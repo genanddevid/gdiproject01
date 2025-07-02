@@ -1,0 +1,11 @@
+<div class="media comment">
+  <div class="media-left">
+    <figure class="image is-48x48">
+      <img src="{{ comment.user.profile.photo.url }}" alt="Profile">
+    </figure>
+  </div>
+  <div class="media-content">
+    <strong>{{ comment.user.username }}</strong><br>
+    {{ comment.body|linebreaks }}
+  </div>
+</div>

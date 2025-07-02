@@ -1,0 +1,472 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body_class %}custom-bg{% endblock %}
+{% block content %}
+
+
+<div class="columns is-mobile has-text-centered" style="background-color: white; min-height: 100vh;">
+  <div class="column is-half is-offset-one-quarter">
+
+    <div class="card" style="box-shadow: none; border: 1px solid rgb(245, 243, 243); border-radius: 0;">
+
+      <div class="card-content">
+
+        <form method="post" action="" enctype="multipart/form-data" role="form">
+          {% csrf_token %}        
+
+          <div class="field">
+            <div id="captionPreview" class="preview-container" >Your headline will preview here</div>
+            <p class="control">              
+              {{ form.caption }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>            
+          </div>
+
+          <div class="field">
+            <div id="contentPreview" class="preview-container2" style=" 
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 300px;           
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 17px;
+            text-align:left;            
+            margin-bottom: 2%;            
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            ">Ensure your narrative is at least 250 words in length</div>
+     
+            <p class="control">              
+              {{ form.content }}
+        
+</p>
+<p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888;">
+  Word count: 0 / 250
+
+              </p>
+              
+              {% if form.content.errors %}
+                <p class="help is-danger" style="font-size: 14px; margin-top: 5px;">
+                  {{ form.content.errors.0 }}
+                </p>
+              {% endif %}
+          </div>
+
+          <div class="field">
+            <p class="control">
+              {{ form.tag }}
+            </p>
+          </div>
+          <br>
+          
+
+          <style>
+  .platform-grid {
+    display: flex;
+    justify-content: center; /* centers the whole row horizontally */
+    gap: 40px; /* space between each platform */
+    padding: 20px;
+  }
+
+  .platform-grid a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    font-family: Arial, sans-serif;
+  }
+
+  .platform-grid img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+  }
+
+  .platform-grid h1 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+</style>
+
+<div class="platform-grid">
+  <a href="https://www.instagram.com" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+    <h1>Instagram</h1>
+  </a>
+  <a href="https://www.tiktok.com" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
+    <h1>Tiktok</h1>
+  </a>
+  <a href="https://x.com" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="X">
+    <h1>X</h1>
+  </a>
+  <a href="https://www.youtube.com/" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube Icon">
+    <h1>YouTube</h1>
+  </a>
+</div>
+
+              
+        <!-- <h2>Paste links</h2>-->
+            <div class="outer-container" style="padding: 10px 50px;">
+                <p style="
+                margin: 1px 0;
+                font-size: 16px;
+                text-align: center;
+                ">Choose a platform, go to the post you want to use and copy its link then paste it below.</p>
+            </div>
+             <!-- Links -->
+
+            <div class="field">
+            <p class="control">
+              {{ form.link1 }}
+            </p>
+          </div>
+          <div class="field">
+            <p class="control">
+              {{ form.link2 }}
+            </p>
+          </div>
+
+<!-- Instagram preview area -->
+<div id="instagramPreviewArea" style="display: flex; gap: 2px; margin-top: 20px;"></div>
+
+            <br>
+
+          <div class="field">
+            <p class="control has-icons-left">
+              <label class="label is-medium">Choose a file for your lead photo</label>
+              {{ form.picture }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+            
+          </div> <br> <br>
+
+<div class="field">
+  <button 
+    type="submit" 
+    formaction="{% if edit_mode %}{% url 'preview_narrative' post.id %}{% else %}{% url 'preview_narrative' %}{% endif %}" 
+    formmethod="post" 
+    class="button is-yellow">
+    {% if edit_mode %}Preview{% else %}Preview Narrative{% endif %}
+  </button>
+</div>
+
+<style>
+.button.is-yellow {
+  background-color: #fff27d;
+  color: #1f1f1f;
+  border-color: #fff27d;
+}
+</style>
+
+          <div class="field">
+            <p class="control">
+              <button type="submit" name="action" class="button is-success">
+                {% if edit_mode %}Update{% else %}Publish{% endif %}
+              </button>
+            </p>
+          </div>
+        </form>
+
+      </div> <!-- end card-content -->
+    </div>   <!-- end card -->
+
+  </div>     <!-- end column -->
+</div>       <!-- end columns -->
+
+
+<style>
+
+    .custom-caption {
+    width: 100%;
+    padding: 1%;
+    border-radius: 5px;    
+}
+
+.preview-container {
+            /*border: 1px dashed #999;*/
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 120px;
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size:xx-large;
+            text-align: center;
+            margin-top: 5%;
+            margin-bottom: 2%;
+            /*margin-right: 3%;
+            margin-left: 3%;*/
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .view-draft {
+            width: 9%;
+            aspect-ratio: 5/5;
+            border-radius: 20%;
+            background-color: rgb(175, 1, 1);
+            margin-top: 1%;
+            margin-left: 90%;
+            border: 1px solid rgb(175, 1, 1);
+            padding-top: 0px;
+            padding-left: 0px;
+            cursor: pointer;     
+        }
+            
+         .platform-links {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top:10px;
+        }
+        .platform-links a {
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .platform-links a:hover {
+            text-decoration: underline;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+</style>
+
+
+<script>
+    
+let activeField = null;
+
+// Track which field is being edited
+document.querySelectorAll('textarea').forEach(field => {
+  field.addEventListener('focus', () => activeField = field);
+});
+
+function wrapSelection(tagStart, tagEnd) {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end);
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  const newText = before + tagStart + selectedText + tagEnd + after;
+  activeField.value = newText;
+
+  // Optional: set cursor after inserted text
+  activeField.setSelectionRange(start + tagStart.length, end + tagStart.length);
+  activeField.focus();
+}
+
+// Example usage: bold, italic, underline, uppercase
+function boldButton() {
+  wrapSelection('<b>', '</b>');
+}
+
+function italicButton() {
+  wrapSelection('<i>', '</i>');
+}
+
+function underlineButton() {
+  wrapSelection('<u>', '</u>');
+}
+
+function uppercaseButton() {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end).toUpperCase();
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  activeField.value = before + selectedText + after;
+  activeField.setSelectionRange(start, start + selectedText.length);
+  activeField.focus();
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const captionField = document.querySelector('textarea[name="caption"]');
+  const contentField = document.querySelector('textarea[name="content"]');
+  const captionPreview = document.getElementById('captionPreview');
+  const contentPreview = document.getElementById('contentPreview');
+
+  if (captionField && captionPreview) {
+    captionField.addEventListener('input', () => {
+      captionPreview.innerHTML = captionField.value;
+    });
+  }
+
+  if (contentField && contentPreview) {
+    contentField.addEventListener('input', () => {
+      contentPreview.innerHTML = contentField.value;
+    });
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const captionField = document.querySelector('textarea[name="caption"]');
+    const captionPreview = document.getElementById('captionPreview');
+    const wordLimit = 50;
+
+    if (captionField && captionPreview) {
+        captionField.addEventListener("input", function () {
+            let words = captionField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                captionField.value = words.join(" ");
+            }
+
+            captionPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Your headline will preview here";
+        });
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const contentField = document.querySelector('textarea[name="content"]');
+    const contentPreview = document.getElementById('contentPreview');
+    const wordLimit = 5000;
+
+    if (contentField && contentPreview) {
+        contentField.addEventListener("input", function () {
+            let words = contentField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                contentField.value = words.join(" ");
+            }
+
+            contentPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Ensure your narrative is at least 250 words in length";
+        });
+    }
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const contentField = document.getElementById("id_content");
+  const wordCountDisplay = document.getElementById("wordCount");
+
+  function updateWordCount() {
+    const content = contentField.value.trim();
+    const words = content.length > 0 ? content.split(/\s+/).filter(w => w.length > 0) : [];
+    const wordCount = words.length;
+
+    wordCountDisplay.textContent = `Word count: ${wordCount} / 250`;
+
+    if (wordCount < 250) {
+      wordCountDisplay.style.color = "red";
+    } else {
+      wordCountDisplay.style.color = "green";
+    }
+  }
+
+  contentField.addEventListener("input", updateWordCount);
+
+  // Initialize on page load
+  updateWordCount();
+});
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const previewButton = document.getElementById("previewInstagram");
+  const previewArea = document.getElementById("instagramPreviewArea");
+
+  let clickedOnce = true;
+
+  previewButton.addEventListener("click", () => {
+    if (!clickedOnce) {
+      clickedOnce = true;
+      return; // First click does nothing
+    }
+
+    const link1 = document.getElementById("id_link1")?.value.trim();
+    const link2 = document.getElementById("id_link2")?.value.trim();
+
+    previewArea.innerHTML = ""; // Clear existing previews
+    
+
+
+    if (link1) {
+      const blockquote1 = document.createElement("blockquote");
+      blockquote1.className = "instagram-media";
+      blockquote1.setAttribute("data-instgrm-permalink", link1);
+      blockquote1.setAttribute("data-instgrm-version", "12");
+      blockquote1.style.maxWidth = "165px";
+      blockquote1.style.transform = "scale(0.85)";
+      blockquote1.style.transformOrigin = "top left";
+      blockquote1.style.margin = "0";
+      blockquote1.style.marginRight = "0";
+      previewArea.appendChild(blockquote1);
+    }
+
+    if (link2) {
+      const blockquote2 = document.createElement("blockquote");
+      blockquote2.className = "instagram-media";
+      blockquote2.setAttribute("data-instgrm-permalink", link2);
+      blockquote2.setAttribute("data-instgrm-version", "12");
+      blockquote2.style.maxWidth = "165px";
+      blockquote2.style.transform = "scale(0.85)";
+      blockquote2.style.transformOrigin = "top right";
+      blockquote2.style.margin = "0";
+      blockquote2.style.marginLeft = "0";
+      previewArea.appendChild(blockquote2);
+    }
+
+    // Trigger Instagram embed render
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
+    }
+  });
+
+
+
+
+
+  const form = document.getElementById("narrativeForm");
+
+form.addEventListener("submit", (e) => {
+  const link1 = document.getElementById("id_link1")?.value.trim();
+  const link2 = document.getElementById("id_link2")?.value.trim();
+
+  if ((link1 || link2) && window.instgrm) {
+    window.instgrm.Embeds.process();
+  }
+});
+
+});
+</script>
+
+<script async defer src="//www.instagram.com/embed.js"></script>
+
+
+{% endblock %}
+
+<!--11:10 7Jun25-->

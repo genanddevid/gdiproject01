@@ -1,0 +1,3097 @@
+
+  <div class="content" style="font-size: 18px; font-weight:300;">
+  {{ content1|safe }}
+
+<br> <br> <br>
+{% if post.link1 %}
+
+
+  
+
+
+
+  {% elif "twitter.com" in post.link1 or "x.com" in post.link1 %}
+    {% with post.link1|fix_twitter_url as twitter_link %}
+    <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
+      <div style="display: inline-block;">
+        <blockquote class="twitter-tweet" data-theme="light">
+          <a href="{{ twitter_link }}"></a>
+        </blockquote>
+      </div>
+      </div>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" onload="twttr.widgets.load();"></script>
+    {% endwith %}
+  
+
+  {% elif "tiktok.com" in post.link1 %}
+  {% with post.link1|tiktok_id as tid %}
+<blockquote class="tiktok-embed"
+                cite="{{ post.link1 }}"
+                data-video-id="{{ tid }}"
+                style="max-width: 380px;min-width: 225px; margin: 20px auto; transform:scale(1);">
+      <section> </section>
+    </blockquote>
+  {% endwith %}
+
+  {% if "instagram.com" in post.link1 %}
+    <div class="instagram-wrapper" style="text-align: center; margin: 20px 0;">
+      <div style="display: inline-block; max-width: 400px; width: 100%;">
+        <blockquote 
+          class="instagram-media" 
+          data-instgrm-permalink="{{ post.link1 }}" 
+          data-instgrm-version="14" 
+          style="background: #FFF; border: none; margin: 0 auto;">
+        </blockquote>
+      </div>
+    </div>
+ 
+
+  
+  {% elif "youtu" in post.link1 %}
+    {% with post.link1|youtube_id as vid %}
+      <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+          <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+          <div style="
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            font-size:3em;
+            color:white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+          ">▶</div>
+        </a>
+      </div>
+    {% endwith %}
+
+  
+  
+  {% endif %}
+{% endif %}
+
+<br> <br>
+
+
+
+{% if content2 %}
+  <div class="content" style="font-size: 18px; font-weight:300;">
+    {{ content2|safe }}
+  </div>
+{% endif %}
+<br> 
+{% if post.link2 %}
+
+{% if "instagram.com" in post.link2 %}
+    <div class="instagram-wrapper" style="text-align: center; margin: 20px 0;">
+      <div style="display: inline-block; max-width: 400px; width: 100%;">
+        <blockquote 
+          class="instagram-media" 
+          data-instgrm-permalink="{{ post.link2 }}" 
+          data-instgrm-version="14" 
+          style="background: #FFF; border: none; margin: 0 auto;">
+        </blockquote>
+      </div>
+    </div>
+ 
+
+
+{% elif "twitter.com" in post.link2 or "x.com" in post.link2 %}
+    {% with post.link2|fix_twitter_url as twitter_link %}
+<div class="x-wrapper" style="text-align: center; margin: 20px 0;">
+      <div style="display: inline-block;">
+        <blockquote class="twitter-tweet" data-theme="light" style="display: inline-block;">
+          <a href="{{ twitter_link }}"></a>
+        </blockquote>
+      </div>
+      </div>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" onload="twttr.widgets.load();"></script>
+    {% endwith %}
+  
+
+{% elif "tiktok.com" in post.link2 %}
+  {% with post.link2|tiktok_id as tid %}
+    <blockquote class="tiktok-embed"
+                cite="{{ post.link2 }}"
+                data-video-id="{{ tid }}"
+                style="max-width: 380px;min-width: 225px; margin: 20px auto; transform:scale(1);">
+      <section> </section>
+    </blockquote>
+  {% endwith %}
+
+
+  {% elif "youtu" in post.link2 %}
+    {% with post.link2|youtube_id as vid %}
+      <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+          <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+          <div style="
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            font-size:3em;
+            color:white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+          ">▶</div>
+        </a>
+      </div>
+    {% endwith %}
+  
+  {% endif %}
+{% endif %}
+
+<br> <br>
+{% if content3 %}
+  <div class="content" style="font-size: 18px; font-weight:300;">
+    {{ content3|safe }}
+  </div>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="content" style="font-size: 18px; font-weight:300;">
+  {{ content1|safe }}
+  
+
+
+
+
+{% if post.link1 %}
+
+  <div class="instagram-wrapper">
+    <div class="instagram-loading">Loading Instagram Post...</div>
+    <div class="instagram-embed" data-instagram-link="{{ post.link1 }}"></div>
+  </div>
+{% endif %}
+<br>
+
+{% if content2 %}
+  <div class="content" style="font-size: 18px; font-weight:300;">
+    {{ content2|safe }}
+  </div>
+{% endif %}
+
+
+{% if post.link2 %}
+<br>
+  <div class="instagram-wrapper">
+    <div class="instagram-loading">Loading Instagram Post...</div>
+    <div class="instagram-embed" data-instagram-link="{{ post.link2 }}"></div>
+  </div>
+{% endif %}
+
+
+{% if content3 %}
+  <div class="content" style="font-size: 18px; font-weight:300;">
+    {{ content3|safe }}
+  </div>
+{% endif %}
+
+
+
+
+{% if post.link1 and "youtu" in post.link1 %}
+  {% with post.link1|youtube_id as vid %}
+    <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+      <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+        <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+        <div style="
+          position:absolute;
+          top:50%;
+          left:50%;
+          transform:translate(-50%, -50%);
+          font-size:3em;
+          color:white;
+          text-shadow: 0 0 10px rgba(0,0,0,0.7);
+        ">▶</div>
+      </a>
+    </div>
+  {% endwith %}
+{% endif %}
+
+{% if post.link2 and "youtu" in post.link2 %}
+  {% with post.link2|youtube_id as vid %}
+    <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+      <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+        <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+        <div style="
+          position:absolute;
+          top:50%;
+          left:50%;
+          transform:translate(-50%, -50%);
+          font-size:3em;
+          color:white;
+          text-shadow: 0 0 10px rgba(0,0,0,0.7);
+        ">▶</div>
+      </a>
+    </div>
+  {% endwith %}
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  
+        {% for post in posts %}
+
+            <!--<div class="columns is-mobile"></div>-->
+            
+            <!-- Small Card -->
+<div class="box" style="max-width: 543px; margin-left: 100px; margin-bottom: 0px; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+  <article class="media">
+    <div style="display: flex;">
+      
+      <!-- Left: Photo Heading of Article -->
+      <div style="width: 100px; height: 100px;">
+        <a href="{{ post.get_absolute_url }}">
+          <img src="{{ post.picture.url }}" alt="Article Image" 
+               style="width: 100%; height: 100%; object-fit: cover;" />
+        </a>
+      </div>
+
+      <!-- Right: Text section -->
+      <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
+        
+        <!-- Top section: User image and name, then caption -->
+        <div class="content" style="margin-top: -13px;">
+          <!-- User image and name -->
+          <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                        <!-- Profile Picture of article writer -->
+                        <div class="media-left">
+                          <a href="{% url 'profile' post.user.username %}">
+                            <figure class="image is-24x24" style="margin: 0;">
+                                <img class="is-rounded"
+                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                        style="width: 24px; height: 24px; object-fit: cover;">
+                            </figure>
+                            </a>
+
+                           
+                        </div>
+                        <!-- Name -->
+                        <div class="media-content" style="margin-left: -10px;">
+                           <a href="{% url 'profile' post.user.username %}">
+
+                    {% if post.user.profile.first_name %}
+                    <p class="title is-4" style="
+                        font-weight:bolder;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        font-size: 12px;
+                        margin: 0;"
+                        >{{ post.user.profile.first_name }} {{ post.user.profile.last_name }}</p>
+                        {% else %}
+                        <p class="title is-4">Unknown</p>
+                        {% endif %}
+                        <!--<p class="subtitle is-6">@{{ post_item.user.username }}</p>-->
+                    </a>
+                        </div>
+                    </div>
+
+          <!-- Caption -->
+          <div style="
+            margin-top: 7px;
+                    font-size: 16.0px;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    line-clamp: 2;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    line-height: 1.2em;
+                    max-height: 2.4em;
+          ">
+          <a href="{{ post.get_absolute_url }}" style="color: inherit; text-decoration: none;">
+            {{ post.caption }}
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Time aligned with bottom of left image -->
+        <time datetime="{{ post.posted|date:'c' }}" 
+              style="font-size: 10.5px; color: #676767; font-family: 'Inter', sans-serif; 
+              ">
+          {{ post.posted }}
+        </time>
+
+      </div>
+      
+    </div>
+
+  </article>
+  
+</div>
+
+{% endfor %}
+    
+{% endblock %}
+
+
+
+3/3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BUGEL</title>
+  <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: rgb(241, 241, 233);
+      font-family: Arial, sans-serif;
+    }
+
+    .layout {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .sidebar {
+      width: 230px;
+      background-color: rgb(230, 230, 221);
+      padding: 10px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 1;
+    }
+
+    .main-content {
+      margin-left: 230px; /* Push to right of sidebar */
+      padding: 20px;
+      background-color: rgb(241, 241, 233);
+      flex-grow: 1;
+    }
+
+    .sidebar .button {
+      width: 90%;
+      margin: 5px auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 12px 10px;
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .material-icons,
+    .material-symbols-outlined {
+      font-size: 24px;
+      margin-right: 6px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin: 2.5rem 0 2rem 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="{% url 'frontpage' %}">
+      <h1>BUGEL</h1>
+    </a>
+
+    <aside class="menu">
+      <div class="buttons is-flex is-flex-direction-column">
+        <a href="{% url 'frontpage' %}" class="button is-white">
+          <span class="material-icons">flip_to_front</span>
+          Frontpage
+        </a>
+
+        <a href="{% url 'index' %}" class="button is-white">
+          <span class="material-icons">check_circle_outline</span>
+          Interests
+        </a>
+
+        <a href="{% url 'narrativebuilder' %}" class="button is-white">
+          <span class="material-symbols-outlined">stylus_fountain_pen</span>
+          Narrative Builder
+        </a>
+
+        <a href="{% url 'discover' %}" class="button is-white">
+          <span class="material-icons">explore</span>
+          Discover
+        </a>
+
+        <a href="{% url 'all_collections' %}" class="button is-white">
+          <span class="material-icons">bookmark_border</span>
+          Collections
+        </a>
+
+        <a href="{% url 'profile' request.user %}" class="button is-white">
+          <span class="material-icons">person_outline</span>
+          {{ request.user }}
+        </a>
+      </div>
+
+      <div class="navbar-item has-dropdown is-hoverable" style="margin-top: 30px;">
+        <a class="navbar-link">Settings</a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item">Change password</a>
+          <a class="navbar-item">Contact</a>
+          <a class="navbar-item">Report an issue</a>
+          <hr class="navbar-divider">
+          <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="button is-white" style="padding-left: 0;">Log out</button>
+          </form>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    {% block content %}{% endblock %}
+    {% block pagination %}{% endblock %}
+  </div>
+
+  <script async defer src="https://www.instagram.com/embed.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Narrativebuilder.html 28may25
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+
+
+<div class="columns is-mobile has-text-centered">
+  <div class="column is-half is-offset-one-quarter">
+
+    <div class="card">
+      <div class="card-content">
+
+        <form method="post" action="" enctype="multipart/form-data" role="form">
+          {% csrf_token %}        
+
+          <div class="field">
+            <div id="captionPreview" class="preview-container" >Your headline will preview here</div>
+            <p class="control">              
+              {{ form.caption }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>            
+          </div>
+
+
+
+          <div class="field">
+            <div id="contentPreview" class="preview-container2" style=" 
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 300px;           
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 17px;
+            text-align:left;            
+            margin-bottom: 2%;            
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            ">Ensure your narrative is at least 150 words in length</div>
+
+                
+            <p class="control">              
+              {{ form.content }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control">
+              {{ form.tags }}
+            </p>
+          </div>
+          <br>          
+              
+<div class="platform-grid">
+    <a href="https://www.instagram.com" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+    </a>
+    <a href="https://www.tiktok.com" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
+    </a>
+    <a href="https://x.com" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="X">
+    </a>  
+    <a href="https://www.youtube.com/" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube Icon">
+    </a>
+</div>
+<style>
+    .platform-grid {
+    display: grid;
+    grid-template-columns: 30px 30px;
+    grid-template-rows: 30px 30px;
+    gap: 50px;
+    width: max-content;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #f7f7f7;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.platform-grid a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.2s;
+}
+
+.platform-grid a:hover img {
+    transform: scale(1.1);
+}
+</style>
+
+        <!-- <h2>Paste links</h2>-->
+            <div class="outer-container" style="padding: 10px 50px;">
+                <p style="
+                margin: 1px 0;
+                font-size: 17px;
+                text-align: center;
+                ">Choose a platform, go to the post you want and copy its link then paste it below.</p>
+            </div>
+             <!-- Links -->
+
+
+         
+
+            <div class="field">
+            <p class="control">
+              {{ form.link1 }}
+            </p>
+          </div>
+          <div class="field">
+            <p class="control">
+              {{ form.link2 }}
+            </p>
+          </div>
+
+          <div class="field">
+  <button type="button" class="button is-info" id="previewInstagram">Preview Instagram Posts</button>
+</div>
+
+<!-- Instagram preview area -->
+<div id="instagramPreviewArea" style="display: flex; gap: 2px; margin-top: 20px;"></div>
+
+            <br><br>
+
+          <div class="field">
+            <p class="control has-icons-left">
+              <label class="label is-medium">Choose a file for your lead photo</label>
+              {{ form.picture }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div> <br> <br>
+
+
+
+          
+          <div class="field">
+            <p class="control">
+              <button type="submit" name="action" class="button is-success">
+                {% if edit_mode %}Update{% else %}Publish{% endif %}
+              </button>
+            </p>
+          </div>
+        </form>
+
+      </div> <!-- end card-content -->
+    </div>   <!-- end card -->
+
+  </div>     <!-- end column -->
+</div>       <!-- end columns -->
+
+
+<style>
+
+    .custom-caption {
+    width: 100%;
+    padding: 1%;
+    border-radius: 5px;    
+}
+
+.preview-container {
+            /*border: 1px dashed #999;*/
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 120px;
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size:xx-large;
+            text-align: center;
+            margin-top: 5%;
+            margin-bottom: 2%;
+            /*margin-right: 3%;
+            margin-left: 3%;*/
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .view-draft {
+            width: 9%;
+            aspect-ratio: 5/5;
+            border-radius: 20%;
+            background-color: rgb(175, 1, 1);
+            margin-top: 1%;
+            margin-left: 90%;
+            border: 1px solid rgb(175, 1, 1);
+            padding-top: 0px;
+            padding-left: 0px;
+            cursor: pointer;     
+        }
+            
+         .platform-links {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top:10px;
+        }
+        .platform-links a {
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .platform-links a:hover {
+            text-decoration: underline;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+
+
+
+</style>
+
+
+<script>
+    
+let activeField = null;
+
+// Track which field is being edited
+document.querySelectorAll('textarea').forEach(field => {
+  field.addEventListener('focus', () => activeField = field);
+});
+
+function wrapSelection(tagStart, tagEnd) {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end);
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  const newText = before + tagStart + selectedText + tagEnd + after;
+  activeField.value = newText;
+
+  // Optional: set cursor after inserted text
+  activeField.setSelectionRange(start + tagStart.length, end + tagStart.length);
+  activeField.focus();
+}
+
+// Example usage: bold, italic, underline, uppercase
+function boldButton() {
+  wrapSelection('<b>', '</b>');
+}
+
+function italicButton() {
+  wrapSelection('<i>', '</i>');
+}
+
+function underlineButton() {
+  wrapSelection('<u>', '</u>');
+}
+
+function uppercaseButton() {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end).toUpperCase();
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  activeField.value = before + selectedText + after;
+  activeField.setSelectionRange(start, start + selectedText.length);
+  activeField.focus();
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const captionField = document.querySelector('textarea[name="caption"]');
+  const contentField = document.querySelector('textarea[name="content"]');
+  const captionPreview = document.getElementById('captionPreview');
+  const contentPreview = document.getElementById('contentPreview');
+
+  if (captionField && captionPreview) {
+    captionField.addEventListener('input', () => {
+      captionPreview.innerHTML = captionField.value;
+    });
+  }
+
+  if (contentField && contentPreview) {
+    contentField.addEventListener('input', () => {
+      contentPreview.innerHTML = contentField.value;
+    });
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const captionField = document.querySelector('textarea[name="caption"]');
+    const captionPreview = document.getElementById('captionPreview');
+    const wordLimit = 50;
+
+    if (captionField && captionPreview) {
+        captionField.addEventListener("input", function () {
+            let words = captionField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                captionField.value = words.join(" ");
+            }
+
+            captionPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Your headline will preview here";
+        });
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const contentField = document.querySelector('textarea[name="content"]');
+    const contentPreview = document.getElementById('contentPreview');
+    const wordLimit = 5000;
+
+    if (contentField && contentPreview) {
+        contentField.addEventListener("input", function () {
+            let words = contentField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                contentField.value = words.join(" ");
+            }
+
+            contentPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Ensure your narrative is at least 150 words in length";
+        });
+    }
+});
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const previewButton = document.getElementById("previewInstagram");
+  const previewArea = document.getElementById("instagramPreviewArea");
+
+  let clickedOnce = true;
+
+  previewButton.addEventListener("click", () => {
+    if (!clickedOnce) {
+      clickedOnce = true;
+      return; // First click does nothing
+    }
+
+    const link1 = document.getElementById("id_link1")?.value.trim();
+    const link2 = document.getElementById("id_link2")?.value.trim();
+
+    previewArea.innerHTML = ""; // Clear existing previews
+    
+
+
+    if (link1) {
+      const blockquote1 = document.createElement("blockquote");
+      blockquote1.className = "instagram-media";
+      blockquote1.setAttribute("data-instgrm-permalink", link1);
+      blockquote1.setAttribute("data-instgrm-version", "12");
+      blockquote1.style.maxWidth = "165px";
+      blockquote1.style.transform = "scale(0.85)";
+      blockquote1.style.transformOrigin = "top left";
+      blockquote1.style.margin = "0";
+      blockquote1.style.marginRight = "0";
+      previewArea.appendChild(blockquote1);
+    }
+
+    if (link2) {
+      const blockquote2 = document.createElement("blockquote");
+      blockquote2.className = "instagram-media";
+      blockquote2.setAttribute("data-instgrm-permalink", link2);
+      blockquote2.setAttribute("data-instgrm-version", "12");
+      blockquote2.style.maxWidth = "165px";
+      blockquote2.style.transform = "scale(0.85)";
+      blockquote2.style.transformOrigin = "top right";
+      blockquote2.style.margin = "0";
+      blockquote2.style.marginLeft = "0";
+      previewArea.appendChild(blockquote2);
+    }
+
+    // Trigger Instagram embed render
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
+    }
+  });
+
+
+
+
+
+  const form = document.getElementById("narrativeForm");
+
+form.addEventListener("submit", (e) => {
+  const link1 = document.getElementById("id_link1")?.value.trim();
+  const link2 = document.getElementById("id_link2")?.value.trim();
+
+  if ((link1 || link2) && window.instgrm) {
+    window.instgrm.Embeds.process();
+  }
+});
+
+
+
+
+
+
+});
+</script>
+
+<script async defer src="//www.instagram.com/embed.js"></script>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% load static %}
+
+<!--{% load custom_filters %}-->
+
+{% block content %}
+
+
+
+
+
+
+      
+
+<div class="columns is-mobile is-centered">
+  <div class="column is-three-fifths">
+
+    <div class="card">
+      <div class="card-image">
+        <figure class="image is-3by2.5">
+          
+          
+          <img
+            src="{{ post.picture.url }}"
+            alt="Placeholder image"
+            style="border-radius: 0; width: 100%; height: auto; max-height: 550px; object-fit: cover; object-position: top;"
+          />
+        </figure>
+      </div>
+
+      <img/>
+
+      <div>
+        <p class="title" style="                  
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+          font-size:26px;
+          font-weight:600;
+          font-family: 'Inter', sans-serif;
+          color: rgb(20, 20, 20);
+          letter-spacing: -0.8px;">
+          {{ post.caption }}
+        </p>
+      </div>
+
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-48x48">
+              <img class="is-rounded"
+                src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                style="width: 48px; height: 48px; object-fit: cover;">
+            </figure>
+          </div>
+          <div class="media-content">
+            {% if post.user.profile.first_name %}
+            <p class="title is-4" style="
+              font-weight:500;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-size: 0.9rem;
+              letter-spacing: 0.1px;
+              margin: 0;">
+              {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
+            </p>
+              {% else %}
+            <p class="title is-4">Unknown</p>
+              {% endif %}               
+            <h1 class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
+              {{ post.posted }}
+            </h1>
+          </div>
+        </div>                  
+        <div class="content" style="font-size: 18px; font-weight:300;">
+          {{ post.content }}
+          <p>{% for tag in post.tags.all %}
+            <a href="{{ tag.get_absolute_url }}">#{{ tag }}</a>
+            {% endfor %}
+          </p>
+          
+             <div class="instagram-wrapper">
+  {% if post.link1 %}
+    <div class="instagram-loading">Loading Instagram Post...</div>
+    <div class="instagram-embed" data-instagram-link="{{ post.link1 }}"></div>
+  {% endif %}
+  </div>
+  <div class="instagram-wrapper">
+  {% if post.link2 %}
+    <div class="instagram-loading">Loading Instagram Post...</div>
+    <div class="instagram-embed" data-instagram-link="{{ post.link2 }}"></div>
+  {% endif %}
+  </div>
+
+
+<style>
+
+  .instagram-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+.instagram-loading {
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+}
+
+
+
+</style>
+            
+        </div>
+      </div>
+      
+      <div class="media-right-container" style="display: flex; justify-content: space-evenly; align-items: center;">
+
+        <div class="media-right" style="text-align: center;">
+          <a href="">
+            <i class="material-icons" style="color:rgb(134, 134, 129)">
+              message
+            </i>
+          </a>
+          <!--<p>{{ total_comment_count|short_number }}</p>-->
+          <p>{{ total_comment_count|intcomma }}</p>
+        </div>  
+
+        <div class="media-right" style="text-align: center;">
+          <a href="">
+            <i class="material-icons" style="color:rgb(134, 134, 129)">
+              share
+            </i>
+          </a>
+          <p>Share</p>
+        </div>
+
+        <div class="media-right" style="text-align: center;">
+          <a href="{% url 'postlike' post.id %}">
+            <i class="material-icons"
+              {% if liked %}
+              style="color: rgb(50, 115, 220);"
+              {% else %}
+              style="color: rgb(134, 134, 129)"
+              {% endif %}>
+              thumb_up_alt
+            </i>
+          </a>
+          <p>{{ post.likes }}</p>
+        </div>
+  
+        {% if favorited is True %}
+        <div class="media-right" style="text-align: center;">
+          <a href="{% url 'postfavorite' post.id %}">
+            <i class="material-icons has-text-link" style="color:rgb(134, 134, 129)">
+              bookmark
+            </i>
+          </a>
+          <p>Saved</p>
+        </div>
+        {% else %}
+
+        <div class="media-right" style="text-align: center;">
+          <a href="{% url 'postfavorite' post.id %}">
+            <i class="material-icons" style="color:rgb(134, 134, 129)">
+              bookmark
+            </i>
+          </a>
+          <p>Save</p>
+        </div>  
+        {% endif %}
+
+      </div>
+      
+      <br>
+
+      <div class="recommendation-wrapper">
+
+      <div id="recommendations-Container" style="
+    background-color: #f9f9f9;
+    font-size: 15px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    margin-top: 20px;
+    margin-bottom: 10px;
+">
+    Recommendations
+</div>
+<div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+      <!-- Left Recommendations -->
+  <div style="flex: 1; min-width: 250px; max-width: 525px;">
+    {% for post in left_recommendations %}
+      <!-- Paste your card HTML here -->
+      <div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+        <article class="media">
+          <div style="display: flex;">
+            <!-- Left: Article image -->
+            <div style="width: 100px; height: 100px;">
+              <a href="{{ post.get_absolute_url }}">
+                <img src="{{ post.picture.url }}" alt="Article Image" 
+                     style="width: 100%; height: 100%; object-fit: cover;" />
+              </a>
+            </div>
+
+            <!-- Right: Text and metadata -->
+            <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
+              <div class="content" style="margin-top: -13px;">
+                <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                  <div class="media-left">
+                    <figure class="image is-24x24" style="margin: 0;">
+                      <img class="is-rounded"
+                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                        style="width: 24px; height: 24px; object-fit: cover;">
+                    </figure>
+                  </div>
+                  <div class="media-content" style="margin-left: -10px;">
+                    <p class="title is-4" style="
+                        font-weight:bolder;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        font-size: 12px;
+                        margin: 0;
+                        ">{{ post.user.username }}
+                    </p>
+                  </div>
+                </div>
+
+                <div style="margin-top: 7px; font-size: 16.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 2.4em;">
+                  <a href="{{ post.get_absolute_url }}" style="color: inherit; text-decoration: none;">
+                    {{ post.caption }}
+                  </a>
+                </div>
+              </div>
+
+              <time datetime="{{ post.posted|date:'c' }}" 
+                    style="font-size: 10.5px; color: #676767; font-family: 'Inter', sans-serif;">
+                {{ post.posted }}
+              </time>
+            </div>
+          </div>
+        </article>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Right Recommendations -->
+  <div style="flex: 1; min-width: 250px; max-width: 525px;">
+    {% for post in right_recommendations %}
+      <!-- Use the same card again -->
+      {# Copy-paste same structure as above #}
+      <div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+        <article class="media">
+          <div style="display: flex;">
+            <!-- Left: Article image -->
+            <div style="width: 100px; height: 100px;">
+              <a href="{{ post.get_absolute_url }}">
+                <img src="{{ post.picture.url }}" alt="Article Image" 
+                     style="width: 100%; height: 100%; object-fit: cover;" />
+              </a>
+            </div>
+
+            <!-- Right: Text and metadata -->
+            <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
+              <div class="content" style="margin-top: -13px;">
+                <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                  <div class="media-left">
+                    <figure class="image is-24x24" style="margin: 0;">
+                      <img class="is-rounded"
+                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                        style="width: 24px; height: 24px; object-fit: cover;">
+                    </figure>
+                  </div>
+                  <div class="media-content" style="margin-left: -10px;">
+                    <p class="title is-4" style="
+                        font-weight:bolder;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        font-size: 12px;
+                        margin: 0;
+                        ">{{ post.user.username }}
+                    </p>
+                  </div>
+                </div>
+
+                <div style="margin-top: 7px; font-size: 16.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 2.4em;">
+                  <a href="{{ post.get_absolute_url }}" style="color: inherit; text-decoration: none;">
+                    {{ post.caption }}
+                  </a>
+                </div>
+              </div>
+
+              <time datetime="{{ post.posted|date:'c' }}" 
+                    style="font-size: 10.5px; color: #676767; font-family: 'Inter', sans-serif;">
+                {{ post.posted }}
+              </time>
+            </div>
+          </div>
+        </article>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+      <br>
+
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img class="is-rounded"
+              src="{% if request.user.profile.picture %}{{ request.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+              style="width: 48px; height: 48px; object-fit: cover;">
+          </p>
+        </figure>
+        <div class="media-content">
+          <form method="post" action="" role="form">
+            {% csrf_token %}
+            <div class="field">
+              <p class="control">
+                {{ form.body }}                      
+              </p>
+            </div>
+            <div class="field">
+              <p class="control">
+                <button type="submit" name="action" class="button">
+                  Post comment
+                </button>
+              </p>
+            </div>
+          </form>                
+        </div>
+      </article>
+            
+      {% for comment in comments %}
+      {% if not comment.parent %}
+       <article class="media comment-wrapper {% if forloop.counter0 >= 3 %}is-hidden{% endif %}" data-index="{{ forloop.counter0 }}">
+
+          <figure class="media-left">
+            <p class="image is-48x48">
+              <img class="is-rounded"
+                src="{% if comment.user.profile.picture %}{{ comment.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                style="width: 48px; height: 48px; object-fit: cover;">
+            </p>
+          </figure>              
+
+          <div class="media-content">
+            <div class="content">
+              <p style="margin-bottom: 0.3rem;">
+                <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
+                  <span style="
+                    font-weight: 600;
+                    color:black;
+                    font-size: 0.9rem;                                                
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;                      
+                    letter-spacing: 0.1px;">
+                    {% if comment.user.profile.first_name %}                     
+                    {{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }}                   
+                    {% else %}
+                    Unknown                      
+                    {% endif %}
+                  </span>
+                      
+                  <span style="margin: 0; color: #cfcdcd;">•</span>
+                  <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
+                    {{ comment.date|timesince }} 
+                    ago
+                  </span>
+                </span>                                    
+                {{ comment.body }}    
+
+                <div style="height: 0.4rem;"></div> <!-- Adjustable spacer -->
+                
+                <small style="display: flex; gap: 10px;">                  
+
+                  <span style="display: flex; flex-direction: column; align-items:center;">
+                    <a href="#" class="like-btn" data-comment-id="{{ comment.id }}">
+                      Like
+                    </a>
+                    
+                    {% if comment.likes.count > 0 %}
+                    <span class="like-count" id="like-count-{{ comment.id }}">                      
+                      {{ comment.likes.count }} <!--like{{ comment.likes.count|pluralize }}-->
+                    </span>                     
+                    {% endif %}                    
+                  </span>
+
+                  <span>
+                    <a href="#" class="reply-btn" data-comment-id="{{ comment.id }}">
+                      Reply
+                    </a>
+                  </span>
+                  {% if comment.replies.count > 0 %}
+                  <span><a href="#" class="view-replies-btn" 
+                    data-comment-id="{{ comment.id }}"
+                    data-reply-count="{{ comment.replies.count}}">
+                    View replies ({{ comment.replies.count }})
+                    </a>
+                  </span>
+                  {% endif %}
+
+                </small>
+
+                <!-- Hidden reply form (revealed when "Reply" is clicked) -->
+                <div class="reply-form-container" id="reply-form-{{ comment.id }}" style="display: none; margin-left: 30px;">
+                  <form method="POST" action="{% url 'submit_reply' comment.id %}">
+                    {% csrf_token %}
+                    <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
+                      @{{ comment.user.username }} 
+                    </textarea>
+                    <button type="submit">Submit</button>
+                  </form>
+                </div>
+
+
+                <!-- Replies section (initially hidden) -->
+                <div class="replies-section" id="replies-{{ comment.id }}" style="display: none; margin-left: 30px;">
+
+                  {% for reply in comment.replies.all|slice:":4" %}
+                  <article class="media">
+                    <figure class="media-left">
+                      <p class="image is-48x48">
+                        <img class="is-rounded"
+                        src="{% if reply.user.profile.picture %}{{ reply.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                        style="width: 48px; height: 48px; object-fit: cover;">
+                      </p>
+                    </figure>
+                    <div class="media-content">
+                      <div class="content">
+                        <p>
+                          <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
+                          <small>• {{ reply.date|timesince }} ago</small>
+                          <br>
+                          {{ reply.body }}
+                        </p>
+
+                        <small style="display: flex; gap: 10px;">
+                          <span style="display: flex; flex-direction: column; align-items:center;">
+                            <a href="#" class="like-btn" data-comment-id="{{ reply.id }}">Like</a>
+                            {% if reply.likes.count > 0 %}
+                            <span class="like-count" id="like-count-{{ reply.id }}">{{ reply.likes.count }}</span>
+                            {% endif %}
+                          </span>
+                          <span><a href="#" class="reply-btn" data-comment-id="{{ reply.id }}">Reply</a></span>
+                        </small>
+
+                        <!-- Reply-to-reply form -->
+                        <div class="reply-form-container" id="reply-form-{{ reply.id }}" 
+                          style="display: none; margin-left: 30px;">
+                          <form method="POST" action="{% url 'submit_reply' reply.id %}">
+                            {% csrf_token %}
+                            <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
+                              @{{ reply.user.username }} 
+                            </textarea>
+                            <button type="submit">Submit</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                  {% endfor %}
+
+                  {% if comment.replies.count > 4 %}
+                  <!-- Hidden extra replies -->
+                  <div id="extra-replies-{{ comment.id }}" style="display: none;">
+
+                    {% for reply in comment.replies.all|slice:"4:" %}
+                    <article class="media">
+                      <figure class="media-left">
+                        <p class="image is-48x48">
+                          <img class="is-rounded"
+                          src="{% if reply.user.profile.picture %}{{ reply.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                          style="width: 48px; height: 48px; object-fit: cover;">
+                        </p>
+                      </figure>
+                      <div class="media-content">
+                        <div class="content">
+                          <p>
+                            <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
+                            <small>• {{ reply.date|timesince }} ago</small>
+                            <br>
+                            {{ reply.body }}
+                          </p>
+
+                          <small style="display: flex; gap: 10px;">
+                            <span style="display: flex; flex-direction: column; align-items:center;">
+                              <a href="#" class="like-btn" data-comment-id="{{ reply.id }}">Like</a>
+                              {% if reply.likes.count > 0 %}
+                              <span class="like-count" id="like-count-{{ reply.id }}">{{ reply.likes.count }}</span>
+                              {% endif %}
+                            </span>
+                            <span><a href="#" class="reply-btn" data-comment-id="{{ reply.id }}">Reply</a></span>
+                          </small>
+
+                          <!-- Reply-to-reply form -->
+                          <div class="reply-form-container" id="reply-form-{{ reply.id }}" 
+                            style="display: none; margin-left: 30px;">
+                            <form method="POST" action="{% url 'submit_reply' reply.id %}">
+                              {% csrf_token %}
+                              <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
+                                @{{ reply.user.username }} 
+                              </textarea>
+                              <button type="submit">Submit</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                    {% endfor %}
+                  </div>
+
+                  <!-- Show more replies toggle -->
+                  <a href="#" class="show-more-replies-btn" data-comment-id="{{ comment.id }}">
+                    Show more replies
+                  </a>
+                  {% endif %}
+
+                </div>
+              </p>
+            </div>
+          </div>
+
+        </article>
+        {% endif %}
+        {% endfor %}
+
+        <!-- SHOW MORE COMMENTS bar -->
+        <div id="viewcomments-bar" style="
+          background-color: rgb(41, 56, 99);
+          width: 100%;
+          height: 40px;
+          margin-bottom: 30px;
+          font-size:14px;
+          font-weight: bolder;
+          font-family: Verdana, Geneva, Tahoma, sans-serif;
+          color:white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;">
+          SHOW MORE COMMENTS
+        </div>
+    
+        <br>
+
+      </div>
+    </div>
+  </div>       
+
+        
+  
+
+  <script async defer src="https://www.instagram.com/embed.js"></script>
+<script>
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const embedContainers = document.querySelectorAll(".instagram-embed");
+
+  embedContainers.forEach(container => {
+    const link = container.dataset.instagramLink;
+    if (link) {
+      const blockquote = document.createElement("blockquote");
+      blockquote.className = "instagram-media";
+      blockquote.setAttribute("data-instgrm-permalink", link);
+      blockquote.setAttribute("data-instgrm-version", "12");
+      blockquote.style.background = "#fff";
+      blockquote.style.border = "none";
+      blockquote.style.margin = "0 auto";
+      blockquote.style.maxWidth = "100%";
+      blockquote.style.width = "100%";
+
+      container.appendChild(blockquote);
+    }
+  });
+
+  // Wait for a short period to ensure all blockquotes are added
+  setTimeout(() => {
+    if (window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === 'function') {
+      window.instgrm.Embeds.process();
+    }
+
+    // Apply scaling once iframes are loaded
+    setTimeout(() => {
+      embedContainers.forEach(container => {
+        const iframe = container.querySelector("iframe");
+        const loading = container.previousElementSibling;
+
+        if (iframe) {
+          const desiredWidth = 300; // Adjust as needed
+          const scale = desiredWidth / iframe.offsetWidth;
+          iframe.style.transform = `scale(${scale})`;
+          iframe.style.transformOrigin = "top left";
+          container.style.width = `${desiredWidth}px`;
+          container.style.height = `${iframe.offsetHeight * scale}px`;
+
+          if (loading) loading.style.display = "none"; // Hide loading message
+        }
+      });
+    }, 1000); // Adjust delay as needed
+  }, 500); // Initial delay before processing embeds
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const commentId = this.dataset.commentId;
+
+        fetch(`/comment/${commentId}/like/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            const likeCountId = `like-count-${commentId}`;
+            let likeSpan = document.getElementById(likeCountId);
+
+            if (data.likes > 0) {
+                const likeText = `${data.likes}`;
+
+                if (likeSpan) {
+                  likeSpan.innerText = likeText;
+                } else {
+                likeSpan = document.createElement('span');
+                likeSpan.className = 'like-count';
+                likeSpan.id = likeCountId;
+                likeSpan.innerText = likeText;
+                this.insertAdjacentElement('afterend', likeSpan);
+            }
+          } else {
+                // Remove the like span if it exists and likes dropped to 0
+                if (likeSpan) {
+                    likeSpan.remove();
+        }
+      }
+    });
+});
+      });
+
+// CSRF helper
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.querySelectorAll('.reply-btn').forEach(btn => {
+  btn.addEventListener('click', function(event) {
+    event.preventDefault();
+    const commentId = this.getAttribute('data-comment-id');
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
+  });
+});
+
+
+
+
+document.querySelectorAll('.view-replies-btn').forEach(button => {
+  button.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    const commentId = this.dataset.commentId;
+    const replyCount = this.dataset.replyCount;
+    const repliesSection = document.getElementById(`replies-${commentId}`);
+
+    if (repliesSection) {
+      const isVisible = repliesSection.style.display === 'block';
+      repliesSection.style.display = isVisible ? 'none' : 'block';
+      this.textContent = isVisible ? `View replies (${replyCount})` : 'Hide replies';
+    }
+  });
+});
+
+document.querySelectorAll('.show-more-replies-btn').forEach(button => {
+  button.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    const commentId = this.dataset.commentId;
+    const extraReplies = document.getElementById('extra-replies-' + commentId);
+
+    if (extraReplies) {
+      extraReplies.style.display = 'block'; // Show additional replies
+      this.style.display = 'none'; // Hide "Show more replies" button
+    }
+  });
+});
+
+
+  
+   document.getElementById("viewcomments-bar").addEventListener("click", function () {
+  document.querySelectorAll(".comment-wrapper.is-hidden").forEach(el => {
+    el.classList.remove("is-hidden");
+  });
+  this.style.display = "none";
+});
+
+
+
+
+
+</script>
+
+ {% endblock %} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+post/models (working well)
+
+from django.db import models
+from django.contrib.auth.models import User
+import uuid
+from django.db.models.signals import post_save
+from django.utils.text import slugify
+from django.urls import reverse
+from django.utils import timezone
+
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.user.id, filename)
+
+# Tag model
+class Tag(models.Model):
+    title = models.CharField(max_length=75, verbose_name='Tag')
+    slug = models.SlugField(null=False, unique=True)
+
+    class Meta:
+        verbose_name_plural = 'Tags'
+
+    #def get_absolute_url(self):
+        #return reverse('tags', args=[self.slug])
+        
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
+
+# Post model
+class Post(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
+    picture = models.ImageField(upload_to=user_directory_path, verbose_name='Picture', null=False, default='defaults/default.jpg')
+   # picture = models.ImageField(upload_to='posts/', blank=True, null=True)
+    caption = models.TextField(max_length=1500, verbose_name='Caption', default='Default caption text')
+    posted = models.DateTimeField(auto_now_add=True)  # This will automatically set the time when a post is created
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    tags = models.ManyToManyField(Tag, related_name='tags')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    likes = models.IntegerField(default=0)
+    link1 = models.URLField(blank=False, null=True)
+    link2 = models.URLField(blank=True, null=True)
+
+
+    def __str__(self):
+        return self.caption[:50]  # Returns first 50 characters of the caption
+
+
+    def get_absolute_url(self):
+        return reverse('postdetails', args=[str(self.id)])
+
+# Follow model
+class Follow(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+
+# Stream model
+class Stream(models.Model):
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stream_following')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+
+# Signal handler for adding posts to the stream
+def add_post(sender, instance, *args, **kwargs):
+    post = instance
+    user = post.user
+    followers = Follow.objects.filter(following=user)
+    for follower in followers:
+        stream = Stream(
+            post=post,
+            user=follower.follower,
+            date=post.posted,
+            following=user
+        )
+        stream.save()
+
+class Likes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_like')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
+
+# Connect the post_save signal to the add_post function
+post_save.connect(add_post, sender=Post)
+
+
+class SavedItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='saved_posts')
+    saved_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user.username} saved {self.post.id}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+post/forms (working well)
+
+from django import forms
+from post.models import Post, Tag
+
+class NarrativeBuilderForm(forms.ModelForm):
+    
+    caption = forms.CharField(widget=forms.Textarea(attrs={
+        'style': 'font-size: 17px; font-family: consolas;',
+        'class': 'input is-medium custom-caption', 
+        'placeholder': 'Write your headline...'
+        }), required=True)
+    content = forms.CharField(widget=forms.Textarea(attrs={
+        'style': 'font-size: 17px; font-family: consolas; height: 80px;',
+        'class': 'input is-medium', 
+        'placeholder': 'Write your narrative...'
+        }), required=True)
+    tags = forms.CharField(widget=forms.TextInput(attrs={
+        'style': 'font-size: 17px; font-family: consolas;',
+        'class': 'input is-medium',
+        'placeholder': 'Tags (add tags, separated by commas)'
+        }), required=True)
+    
+    link1 = forms.URLField(widget=forms.TextInput(attrs={
+        'style': 'font-size: 17px; font-family: consolas;',
+        'class': 'input is-medium',
+        'placeholder': 'Link 1'
+        }),required=True)
+    link2 = forms.URLField(widget=forms.TextInput(attrs={
+        'style': 'font-size: 17px; font-family: consolas;',
+        'class': 'input is-medium',
+        'placeholder': 'Link 2 (optional)'
+        }),required=False)        
+    picture = forms.ImageField(required=True)
+
+    class Meta:
+        model = Post
+        fields = ('caption', 'content', 'tags', 'link1', 'link2', 'picture')
+
+        
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Extract the tags string and split by comma
+        tags_str = self.cleaned_data.get('tags', '')
+        tag_names = [tag.strip() for tag in tags_str.split(',') if tag.strip()]
+
+        if commit:
+            instance.save()
+
+        # Clear existing tags
+        instance.tags.clear()
+
+        # Add tags, creating any that don't exist
+        for tag_name in tag_names:
+            tag_obj, created = Tag.objects.get_or_create(title=tag_name)
+            instance.tags.add(tag_obj)
+
+        if commit:
+            instance.save()
+
+        return instance
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+post_detail.html (working well)
+
+
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% load static %}
+
+<!--{% load custom_filters %}-->
+
+{% block content %}
+
+
+
+
+
+
+      
+
+<div class="columns is-mobile is-centered">
+  <div class="column is-three-fifths">
+
+    <div class="card">
+      <div class="card-image">
+        <figure class="image is-3by2.5">
+          <img
+            src="{{ post.picture.url }}"
+            alt="Placeholder image"
+            style="border-radius: 0; width: 100%; height: auto; max-height: 550px; object-fit: cover; object-position: top;"
+          />
+        </figure>
+      </div>
+
+      <img/>
+
+      <div>
+        <p class="title" style="                  
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+          font-size:26px;
+          font-weight:600;
+          font-family: 'Inter', sans-serif;
+          color: rgb(20, 20, 20);
+          letter-spacing: -0.8px;">
+          {{ post.caption }}
+        </p>
+      </div>
+
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-48x48">
+              <img class="is-rounded"
+                src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                style="width: 48px; height: 48px; object-fit: cover;">
+            </figure>
+          </div>
+          <div class="media-content">
+            {% if post.user.profile.first_name %}
+            <p class="title is-4" style="
+              font-weight:500;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-size: 0.9rem;
+              letter-spacing: 0.1px;
+              margin: 0;">
+              {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
+            </p>
+              {% else %}
+            <p class="title is-4">Unknown</p>
+              {% endif %}               
+            <h1 class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
+              {{ post.posted }}
+            </h1>
+          </div>
+        </div>                  
+        <div class="content" style="font-size: 18px; font-weight:300;">
+          {{ post.content }}
+          <p>{% for tag in post.tags.all %}<a href="{{ tag.get_absolute_url }}">#{{ tag }}</a>{% endfor %}</p>
+          {% if post.link1 %}
+  <div class="content" style="margin-top: 10px;">
+    <a href="{{ post.link1 }}" target="_blank" style="color: #3897f0; word-break: break-word;">{{ post.link1 }}</a>
+  </div>
+{% endif %}
+
+                      
+
+
+        </div>
+      </div>
+      
+      <div class="media-right-container" style="display: flex; justify-content: space-evenly; align-items: center;">
+
+        <div class="media-right" style="text-align: center;">
+          <a href="">
+            <i class="material-icons" style="color:rgb(134, 134, 129)">
+              message
+            </i>
+          </a>
+          <!--<p>{{ total_comment_count|short_number }}</p>-->
+          <p>{{ total_comment_count|intcomma }}</p>
+        </div>  
+
+        <div class="media-right" style="text-align: center;">
+          <a href="">
+            <i class="material-icons" style="color:rgb(134, 134, 129)">
+              share
+            </i>
+          </a>
+          <p>Share</p>
+        </div>
+
+        <div class="media-right" style="text-align: center;">
+          <a href="{% url 'postlike' post.id %}">
+            <i class="material-icons"
+              {% if liked %}
+              style="color: rgb(50, 115, 220);"
+              {% else %}
+              style="color: rgb(134, 134, 129)"
+              {% endif %}>
+              thumb_up_alt
+            </i>
+          </a>
+          <p>{{ post.likes }}</p>
+        </div>
+  
+        {% if favorited is True %}
+        <div class="media-right" style="text-align: center;">
+          <a href="{% url 'postfavorite' post.id %}">
+            <i class="material-icons has-text-link" style="color:rgb(134, 134, 129)">
+              bookmark
+            </i>
+          </a>
+          <p>Saved</p>
+        </div>
+        {% else %}
+
+        <div class="media-right" style="text-align: center;">
+          <a href="{% url 'postfavorite' post.id %}">
+            <i class="material-icons" style="color:rgb(134, 134, 129)">
+              bookmark
+            </i>
+          </a>
+          <p>Save</p>
+        </div>  
+        {% endif %}
+
+      </div>
+      
+      <br>
+
+      <div class="recommendation-wrapper">
+
+      <div id="recommendations-Container" style="
+    background-color: #f9f9f9;
+    font-size: 15px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    margin-top: 20px;
+    margin-bottom: 10px;
+">
+    Recommendations
+</div>
+<div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+      <!-- Left Recommendations -->
+  <div style="flex: 1; min-width: 250px; max-width: 525px;">
+    {% for post in left_recommendations %}
+      <!-- Paste your card HTML here -->
+      <div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+        <article class="media">
+          <div style="display: flex;">
+            <!-- Left: Article image -->
+            <div style="width: 100px; height: 100px;">
+              <a href="{{ post.get_absolute_url }}">
+                <img src="{{ post.picture.url }}" alt="Article Image" 
+                     style="width: 100%; height: 100%; object-fit: cover;" />
+              </a>
+            </div>
+
+            <!-- Right: Text and metadata -->
+            <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
+              <div class="content" style="margin-top: -13px;">
+                <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                  <div class="media-left">
+                    <figure class="image is-24x24" style="margin: 0;">
+                      <img class="is-rounded"
+                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                        style="width: 24px; height: 24px; object-fit: cover;">
+                    </figure>
+                  </div>
+                  <div class="media-content" style="margin-left: -10px;">
+                    <p class="title is-4" style="
+                        font-weight:bolder;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        font-size: 12px;
+                        margin: 0;
+                        ">{{ post.user.username }}
+                    </p>
+                  </div>
+                </div>
+
+                <div style="margin-top: 7px; font-size: 16.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 2.4em;">
+                  <a href="{{ post.get_absolute_url }}" style="color: inherit; text-decoration: none;">
+                    {{ post.caption }}
+                  </a>
+                </div>
+              </div>
+
+              <time datetime="{{ post.posted|date:'c' }}" 
+                    style="font-size: 10.5px; color: #676767; font-family: 'Inter', sans-serif;">
+                {{ post.posted }}
+              </time>
+            </div>
+          </div>
+        </article>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Right Recommendations -->
+  <div style="flex: 1; min-width: 250px; max-width: 525px;">
+    {% for post in right_recommendations %}
+      <!-- Use the same card again -->
+      {# Copy-paste same structure as above #}
+      <div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+        <article class="media">
+          <div style="display: flex;">
+            <!-- Left: Article image -->
+            <div style="width: 100px; height: 100px;">
+              <a href="{{ post.get_absolute_url }}">
+                <img src="{{ post.picture.url }}" alt="Article Image" 
+                     style="width: 100%; height: 100%; object-fit: cover;" />
+              </a>
+            </div>
+
+            <!-- Right: Text and metadata -->
+            <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
+              <div class="content" style="margin-top: -13px;">
+                <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                  <div class="media-left">
+                    <figure class="image is-24x24" style="margin: 0;">
+                      <img class="is-rounded"
+                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                        style="width: 24px; height: 24px; object-fit: cover;">
+                    </figure>
+                  </div>
+                  <div class="media-content" style="margin-left: -10px;">
+                    <p class="title is-4" style="
+                        font-weight:bolder;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        font-size: 12px;
+                        margin: 0;
+                        ">{{ post.user.username }}
+                    </p>
+                  </div>
+                </div>
+
+                <div style="margin-top: 7px; font-size: 16.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 2.4em;">
+                  <a href="{{ post.get_absolute_url }}" style="color: inherit; text-decoration: none;">
+                    {{ post.caption }}
+                  </a>
+                </div>
+              </div>
+
+              <time datetime="{{ post.posted|date:'c' }}" 
+                    style="font-size: 10.5px; color: #676767; font-family: 'Inter', sans-serif;">
+                {{ post.posted }}
+              </time>
+            </div>
+          </div>
+        </article>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+      <br>
+
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img class="is-rounded"
+              src="{% if request.user.profile.picture %}{{ request.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+              style="width: 48px; height: 48px; object-fit: cover;">
+          </p>
+        </figure>
+        <div class="media-content">
+          <form method="post" action="" role="form">
+            {% csrf_token %}
+            <div class="field">
+              <p class="control">
+                {{ form.body }}                      
+              </p>
+            </div>
+            <div class="field">
+              <p class="control">
+                <button type="submit" name="action" class="button">
+                  Post comment
+                </button>
+              </p>
+            </div>
+          </form>                
+        </div>
+      </article>
+            
+      {% for comment in comments %}
+      {% if not comment.parent %}
+       <article class="media comment-wrapper {% if forloop.counter0 >= 3 %}is-hidden{% endif %}" data-index="{{ forloop.counter0 }}">
+
+          <figure class="media-left">
+            <p class="image is-48x48">
+              <img class="is-rounded"
+                src="{% if comment.user.profile.picture %}{{ comment.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                style="width: 48px; height: 48px; object-fit: cover;">
+            </p>
+          </figure>              
+
+          <div class="media-content">
+            <div class="content">
+              <p style="margin-bottom: 0.3rem;">
+                <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
+                  <span style="
+                    font-weight: 600;
+                    color:black;
+                    font-size: 0.9rem;                                                
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;                      
+                    letter-spacing: 0.1px;">
+                    {% if comment.user.profile.first_name %}                     
+                    {{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }}                   
+                    {% else %}
+                    Unknown                      
+                    {% endif %}
+                  </span>
+                      
+                  <span style="margin: 0; color: #cfcdcd;">•</span>
+                  <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
+                    {{ comment.date|timesince }} 
+                    ago
+                  </span>
+                </span>                                    
+                {{ comment.body }}    
+
+                <div style="height: 0.4rem;"></div> <!-- Adjustable spacer -->
+                
+                <small style="display: flex; gap: 10px;">                  
+
+                  <span style="display: flex; flex-direction: column; align-items:center;">
+                    <a href="#" class="like-btn" data-comment-id="{{ comment.id }}">
+                      Like
+                    </a>
+                    
+                    {% if comment.likes.count > 0 %}
+                    <span class="like-count" id="like-count-{{ comment.id }}">                      
+                      {{ comment.likes.count }} <!--like{{ comment.likes.count|pluralize }}-->
+                    </span>                     
+                    {% endif %}                    
+                  </span>
+
+                  <span>
+                    <a href="#" class="reply-btn" data-comment-id="{{ comment.id }}">
+                      Reply
+                    </a>
+                  </span>
+                  {% if comment.replies.count > 0 %}
+                  <span><a href="#" class="view-replies-btn" 
+                    data-comment-id="{{ comment.id }}"
+                    data-reply-count="{{ comment.replies.count}}">
+                    View replies ({{ comment.replies.count }})
+                    </a>
+                  </span>
+                  {% endif %}
+
+                </small>
+
+                <!-- Hidden reply form (revealed when "Reply" is clicked) -->
+                <div class="reply-form-container" id="reply-form-{{ comment.id }}" style="display: none; margin-left: 30px;">
+                  <form method="POST" action="{% url 'submit_reply' comment.id %}">
+                    {% csrf_token %}
+                    <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
+                      @{{ comment.user.username }} 
+                    </textarea>
+                    <button type="submit">Submit</button>
+                  </form>
+                </div>
+
+
+                <!-- Replies section (initially hidden) -->
+                <div class="replies-section" id="replies-{{ comment.id }}" style="display: none; margin-left: 30px;">
+
+                  {% for reply in comment.replies.all|slice:":4" %}
+                  <article class="media">
+                    <figure class="media-left">
+                      <p class="image is-48x48">
+                        <img class="is-rounded"
+                        src="{% if reply.user.profile.picture %}{{ reply.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                        style="width: 48px; height: 48px; object-fit: cover;">
+                      </p>
+                    </figure>
+                    <div class="media-content">
+                      <div class="content">
+                        <p>
+                          <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
+                          <small>• {{ reply.date|timesince }} ago</small>
+                          <br>
+                          {{ reply.body }}
+                        </p>
+
+                        <small style="display: flex; gap: 10px;">
+                          <span style="display: flex; flex-direction: column; align-items:center;">
+                            <a href="#" class="like-btn" data-comment-id="{{ reply.id }}">Like</a>
+                            {% if reply.likes.count > 0 %}
+                            <span class="like-count" id="like-count-{{ reply.id }}">{{ reply.likes.count }}</span>
+                            {% endif %}
+                          </span>
+                          <span><a href="#" class="reply-btn" data-comment-id="{{ reply.id }}">Reply</a></span>
+                        </small>
+
+                        <!-- Reply-to-reply form -->
+                        <div class="reply-form-container" id="reply-form-{{ reply.id }}" 
+                          style="display: none; margin-left: 30px;">
+                          <form method="POST" action="{% url 'submit_reply' reply.id %}">
+                            {% csrf_token %}
+                            <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
+                              @{{ reply.user.username }} 
+                            </textarea>
+                            <button type="submit">Submit</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                  {% endfor %}
+
+                  {% if comment.replies.count > 4 %}
+                  <!-- Hidden extra replies -->
+                  <div id="extra-replies-{{ comment.id }}" style="display: none;">
+
+                    {% for reply in comment.replies.all|slice:"4:" %}
+                    <article class="media">
+                      <figure class="media-left">
+                        <p class="image is-48x48">
+                          <img class="is-rounded"
+                          src="{% if reply.user.profile.picture %}{{ reply.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
+                          style="width: 48px; height: 48px; object-fit: cover;">
+                        </p>
+                      </figure>
+                      <div class="media-content">
+                        <div class="content">
+                          <p>
+                            <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
+                            <small>• {{ reply.date|timesince }} ago</small>
+                            <br>
+                            {{ reply.body }}
+                          </p>
+
+                          <small style="display: flex; gap: 10px;">
+                            <span style="display: flex; flex-direction: column; align-items:center;">
+                              <a href="#" class="like-btn" data-comment-id="{{ reply.id }}">Like</a>
+                              {% if reply.likes.count > 0 %}
+                              <span class="like-count" id="like-count-{{ reply.id }}">{{ reply.likes.count }}</span>
+                              {% endif %}
+                            </span>
+                            <span><a href="#" class="reply-btn" data-comment-id="{{ reply.id }}">Reply</a></span>
+                          </small>
+
+                          <!-- Reply-to-reply form -->
+                          <div class="reply-form-container" id="reply-form-{{ reply.id }}" 
+                            style="display: none; margin-left: 30px;">
+                            <form method="POST" action="{% url 'submit_reply' reply.id %}">
+                              {% csrf_token %}
+                              <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
+                                @{{ reply.user.username }} 
+                              </textarea>
+                              <button type="submit">Submit</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                    {% endfor %}
+                  </div>
+
+                  <!-- Show more replies toggle -->
+                  <a href="#" class="show-more-replies-btn" data-comment-id="{{ comment.id }}">
+                    Show more replies
+                  </a>
+                  {% endif %}
+
+                </div>
+              </p>
+            </div>
+          </div>
+
+        </article>
+        {% endif %}
+        {% endfor %}
+
+        <!-- SHOW MORE COMMENTS bar -->
+        <div id="viewcomments-bar" style="
+          background-color: rgb(41, 56, 99);
+          width: 100%;
+          height: 40px;
+          margin-bottom: 30px;
+          font-size:14px;
+          font-weight: bolder;
+          font-family: Verdana, Geneva, Tahoma, sans-serif;
+          color:white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;">
+          SHOW MORE COMMENTS
+        </div>
+    
+        <br>
+
+      </div>
+    </div>
+  </div>       
+
+        
+  <script>
+      document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const commentId = this.dataset.commentId;
+
+        fetch(`/comment/${commentId}/like/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            const likeCountId = `like-count-${commentId}`;
+            let likeSpan = document.getElementById(likeCountId);
+
+            if (data.likes > 0) {
+                const likeText = `${data.likes}`;
+
+                if (likeSpan) {
+                  likeSpan.innerText = likeText;
+                } else {
+                likeSpan = document.createElement('span');
+                likeSpan.className = 'like-count';
+                likeSpan.id = likeCountId;
+                likeSpan.innerText = likeText;
+                this.insertAdjacentElement('afterend', likeSpan);
+            }
+          } else {
+                // Remove the like span if it exists and likes dropped to 0
+                if (likeSpan) {
+                    likeSpan.remove();
+        }
+      }
+    });
+});
+      });
+
+// CSRF helper
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.querySelectorAll('.reply-btn').forEach(btn => {
+  btn.addEventListener('click', function(event) {
+    event.preventDefault();
+    const commentId = this.getAttribute('data-comment-id');
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
+  });
+});
+
+
+
+
+document.querySelectorAll('.view-replies-btn').forEach(button => {
+  button.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    const commentId = this.dataset.commentId;
+    const replyCount = this.dataset.replyCount;
+    const repliesSection = document.getElementById(`replies-${commentId}`);
+
+    if (repliesSection) {
+      const isVisible = repliesSection.style.display === 'block';
+      repliesSection.style.display = isVisible ? 'none' : 'block';
+      this.textContent = isVisible ? `View replies (${replyCount})` : 'Hide replies';
+    }
+  });
+});
+
+document.querySelectorAll('.show-more-replies-btn').forEach(button => {
+  button.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    const commentId = this.dataset.commentId;
+    const extraReplies = document.getElementById('extra-replies-' + commentId);
+
+    if (extraReplies) {
+      extraReplies.style.display = 'block'; // Show additional replies
+      this.style.display = 'none'; // Hide "Show more replies" button
+    }
+  });
+});
+
+
+  
+   document.getElementById("viewcomments-bar").addEventListener("click", function () {
+  document.querySelectorAll(".comment-wrapper.is-hidden").forEach(el => {
+    el.classList.remove("is-hidden");
+  });
+  this.style.display = "none";
+});
+
+
+
+
+
+</script>
+
+ {% endblock %} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Narrativebuilder.html (working well)
+
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+
+
+<div class="columns is-mobile has-text-centered">
+  <div class="column is-half is-offset-one-quarter">
+
+    <div class="card">
+      <div class="card-content">
+
+        <form method="post" action="" enctype="multipart/form-data" role="form">
+          {% csrf_token %}        
+
+          <div class="field">
+            <div id="captionPreview" class="preview-container" >Your headline will preview here</div>
+            <p class="control">              
+              {{ form.caption }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>            
+          </div>
+
+
+
+          <div class="field">
+            <div id="contentPreview" class="preview-container2" style=" 
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 300px;           
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 17px;
+            text-align:left;            
+            margin-bottom: 2%;            
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            ">Ensure your narrative is at least 150 words in length</div>
+
+                
+            <p class="control">              
+              {{ form.content }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div><br>
+
+          <div class="field">
+            <p class="control">
+              {{ form.tags }}
+            </p>
+          </div>
+          <br>
+
+          <!-- <h2>Paste links</h2>-->
+            <div class="outer-container" style="padding: 10px 50px;">
+                <p style="margin: 5px 0;
+            font-size: 18px;
+            text-align: center;
+            ">Choose a platform, go to the post you want and copy its link then paste it below.</p>
+            </div>
+             <!-- Links -->
+            <div class="platform-links">
+                <a href="https://www.instagram.com" target="_blank">Instagram</a>
+                <br><br>
+                <a href="https://www.tiktok.com" target="_blank">Tiktok</a>
+                <br><br>
+                <a href="https://x.com" target="_blank">X</a>
+                <br><br>
+                <a href="https://www.youtube.com/" target="_blank">Youtube</a>
+            </div>
+         
+
+            <div class="field">
+            <p class="control">
+              {{ form.link1 }}
+            </p>
+          </div>
+          <div class="field">
+            <p class="control">
+              {{ form.link2 }}
+            </p>
+          </div>
+
+            <br><br>
+
+          <div class="field">
+            <p class="control has-icons-left">
+              <label class="label is-medium">Choose a file for your lead photo</label>
+              {{ form.picture }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div> <br> <br>
+
+          <div class="field">
+            <p class="control">
+              <button type="submit" name="action" class="button is-success">
+                {% if edit_mode %}Update{% else %}Publish{% endif %}
+              </button>
+            </p>
+          </div>
+        </form>
+
+      </div> <!-- end card-content -->
+    </div>   <!-- end card -->
+
+  </div>     <!-- end column -->
+</div>       <!-- end columns -->
+
+
+<style>
+
+    .custom-caption {
+    width: 100%;
+    padding: 1%;
+    border-radius: 5px;    
+}
+
+.preview-container {
+            /*border: 1px dashed #999;*/
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 120px;
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size:xx-large;
+            text-align: center;
+            margin-top: 5%;
+            margin-bottom: 2%;
+            /*margin-right: 3%;
+            margin-left: 3%;*/
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .view-draft {
+            width: 9%;
+            aspect-ratio: 5/5;
+            border-radius: 20%;
+            background-color: rgb(175, 1, 1);
+            margin-top: 1%;
+            margin-left: 90%;
+            border: 1px solid rgb(175, 1, 1);
+            padding-top: 0px;
+            padding-left: 0px;
+            cursor: pointer;     
+        }
+            
+         .platform-links {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top:10px;
+        }
+        .platform-links a {
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .platform-links a:hover {
+            text-decoration: underline;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+
+
+
+</style>
+
+
+<script>
+let activeField = null;
+
+// Track which field is being edited
+document.querySelectorAll('textarea').forEach(field => {
+  field.addEventListener('focus', () => activeField = field);
+});
+
+function wrapSelection(tagStart, tagEnd) {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end);
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  const newText = before + tagStart + selectedText + tagEnd + after;
+  activeField.value = newText;
+
+  // Optional: set cursor after inserted text
+  activeField.setSelectionRange(start + tagStart.length, end + tagStart.length);
+  activeField.focus();
+}
+
+// Example usage: bold, italic, underline, uppercase
+function boldButton() {
+  wrapSelection('<b>', '</b>');
+}
+
+function italicButton() {
+  wrapSelection('<i>', '</i>');
+}
+
+function underlineButton() {
+  wrapSelection('<u>', '</u>');
+}
+
+function uppercaseButton() {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end).toUpperCase();
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  activeField.value = before + selectedText + after;
+  activeField.setSelectionRange(start, start + selectedText.length);
+  activeField.focus();
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const captionField = document.querySelector('textarea[name="caption"]');
+  const contentField = document.querySelector('textarea[name="content"]');
+  const captionPreview = document.getElementById('captionPreview');
+  const contentPreview = document.getElementById('contentPreview');
+
+  if (captionField && captionPreview) {
+    captionField.addEventListener('input', () => {
+      captionPreview.innerHTML = captionField.value;
+    });
+  }
+
+  if (contentField && contentPreview) {
+    contentField.addEventListener('input', () => {
+      contentPreview.innerHTML = contentField.value;
+    });
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const captionField = document.querySelector('textarea[name="caption"]');
+    const captionPreview = document.getElementById('captionPreview');
+    const wordLimit = 50;
+
+    if (captionField && captionPreview) {
+        captionField.addEventListener("input", function () {
+            let words = captionField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                captionField.value = words.join(" ");
+            }
+
+            captionPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Your headline will preview here";
+        });
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const contentField = document.querySelector('textarea[name="content"]');
+    const contentPreview = document.getElementById('contentPreview');
+    const wordLimit = 5000;
+
+    if (contentField && contentPreview) {
+        contentField.addEventListener("input", function () {
+            let words = contentField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                contentField.value = words.join(" ");
+            }
+
+            contentPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Ensure your narrative is at least 150 words in length";
+        });
+    }
+});
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+            const instagramLinkInput = document.getElementById("instagramLink");
+            const instagramLinkInput2 = document.getElementById("instagramLink2");
+            const embedButton = document.getElementById("embedButton");
+            const firstScreen = document.getElementById("firstScreen");
+            const secondScreen = document.getElementById("secondScreen");
+            const thirdScreen = document.getElementById("thirdScreen");
+            const fourthScreen = document.getElementById("fourthScreen");
+            const embedContainer = document.getElementById("embedContainer");
+            const embedContainer2 = document.getElementById("embedContainer2");
+            const backButton = document.getElementById("backButton");
+            const nextButton = document.getElementById("nextButton");
+            const backButton3 = document.getElementById("backButton3");
+            const nextButton3 = document.getElementById("nextButton3");
+            const backButton4 = document.getElementById("backButton4");
+  
+            // Embed Instagram Post
+            embedButton.addEventListener("click", () => {
+                const instagramLink = instagramLinkInput.value.trim();
+                const instagramLink2 = instagramLinkInput2.value.trim();
+
+                // Clear any previous embed
+                embedContainer.innerHTML = "";
+                embedContainer2.innerHTML = "";
+                embedContainer.style.display = "none";
+                embedContainer2.style.display = "none";
+                let hasContent = false;
+
+                if (instagramLink) {
+                    // Create a blockquote element for the embed
+                    const blockquote1 = document.createElement("blockquote");
+                    blockquote1.className = "instagram-media";
+                    blockquote1.setAttribute("data-instgrm-permalink", instagramLink);
+                    blockquote1.setAttribute("data-instgrm-version", "12");
+                    blockquote1.style.background = "#fff";
+                    blockquote1.style.border = "none";
+                    blockquote1.style.margin = "0 auto";
+                    blockquote1.style.maxWidth = "100%";
+                    embedContainer.appendChild(blockquote1);
+                    embedContainer.style.display = "block";
+                    hasContent = true;
+                    }
+                if (instagramLink2) {
+                    // Create a blockquote element for the embed
+                    const blockquote2 = document.createElement("blockquote");
+                    blockquote2.className = "instagram-media";
+                    blockquote2.setAttribute("data-instgrm-permalink", instagramLink2);
+                    blockquote2.setAttribute("data-instgrm-version", "12");
+                    blockquote2.style.background = "#fff";
+                    blockquote2.style.border = "none";
+                    blockquote2.style.margin = "0 auto";
+                    blockquote2.style.maxWidth = "100%";
+                    embedContainer2.appendChild(blockquote2);
+                    embedContainer2.style.display = "block";
+                    hasContent = true;
+                    }
+                    if (hasContent) {
+                        // Hide the first screen and show the second screen
+                        firstScreen.style.display = "none";
+                        secondScreen.style.display = "flex";
+
+                    // Process the embed
+                if (window.instgrm) {
+                        window.instgrm.Embeds.process();
+                    }
+
+                    backButton.addEventListener("click", () => {
+                        secondScreen.style.display = "none";
+                        firstScreen.style.display = "flex";
+
+                        // Clear input fields
+                        instagramLinkInput.value = "";
+                        instagramLinkInput2.value = "";
+                    });
+
+                    // Next Button: Go to the third screen
+                    nextButton.addEventListener("click", () => {
+                        secondScreen.style.display = "none";
+                        thirdScreen.style.display = "flex";
+                    });
+
+                    backButton3.addEventListener("click", () => {
+                        thirdScreen.style.display = "none";
+                        secondScreen.style.display = "flex";
+                    });
+
+                    nextButton3.addEventListener("click", () => {
+                        thirdScreen.style.display = "none";
+                        fourthScreen.style.display = "flex";
+                    });
+
+                    backButton4.addEventListener("click", () => {
+                        fourthScreen.style.display = "none";
+                        thirdScreen.style.display = "flex";
+                    });
+
+
+                    // Apply scaling once the embed is processed
+                    setTimeout(() => {
+                        const processScaling = (container) => {
+                            const iframe = container.querySelector("iframe");
+                            if (iframe) {
+                                const desiredWidth = 150; // Desired default width
+                                const scale = desiredWidth / iframe.offsetWidth; // Calculate scaling factor
+                                iframe.style.transform = `scale(${scale})`; // Scale the embed
+                                iframe.style.transformOrigin = "top left"; // Prevent cropping
+                                container.style.width = `${desiredWidth}px`; // Set container width
+                                container.style.height = `${iframe.offsetHeight * scale}px`; // Adjust height based on scaling
+                            }
+                        };
+
+                        processScaling(embedContainer);
+                        processScaling(embedContainer2);
+                    }, 1000); // Delay to ensure the embed is fully rendered
+                } else {
+                    alert("Please enter a valid Instagram link.");
+                }
+            });
+        });
+
+
+</script>
+
+
+
+
+{% endblock %}

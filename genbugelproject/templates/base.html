@@ -1,0 +1,166 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html style="background-color: rgb(241, 241, 233);">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BUGEL</title>
+    <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <!-- For material-icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- For material-symbols-outlined -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
+  </head>
+
+  <style>
+    section.section {
+      padding-top: 0 !important;
+    }
+
+    .custom-button {
+      margin: -5px auto; 
+      padding: 23px 0px 23px 10px;
+      border: 1px solid rgb(230, 230, 221); 
+      font-size: 14.5px; 
+      font-weight: 400; 
+      display: flex; 
+      align-items: center; 
+      justify-content: flex-start; 
+      width: 100%; 
+      text-align: left;
+      color:rgb(112, 112, 112);   
+    }
+
+    .custom-button:hover {
+      background-color: #f3f3f3;
+      color: #000000;
+      font-weight: 600;
+      border: 1px solid #f3f3f3;
+    }  
+
+    .default-bg {
+  background-color: rgb(241, 241, 233);
+  margin: 0;
+}
+.custom-bg {
+  background-color: white !important;  /* or any color you want */
+  margin: 0;
+}
+
+.custom-button.is-active {
+  background-color: #f3f3f3;
+  font-weight: 500;
+  color: #000000;
+  border-left: 0px solid #f3f3f3;
+  border: 1px solid #f3f3f3;
+}
+
+
+  </style>
+
+  <body class="{% block body_class %}default-bg{% endblock %}">
+    <!-- Sidebar -->
+    <div class="sidebar"
+         style="position: fixed; top: 0; left: 0; height: 100vh; width: 230px; background-color: rgb(230, 230, 221); padding: 10px; overflow-y: auto;">
+      <a href="{% url 'index' %}">
+        <h1 style="margin: 1.3rem 0 1rem 0; text-align: center; width: 100%; color: black;
+          font-family: Arial, sans-serif; font-weight:500; font-size: 24px; cursor: pointer;">
+          BUGEL
+        </h1>
+      </a>
+      <aside class="menu">
+        <div class="buttons is-flex is-flex-direction-column" style="align-items: flex-start;">
+
+          <a href="{% url 'index' %}" 
+              class="button custom-button {% if active_page == 'frontpage' %}is-active{% endif %}"
+             style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              flip_to_front
+            </span>
+              Frontpage
+          </a>
+
+          <a href="{% url 'interests' %}" 
+          class="button custom-button {% if active_page == 'interests' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              check_circle_outline
+            </span>
+              Interests
+          </a>
+
+          <a href="{% url 'narrativebuilder' %}" 
+          class="button custom-button {% if active_page == 'narrativebuilder' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-symbols-outlined" style="font-size: 24px; margin-right: 8px;">
+              stylus_fountain_pen
+            </span>
+              Narrative Builder
+          </a>
+
+          <a href="{% url 'discover' %}" 
+          class="button custom-button {% if active_page == 'discover' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              explore
+            </span>
+              Discover
+          </a>  
+          
+          <a href="{% url 'all_collections' %}" 
+          class="button custom-button {% if active_page == 'all_collections' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              bookmark_border
+            </span>
+              Collections
+          </a>          
+
+          <a href="{% url 'profile' request.user %}" 
+          class="button custom-button {% if active_page == 'profile' %}is-active{% endif %}" 
+          style="margin-left: 0px; margin-bottom: 0px;">        
+            <img src="{% if request.user.profile.picture %}{{ request.user.profile.picture.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+              alt="Profile Picture"
+              style="width: 24px; height: 24px; border-radius: 50%; margin-right: 10px; object-fit: cover;">
+              {{ request.user }}
+          </a>    
+
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable" style="margin-top: 20px;">
+          <a class="navbar-link">Settings</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item">Change password</a>
+            <a class="navbar-item">Contact</a>
+            <a class="navbar-item">Report an issue</a>
+            <hr class="navbar-divider">
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="button is-white" style="width: 100%; text-align: center;">Log out</button>
+            </form>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+    <!-- Main Content -->
+    <div style="margin-left: 240px;">
+      <section class="section">
+        <div class="container">
+          {% block content %}{% endblock %}
+          {% block pagination %}{% endblock %}
+        </div>
+      </section>
+    </div>
+  
+  <script async defer src="https://www.instagram.com/embed.js"></script>
+</body>
+
+<!--11:11 7Jun25-->

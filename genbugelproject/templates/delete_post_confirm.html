@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2 class="title is-4">Are you sure you want to delete this post?</h2>
+  <figure>
+    <img src="{{ post.picture.url }}" alt="Post image" style="max-width: 300px;">
+  </figure>
+  <p>{{ post.caption }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button class="button is-danger" type="submit">Yes, delete</button>
+    <a href="{% url 'profile' request.user.username %}" class="button">Cancel</a>
+  </form>
+</div>
+{% endblock %}

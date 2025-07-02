@@ -1,0 +1,71 @@
+
+
+
+    
+        
+        <div class="carousel-item" style="min-width: 210px; max-width: 220px; flex: 0 0 auto; scroll-snap-align: start;">
+          <!-- Your card template starts -->
+    
+          <div class="card" style="padding: 1.0rem 1rem 0.251rem 1.0rem; box-shadow: none; border-radius: 0px;">
+            <div class="card-image">
+              <figure class="image is-4by3" style="margin: 0;">
+                <a href="{% url 'postdetails' post_item.id %}" onclick="openPostModal('{{ post_item.id }}')">
+                  <img src="{{ post_item.picture.url }}" alt="post image" style="width: 100%; object-fit: cover; border-radius: 0.7676%;" />
+                </a>
+              </figure>
+            </div>
+            
+            <div class="card-content" style="padding-left: 0.0rem; padding-top: 0.5rem; padding-right: 0.5rem; margin-left: 0px;">
+              <div class="media" style="align-items: center;">
+                <div class="media-left">
+                  <figure class="image is-24x24">
+                    <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
+                      <img class="is-rounded"
+                        src="{% if post_item.user.profile.picture %}{{ post_item.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                        style="width: 24px; height: 24px; object-fit: cover;">
+                    </a>
+                  </figure>
+                </div>
+                <div class="media-content" style="margin-left: -10px;">
+                  <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
+                    <p class="title is-4" style="font-size: 10.8px; font-weight: 600; 
+                    margin: 0px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:rgb(44, 44, 44);">
+                      {% if post_item.user.profile.first_name %}
+                        {{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}
+                      {% else %}
+                        Unknown
+                      {% endif %}
+                    </p>
+                  </a>
+                </div>
+              </div>
+              <div class="content" style="
+                margin-top: -12px;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+                line-clamp: 3;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.05em;
+                height: 3.5em;">
+                <a href="{% url 'postdetails' post_item.id %}" style="color: rgb(37, 37, 37);
+                 font-size: 14px; font-family: 'Inter', sans-serif; letter-spacing: -0.1px;">
+                  {{ post_item.caption|truncatechars:90 }}
+                </a>
+              </div>
+              <div style="margin-top: -20px;">
+                <time style="color: #676767; font-family: 'Inter', sans-serif; font-size: 10.9px;">
+                  {{ post_item.posted }}
+                </time>
+              </div>
+            </div>
+          </div>
+          <!-- Your card template ends -->
+        </div>
+        
+        
+  
+
+
+

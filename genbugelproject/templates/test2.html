@@ -1,0 +1,1084 @@
+
+<div class="content" style="font-size: 18px; font-weight:300;">
+  {{ content1|safe }}
+</div>
+
+{% if post.link1 %}
+  {% if "youtu" in post.link1 %}
+    {% with post.link1|youtube_id as vid %}
+      <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+          <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+          <div style="
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            font-size:3em;
+            color:white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+          ">▶</div>
+        </a>
+      </div>
+    {% endwith %}
+  {% else %}
+    <div class="instagram-wrapper">
+      <div class="instagram-loading">Loading Instagram Post...</div>
+      <div class="instagram-embed" data-instagram-link="{{ post.link1 }}"></div>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% if content2 %}
+  <div class="content" style="font-size: 18px; font-weight:300;">
+    {{ content2|safe }}
+  </div>
+{% endif %}
+
+{% if post.link2 %}
+  {% if "youtu" in post.link2 %}
+    {% with post.link2|youtube_id as vid %}
+      <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+          <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+          <div style="
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            font-size:3em;
+            color:white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+          ">▶</div>
+        </a>
+      </div>
+    {% endwith %}
+  {% else %}
+    <div class="instagram-wrapper">
+      <div class="instagram-loading">Loading Instagram Post...</div>
+      <div class="instagram-embed" data-instagram-link="{{ post.link2 }}"></div>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% if content3 %}
+  <div class="content" style="font-size: 18px; font-weight:300;">
+    {{ content3|safe }}
+  </div>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Narrativebuilder. A beautiful state.
+
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+
+
+<div class="columns is-mobile has-text-centered">
+  <div class="column is-half is-offset-one-quarter">
+
+    <div class="card">
+      <div class="card-content">
+
+        <form method="post" action="" enctype="multipart/form-data" role="form">
+          {% csrf_token %}
+          
+
+
+          <div class="field">
+            <div id="captionPreview" class="preview-container" >Your headline will preview here</div>
+
+                <div id="typeface-list" class="typefaceList">
+                    <div class="typeface-option" style="font-family: Arial;" onclick="changeTypeface('Arial')">Arial</div>
+                    <div class="typeface-option" style="font-family: 'Courier Prime';" onclick="changeTypeface('Courier Prime')">Courier Prime</div>
+                    <div class="typeface-option" style="font-family: Georgia;" onclick="changeTypeface('Georgia')">Georgia</div>
+                    <div class="typeface-option" style="font-family: 'Pacifico';" onclick="changeTypeface('Pacifico')">Pacifico</div>
+                    <div class="typeface-option" style="font-family: 'Roboto';" onclick="changeTypeface('Roboto')">Roboto</div>
+                </div>
+                <div id="color-list">
+                    <div class="color-option" style="color: red;" onclick="changeColor('red')">Red</div>
+                    <div class="color-option" style="color: blue;" onclick="changeColor('blue')">blue</div>
+                    <div class="color-option" style="color: green;" onclick="changeColor('green')">green</div>
+                    <div class="color-option" style="color: black;" onclick="changeColor('black')">black</div>   
+                </div>
+                <div id="write-menu">
+                    <button id="typeface-button" class="typefaceButton">T</button>      
+                    <button onclick="boldButton()" id="bold-button">B</button>
+                    <button onclick="italicButton()" id="italic-button">I</button>
+                    <button onclick="underlineButton()" id="underline-button">U</button>
+                    <button onclick="uppercaseButton()" id="uppercase-button">C</button>
+                    <button id="color-button">O</button>
+                </div>
+            <p class="control">              
+              {{ form.caption }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>            
+          </div>
+
+
+
+          <div class="field">
+            <div id="contentPreview" class="preview-container2" style=" 
+
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 300px;           
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 17px;
+            text-align:left;
+            
+            margin-bottom: 2%;
+            
+            white-space: pre-wrap;
+            word-wrap: break-word;">Ensure your narrative is at least 150 words in length</div>
+
+                
+            <p class="control">              
+              {{ form.content }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div><br>
+
+          <div class="field">
+            <p class="control">
+              {{ form.tags }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div><br>
+
+          <!-- <h2>Paste links</h2>-->
+            <div class="outer-container" style="padding: 10px 50px;">
+                <p style="margin: 5px 0;
+            font-size: 18px;
+            text-align: center;
+            ">Choose a platform, go to the post you want and copy its link then paste it below.</p>
+            </div>
+             <!-- Links -->
+            <div class="platform-links">
+                <a href="https://www.instagram.com" target="_blank">Instagram</a>
+                <br><br>
+                <a href="https://www.tiktok.com" target="_blank">Tiktok</a>
+                <br><br>
+                <a href="https://x.com" target="_blank">X</a>
+                <br><br>
+                <a href="https://www.youtube.com/" target="_blank">Youtube</a>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <input type="text" id="instagramLink" placeholder="Link 1">
+                <input type="text" id="instagramLink2" placeholder="Link 2 (optional)">
+                
+            </div>
+            <br><br>
+
+          <div class="field">
+            <p class="control has-icons-left">
+              <label class="label is-medium">Choose a file for your lead photo</label>
+              {{ form.picture }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div> <br> <br>
+
+          <div class="field">
+            <p class="control">
+              <button type="submit" name="action" class="button is-success">
+                {% if edit_mode %}Update{% else %}Publish{% endif %}
+              </button>
+            </p>
+          </div>
+        </form>
+
+      </div> <!-- end card-content -->
+    </div>   <!-- end card -->
+
+  </div>     <!-- end column -->
+</div>       <!-- end columns -->
+
+
+<style>
+
+    .custom-caption {
+    width: 100%;
+    padding: 1%;
+    border-radius: 5px;
+    
+}
+
+
+
+.preview-container {
+            /*border: 1px dashed #999;*/
+            background: rgb(255, 255, 255);
+            width: 100%;
+            height: 120px;
+            overflow-y: auto;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size:xx-large;
+            text-align: center;
+            margin-top: 5%;
+            margin-bottom: 2%;
+            /*margin-right: 3%;
+            margin-left: 3%;*/
+            white-space: pre-wrap;
+            word-wrap: break-word;
+
+        }
+        
+        .view-draft {
+            width: 9%;
+            aspect-ratio: 5/5;
+            border-radius: 20%;
+            background-color: rgb(175, 1, 1);
+            margin-top: 1%;
+            margin-left: 90%;
+            border: 1px solid rgb(175, 1, 1);
+            padding-top: 0px;
+            padding-left: 0px;
+            cursor: pointer;
+        
+            
+            
+        
+        }
+
+        #write-menu {
+            width: 100%;
+            aspect-ratio: 5/0.50;
+            background-color: rgb(248, 251, 255);
+            /*border-bottom: 1px solid rgb(218, 223, 230);*/
+            margin-top: 5px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 3px;
+        }
+
+        #write-menu2{
+            width: 100%;
+            aspect-ratio: 5/0.50;
+            background-color: rgb(248, 251, 255);
+            /*border-bottom: 1px solid rgb(218, 223, 230);*/
+            margin-top: 5px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 3px;
+        }
+
+
+
+
+
+        .typefaceList {
+            display: none;
+            position: absolute;
+            margin-top: 40px;
+            margin-left: 20px;
+            /*background-color: #4caf50;*/
+            width: 10%;
+            background: white; /* Ensures readability 
+            border: 1px solid #ccc; /* Optional: Adds a border */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow */
+            z-index: 1000; /* Ensures it appears above other elements */
+            padding: 5px; /* Optional: Adds some spacing */
+            font-size: 11px;
+        }
+
+        .typefaceList2{
+            display: none;
+            position: absolute;
+            margin-top: 40px;
+            margin-left: 20px;
+            /*background-color: #4caf50;*/
+            width: 10%;
+            background: white; /* Ensures readability 
+            border: 1px solid #ccc; /* Optional: Adds a border */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow */
+            z-index: 1000; /* Ensures it appears above other elements */
+            padding: 5px; /* Optional: Adds some spacing */
+            font-size: 11px;
+        }
+
+        
+
+           /* justify-content: center;
+            align-items: center;
+            text-align: center;*/
+            
+
+        
+        .typeface-option {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ccc;
+            margin: 2px;
+            display: block;
+            
+        }
+        .typeface-option:hover {
+            background-color: #f0f0f0;
+        }
+
+
+        #color-list {
+            display: none;
+            position: absolute;
+            margin-top: 40px;
+            margin-left: 260px;
+            /*background-color: #4caf50;*/
+            width: 10%;
+            background: white; /* Ensures readability 
+            border: 1px solid #ccc; /* Optional: Adds a border */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow */
+            z-index: 1000; /* Ensures it appears above other elements */
+            padding: 5px; /* Optional: Adds some spacing */
+            font-size: 11px;
+        }
+
+        #color-list2 {
+            display: none;
+            position: absolute;
+            margin-top: 40px;
+            margin-left: 260px;
+            /*background-color: #4caf50;*/
+            width: 10%;
+            background: white; /* Ensures readability 
+            border: 1px solid #ccc; /* Optional: Adds a border */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow */
+            z-index: 1000; /* Ensures it appears above other elements */
+            padding: 5px; /* Optional: Adds some spacing */
+            font-size: 11px;
+        }
+
+        
+
+           /* justify-content: center;
+            align-items: center;
+            text-align: center;*/
+            
+
+        
+        .color-option {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ccc;
+            margin: 2px;
+            display: block;
+            
+        }
+        .color-option:hover {
+            background-color: #f0f0f0;
+        }
+
+        
+            .typefaceButton {
+                height: 70%;
+                aspect-ratio: 8/4.5;
+                background: rgb(248, 251, 255);
+                border: rgb(248, 251, 255);
+                cursor: pointer;
+            }
+
+            #color-button {
+                height: 70%;
+                aspect-ratio: 8/4.5;
+                background: rgb(248, 251, 255);
+                border: rgb(248, 251, 255);
+                cursor: pointer;
+            }
+            #bold-button {
+                height: 70%;
+                aspect-ratio: 8/4.5;
+                background: rgb(248, 251, 255);
+                border: rgb(248, 251, 255);
+                cursor: pointer;
+            
+            }
+            #italic-button {
+                height: 70%;
+                aspect-ratio: 8/4.5;
+                background: rgb(248, 251, 255);
+                border: rgb(248, 251, 255);
+                cursor: pointer;
+            
+            }
+            #underline-button {
+                height: 70%;
+                aspect-ratio: 8/4.5;
+                background: rgb(248, 251, 255);
+                border: rgb(248, 251, 255);
+                cursor: pointer;
+            
+            }
+
+            #uppercase-button {
+                height: 70%;
+                aspect-ratio: 8/4.5;
+                background: rgb(248, 251, 255);
+                border: rgb(248, 251, 255);
+                cursor: pointer;
+            
+            }
+
+
+        #type-space {
+            width: 100%;
+            aspect-ratio: 5/0.5;
+            background-color: rgb(255, 255, 255);
+            
+
+        }
+
+        #type-space h5 {
+            color: rgb(170, 170, 170);
+            margin-left: 10px;
+            letter-spacing:0.01cm;
+            font-size: 13px;
+            
+        }
+
+        .comment-box {
+            width: 98%;
+            padding: 1%;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+
+         .platform-links {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top:10px;
+        }
+        .platform-links a {
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .platform-links a:hover {
+            text-decoration: underline;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+
+
+
+</style>
+
+
+<script>
+let activeField = null;
+
+// Track which field is being edited
+document.querySelectorAll('textarea').forEach(field => {
+  field.addEventListener('focus', () => activeField = field);
+});
+
+function wrapSelection(tagStart, tagEnd) {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end);
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  const newText = before + tagStart + selectedText + tagEnd + after;
+  activeField.value = newText;
+
+  // Optional: set cursor after inserted text
+  activeField.setSelectionRange(start + tagStart.length, end + tagStart.length);
+  activeField.focus();
+}
+
+// Example usage: bold, italic, underline, uppercase
+function boldButton() {
+  wrapSelection('<b>', '</b>');
+}
+
+function italicButton() {
+  wrapSelection('<i>', '</i>');
+}
+
+function underlineButton() {
+  wrapSelection('<u>', '</u>');
+}
+
+function uppercaseButton() {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end).toUpperCase();
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  activeField.value = before + selectedText + after;
+  activeField.setSelectionRange(start, start + selectedText.length);
+  activeField.focus();
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const captionField = document.querySelector('textarea[name="caption"]');
+  const contentField = document.querySelector('textarea[name="content"]');
+  const captionPreview = document.getElementById('captionPreview');
+  const contentPreview = document.getElementById('contentPreview');
+
+  if (captionField && captionPreview) {
+    captionField.addEventListener('input', () => {
+      captionPreview.innerHTML = captionField.value;
+    });
+  }
+
+  if (contentField && contentPreview) {
+    contentField.addEventListener('input', () => {
+      contentPreview.innerHTML = contentField.value;
+    });
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const captionField = document.querySelector('textarea[name="caption"]');
+    const captionPreview = document.getElementById('captionPreview');
+    const wordLimit = 50;
+
+    if (captionField && captionPreview) {
+        captionField.addEventListener("input", function () {
+            let words = captionField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                captionField.value = words.join(" ");
+            }
+
+            captionPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Your headline will preview here";
+        });
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const contentField = document.querySelector('textarea[name="content"]');
+    const contentPreview = document.getElementById('contentPreview');
+    const wordLimit = 5000;
+
+    if (contentField && contentPreview) {
+        contentField.addEventListener("input", function () {
+            let words = contentField.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+            if (words.length > wordLimit) {
+                words = words.slice(0, wordLimit);
+                contentField.value = words.join(" ");
+            }
+
+            contentPreview.textContent = words.length > 0
+                ? words.join(" ")
+                : "Ensure your narrative is at least 150 words in length";
+        });
+    }
+});
+
+
+
+
+document.getElementById('color-button').addEventListener('click', function() {
+    let list = document.getElementById('color-list');
+    list.style.display = list.style.display === 'none' || list.style.display ==='' ? 'block' : 'none';
+});
+
+function changeColor(font) {
+    document.getElementById('captionPreview').style.color = font;
+    document.getElementById('latestComment').style.color = font;
+    document.getElementById('commentTime').style.color = font;
+    document.getElementById('color-list').style.display = 'none';
+}
+
+
+document.getElementById('typeface-button').addEventListener('click', function() {
+            let list = document.getElementById('typeface-list');
+            list.style.display = list.style.display === 'none' || list.style.display === '' ? 'block' : 'none';
+        });
+
+        function changeTypeface(font) {
+            document.getElementById('captionPreview').style.fontFamily = font;
+            document.getElementById('latestComment').style.fontFamily = font;
+            document.getElementById('commentTime').style.fontFamily = font;
+            document.getElementById('typeface-list').style.display = 'none';
+        }
+
+
+
+
+        function boldButton() {
+            let previewContainer = document.getElementById('captionPreview');
+            previewContainer.style.fontWeight = previewContainer.style.fontWeight === 'bold' ? 'normal' : 'bold';
+            latestComment.style.fontWeight = latestComment.style.fontWeight === 'bold' ? 'normal' : 'bold';
+            commentTime.style.fontWeight = commentTime.style.fontWeight === 'bold' ? 'normal' : 'bold';
+        }
+
+        function italicButton() {
+            let previewContainer = document.getElementById('captionPreview');
+            previewContainer.style.fontStyle = previewContainer.style.fontStyle === 'italic' ? 'normal' : 'italic';
+            latestComment.style.fontStyle = latestComment.style.fontStyle === 'italic' ? 'normal' : 'italic';
+            commentTime.style.fontStyle = commentTime.style.fontStyle === 'italic' ? 'normal' : 'italic';
+        }
+
+        function uppercaseButton() {
+            let previewContainer = document.getElementById('captionPreview');
+            previewContainer.style.textTransform = previewContainer.style.textTransform === 'uppercase' ? 'none' : 'uppercase';
+            latestComment.style.textTransform = latestComment.style.textTransform === 'uppercase' ? 'none' : 'uppercase';
+            commentTime.style.textTransform = commentTime.style.textTransform === 'uppercase' ? 'none' : 'uppercase';
+
+        }
+
+        function underlineButton() {
+            let previewContainer = document.getElementById('captionPreview');
+            previewContainer.style.textDecoration = previewContainer.style.textDecoration === 'underline' ? 'none' : 'underline';
+            latestComment.style.textDecoration = latestComment.style.textDecoration === 'underline' ? 'none' : 'underline';
+            commentTime.style.textDecoration = commentTime.style.textDecoration === 'underline' ? 'none' : 'underline';
+
+        }
+
+
+
+</script>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+When I faced the problem of typing on content field and it wasn't showing in preview
+document.addEventListener('DOMContentLoaded', () => {
+  const captionField = document.querySelector('textarea[name="caption"]');
+  const contentField = document.querySelector('textarea[name="content"]');
+  const captionPreview = document.getElementById('captionPreview');
+  const contentPreview = document.getElementById('contentPreview');
+
+  if (captionField && captionPreview) {
+    captionField.addEventListener('input', () => {
+      captionPreview.innerHTML = captionField.value;
+    });
+  }
+
+  if (contentField) {
+    contentField.addEventListener('input', () => {
+      contentPreview.innerHTML = contentField.value;
+    });
+  }
+});
+
+
+</script>
+
+
+
+
+{% endblock %}
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+
+
+<div class="columns is-mobile has-text-centered">
+  <div class="column is-half is-offset-one-quarter">
+
+    <div class="card">
+      <div class="card-content">
+
+        <form method="post" action="" enctype="multipart/form-data" role="form">
+          {% csrf_token %}
+          
+          <div class="field">
+            <div id="captionPreview" class="preview-container" style=" height: 200px;         /* Adjust as needed */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  font-family: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;"></div>
+
+                <div id="typeface-list" class="typefaceList">
+                    <div class="typeface-option" style="font-family: Arial;" onclick="changeTypeface('Arial')">Arial</div>
+                    <div class="typeface-option" style="font-family: 'Courier Prime';" onclick="changeTypeface('Courier Prime')">Courier Prime</div>
+                    <div class="typeface-option" style="font-family: Georgia;" onclick="changeTypeface('Georgia')">Georgia</div>
+                    <div class="typeface-option" style="font-family: 'Pacifico';" onclick="changeTypeface('Pacifico')">Pacifico</div>
+                    <div class="typeface-option" style="font-family: 'Roboto';" onclick="changeTypeface('Roboto')">Roboto</div>
+                </div>
+                <div id="color-list">
+                    <div class="color-option" style="color: red;" onclick="changeColor('red')">Red</div>
+                    <div class="color-option" style="color: blue;" onclick="changeColor('blue')">blue</div>
+                    <div class="color-option" style="color: green;" onclick="changeColor('green')">green</div>
+                    <div class="color-option" style="color: black;" onclick="changeColor('black')">black</div>   
+                </div>
+                <div id="write-menu">
+                    <button id="typeface-button" class="typefaceButton">T</button>      
+                    <button type="button" onclick="boldButton()">B</button>
+                    <button type="button" onclick="italicButton()">I</button>
+                    <button type="button" onclick="underlineButton()">U</button>
+                    <button type="button" onclick="uppercaseButton()">C</button>
+                    <button id="color-button">O</button>
+                </div>
+            <p class="control has-icons-left">              
+              {{ form.caption }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+            
+          </div>
+
+          <div class="field">
+            <div id="contentPreview" class="preview-container" style=" height: 100px; /* Adjust as needed */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  font-family: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;"></div>
+
+                <div id="typeface-list" class="typefaceList">
+                    <div class="typeface-option" style="font-family: Arial;" onclick="changeTypeface('Arial')">Arial</div>
+                    <div class="typeface-option" style="font-family: 'Courier Prime';" onclick="changeTypeface('Courier Prime')">Courier Prime</div>
+                    <div class="typeface-option" style="font-family: Georgia;" onclick="changeTypeface('Georgia')">Georgia</div>
+                    <div class="typeface-option" style="font-family: 'Pacifico';" onclick="changeTypeface('Pacifico')">Pacifico</div>
+                    <div class="typeface-option" style="font-family: 'Roboto';" onclick="changeTypeface('Roboto')">Roboto</div>
+                </div>
+                <div id="color-list">
+                    <div class="color-option" style="color: red;" onclick="changeColor('red')">Red</div>
+                    <div class="color-option" style="color: blue;" onclick="changeColor('blue')">blue</div>
+                    <div class="color-option" style="color: green;" onclick="changeColor('green')">green</div>
+                    <div class="color-option" style="color: black;" onclick="changeColor('black')">black</div>   
+                </div>
+                <div id="write-menu">
+                    <button id="typeface-button" class="typefaceButton">T</button>      
+                    <button onclick="boldButton()" id="bold-button">B</button>
+                    <button onclick="italicButton()" id="italic-button">I</button>
+                    <button onclick="underlineButton()" id="underline-button">U</button>
+                    <button onclick="uppercaseButton()" id="uppercase-button">C</button>
+                    <button id="color-button">O</button>
+                </div>
+            <p class="control has-icons-left">
+              
+              {{ form.content }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control has-icons-left">
+              <label class="label is-medium">Tags (add tags, separated by commas)</label>
+              {{ form.tags }}
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control">
+              <button type="submit" name="action" style="
+            margin-top: 25px;
+            padding: 8px 20px;
+            background-color: #00aaff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        
+        #embedButton:hover {
+            background-color: #0088cc;
+        }">
+                Next
+              </button>
+            </p>
+          </div>
+        </form>
+
+      </div> <!-- end card-content -->
+    </div>   <!-- end card -->
+
+  </div>     <!-- end column -->
+</div>       <!-- end columns -->
+
+
+<script>
+let activeField = null;
+
+// Track which field is being edited
+document.querySelectorAll('textarea').forEach(field => {
+  field.addEventListener('focus', () => activeField = field);
+});
+
+function wrapSelection(tagStart, tagEnd) {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end);
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  const newText = before + tagStart + selectedText + tagEnd + after;
+  activeField.value = newText;
+
+  // Optional: set cursor after inserted text
+  activeField.setSelectionRange(start + tagStart.length, end + tagStart.length);
+  activeField.focus();
+}
+
+// Example usage: bold, italic, underline, uppercase
+function boldButton() {
+  wrapSelection('<b>', '</b>');
+}
+
+function italicButton() {
+  wrapSelection('<i>', '</i>');
+}
+
+function underlineButton() {
+  wrapSelection('<u>', '</u>');
+}
+
+function uppercaseButton() {
+  if (!activeField) return;
+  const start = activeField.selectionStart;
+  const end = activeField.selectionEnd;
+  const text = activeField.value;
+
+  const selectedText = text.slice(start, end).toUpperCase();
+  const before = text.slice(0, start);
+  const after = text.slice(end);
+
+  activeField.value = before + selectedText + after;
+  activeField.setSelectionRange(start, start + selectedText.length);
+  activeField.focus();
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const captionField = document.querySelector('textarea[name="caption"]');
+  const contentField = document.querySelector('textarea[name="content"]');
+  const captionPreview = document.getElementById('captionPreview');
+  const contentPreview = document.getElementById('contentPreview');
+
+  if (captionField) {
+    captionField.addEventListener('input', () => {
+      captionPreview.innerHTML = captionField.value;
+    });
+  }
+
+  if (contentField) {
+    contentField.addEventListener('input', () => {
+      contentPreview.innerHTML = contentField.value;
+    });
+  }
+});
+
+
+</script>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container" id="firstScreen" style="flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 46px;
+            width: 100%;
+            height: 100%;
+            max-width: 385px;
+            max-height: 550px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+            <h1 style="text-align: center;
+            margin-bottom: 0px;
+            margin-top: 40px; font-size: 18px;
+            font-weight: 600;">Narrative Builder</h1>
+            <!-- <h2>Paste links</h2>-->
+            <div class="outer-container" style="padding: 10px 50px; margin: 5px 0;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 0px;">
+                <p>Choose a platform, go to the post you want and copy its link then paste it below.</p>
+            </div>
+             <!-- Links -->
+            <div class="platform-links" style="text-align: center;
+            margin-bottom: 20px; text-decoration: underline;
+            margin-top:10px;
+            font-size: 14px;">
+                <a href="https://www.instagram.com" target="_blank">Instagram</a>
+                <br><br>
+                <a href="https://www.tiktok.com" target="_blank">Tiktok</a>
+                <br><br>
+                <a href="https://x.com" target="_blank">X</a>
+                <br><br>
+                <a href="https://www.youtube.com/" target="_blank">Youtube</a>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <input type="text" id="instagramLink" placeholder="Link 1" style="width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;">
+                <input type="text" id="instagramLink2" placeholder="Link 2 (optional)" style="width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;">
+                <p id="leadphotoText">Choose a file for your lead photo</p>
+                <input style="padding: 10px;" type="file" id="uploadInput" accept="image/*" />
+                <button id="embedButton" style="margin-top: 25px;
+            padding: 8px 20px;
+            background-color: #00aaff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;">Next</button>
+            </div>
+        </div>

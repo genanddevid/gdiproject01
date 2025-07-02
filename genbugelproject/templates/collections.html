@@ -1,0 +1,191 @@
+
+
+
+{% extends 'base.html' %}
+
+{% load static %}
+{% block body_class %}custom-bg{% endblock %}
+{% block content %}
+
+<div style="background-color: white; min-height: 100vh;">
+
+    <!--<div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: flex-start; 
+        background-color: rgb(206, 206, 85);">-->
+      <div style="width: calc(38.5% - 0px); margin-top: 0%; padding-top: 3.3%; padding-right: 2%; padding-left: 2%; 
+          margin-left: 30%; display: flex; flex-direction: column; gap: 5px; border: 1px solid rgb(230, 230, 230);
+          border-top: none;">
+
+<!-- Commented on -->
+        <div style="width: 100%; aspect-ratio: 5/1.5; background-color: rgb(255, 255, 255); display: flex; 
+          flex-direction: column; gap: 15px; font-size: 13.5px; font-weight: bold; font-family: sans-serif; 
+          color: rgb(45, 45, 45); letter-spacing: 0.2px; margin-left: 0%;">
+          <div style="font-size: 14.5px; font-weight: bold; font-family: sans-serif; 
+            color: rgb(45, 45, 45); letter-spacing: 0.2px; margin-left: 2.5%;">
+            You Commented on
+          </div>
+
+          <a href="{% url 'collections_commented_posts' %}">
+            <div style="width: 85%; aspect-ratio: 5/0.48; border: 1px solid rgb(255, 255, 255); 
+              background-color: rgb(254, 254, 254); display: flex; gap: 0%; align-items: center; cursor: pointer; 
+              margin-left: 10.5%;" 
+              onmouseover="this.style.backgroundColor='rgb(241, 241, 233)'" 
+              onmouseout="this.style.backgroundColor='rgb(254, 254, 254)'">
+              <div style="width: 91%; font-size: 13px; font-weight: bold; font-family: sans-serif; 
+                color: rgb(16, 0, 0); letter-spacing: 0.2px; margin-left: 2%;">
+                  Posts
+              </div>
+              <div style="height: 9px; position: relative;">
+                <div style="content: ''; width: 6.5px; height: 6.5px; border: solid rgb(180, 180, 180); 
+                  border-width: 0 1.9px 1.9px 0; transform: rotate(315deg); position: absolute;">
+                </div>
+              </div>
+            </div>
+            </a>
+  
+          <a href="{% url 'collections_commented_comments' %}">
+            <div style="width: 85%; aspect-ratio: 5/0.48; border: 1px solid rgb(255, 255, 255); 
+              background-color: rgb(254, 254, 254); display: flex; gap: 0%; align-items: center; cursor: pointer; 
+              margin-left: 10.5%;" 
+              onmouseover="this.style.backgroundColor='rgb(241, 241, 233)'" 
+              onmouseout="this.style.backgroundColor='rgb(254, 254, 254)'">
+              <div style="width: 91%; font-size: 13px; font-weight: bold; font-family: sans-serif; 
+                color: rgb(16, 0, 0); letter-spacing: 0.2px; margin-left: 2%;">
+                  Comments
+            </div>
+            
+            <div style="height: 9px; position: relative;">
+              <div style="content: ''; width: 6.5px; height: 6.5px; border: solid rgb(180, 180, 180); 
+                border-width: 0 1.9px 1.9px 0; transform: rotate(315deg); position: absolute;">
+              </div>
+            </div>
+          </div>
+          </a>
+
+        </div>
+        <br>
+
+<!-- Liked -->
+  
+        <div style="width: 100%; aspect-ratio: 5/1.5; background-color: rgb(255, 255, 255); display: flex; 
+          flex-direction: column; gap: 15px; font-size: 13.5px; font-weight: bold; font-family: sans-serif; 
+          color: rgb(45, 45, 45); letter-spacing: 0.2px; margin-left: 0%;">
+          <div style="font-size: 14.5px; font-weight: bold; font-family: sans-serif; 
+            color: rgb(45, 45, 45); letter-spacing: 0.2px; margin-left: 2.5%;">
+            You Liked
+          </div>
+
+          <a href="{% url 'collections_liked_posts' %}">
+            <div style="width: 85%; aspect-ratio: 5/0.48; border: 1px solid rgb(255, 255, 255); 
+              background-color: rgb(254, 254, 254); display: flex; gap: 0%; align-items: center; cursor: pointer; 
+              margin-left: 10.5%;" 
+              onmouseover="this.style.backgroundColor='rgb(241, 241, 233)'" 
+              onmouseout="this.style.backgroundColor='rgb(254, 254, 254)'">
+              <div style="width: 91%; font-size: 13px; font-weight: bold; font-family: sans-serif; 
+                color: rgb(16, 0, 0); letter-spacing: 0.2px; margin-left: 2%;">
+                  Posts
+              </div>
+              <div style="height: 9px; position: relative;">
+                <div style="content: ''; width: 6.5px; height: 6.5px; border: solid rgb(180, 180, 180); 
+                  border-width: 0 1.9px 1.9px 0; transform: rotate(315deg); position: absolute;">
+                </div>
+              </div>
+            </div>
+            </a>
+
+          <a href="{% url 'collections_liked_comments' %}">
+            <div style="width: 85%; aspect-ratio: 5/0.48; border: 1px solid rgb(255, 255, 255); 
+            background-color: rgb(254, 254, 254); display: flex; gap: 0%; align-items: center; cursor: pointer; 
+            margin-left: 10.5%;" 
+            onmouseover="this.style.backgroundColor='rgb(241, 241, 233)'" 
+            onmouseout="this.style.backgroundColor='rgb(254, 254, 254)'">            
+            <div style="width: 91%; font-size: 13px; font-weight: bold; font-family: sans-serif; 
+              color: rgb(16, 0, 0); letter-spacing: 0.2px; margin-left: 2%;">
+              Comments
+            </div>
+            <div style="height: 9px; position: relative;">
+              <div style="content: ''; width: 6.5px; height: 6.5px; border: solid rgb(180, 180, 180); 
+                border-width: 0 1.9px 1.9px 0; transform: rotate(315deg); position: absolute;">
+              </div>
+            </div>
+          </div>
+          </a>
+
+        </div>
+        <br>
+
+
+<!-- Saved -->
+
+        <div style="width: 100%; aspect-ratio: 5/0.72; background-color: #ffffff; display: flex; 
+          flex-direction: column;">
+          <a href="{% url 'collections_saved' %}" style="text-decoration: none;">
+            <div style="width: 99%; aspect-ratio: 5/0.48; border: 1px solid rgb(255, 255, 255); 
+              background-color: rgb(254, 254, 254); display: flex; gap: 0%; align-items: center; cursor: pointer; 
+              margin-left: 0%;" 
+              onmouseover="this.style.backgroundColor='rgb(241, 241, 233)'" 
+              onmouseout="this.style.backgroundColor='rgb(254, 254, 254)'">    
+              <div style="width: 91%; font-size: 14.5px; font-weight: bold; font-family: sans-serif; 
+                color: rgb(15, 0, 0); letter-spacing: 0.25px; margin-left: 2%;">
+                Saved
+              </div>
+              <div style="height: 9px; position: relative;">
+                <div style="content: ''; width: 6.5px; height: 6.5px; border: solid rgb(180, 180, 180); 
+                  border-width: 0 1.9px 1.9px 0; transform: rotate(315deg); position: absolute;">
+                </div>
+              </div>
+            </div>
+            </a>
+        </div>
+        
+<!-- History -->
+        <div style="width: 100%; aspect-ratio: 5/0.72; background-color: #ffffff; display: flex; 
+          flex-direction: column;">
+          <a href="{% url 'collections_history' %}" style="text-decoration: none;">
+            <div style="width: 99%; aspect-ratio: 5/0.48; border: 1px solid rgb(255, 255, 255); 
+              background-color: rgb(254, 254, 254); display: flex; gap: 0%; align-items: center; cursor: pointer; 
+              margin-left: 0%;" 
+              onmouseover="this.style.backgroundColor='rgb(241, 241, 233)'" 
+              onmouseout="this.style.backgroundColor='rgb(254, 254, 254)'">
+              <div style="width: 91%; font-size: 14.5px; font-weight: bold; font-family: sans-serif; 
+                color: rgb(15, 0, 0); letter-spacing: 0.25px; margin-left: 2%;">
+                History
+              </div>
+              <div style="height: 9px; position: relative;">
+                <div style="content: ''; width: 6.5px; height: 6.5px; border: solid rgb(180, 180, 180); 
+                  border-width: 0 1.9px 1.9px 0; transform: rotate(315deg); position: absolute;">
+                </div>
+              </div>
+            </div>
+            </a>
+          </div>
+  
+
+
+<!-- Notifications -->
+        <div style="width: 100%; aspect-ratio: 5/0.72; background-color: #ffffff; display: flex; 
+          flex-direction: column;">
+          <a href="{% url 'collections_notifications' %}" style="text-decoration: none;">
+            <div style="width: 99%; aspect-ratio: 5/0.48; border: 1px solid rgb(255, 255, 255); 
+              background-color: rgb(254, 254, 254); display: flex; gap: 0%; align-items: center; cursor: pointer; 
+              margin-left: 0%;" 
+              onmouseover="this.style.backgroundColor='rgb(241, 241, 233)'" 
+              onmouseout="this.style.backgroundColor='rgb(254, 254, 254)'">
+              <div style="width: 91%; font-size: 14.5px; font-weight: bold; font-family: sans-serif; 
+                color: rgb(15, 0, 0); letter-spacing: 0.25px; margin-left: 2%;">
+                Notifications
+              </div>
+              <div style="height: 9px; position: relative;">
+                <div style="content: ''; width: 6.5px; height: 6.5px; border: solid rgb(180, 180, 180); 
+                  border-width: 0 1.9px 1.9px 0; transform: rotate(315deg); position: absolute;">
+                </div>
+              </div>
+            </div>
+            </a>
+        </div>
+  
+      </div>
+      </div>
+    
+    {% endblock %}
+
+    <!--11:10 7Jun25-->

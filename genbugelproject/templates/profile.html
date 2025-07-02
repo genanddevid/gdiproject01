@@ -1,0 +1,819 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+            <!-- Narrow container -->
+            <div class="container" style="display: flex; flex-direction: column; align-items: center; width: 30rem; padding: 15px;">
+
+                <!-- Profile photo, user name, buttons-->
+                <figure class="image is-128x128">
+                    
+                <img class="is-rounded"
+                    src="{% if profile.picture %}{{ profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/128x128.png{% endif %}"
+                    style="width: 128px; height: 128px; object-fit: cover;">
+
+                </figure>
+
+                <div class="media-content" style="display: flex; flex-direction: column; align-items: center;">
+                    <h5 style="font-weight: 450; margin-bottom: 15px;" class="title is-3">@{{ profile.user }}</h5>
+                    <h5 style="font-weight: 500; font-size: 14px;">
+                        {% if profile.first_name and profile.last_name %}
+                        {{ profile.first_name }} {{ profile.last_name }}
+                        {% elif profile.first_name %}
+                        {{ profile.first_name }}
+                        {% elif profile.last_name %}
+                        {{ profile.last_name }}
+                        {% endif %}
+                    </h5>           
+                    
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+                        <button id="toggleStatBtn" class="button is-link" onclick="toggleProfileStats()">
+                            <i id="toggleIcon" class="material-icons md-dark">arrow_drop_down</i>
+                        </button>
+                        
+                        {% if user.is_authenticated and user == profile.user %}
+                            <a href="{% url 'edit-profile' %}" class="button is-link">Edit</a>
+                        {% else %}
+                            {% if follow_status == True %}
+                                <a href="{% url 'follow' profile.user 0 %}" class="button is-link">Unsubscribe</a>
+                            {% else %}
+                                <a href="{% url 'follow' profile.user 1 %}" class="button is-success">Subscribe</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <style>
+                  .heading {
+                    font-size: 14px;
+                  }
+
+
+                </style>
+                <!-- Subscribers -->
+                 {% if user.is_authenticated and user == profile.user %}
+                 <div id="profileStatsBlock">
+                <nav class="level is-mobile" style="gap: 5rem; margin-top: 1.1rem;">
+                    
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Posts</p>
+                            <p class="subtitle">{{ posts_count }}</p>
+                        </div>
+                    </div>
+
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Subscribers</p>
+                            <p class="subtitle">{{ followers_count }}</p>
+                        </div>
+                    </div>
+
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Subscribing</p>
+                            <p class="subtitle">{{ following_count }}</p>
+                        </div>
+                    </div>
+
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Likes</p>
+                            <p class="subtitle">{{ likes_count }}</p>
+                        </div>
+                    </div>
+
+                    <!--<div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Comments</p>
+                            <p class="subtitle">{{ comment_count }}</p>
+                        </div>
+                    </div>-->
+                </nav>
+                </div>
+                {% else %}
+                {% endif %}
+                <!-- Description -->
+                <div style="margin-top: 1rem;">
+                    <h5 class="title is-5" style="font-weight: 500";>Description</h5>
+                    <p style="text-align: justify; font-size: 14px; margin-top: -9px; margin-bottom: 10px;">{% if profile.profile_info %}{{ profile.profile_info }}{% endif %}</p>
+                 
+                </div>
+
+            </div>
+
+<div class="tabs is-centered">
+    <ul>
+        <li class="is-active">
+            <a><i class="material-icons">dashboard</i>Posts</a>
+        </li>
+        <!--<li class="is-active">
+            <a><i class="material-icons">save_alt</i>Saved</a>
+        </li>-->
+    </ul>
+</div>
+      
+
+<!--<div class="columns is-mobile is-multiline is-centered">-->
+    {% for post in posts %}
+    <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
+   <!-- Article Card -->
+<div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+  <article class="media">
+    <div style="display: flex;">
+      
+      <!-- Left: Photo Heading of Article -->
+      <div style="width: 100px; height: 100px;">
+        <a href="{{ post.get_absolute_url }}">
+          <img src="{{ post.picture.url }}" alt="Article Image" 
+               style="width: 100%; height: 100%; object-fit: cover;" />
+        </a>
+      </div>
+
+      <!-- Right: Text section -->
+      <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
+        
+        <!-- Top section: User image and name, then caption -->
+        <div class="content" style="margin-top: -13px;">
+          <!-- User image and name -->
+          <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                        <!-- Profile Picture of article writer -->
+                        <div class="media-left">
+                            <figure class="image is-24x24" style="margin: 0;">
+                                <img class="is-rounded"
+                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                        style="width: 24px; height: 24px; object-fit: cover;">
+                            </figure>
+
+                           
+                        </div>
+                        <!-- Name -->
+                        <div class="media-content" style="margin-left: -10px;">
+                            <p class="title is-4" style="
+                                font-weight:bolder;
+                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                font-size: 12px;
+                                margin: 0;
+                                ">{{ post.user.username }}
+                            </p>
+                        </div>
+                    </div>
+
+          <!-- Caption -->
+          <div style="
+            margin-top: 7px;
+                    font-size: 16.0px;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    line-clamp: 2;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    line-height: 1.4em;
+                    height: 2.9em;
+          ">
+          <a href="{{ post.get_absolute_url }}" style="color: rgb(30, 30, 30); text-decoration: none;">
+            {{ post.caption }}
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Time aligned with bottom of left image -->
+        <time datetime="{{ post.posted|date:'c' }}" 
+              style="font-size: 10.5px; color: #676767; font-family: 'Inter', sans-serif; 
+              ">
+          {{ post.posted }}
+        </time>
+
+      </div>
+      
+    </div>
+
+  </article>
+  
+</div>
+</div>
+
+{% if post.user == request.user %}
+<div style="max-width: 500px; margin: auto; text-align: right; padding-top: 0px; padding-bottom: 10px;">
+  
+    <!-- Edit Button -->
+  
+
+    <a href="{% url 'edit_post' post.id %}" 
+     class="button is-small has-tooltip-left" 
+     data-tooltip="Edit"
+     style="background-color: rgb(241, 241, 233); border: none;" 
+     aria-label="Edit this post">
+    <i class="material-icons" style="font-size: 14px;">edit</i>
+  </a>
+  
+    <button class="button is-small has-tooltip-left" 
+            data-tooltip="Delete"
+
+          style="background-color: rgb(241, 241, 233); border: none;" 
+          aria-label="Delete this post"
+          onclick="openModalD('{{ post.id }}')">
+    <i class="material-icons" style="font-size: 14px;">delete</i>
+  </button>
+</div>
+{% endif %}
+
+
+<style>
+.has-tooltip-left[data-tooltip] {
+  position: relative;
+}
+
+.has-tooltip-left[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #4a4a4a;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 100;
+}
+</style>
+
+  {% empty %}
+  <div style="text-align: center;">
+
+  <h5 class="title is-5">Create your first post</h5>
+</div>
+
+  {% endfor %}
+
+
+  <div class="modal" id="delete-confirmation-modal">
+  <div class="modal-background" onclick="closeModalD()"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Confirm Deletion</p>
+      <button class="delete" aria-label="close" onclick="closeModalD()"></button>
+    </header>
+    <section class="modal-card-body">
+      <p>Are you sure you want to delete this post?</p>
+    </section>
+    <footer class="modal-card-foot">
+      <form id="confirm-delete-form" method="post">
+        {% csrf_token %}
+        <button type="submit" class="button is-danger is-small">Delete</button>
+        <button type="button" class="button is-light is-small" onclick="closeModalD()">Cancel</button>
+      </form>
+    </footer>
+  </div>
+</div>
+
+
+
+<script>
+  function openModalD(postId) {
+    const modal = document.getElementById('delete-confirmation-modal');
+    const form = document.getElementById('confirm-delete-form');
+    form.action = `/delete/${postId}/`;  // Update this if your delete URL is different
+    modal.classList.add('is-active');
+  }
+
+  function closeModalD() {
+    document.getElementById('delete-confirmation-modal').classList.remove('is-active');
+  }
+
+  // Optional: close modal with Escape key
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      closeModalD();
+    }
+  });
+</script>
+
+
+
+
+
+  
+
+   
+  <!-- Modal container -->
+<!-- Modal container -->
+<div id="postModal" class="my-modal" style="display: none;">
+  <button id="modalPrevBtn" class="modal-nav-btn modal-nav-btn-left" onclick="showPreviousPost()">&#10094;</button>
+  <button class="my-close-button" onclick="closePostModal()">&times;</button>
+  <div class="my-modal-content" id="modalContent">
+    
+    <div id="modalBody"></div>
+  </div>
+  <button id="modalNextBtn" class="modal-nav-btn modal-nav-btn-right" onclick="showNextPost()">&#10095;</button>
+</div>
+
+<style>
+
+ /* Add these styles for the navigation buttons */
+.modal-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgb(0, 0, 0); /* Semi-transparent background */
+  color: white;
+  border: none;
+  
+  padding-left: 15px;
+  padding-top: 19px;
+  padding-bottom: 21px;
+  padding-right: 15px;
+
+  cursor: pointer;
+  font-size: 2em; /* Make arrows larger */
+  z-index: 10000; /* Ensure they are above the modal background */
+  border-radius: 5px; /* Slightly rounded corners */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+  user-select: none; /* Prevent text selection */
+ /* opacity: 0.8; Slight transparency */
+}
+
+
+.modal-nav-btn:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+}
+
+.modal-nav-btn-left {
+  left: 20px; /* Distance from left edge */
+}
+
+.modal-nav-btn-right {
+  right: 20px; /* Distance from right edge */
+}
+
+.modal-nav-btn:disabled {
+  opacity: 0.3; /* Visually indicate disabled state */
+  cursor: not-allowed;
+}
+
+/* Your existing modal and close button styles here */
+ 
+
+/* Modal background */
+.my-modal {
+  
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal content box */
+.my-modal-content {
+  background: white;
+  width: 100%;
+  max-width: 905px;
+  height: 96vh;
+  overflow-y: auto;
+  border-radius: 0px;
+  padding-left: 75px;
+            padding-right: 75px;
+            padding-top: 25px;
+  position: relative;
+}
+
+/* Freely movable close button */
+.my-close-button {
+  position: absolute;
+  top: 10px; /* Adjust the distance above the modal */
+  right: 20px; /* Adjust the distance to the right of the modal */
+
+  font-size: 25px;
+  cursor: pointer;
+  background-color: white; /* Optional: Add a background for visibility */
+  border: none;
+  border-radius: 50%; /* Makes the close button circular */
+  width: 30px;
+  height: 30px; /* Keep height explicitly set */
+  line-height: 30px; /* Add this: Make line-height equal to height for better vertical alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(99, 98, 98, 0.2); /* Optional: Add a subtle shadow */
+  
+  /* --- FIX FOR CENTERING THE 'X' --- */
+  padding-bottom: 5px; /* Adjust this value (e.g., 1px, 2px) to visually center the 'X' */
+  /* You might also try transform: translateY(1px); instead of padding-bottom for more precise nudging if needed */
+}
+/* Optional: Style on hover */
+.close-button:hover {
+  background: #eee;
+}
+
+/* Add this new class */
+.no-scroll {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+}
+</style>
+
+
+<script>
+
+  
+let allPostIds = []; // Global array to store all post IDs in order
+let currentPostIndex = -1; // Global variable to store the index of the currently viewed post
+
+// Function to initialize allPostIds array when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    const postCards = document.querySelectorAll('.post-card');
+    postCards.forEach(card => {
+        const postId = card.dataset.postId; 
+        if (postId) {
+            allPostIds.push(postId);
+        }
+    });
+});
+
+// Helper function to update the navigation button states
+function updateNavButtons() {
+    const prevBtn = document.getElementById('modalPrevBtn');
+    const nextBtn = document.getElementById('modalNextBtn');
+
+    if (prevBtn && nextBtn) {
+        prevBtn.disabled = (currentPostIndex <= 0);
+        nextBtn.disabled = (currentPostIndex >= allPostIds.length - 1);
+    }
+}
+
+// Function to load and display post content in modal
+function loadPostContent(postId) {
+    fetch(`/modal/${postId}/`)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return response.text();
+        })
+        .then(html => {
+            document.getElementById("modalBody").innerHTML = html;
+
+            // Instagram
+            if (window.instgrm && instgrm.Embeds) {
+                instgrm.Embeds.process();
+            }
+
+            // Twitter/X
+            const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+            if (existingTwitterScript) existingTwitterScript.remove();
+            const twitterScript = document.createElement('script');
+            twitterScript.src = "https://platform.twitter.com/widgets.js";
+            twitterScript.async = true;
+            twitterScript.charset = "utf-8";
+            document.body.appendChild(twitterScript);
+
+            // TikTok
+            const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+            if (oldTikTokScript) oldTikTokScript.remove();
+            const tiktokScript = document.createElement('script');
+            tiktokScript.src = "https://www.tiktok.com/embed.js";
+            tiktokScript.async = true;
+            document.body.appendChild(tiktokScript);
+
+            // Scroll modal content to top
+            document.getElementById('modalContent').scrollTop = 0;
+        })
+        .catch(error => {
+            console.error('Error loading post content:', error);
+            document.getElementById("modalBody").innerHTML = "<p>Error loading post. Please try again.</p>";
+        });
+}
+
+function openPostModal(postId, event) {
+    if (event) event.preventDefault();
+
+    currentPostIndex = allPostIds.indexOf(postId);
+
+    if (currentPostIndex === -1) {
+        console.error("Post ID not found in allPostIds array:", postId);
+        loadPostContent(postId);
+        document.getElementById("postModal").style.display = "flex";
+        document.body.classList.add("no-scroll");
+        document.documentElement.classList.add("no-scroll");
+        return; 
+    }
+
+    loadPostContent(postId);
+    document.getElementById("postModal").style.display = "flex";
+    document.body.classList.add("no-scroll");
+    document.documentElement.classList.add("no-scroll");
+    updateNavButtons();
+}
+
+function closePostModal() {
+    document.getElementById("postModal").style.display = "none";
+    document.getElementById("modalBody").innerHTML = "";
+    document.body.classList.remove("no-scroll");
+    document.documentElement.classList.remove("no-scroll"); 
+    currentPostIndex = -1;
+    window.tiktokEmbedLoaded = false;
+}
+
+function showNextPost() {
+    if (currentPostIndex < allPostIds.length - 1) {
+        currentPostIndex++;
+        const nextPostId = allPostIds[currentPostIndex];
+        loadPostContent(nextPostId);
+        updateNavButtons();
+    }
+}
+
+function showPreviousPost() {
+    if (currentPostIndex > 0) {
+        currentPostIndex--;
+        const prevPostId = allPostIds[currentPostIndex];
+        loadPostContent(prevPostId);
+        updateNavButtons();
+    }
+}
+
+// Optional: Keyboard navigation
+document.addEventListener('keydown', (event) => {
+    if (document.getElementById("postModal").style.display === "flex") {
+        if (event.key === 'ArrowRight') {
+            showNextPost();
+        } else if (event.key === 'ArrowLeft') {
+            showPreviousPost();
+        } else if (event.key === 'Escape') {
+            closePostModal();
+        }
+    }
+});
+
+document.getElementById('modalBody').addEventListener('click', function (event) {
+  const postLikeBtn = event.target.closest('.like-post-btn');
+  const commentLikeBtn = event.target.closest('.like-btn');
+
+  // 🔵 Handle post like (only if .like-post-btn was clicked)
+  if (postLikeBtn) {
+    event.preventDefault();
+
+    const postId = postLikeBtn.dataset.postId;
+
+    fetch(`/${postId}/like`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const icon = postLikeBtn.querySelector('i');
+      const countElem = document.getElementById(`like-count-${postId}`);
+
+      if (icon) {
+        icon.style.color = data.liked ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
+      }
+
+      if (countElem) {
+        countElem.textContent = data.likes;
+      }
+    })
+    .catch(err => console.error('Post like failed:', err));
+  }
+
+  // 🟢 Handle comment like (only if .like-btn was clicked and not inside a post like)
+  if (commentLikeBtn && !postLikeBtn) {
+    event.preventDefault();
+
+    const commentId = commentLikeBtn.dataset.commentId;
+
+    fetch(`/comment/${commentId}/like/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+      const likeCountId = `like-count-${commentId}`;
+      let likeSpan = document.getElementById(likeCountId);
+
+      if (data.likes > 0) {
+        const likeText = `${data.likes}`;
+
+        if (likeSpan) {
+          likeSpan.innerText = likeText;
+        } else {
+          likeSpan = document.createElement('span');
+          likeSpan.className = 'like-count';
+          likeSpan.id = likeCountId;
+          likeSpan.innerText = likeText;
+          commentLikeBtn.insertAdjacentElement('afterend', likeSpan);
+        }
+      } else {
+        if (likeSpan) {
+          likeSpan.remove();
+        }
+      }
+    })
+    .catch(err => console.error('Comment like failed:', err));
+  }
+});
+
+
+
+document.getElementById('modalBody').addEventListener('click', function (event) {
+  const target = event.target;
+
+  if (target.closest('.save-post-btn')) {
+  event.preventDefault();
+
+  const saveBtn = target.closest('.save-post-btn');
+  const postId = saveBtn.dataset.postId;
+
+  fetch(`/${postId}/favorite`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+  })
+  .then(response => {
+    if (response.ok) {
+      saveBtn.classList.toggle('saved');
+
+      // Optionally change icon color or text to reflect save state
+      const icon = saveBtn.querySelector('i');
+      if (icon) {
+        icon.style.color = saveBtn.classList.contains('saved') ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
+      }
+
+      const textElem = saveBtn.nextElementSibling;
+      if (textElem && textElem.tagName === 'P') {
+        textElem.textContent = saveBtn.classList.contains('saved') ? 'Saved' : 'Save';
+      }
+    }
+  });
+}
+
+
+
+  // ✅ Add this block for SHOW MORE COMMENTS bar
+  if (target.id === 'viewcomments-bar') {
+    document.querySelectorAll(".comment-wrapper.is-hidden").forEach(el => {
+      el.classList.remove("is-hidden");
+    });
+    target.style.display = "none";
+  }
+
+  // Handle reply toggle
+  if (target.classList.contains('reply-btn')) {
+    event.preventDefault();
+    const commentId = target.dataset.commentId;
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    if (replyForm) {
+      replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
+    }
+  }
+
+  // Handle "View replies"
+  if (target.classList.contains('view-replies-btn')) {
+    event.preventDefault();
+    const commentId = target.dataset.commentId;
+    const replyCount = target.dataset.replyCount;
+    const repliesSection = document.getElementById(`replies-${commentId}`);
+
+    if (repliesSection) {
+      const isVisible = repliesSection.style.display === 'block';
+      repliesSection.style.display = isVisible ? 'none' : 'block';
+      target.textContent = isVisible ? `View replies (${replyCount})` : 'Hide replies';
+    }
+  }
+
+  // Handle "Show more replies"
+  if (target.classList.contains('show-more-replies-btn')) {
+    event.preventDefault();
+    const commentId = target.dataset.commentId;
+    const extraReplies = document.getElementById('extra-replies-' + commentId);
+
+    if (extraReplies) {
+      extraReplies.style.display = 'block';
+      target.style.display = 'none';
+    }
+  }
+});
+
+// ✅ Handle comment form submission inside the modal via AJAX
+document.getElementById('modalBody').addEventListener('submit', function (event) {
+  const form = event.target;
+  
+
+  if (form.id === 'modal-comment-form') {
+    event.preventDefault(); // Stop full page reload
+
+    const postId = form.dataset.postId;
+    const formData = new FormData(form);
+
+    fetch(`/modal/${postId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: formData,
+    })
+    .then(response => response.text())
+    .then(html => {
+      // Reload the modal with updated content
+      document.getElementById('modalBody').innerHTML = html;
+    })
+    .catch(error => console.error('Comment submit failed:', error));
+  }
+
+
+  // ✅ Reply form (identified by class or action URL pattern)
+  if (form.action.includes('/comment/') && form.action.includes('/reply/')) {
+    event.preventDefault();
+
+    const commentId = form.getAttribute('data-comment-id') || form.action.split('/comment/')[1].split('/reply')[0];
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: formData,
+    })
+
+
+
+.then(response => {
+  if (response.status === 204) {
+    const postId = document.getElementById('modal-comment-form')?.dataset.postId;
+    if (postId) {
+      fetch(`/modal/${postId}/`)
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('modalBody').innerHTML = html;
+        });
+    }
+  }
+})
+
+
+
+
+    .catch(error => console.error('Reply submit failed:', error));
+  }
+});
+
+
+
+
+
+
+
+
+// CSRF helper
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+function toggleProfileStats() {
+    const statsBlock = document.getElementById('profileStatsBlock');
+    const icon = document.getElementById('toggleIcon');
+
+    if (statsBlock.style.display === 'none') {
+        statsBlock.style.display = 'flex';
+        icon.innerText = 'arrow_drop_up';
+    } else {
+        statsBlock.style.display = 'none';
+        icon.innerText = 'arrow_drop_down';
+    }
+}
+
+
+</script>
+  
+
+{% endblock %}

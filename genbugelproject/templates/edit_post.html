@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: auto;">
+  <h2 class="title is-4">Edit Post</h2>
+  
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="button is-link">Save Changes</button>
+    <a href="{% url 'profile' username=request.user.username %}" class="button is-light">Cancel</a>
+  </form>
+</div>
+{% endblock %}

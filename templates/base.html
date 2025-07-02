@@ -1,0 +1,119 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BUGEL</title>
+    <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <!-- For material-icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- For material-symbols-outlined -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  </head>
+  <body>
+
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io" style="width: 280px;">
+          <h1 class="bugel-title" style="font-size: 2.0rem; font-weight: 500; letter-spacing: 0.1px;">BUGEL</h1>
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+
+          <a class="navbar-item">
+            <span class="material-icons" style="margin-right: 10px;">flip_to_front</span>
+              Frontpage
+          </a>
+      
+          <a class="navbar-item">
+            <span class="material-icons" style="margin-right:10px;">check_circle_outline</span>
+              Interests
+          </a>
+
+          <a class="navbar-item">
+            <span class="material-symbols-outlined" style="margin-right: 10px;">stylus_fountain_pen</span>
+              Narrative Builder
+          </a>
+
+          <a class="navbar-item">
+            <span class="material-symbols-outlined" style="margin-right: 10px;">explore</span>
+              Discover
+          </a>
+
+          <a class="navbar-item">
+            <span class="material-icons" style="margin-right: 10px;">bookmark_border</span>
+              Collections
+          </a>
+
+          <a class="navbar-item">
+            <span class="material-icons" style="margin-right: 10px;">person_outline</span>
+              Profile
+          </a>
+
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Settings
+            </a>
+      
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Change password
+              </a>
+              <a class="navbar-item">
+                Contact
+              </a>
+              <a class="navbar-item">
+                Report an issue
+              </a>
+               
+              <hr class="navbar-divider">
+
+              <a class="navbar-item">
+                Log out
+              </a>
+            </div>
+
+          </div>
+
+        </div> 
+      </div>
+
+    </nav>
+
+
+<!-- After Navigation -->
+
+
+
+
+    <section class="section">
+      <div class="container">
+      
+
+        {% block content %}
+        {% endblock %}
+
+        {% block pagination %}
+        {% endblock %}
+
+
+      </div>
+    </section>
+
+
+
+  </body>
+</html>

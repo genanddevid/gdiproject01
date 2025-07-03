@@ -7,6 +7,31 @@
 {% block body_class %}custom-bg{% endblock %}
 {% block content %}
 
+<div class="mobile-wrapper">
+
+  <style>
+
+    @media (max-width: 768px) {
+  .mobile-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+  }
+
+  .columns.is-centered {
+    justify-content: flex-start !important;
+  }
+
+  .column.is-half {
+    width: 100% !important;
+    flex: none;
+  }
+}
+
+  </style>
+
 <div style="background-color: white; min-height: 100vh;">
 
     <!--<div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: flex-start; 
@@ -183,6 +208,7 @@
             </a>
         </div>
   
+      </div>
       </div>
       </div>
     

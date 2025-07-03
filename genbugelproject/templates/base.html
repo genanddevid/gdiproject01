@@ -19,6 +19,20 @@
   </head>
 
   <style>
+    html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.main-content {
+  min-height: 100%;
+  padding-bottom: 60px; /* To prevent content from being hidden under the nav */
+  box-sizing: border-box;
+}
+
+
     section.section {
       padding-top: 0 !important;
     }
@@ -61,7 +75,30 @@
   border: 1px solid #f3f3f3;
 }
 
+/* Mobile Bottom Nav Styles */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: rgb(230, 230, 221);
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+}
 
+.mobile-bottom-nav .nav-item {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  flex-grow: 1;
+}
+
+/* Show bottom nav on screens smaller than 768px */
 @media (max-width: 768px) {
   .sidebar {
     display: none;
@@ -74,7 +111,19 @@
   .main-content {
     margin-left: 0 !important;
   }
+
+  body {
+    padding-bottom: 60px; /* Prevent content from being hidden behind bottom nav */
+  }
+
+  /* Optional: remove left margin from content container */
+  body > div[style*="margin-left"] {
+    margin-left: 0 !important;
+  }
 }
+
+
+
   </style>
 
 
@@ -188,8 +237,8 @@
   <a href="{% url 'discover' %}" class="has-text-black">
     <span class="material-icons">explore</span>
   </a>
-  <a href="{% url 'profile' request.user %}" class="has-text-black">
-    <span class="material-icons">person</span>
+  <a href="{% url 'all_collections' %}" class="has-text-black">
+    <span class="material-icons">bookmark_border</span>
   </a>
 </div>
 

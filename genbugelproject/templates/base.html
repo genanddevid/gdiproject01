@@ -19,18 +19,20 @@
   </head>
 
   <style>
-    html, body {
+    html, body { 
   height: 100%;
   margin: 0;
   padding: 0;
   position: relative;
+  background-color: rgb(241, 241, 233);
+  overflow-x: hidden;
 }
 
 .main-content {
-  min-height: 100%;
-  padding-bottom: 60px; /* To prevent content from being hidden under the nav */
+  padding-bottom: 60px; /* space for bottom nav */
   box-sizing: border-box;
 }
+
 
 
     section.section {
@@ -91,6 +93,7 @@
   z-index: 1000;
 }
 
+
 .mobile-bottom-nav .nav-item {
   text-align: center;
   color: #333;
@@ -112,11 +115,11 @@
     margin-left: 0 !important;
   }
 
-  body {
-    padding-bottom: 60px; /* Prevent content from being hidden behind bottom nav */
-  }
+  /* REMOVE this block — not needed anymore */
+  /* body {
+    padding-bottom: 60px;
+  } */
 
-  /* Optional: remove left margin from content container */
   body > div[style*="margin-left"] {
     margin-left: 0 !important;
   }

@@ -62,7 +62,21 @@
 }
 
 
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+}
   </style>
+
 
   <body class="{% block body_class %}default-bg{% endblock %}">
     <!-- Sidebar -->
@@ -151,7 +165,7 @@
     </div>
 
     <!-- Main Content -->
-    <div style="margin-left: 240px;">
+    <div class="main-content" style="margin-left: 240px;">
       <section class="section">
         <div class="container">
           {% block content %}{% endblock %}
@@ -159,6 +173,26 @@
         </div>
       </section>
     </div>
+
+
+    <div class="mobile-bottom-nav" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; height: 55px; background-color: rgb(230, 230, 221); border-top: 1px solid #ccc; justify-content: space-around; align-items: center; z-index: 1000;">
+  <a href="{% url 'index' %}" class="has-text-black">
+    <span class="material-icons">flip_to_front</span>
+  </a>
+  <a href="{% url 'interests' %}" class="has-text-black">
+    <span class="material-icons">check_circle_outline</span>
+  </a>
+  <a href="{% url 'narrativebuilder' %}" class="has-text-black">
+    <span class="material-symbols-outlined">stylus_fountain_pen</span>
+  </a>
+  <a href="{% url 'discover' %}" class="has-text-black">
+    <span class="material-icons">explore</span>
+  </a>
+  <a href="{% url 'profile' request.user %}" class="has-text-black">
+    <span class="material-icons">person</span>
+  </a>
+</div>
+
   
   <script async defer src="https://www.instagram.com/embed.js"></script>
 </body>

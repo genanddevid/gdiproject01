@@ -109,8 +109,8 @@
   }
 
   .platform-grid img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     margin-bottom: 10px;
   }
 
@@ -118,6 +118,31 @@
     font-size: 1.2rem;
     margin: 0;
   }
+
+  @media (max-width: 768px) {
+  .narrative-container,
+  .card,
+  .card-content,
+  form,
+  .field,
+  .control {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  #captionPreview,
+  #contentPreview {
+    width: 100% !important;
+  }
+}
+
 </style>
 
 <div class="platform-grid">

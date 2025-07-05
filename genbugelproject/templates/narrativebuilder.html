@@ -41,7 +41,7 @@
               {{ form.content }}
         
 </p>
-<p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888;">
+<p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888; text-align: center;">
   Word count: 0 / 250
 
               </p>
@@ -185,12 +185,14 @@
              <!-- Links -->
 
             <div class="field">
-            <p class="control">
+            <p class="control" style="display: flex;
+  justify-content: center;">
               {{ form.link1 }}
             </p>
           </div>
           <div class="field">
-            <p class="control">
+            <p class="control" style="display: flex;
+  justify-content: center;">
               {{ form.link2 }}
             </p>
           </div>
@@ -200,7 +202,8 @@
 
             <br>
 
-          <div class="field">
+          <div class="field" style="display: flex;
+  justify-content: center; text-align: center">
             <p class="control has-icons-left">
               <label class="label is-medium">Choose a file for your lead photo</label>
               {{ form.picture }}
@@ -211,7 +214,8 @@
             
           </div> <br> <br>
 
-<div class="field">
+<div class="field" style="display: flex;
+  justify-content: center;">
   <button 
     type="submit" 
     formaction="{% if edit_mode %}{% url 'preview_narrative' post.id %}{% else %}{% url 'preview_narrative' %}{% endif %}" 
@@ -226,11 +230,13 @@
   background-color: #fff27d;
   color: #1f1f1f;
   border-color: #fff27d;
+  
 }
 </style>
 
           <div class="field">
-            <p class="control">
+            <p class="control" style="display: flex;
+  justify-content: center;">
               <button type="submit" name="action" class="button is-success">
                 {% if edit_mode %}Update{% else %}Publish{% endif %}
               </button>

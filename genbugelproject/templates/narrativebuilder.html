@@ -5,14 +5,11 @@
 {% block body_class %}custom-bg{% endblock %}
 {% block content %}
 
-
+<div class="columns is-mobile is-centered" style="margin: 0;">
+  <div class="column is-12-mobile is-half-tablet is-offset-one-quarter-tablet">
 <div class="narrative-container" style="background-color: white; min-height: 100vh;">
-
-
     <div class="card" style="box-shadow: none; border: 1px solid rgb(245, 243, 243); border-radius: 0;">
-
       <div class="card-content">
-
         <form method="post" action="" enctype="multipart/form-data" role="form">
           {% csrf_token %}        
 
@@ -119,29 +116,8 @@
     margin: 0;
   }
 
-  @media (max-width: 768px) {
-  .narrative-container,
-  .card,
-  .card-content,
-  form,
-  .field,
-  .control {
-    width: 100% !important;
-    box-sizing: border-box;
-  }
+  
 
-  input[type="text"],
-  textarea,
-  select {
-    width: 100% !important;
-    box-sizing: border-box;
-  }
-
-  #captionPreview,
-  #contentPreview {
-    width: 100% !important;
-  }
-}
 
 </style>
 
@@ -216,7 +192,8 @@
     </div>   <!-- end card -->
 
   </div>     <!-- end column -->
-
+</div>
+</div>
 
 <style>
 

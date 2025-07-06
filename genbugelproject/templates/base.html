@@ -100,17 +100,22 @@
   justify-content: center;
   text-align: center;
   text-decoration: none;
-  color: #333;
+  color: #47f37b;
 }
 .mobile-bottom-nav .nav-item {
   text-align: center;
-  color: #333;
+  color: #ff8989;
   font-size: 24px;
   flex-grow: 1;
 }
 .mobile-bottom-nav span {
   font-size: 24px;
 }
+
+.mobile-bottom-nav a.is-active span {
+  color: #000000;
+}
+
 
 .mobile-bottom-nav p {
   font-size: 9px;
@@ -120,8 +125,9 @@
   
 }
 
+
 .mobile-bottom-nav a.is-active p {
-  font-weight: 500;
+  font-weight: 700;
   color: #000000;
 }
 
@@ -394,7 +400,7 @@ body {
   </a>
   <a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">
     <span class="material-symbols-outlined">stylus_fountain_pen</span>
-    <p class="subtitle">WRITE</p>
+    
   </a>
   <a href="{% url 'discover' %}" class="{% if active_page == 'discover' %}is-active{% endif %}">
     <span class="material-icons">explore</span>

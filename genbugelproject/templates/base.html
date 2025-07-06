@@ -293,6 +293,7 @@ body {
       </a>
       <aside class="menu">
         <div class="buttons is-flex is-flex-direction-column" style="align-items: flex-start;">
+       
 
           <a href="{% url 'index' %}" 
               class="button custom-button {% if active_page == 'frontpage' %}is-active{% endif %}"
@@ -349,6 +350,7 @@ body {
           </a>    
 
         </div>
+      
 
         <div class="navbar-item has-dropdown is-hoverable" style="margin-top: 20px;">
           <a class="navbar-link">Settings</a>
@@ -400,6 +402,65 @@ body {
     <P class="subtitle">COLLECTIONS</P>
   </a>
 </div>
+
+
+<div class="mobile-bottom-nav">
+
+          <a href="{% url 'index' %}" 
+              class="button custom-button {% if active_page == 'frontpage' %}is-active{% endif %}"
+             style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              flip_to_front
+            </span>
+              Frontpage
+          </a>
+
+          <a href="{% url 'interests' %}" 
+          class="button custom-button {% if active_page == 'interests' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              check_circle_outline
+            </span>
+              Interests
+          </a>
+
+          <a href="{% url 'narrativebuilder' %}" 
+          class="button custom-button {% if active_page == 'narrativebuilder' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-symbols-outlined" style="font-size: 24px; margin-right: 8px;">
+              stylus_fountain_pen
+            </span>
+              Narrative Builder
+          </a>
+
+          <a href="{% url 'discover' %}" 
+          class="button custom-button {% if active_page == 'discover' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              explore
+            </span>
+              Discover
+          </a>  
+          
+          <a href="{% url 'all_collections' %}" 
+          class="button custom-button {% if active_page == 'all_collections' %}is-active{% endif %}" 
+          style="margin-bottom: 0px;">
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              bookmark_border
+            </span>
+              Collections
+          </a>          
+
+          <a href="{% url 'profile' request.user %}" 
+          class="button custom-button {% if active_page == 'profile' %}is-active{% endif %}" 
+          style="margin-left: 0px; margin-bottom: 0px;">        
+            <img src="{% if request.user.profile.picture %}{{ request.user.profile.picture.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+              alt="Profile Picture"
+              style="width: 24px; height: 24px; border-radius: 50%; margin-right: 10px; object-fit: cover;">
+              {{ request.user }}
+          </a>    
+
+        </div>
 
   
   <script async defer src="https://www.instagram.com/embed.js"></script>

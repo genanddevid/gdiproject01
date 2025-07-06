@@ -120,6 +120,12 @@
   
 }
 
+.mobile-bottom-nav a.is-active p {
+  font-weight: 500;
+  color: #000000;
+}
+
+
 
 
 /* Show bottom nav on screens smaller than 768px */
@@ -378,23 +384,23 @@ body {
 
 
     <div class="mobile-bottom-nav">
-  <a href="{% url 'index' %}" class="has-text-black">
+  <a href="{% url 'index' %}" class="{% if active_page == 'frontpage' %}is-active{% endif %}">
     <span class="material-icons">flip_to_front</span>
     <p class="subtitle">FRONTPAGE</p>
   </a>
-  <a href="{% url 'interests' %}" class="has-text-black">
+  <a href="{% url 'interests' %}" class="{% if active_page == 'frontpage' %}is-active{% endif %}">
     <span class="material-icons">check_circle_outline</span>
     <P class="subtitle">INTERESTS</P>
   </a>
-  <a href="{% url 'narrativebuilder' %}" class="has-text-black">
+  <a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'frontpage' %}is-active{% endif %}">
     <span class="material-symbols-outlined">stylus_fountain_pen</span>
     
   </a>
-  <a href="{% url 'discover' %}" class="has-text-black">
+  <a href="{% url 'discover' %}" class="{% if active_page == 'frontpage' %}is-active{% endif %}">
     <span class="material-icons">explore</span>
     <p class="subtitle">DISCOVER</p>
   </a>
-  <a href="{% url 'all_collections' %}" class="has-text-black">
+  <a href="{% url 'all_collections' %}" class="{% if active_page == 'frontpage' %}is-active{% endif %}">
     <span class="material-icons">bookmark_border</span>
     <P class="subtitle">COLLECTIONS</P>
   </a>

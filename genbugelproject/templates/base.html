@@ -407,45 +407,40 @@ body {
 <div class="mobile-bottom-nav">
 
           <a href="{% url 'index' %}" 
-              class="button custom-button {% if active_page == 'frontpage' %}is-active{% endif %}"
-             style="margin-bottom: 0px;">
-            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              class="button custom-button {% if active_page == 'frontpage' %}is-active{% endif %}">
+            <span class="material-icons">
               flip_to_front
             </span>
               Frontpage
           </a>
 
           <a href="{% url 'interests' %}" 
-          class="button custom-button {% if active_page == 'interests' %}is-active{% endif %}" 
-          style="margin-bottom: 0px;">
-            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+          class="button custom-button {% if active_page == 'interests' %}is-active{% endif %}">
+            <span class="material-icons">
               check_circle_outline
             </span>
               Interests
           </a>
 
           <a href="{% url 'narrativebuilder' %}" 
-          class="button custom-button {% if active_page == 'narrativebuilder' %}is-active{% endif %}" 
-          style="margin-bottom: 0px;">
-            <span class="material-symbols-outlined" style="font-size: 24px; margin-right: 8px;">
+          class="button custom-button {% if active_page == 'narrativebuilder' %}is-active{% endif %}">
+            <span class="material-symbols-outlined">
               stylus_fountain_pen
             </span>
               Narrative Builder
           </a>
 
           <a href="{% url 'discover' %}" 
-          class="button custom-button {% if active_page == 'discover' %}is-active{% endif %}" 
-          style="margin-bottom: 0px;">
-            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+          class="button custom-button {% if active_page == 'discover' %}is-active{% endif %}">
+            <span class="material-icons">
               explore
             </span>
               Discover
           </a>  
           
           <a href="{% url 'all_collections' %}" 
-          class="button custom-button {% if active_page == 'all_collections' %}is-active{% endif %}" 
-          style="margin-bottom: 0px;">
-            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+          class="button custom-button {% if active_page == 'all_collections' %}is-active{% endif %}">
+            <span class="material-icons">
               bookmark_border
             </span>
               Collections

@@ -50,12 +50,39 @@
                     font-size: 14px;
                   }
 
+                  .profile-stats-nav {
+  
+  gap: 5rem; /* Smaller gap works on mobile and desktop */
+  margin-top: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .profile-stats-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.1rem;
+  }
+
+  .profile-stats-nav .level-item {
+    flex: 1 1 40%; /* allow wrapping with 2 per row */
+    max-width: 45%;
+  }
+
+  .profile-stats-nav .level-item .heading,
+  .profile-stats-nav .level-item .subtitle {
+    font-size: 0.85rem;
+  }
+}
 
                 </style>
+
+
                 <!-- Subscribers -->
                  {% if user.is_authenticated and user == profile.user %}
                  <div id="profileStatsBlock">
-                <nav class="level is-mobile" style="gap: 5rem; margin-top: 1.1rem;">
+                <nav class="level is-mobile profile-stats-nav">
+
                     
                     <div class="level-item has-text-centered">
                         <div>

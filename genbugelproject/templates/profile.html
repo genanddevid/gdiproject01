@@ -60,28 +60,20 @@
   .profile-stats-nav {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.1rem;
+    gap: 1rem;
     margin-top: 1.1rem;
-    margin-top: 1.1rem;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
-  }
   }
 
   .profile-stats-nav .level-item {
-    flex: 1 1 22%; /* allow wrapping with 2 per row */
-    max-width: 24%;
-    text-align: center;
+    flex: 1 1 40%; /* allow wrapping with 2 per row */
+    max-width: 45%;
   }
 
   .profile-stats-nav .level-item .heading,
   .profile-stats-nav .level-item .subtitle {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
   }
-
+}
 
                 </style>
 
@@ -89,7 +81,7 @@
                 <!-- Subscribers -->
                  {% if user.is_authenticated and user == profile.user %}
                  <div id="profileStatsBlock">
-                <nav class="level is-mobile profile-stats-nav" style="letter-spacing: 6px;">
+                <nav class="level is-mobile profile-stats-nav">
 
                     
                     <div class="level-item has-text-centered">
@@ -113,12 +105,12 @@
                         </div>
                     </div>
 
-                  <!--  <div class="level-item has-text-centered">
+                    <div class="level-item has-text-centered">
                         <div>
                             <p class="heading">Likes</p>
                             <p class="subtitle">{{ likes_count }}</p>
                         </div>
-                    </div>-->
+                    </div>
 
                     <!--<div class="level-item has-text-centered">
                         <div>

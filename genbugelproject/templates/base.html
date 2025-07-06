@@ -100,11 +100,11 @@
   justify-content: center;
   text-align: center;
   text-decoration: none;
-  color: #16cf45;
+  color: #333;
 }
 .mobile-bottom-nav .nav-item {
   text-align: center;
-  color: #f11818;
+  color: #333;
   font-size: 24px;
   flex-grow: 1;
 }
@@ -114,29 +114,17 @@
 
 .mobile-bottom-nav p {
   font-size: 9px;
-  color: #2c2c2c;
+  color: #0ab90a;
   margin: 0;
   padding-top: 2px;
   
 }
 
-/* Inactive state (shared style) */
-.mobile-bottom-nav a {
-  color: rgb(112, 112, 112); /* match sidebar */
-}
-
-.mobile-bottom-nav span,
-.mobile-bottom-nav p {
-  color: inherit; /* inherit from <a> */
-  transition: color 0.2s ease;
-}
-
-/* Active state */
-.mobile-bottom-nav a.is-active {
+.mobile-bottom-nav p.is-active {
+  
+  font-weight: 500;
   color: #000000;
-  font-weight: 600;
 }
-
 
 /* Show bottom nav on screens smaller than 768px */
 @media (max-width: 768px) {

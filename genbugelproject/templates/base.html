@@ -87,24 +87,36 @@
   height: 60px;
   background-color: rgb(230, 230, 221);
   border-top: 1px solid #ccc;
-
   justify-content: space-around;
   align-items: center;
   z-index: 1000;
 }
 
-
+.mobile-bottom-nav a {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+}
 .mobile-bottom-nav .nav-item {
   text-align: center;
   color: #333;
   font-size: 24px;
   flex-grow: 1;
 }
+.mobile-bottom-nav span {
+  font-size: 24px;
+}
 
 .mobile-bottom-nav p {
-  
   font-size: 8px;
   color: red;
+  margin: 0;
+  
 }
 
 /* Show bottom nav on screens smaller than 768px */

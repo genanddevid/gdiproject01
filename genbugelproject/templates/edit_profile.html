@@ -2,13 +2,27 @@
 {% load static %}
 {% block content %}
 
-<div class="section" style="padding-top: 0px; padding-bottom: 0px; min-height: 100vh;">
+<div class="section" style="padding-top: 0px; padding-bottom: 10px; min-height: 100vh;">
 
   <div class="container">
     <div class="columns is-mobile is-centered">
       <div class="column is-12-mobile is-8-tablet is-6-desktop">
 
-        <div class="card" style="box-shadow: none; border: 1px solid #f0f0f0; border-radius: 1px;">
+        <div class="card" style="box-shadow: none; border: 1px solid #f0f0f0; border-radius: 1px; margin-top: 0 !important;
+; ">
+<style>
+
+  @media (max-width: 768px) {
+  .card {
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+}
+
+</style>
+
+
           <div class="card-content">
 
             <form method="post" enctype="multipart/form-data" role="form">

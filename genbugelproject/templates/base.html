@@ -29,10 +29,14 @@
 }
 
 .main-content {
-  padding-bottom: 30px; /* space for bottom nav */
+  padding-bottom: 0px; /* space for bottom nav */
   box-sizing: border-box;
 }
-
+@media (max-width: 768px) {
+  .main-content {
+    padding-bottom: 70px; /* enough space for mobile-bottom-nav */
+  }
+}
 
     section.section {
       padding-top: 0px !important;

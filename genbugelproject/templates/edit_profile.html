@@ -1,85 +1,90 @@
 {% extends 'base.html' %}
 {% load static %}
-
-        
 {% block content %}
 
-<div class="columns is-mobile">
-    <div class="column is-half is-offset-one-quarter">
+<div class="section">
+  <div class="container">
+    <div class="columns is-mobile is-centered">
+      <div class="column is-12-mobile is-8-tablet is-6-desktop">
 
-        <div class="card" style="box-shadow: none; border-radius: 0;">
-            <div class="card-content">
+        <div class="card" style="box-shadow: none; border: 1px solid #f0f0f0; border-radius: 6px;">
+          <div class="card-content">
 
-    
-    <form method="post" enctype="multipart/form-data" action="" role="form">
-        {% csrf_token %}
-  <h3 class="title is-3">Edit Profile</h3>
+            <form method="post" enctype="multipart/form-data" role="form">
+              {% csrf_token %}
 
-  <div class="field">
-    <label class="label is-medium">Choose your picture</label>
-    <div class="control">
-      {{ form.picture }}
-    </div>    
-  </div>
+              <h3 class="title is-4 has-text-centered mb-5">Edit Profile</h3>
 
-  <div class="field">
-    <label class="label is-medium">First name</label>
-    <div class="control">
-      {{ form.first_name }}
-    </div>    
-  </div>
+              <div class="field">
+                <label class="label is-medium">Profile Picture</label>
+                <div class="control">
+                  {{ form.picture }}
+                </div>
+              </div>
 
-  <div class="field">
-    <label class="label is-medium">Last name</label>
-    <div class="control">
-      {{ form.last_name }}
-    </div>    
-  </div>
+              <div class="field">
+                <label class="label is-medium">First Name</label>
+                <div class="control">
+                  {{ form.first_name }}
+                </div>
+              </div>
 
-  <div class="field">
-    <label class="label is-medium">Location</label>
-    <div class="control">
-      {{ form.location }}
-    </div>    
-  </div>
+              <div class="field">
+                <label class="label is-medium">Last Name</label>
+                <div class="control">
+                  {{ form.last_name }}
+                </div>
+              </div>
 
-  <div class="field">
-    <label class="label is-medium">URL</label>
-    <div class="control">
-      {{ form.url }}
-    </div>    
-  </div>
+              <div class="field">
+                <label class="label is-medium">Location</label>
+                <div class="control">
+                  {{ form.location }}
+                </div>
+              </div>
 
-  <div class="field">
-    <label class="label is-medium">Description</label>
-    <div class="control">
-      {{ form.profile_info }}
-    </div>    
-  </div>
+              <div class="field">
+                <label class="label is-medium">Website URL</label>
+                <div class="control">
+                  {{ form.url }}
+                </div>
+              </div>
 
-  <!-- Errors -->
-  <div class="row">
-    <div class="col s12">
-      <span style="color: red; font-weight: bold;">
-        {{ form.errors }}
-      </span>
+              <div class="field">
+                <label class="label is-medium">Bio / Description</label>
+                <div class="control">
+                  {{ form.profile_info }}
+                </div>
+              </div>
+
+              {% if form.errors %}
+                <div class="notification is-danger is-light mt-3">
+                  <strong>Please fix the errors below:</strong>
+                  <ul>
+                    {% for field in form %}
+                      {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+
+              <div class="field mt-5">
+                <p class="control has-text-centered">
+                  <button type="submit" class="button is-success is-fullwidth">
+                    Update
+                  </button>
+                </p>
+              </div>
+            </form>
+
+          </div> <!-- end card-content -->
+        </div> <!-- end card -->
+
+      </div>
     </div>
   </div>
-
-  <div class="field">
-    <p class="control">
-      <button type="submit" value="login" class="button is-success">
-        Update
-      </button>
-    </p>
-  </div>
-</form>
-
-
-</div>
 </div>
 
-  </div>
-  </div>
-
-{% endblock %} 
+{% endblock %}

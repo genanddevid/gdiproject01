@@ -3,6 +3,8 @@
 {% block content %}
 
 <div class="section" style="padding-top: 0px; padding-bottom: 0px; min-height: 100vh;">
+  <div class="container">
+
 <div>
   
     <div class="columns is-mobile is-centered">
@@ -12,45 +14,7 @@
 ; ">
 
 
-  <style>
-@media (max-width: 768px) {
-  .container {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-  }
-
-  .columns {
-    margin: 0 !important;
-  }
-
-  .column {
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .card {
-    width: 100% !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-    border-left: none;
-    border-right: none;
-  }
-
-  .section {
-    padding: 0 !important;
-    margin: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-  }
-}
-</style>
-
-
-
-
+  
 
           <div class="card-content">
 
@@ -130,5 +94,40 @@
     </div>
   </div>
 </div>
+
+
+<style>
+@media (max-width: 768px) {
+  .section {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .columns {
+    margin: 0 !important;
+  }
+
+  .column {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .card {
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-left: none;
+    border-right: none;
+  }
+}
+</style>
+
 
 {% endblock %}

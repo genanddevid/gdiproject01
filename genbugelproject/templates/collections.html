@@ -9,7 +9,10 @@
 <div class="mobile-wrapper">
 
   <style>
+.collections-container {
+  background-color: white;
 
+  }
     @media (max-width: 768px) {
   .mobile-wrapper {
     width: 100%;
@@ -40,9 +43,35 @@
   }
 }
 
+  @media (max-width: 768px) {
+  .collection-item {
+    aspect-ratio: auto !important;
+    height: auto !important;
+  }
+}
+
+
+
+
+@media (min-width: 769px) {
+  .collections-container {
+    min-height: 92.3vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .collections-container {
+    min-height: auto;
+    height: auto;
+  }
+}
+
+
+
+
   </style>
 
-<div style="background-color: white; min-height: 100vh;">
+<div class="collections-container">
 
     <!--<div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: flex-start; 
         background-color: rgb(206, 206, 85);">-->

@@ -183,11 +183,10 @@
 
 <!--<div class="columns is-mobile is-multiline is-centered">-->
     {% for post in posts %}
-    <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)" 
-    style="background-color: black;">
+    <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
    <!-- Article Card -->
-<div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; 
-border-radius: 0;">
+<div class="box tight-box" style="max-width: 490px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; 
+border-radius: 0; padding: 13px !important; padding-right: 20px !important;">
   <article class="media">
     <div style="display: flex;">
       

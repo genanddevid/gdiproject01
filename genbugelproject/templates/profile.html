@@ -4,6 +4,41 @@
 
 {% block content %}
 
+<style>
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+    }
+
+    .box {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      border-radius: 0 !important;
+      max-width: 100% !important;
+    }
+
+    .post-card {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+
+    .columns {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .column {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
+</style>
+
             <!-- Narrow container -->
             <div class="container" style="display: flex; flex-direction: column; align-items: center; 
             width: 30rem; padding: 15px; background-color: aquamarine;">
@@ -148,9 +183,11 @@
 
 <!--<div class="columns is-mobile is-multiline is-centered">-->
     {% for post in posts %}
-    <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)" style="background-color: black;">
+    <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)" 
+    style="background-color: black;">
    <!-- Article Card -->
-<div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+<div class="box" style="max-width: 525px; margin: auto; background-color: rgb(255, 255, 255); box-shadow: none; 
+border-radius: 0;">
   <article class="media">
     <div style="display: flex;">
       

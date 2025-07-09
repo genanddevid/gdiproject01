@@ -41,7 +41,7 @@
 
             <!-- Narrow container -->
             <div class="container" style="display: flex; flex-direction: column; align-items: center; 
-            width: 30rem; padding: 15px; background-color: aquamarine;">
+            width: 30rem; padding: 15px;">
 
                 <!-- Profile photo, user name, buttons-->
                 <figure class="image is-128x128">
@@ -169,16 +169,25 @@
 
             </div>
 
-<div class="tabs is-centered" style="background-color: rgb(20, 17, 189);">
+<div class="tabs is-centered">
     <ul>
-        <li class="is-active" style="background-color: rgb(170, 88, 12);">
-            <a><i class="material-icons" style="background-color: rgb(126, 126, 7);">dashboard</i>Posts</a>
+        <li class="is-active">
+            <a><i class="material-icons">dashboard</i>Posts</a>
         </li>
         <!--<li class="is-active">
             <a><i class="material-icons">save_alt</i>Saved</a>
         </li>-->
     </ul>
 </div>
+<style>
+@media (max-width: 768px) {
+  .box tight-box {
+   
+    padding-left: 0px !important;
+  }
+}
+</style>
+ 
       
 
 <!--<div class="columns is-mobile is-multiline is-centered">-->

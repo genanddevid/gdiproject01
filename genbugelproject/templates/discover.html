@@ -10,19 +10,30 @@
             <!--<div class="columns is-mobile"></div>-->
             
 <style>
-  @media (max-width: 768px) {
-    
-    .medium-card-group {
-      margin-left: 0 !important;
-      
-    }
-    .post-card{
-      margin-left: 0 !important;
-    }
+
+  .medium-card-group.responsive-group {
+  width: 100%;
+  max-width: 490px;
+  margin: 0 auto;
+  position: relative;
+  background-color: rgb(17, 143, 165);
+  gap: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .medium-card-group.responsive-group {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden;
   }
+}
+
   </style>
 
-<div class="medium-card-group" style="position: relative; gap: 0rem; background-color: rgb(17, 143, 165); width: 490px; margin-left: 100px;">
+<div class="medium-card-group responsive-group" style="position: relative; margin-left: 100px;">
     {% for post in posts %}
       <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
         {% include "cards/medium_card.html" with post=post %}

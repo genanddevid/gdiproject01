@@ -30,6 +30,15 @@
       border-radius: 0 !important;
       box-shadow: none !important;
     }
+
+    .no-gap {
+  padding: 0 !important;
+}
+
+.card-content {
+  margin-left: 0 !important;
+}
+
   }
 </style>
 
@@ -43,8 +52,7 @@
             <!--large Card  -->
           <!-- DEBUG: This is the large card -->
 
-        <div class="card no-gap"
-         ">     
+        <div class="card no-gap">     
           <div class="card-image">
             <figure class="image is-3by2" style="margin: 0;">
               <a href="{% url 'postdetails' post_item.id %}" onclick="openPostModal('{{ post_item.id }}')">

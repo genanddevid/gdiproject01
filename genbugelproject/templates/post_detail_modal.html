@@ -9,6 +9,7 @@
 <!--{% load custom_filters %}-->
 
 {% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   @media (max-width: 768px) {
   .mobile-fullwidth-image-container {
@@ -20,9 +21,9 @@
 </style>
 
 <div class="columns is-mobile is-centered" style="background-color: #f14668;">
-  <div class="column" style="background-color: #ffffff;">
+  <div class="column" style="background-color: #ffffff; padding: 0;">
 
-    <div class="mobile-fullwidth-image-container" style="margin: 0;">
+    <div class="mobile-fullwidth-image-container">
       <img
         src="{{ post.picture.url }}"
         alt="Post image"
@@ -31,14 +32,8 @@
       />
     </div>
 
-    <div class="mya-card" style="box-shadow: none; background-color: #ffffff;">
-      <div class="card-image" style="background-color: #f146e8;">
-        <figure class="image is-3by3" style="background-color: #61ee0f;">
-          
-          
-          
-        </figure>
-      </div>
+    <div class="mya-card" style="box-shadow: none; background-color: #ffffff; padding: 20px;">
+      
 
     
 

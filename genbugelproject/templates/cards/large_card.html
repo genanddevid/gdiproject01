@@ -48,7 +48,7 @@
                     color:rgb(63, 63, 63);"
                   >{{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}</p>
                   {% else %}
-                  <p class="title is-4">Unknown</p>
+                  <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">{{ post.user.username }}</p>
                   {% endif %}
                   <!--<p class="subtitle is-6">@{{ post_item.user.username }}</p>-->
                 </a>

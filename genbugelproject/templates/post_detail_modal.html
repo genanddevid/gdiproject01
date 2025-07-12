@@ -71,15 +71,15 @@
               font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
               font-size: 0.9rem;
               letter-spacing: 0.1px;
-              margin: 0;
-              color:#030303">
+              margin-top: 7px;
+              color:#030303;">
               {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
             </p>
               {% else %}
             <p class="title is-4">Unknown</p>
               {% endif %}
                 </a>             
-            <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; padding-top:3px;color:#1a1a1a">
+            <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; padding-top:2px;color:#131313">
               {{ post.posted }}
             </h1>
           </div>
@@ -92,7 +92,7 @@
 
 
 <!--Social media posts mixed with paragraphs-->
-<div class="content" style="font-size: 18px; font-weight:100; width: 100%; color:#161616; font-family:Arial, Helvetica, sans-serif;">
+<div class="content" style="font-size: 18px; width: 100%; color:#161616; font-family:Arial, Helvetica, sans-serif;">
   {{ content1|safe }}
   <br><br><br>
 

@@ -49,7 +49,7 @@
 
   </style>
 
-<div class="medium-card-group responsive-group" style="position: relative; margin-left: 100px;">
+<div class="medium-card-group responsive-group" style="position: relative; margin-left: 0px;">
     {% for post in posts %}
       <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
         {% include "cards/medium_card.html" with post=post %}

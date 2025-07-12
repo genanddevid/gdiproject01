@@ -3,11 +3,12 @@
 <style>
   
   @media (max-width: 768px) {
-    .box.full-width-mobile {
+    .box {
       margin: 0 !important;
       border-radius: 0 !important;
       max-width: 100% !important;
       padding-left: 0px !important;
+      margin-top: 0 !important;
     
     }
 
@@ -52,7 +53,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
                 <figure class="image is-24x24" style="margin: 0;">
                   <img class="is-rounded"
                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
-                       style="width: 24px; height: 24px; object-fit: cover;">
+                       style="width: 24px; height: 24px; object-fit: cover; background-color: #6b6b6b;">
                 </figure>
               </a>                           
             </div>

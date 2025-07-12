@@ -1,9 +1,24 @@
 
+<style>
+  .carousel-item {
+    min-width: 210px;
+    max-width: 220px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  @media (max-width: 768px) {
+    .carousel-item {
+      min-width: 170px;
+      max-width: 100% !important;
+    }
+  }
+</style>
 
 
     
         
-        <div class="carousel-item" style="min-width: 210px; max-width: 220px; flex: 0 0 auto; scroll-snap-align: start;">
+        <div class="carousel-item">
           <!-- Your card template starts -->
     
           <div class="card" style="padding: 1.0rem 1rem 0.251rem 1.0rem; box-shadow: none; border-radius: 0px;">

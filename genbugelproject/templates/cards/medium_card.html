@@ -53,7 +53,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
                 <figure class="image is-24x24" style="margin: 0;">
                   <img class="is-rounded"
                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
-                       style="width: 24px; height: 24px; object-fit: cover; background-color: #6b6b6b;">
+                       style="width: 24px; height: 24px; object-fit: cover; background-color: #4e4e4e;">
                 </figure>
               </a>                           
             </div>
@@ -64,7 +64,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
                   {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
                 </p>
                 {% else %}
-                <p class="title is-4">Unknown</p>
+                <p class="title is-4" style="font-weight:600; font-size: 11.5px; margin: 0;">{{ post.user.username }}</p>
                 {% endif %}
               </a>
             </div>

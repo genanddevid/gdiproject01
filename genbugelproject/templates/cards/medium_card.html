@@ -60,11 +60,11 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
             <div class="media-content" style="margin-left: -10px;">
               <a href="{% url 'profile' post.user.username %}" onclick="event.stopPropagation();">
                 {% if post.user.profile.first_name %}
-                <p class="title is-4" style="font-weight:600; font-size: 11.5px; margin: 0;">
+                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">
                   {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
                 </p>
                 {% else %}
-                <p class="title is-4" style="font-weight:600; font-size: 11.5px; margin: 0;">{{ post.user.username }}</p>
+                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">{{ post.user.username }}</p>
                 {% endif %}
               </a>
             </div>

@@ -16,6 +16,15 @@
     width: 100vw;
     margin-left: calc(-50vw + 50%);
   }
+  @media (max-width: 768px) {
+  .columns.is-mobile > .column {
+    min-width: 100%;
+  }
+}
+.columns.is-mobile > .column {
+  transition: min-width 0.1s ease-out;
+}
+
 }
 
 </style>
@@ -61,7 +70,8 @@
               style="width: 48px; height: 48px; object-fit: cover;">
           {% else %}
             <span class="material-icons is-rounded"
-              style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; background-color: #eee; border-radius: 50%; font-size: 28px; color: #555;">
+              style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; 
+              background-color: #eee; border-radius: 50%; font-size: 28px; color: #555;">
               person
             </span>
           {% endif %}
@@ -84,7 +94,8 @@
               {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
             </p>
               {% else %}
-            <p class="title is-4" style="font-weight:500; font-size: 12px; margin-top: 7px;">{{ post.user.username }}</p>
+            <p class="title is-4" style="font-weight:500; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.9rem; margin-top: 7px; color:#030303;">{{ post.user.username }}</p>
               {% endif %}
                 </a>             
             <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; padding-top:2px;color:#131313">

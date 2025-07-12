@@ -84,7 +84,7 @@
               {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
             </p>
               {% else %}
-            <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">{{ post.user.username }}</p>
+            <p class="title is-4" style="font-weight:500; font-size: 12px; margin-top: 7px;">{{ post.user.username }}</p>
               {% endif %}
                 </a>             
             <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; padding-top:2px;color:#131313">
@@ -100,9 +100,9 @@
 
 
 <!--Social media posts mixed with paragraphs-->
-<div class="content" style="font-size: 18px; width: 100%; color:#1b1b1b; font-family:Arial, Helvetica, sans-serif;">
+<div class="content" style="font-size: 18px; width: 100%; color:#242424; font-family:Arial, Helvetica, sans-serif; line-height: 1.3;">
   {{ content1|safe }}
-  <br><br><br>
+  <br><br>
 
   {% if post.link1 %}
 
@@ -161,13 +161,13 @@
 
   {% endif %}
 
-  <br><br>
+  <br>
 
 
 
 
 {% if content2 %}
-  <div class="content" style="font-size: 18px; font-weight:300;">
+  <div class="content" style="font-size: 18px; width: 100%; color:#1b1b1b; font-family:Arial, Helvetica, sans-serif;">
     {{ content2|safe }}
   </div>
 {% endif %}
@@ -231,9 +231,9 @@
 
   {% endif %}
 {% endif %}
-<br> <br>
+<br> 
 {% if content3 %}
-  <div class="content" style="font-size: 18px; font-weight:300;">
+  <div class="content" style="font-size: 18px; width: 100%; color:#1b1b1b; font-family:Arial, Helvetica, sans-serif;">
     {{ content3|safe }}
   </div>
 {% endif %}
@@ -546,12 +546,20 @@
 
       <article class="media">
         <figure class="media-left">
-          <p class="image is-64x64">
-            <img class="is-rounded"
-              src="{% if request.user.profile.picture %}{{ request.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
-              style="width: 48px; height: 48px; object-fit: cover;">
-          </p>
-        </figure>
+  <p class="image is-64x64">
+    {% if request.user.profile.picture %}
+      <img class="is-rounded"
+        src="{{ request.user.profile.picture.url }}"
+        style="width: 48px; height: 48px; object-fit: cover;">
+    {% else %}
+      <span class="material-icons is-rounded"
+        style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; background-color: #eee; border-radius: 50%; font-size: 28px; color: #555;">
+        person
+      </span>
+    {% endif %}
+  </p>
+</figure>
+
         <div class="media-content">
                 <form id="modal-comment-form" method="post" data-post-id="{{ post.id }}">
   {% csrf_token %}

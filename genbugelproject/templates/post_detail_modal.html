@@ -6,36 +6,41 @@
 {% load youtube_extras %}
 {% load filters %}
 
-
-
 <!--{% load custom_filters %}-->
 
 {% block content %}
+<style>
+  @media (max-width: 768px) {
+  .mobile-fullwidth-image-container {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+  }
+}
 
-
-
-
-
-
-      
+</style>
 
 <div class="columns is-mobile is-centered" style="background-color: #f14668;">
   <div class="column" style="background-color: #ffffff;">
+
+    <div class="mobile-fullwidth-image-container" style="margin: 0;">
+      <img
+        src="{{ post.picture.url }}"
+        alt="Post image"
+        class="mobile-fullwidth-image"
+        style="width: 100%; height: auto; max-height: 550px; object-fit: cover; object-position: top; border-radius: 0;"
+      />
+    </div>
 
     <div class="mya-card" style="box-shadow: none; background-color: #ffffff;">
       <div class="card-image" style="background-color: #f146e8;">
         <figure class="image is-3by3" style="background-color: #61ee0f;">
           
           
-          <img
-            src="{{ post.picture.url }}"
-            alt="Placeholder image"
-            style="border-radius: 0; width: 100%; height: auto; max-height: 550px; object-fit: cover; object-position: top;"
-          />
+          
         </figure>
       </div>
 
-      <img/>
+    
 
       <div>
         <p class="title" style="                  
@@ -100,7 +105,8 @@
 
 
 <!--Social media posts mixed with paragraphs-->
-<div class="content" style="font-size: 18px; width: 100%; color:#242424; font-family:Arial, Helvetica, sans-serif; line-height: 1.3;">
+<div class="content" style="font-size: 18px; width: 100%; 
+color:#272727; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
   {{ content1|safe }}
   <br><br>
 
@@ -413,7 +419,7 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: bold;
     padding: 8px 12px;
-    border-bottom: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e9e9e9;
     margin-top: 20px;
     margin-bottom: 10px;
 ">

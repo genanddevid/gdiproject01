@@ -5,12 +5,30 @@
     margin-bottom: -5px;
   }
 
+  .no-gap {
+    width: 543px;
+    background-color:#ffffff;
+    padding: 1.0rem 1.0rem 0.0rem 1.0rem;
+    border-radius: 0; 
+    box-shadow: none; 
+        position: relative;
+         margin-bottom: 5px !important;
+  }
+
   @media (max-width: 768px) {
     .large-card-wrapper {
       width: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
       box-sizing: border-box;
+    }
+    .card {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box;
+      border-radius: 0 !important;
+      box-shadow: none !important;
     }
   }
 </style>
@@ -20,15 +38,13 @@
 <div class="large-card-wrapper">
 
   
-    <div style="background-color: rgb(156, 187, 18); padding: 0 0 0 0; width: 543px; 
-    margin-left: 0px; margin-top: 0px;">
+    <div style="background-color: rgb(156, 187, 18); padding: 0;">
      
             <!--large Card  -->
           <!-- DEBUG: This is the large card -->
 
-        <div class="card no-gap" style="width: 543px; background-color:#ffffff; margin-bottom: 5px;
-        padding: 1.0rem 1.0rem 0.0rem 1.0rem; border-radius: 0; box-shadow: none; 
-        position: relative;">     
+        <div class="card no-gap"
+         ">     
           <div class="card-image">
             <figure class="image is-3by2" style="margin: 0;">
               <a href="{% url 'postdetails' post_item.id %}" onclick="openPostModal('{{ post_item.id }}')">

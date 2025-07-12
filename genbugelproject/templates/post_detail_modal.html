@@ -51,16 +51,24 @@
       </div>
 
       <div class="my-card-content" style="width: 100%; padding-top: 30px;">
-        <div class="media">
-          <div class="media-left">
-            <a href="{% url 'profile' post.user.username %}">
-            <figure class="image is-48x48">
-              <img class="is-rounded"
-                src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
-                style="width: 48px; height: 48px; object-fit: cover;">
-            </figure>
-            </a>
-          </div>
+  <div class="media">
+    <div class="media-left">
+      <a href="{% url 'profile' post.user.username %}">
+        <figure class="image is-48x48">
+          {% if post.user.profile.picture %}
+            <img class="is-rounded"
+              src="{{ post.user.profile.picture.url }}"
+              style="width: 48px; height: 48px; object-fit: cover;">
+          {% else %}
+            <span class="material-icons is-rounded"
+              style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; background-color: #eee; border-radius: 50%; font-size: 28px; color: #555;">
+              person
+            </span>
+          {% endif %}
+        </figure>
+      </a>
+    </div>
+
           
           
           <div class="media-content">
@@ -76,7 +84,7 @@
               {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
             </p>
               {% else %}
-            <p class="title is-4">Unknown</p>
+            <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">{{ post.user.username }}</p>
               {% endif %}
                 </a>             
             <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; padding-top:2px;color:#131313">
@@ -92,7 +100,7 @@
 
 
 <!--Social media posts mixed with paragraphs-->
-<div class="content" style="font-size: 18px; width: 100%; color:#161616; font-family:Arial, Helvetica, sans-serif;">
+<div class="content" style="font-size: 18px; width: 100%; color:#1b1b1b; font-family:Arial, Helvetica, sans-serif;">
   {{ content1|safe }}
   <br><br><br>
 

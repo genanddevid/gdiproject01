@@ -2,11 +2,34 @@
 {% load static %}
 {% block content %}
 
+<style>
+  .large-card-group.responsive-group {
+  width: 100%;
+  max-width: 490px;
+  margin: 0 auto;
+  position: relative;
+  background-color: rgb(17, 143, 165);
+  gap: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .large-card-group.responsive-group {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden;
+  }
+}
+
+</style>
+
 {% for block in layout_blocks %}
   
   <!-- Large Cards -->
   {% if block.type == "large" %}
-  <div class="large-card-group" style="position: relative; margin-left: 100px; width: 543px;">
+  <div class="large-card-group responsive-group">
     {% for post in block.posts %}
       <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
         {% include "cards/large_card.html" with post_item=post %}

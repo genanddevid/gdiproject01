@@ -83,7 +83,7 @@
                   <p class="title is-4" style="
                     font-weight:600;
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    font-size: 11.5px;
+                    font-size: 12px;
                     margin: 0;
                     color:rgb(63, 63, 63);"
                   >{{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}</p>
@@ -97,10 +97,10 @@
                
             <div class="content">
               <a href="{% url 'postdetails' post_item.id %}" style="
-                font-size: clamp(13px, 3vw, 19.4px); font-weight:100; 
+                font-size: clamp(15px, 4vw, 19.4px); font-weight:100; 
                 font-family: 'Inter', sans-serif; line-height: 1.2; color: rgb(37, 37, 37);
                 letter-spacing: -0.4px;
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+                
                 ">
                 {{ post_item.caption }}
               </a>

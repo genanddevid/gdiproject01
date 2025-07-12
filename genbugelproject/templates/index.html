@@ -9,6 +9,15 @@
   }
 
   @media (max-width: 768px) {
+    .container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+    }
     .responsive-group {
       width: 100% !important;
       margin: 0 !important;
@@ -32,7 +41,7 @@
     }
   }
 </style>
-
+<div class="container">
 {% for block in layout_blocks %}
   
   <!-- Large Cards -->
@@ -43,6 +52,7 @@
         {% include "cards/large_card.html" with post_item=post %}
       </div>
     {% endfor %}
+  </div>
   </div>
 
  

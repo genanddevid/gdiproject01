@@ -10,24 +10,25 @@
 
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
 <style>
   @media (max-width: 768px) {
-  .mobile-fullwidth-image-container {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    .mobile-fullwidth-image-container {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+    }
+
+    .columns.is-mobile > .column {
+      min-width: 100%;
+    }
   }
-  @media (max-width: 768px) {
+
   .columns.is-mobile > .column {
-    min-width: 100%;
+    transition: min-width 0.1s ease-out;
   }
-}
-.columns.is-mobile > .column {
-  transition: min-width 0.1s ease-out;
-}
-
-}
-
 </style>
+
 
 <div class="columns is-mobile is-centered" style="background-color: #f14668;">
   <div class="column" style="background-color: #ffffff; padding: 0;">

@@ -100,24 +100,27 @@
               </div>
             </div>
                
-            <div class="content">
+            <div class="content" style="margin-top: 7px; font-size: 18.15px; display: -webkit-box; -webkit-box-orient: vertical; 
+          -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.4em; 
+          height: 3.0em;">
               <a href="{% url 'postdetails' post_item.id %}" style="
-                font-size: 18px; font-weight:100; 
-                font-family: 'Inter', sans-serif; line-height: 1.2; color: rgb(37, 37, 37);
+                
+                font-family: 'Inter', sans-serif; color: rgb(37, 37, 37);
                 letter-spacing: -0.4px;
                 
                 ">
                 {{ post_item.caption }}
               </a>
+              </div>
               <!--<a href="#">#css</a>
               <a href="#">#responsive</a>-->    
-              <br>
-              <div style="margin-top: 6px;">
+              
+              <div style="margin-top: -15px;">
                 <time datetime="2016-1-1" style="color: #676767; font-family: 'Inter', sans-serif;
                   font-size: 10.9px;">{{ post_item.posted }}</time>
               </div>
             </div>
-          </div>
+          
 
           
         </div>

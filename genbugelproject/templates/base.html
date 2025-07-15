@@ -213,7 +213,7 @@ body {
 .right-icons {
   display: flex;
   align-items: center;
-  padding-right: 0.5rem;
+  padding-right: 0.9rem;
 }
 
 
@@ -264,7 +264,7 @@ body {
   </div>
   <div class="right-icons">
     <a href="{% url 'profile' request.user %}" class="has-text-black">
-      <span class="material-icons">person</span>
+      <span class="material-icons">account_circle</span>
     </a>
     <div class="dropdown">
       <span class="material-icons">more_vert</span>
@@ -339,7 +339,9 @@ body {
               bookmark_border
             </span>
               Collections
-          </a>          
+          </a>     
+          
+          
 
           <a href="{% url 'profile' request.user %}" 
           class="button custom-button {% if active_page == 'profile' %}is-active{% endif %}" 

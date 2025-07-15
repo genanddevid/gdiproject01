@@ -268,14 +268,14 @@ body {
     <a href="{% url 'profile' request.user %}" class="has-text-black">
 {% if request.user.profile.picture %}
       <img src="{{ request.user.profile.picture.url }}" 
-      style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+      style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;"
            alt="Profile Picture">
            {% else %}
       <span class="material-icons">account_circle</span>
       {% endif %}
     </a>
     <div class="dropdown">
-      <span class="material-icons" style="font-size: 22px;">more_vert</span>
+      <span class="material-icons" style="font-size: 24px;">more_vert</span>
       <div class="dropdown-menu">
         <a href="#" class="dropdown-item">Change password</a>
         <a href="#" class="dropdown-item">Contact</a>

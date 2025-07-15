@@ -44,8 +44,21 @@
     }
 
     .leadphoto {
-      width: 116px !important;
-      height: 116px !important;
+      width: 117px !important;
+      height: 117px !important;
+    }
+
+    .leadcaption {
+      margin-top: 7px;
+      font-size: 16.0px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3 !important;
+      line-clamp: 3 !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4em;
+      height: 4.05em !important;
     }
   }
 </style>
@@ -247,17 +260,17 @@ border-radius: 0; padding-right: 20px !important;">
                     </div>
 
           <!-- Caption -->
-          <div style="
+          <div class="leadcaption" style="
             margin-top: 7px;
                     font-size: 16.0px;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 3;
-                    line-clamp: 3;
+                    -webkit-line-clamp: 2;
+                    line-clamp: 2;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     line-height: 1.4em;
-                    height: 4.05em;
+                    height: 2.9em;
           ">
           <a href="{{ post.get_absolute_url }}" style="color: rgb(30, 30, 30); text-decoration: none;">
             {{ post.caption }}

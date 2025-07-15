@@ -75,7 +75,7 @@
          style="width: 128px; height: 128px; object-fit: cover;">
   {% else %}
     <span class="material-icons"
-          style="font-size: 150px; width: 128px; height: 128px; background-color: #8d8d8d; display: flex; 
+          style="font-size: 152px; width: 128px; height: 128px; background-color: #8d8d8d; display: flex; 
           align-items: center; justify-content: center; border-radius: 50%; color: #d4d4d4;">
       account_circle
     </span>
@@ -241,9 +241,19 @@ border-radius: 0; padding-right: 20px !important;">
                         <!-- Profile Picture of article writer -->
                         <div class="media-left">
                             <figure class="image is-24x24" style="margin: 0;">
-                                <img class="is-rounded"
-                        src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
-                        style="width: 24px; height: 24px; object-fit: cover;">
+
+                                {% if post.user.profile.picture %}
+        <img class="is-rounded"
+             src="{{ post.user.profile.picture.url }}"
+             style="width: 24px; height: 24px; object-fit: cover; background-color: #6d6d6d;">
+      {% else %}
+        <span class="material-icons"
+              style="width: 24px; height: 24px; font-size: 30px;
+                     display: flex; align-items: center; justify-content: center;
+                     border-radius: 50%; background-color: #6d6d6d; color: #d9d9d9;">
+          account_circle
+        </span>
+      {% endif %}
                             </figure>
 
                            

@@ -75,10 +75,19 @@
               <div class="media-left">
                 <figure class="image is-24x24">
                   <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
-                    <img class="is-rounded"
-                      src="{% if post_item.user.profile.picture %}{{ post_item.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
-                      style="width: 24px; height: 24px; object-fit: cover;">
-                  </a>
+
+                    {% if post.user.profile.picture %}
+        <img class="is-rounded"
+             src="{{ post_item.user.profile.picture.url }}"
+             style="width: 24px; height: 24px; object-fit: cover; background-color: #6d6d6d;">
+      {% else %}
+        <span class="material-icons"
+              style="width: 24px; height: 24px; font-size: 30px;
+                     display: flex; align-items: center; justify-content: center;
+                     border-radius: 50%; background-color: #6d6d6d; color: #d9d9d9;">
+          account_circle
+        </span>
+      {% endif %}
                 </figure>
               </div>
 

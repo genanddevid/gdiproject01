@@ -24,6 +24,13 @@
       margin-right: 0 !important;
       margin-top: 0 !important;
       width: 100% !important;
+      margin-bottom: 0 !important;
+    }
+
+    .leadphoto,
+    .leadcaption,
+    .content {
+      width: 100% !important;
     }
 
     
@@ -35,13 +42,13 @@
     
     {% if image_url %}
   
-    <img src="{{ image_url }}" alt="Preview Image" style="max-width:85%; display: block;">
+    <img class="leadphoto" src="{{ image_url }}" alt="Preview Image" style="max-width:85%; display: block;">
 
 {% else %}
   <p style="color: #aaa;">No image selected for preview</p>
 {% endif %}
 
-<div style="max-width: 85%; text-align: left; margin-top: 20px;">
+<div class="leadcaption" style="max-width: 85%; text-align: left; margin-top: 20px;">
     <h1 class="title is-3" style="margin: 0;">{{ post.caption }}</h1>
     
 

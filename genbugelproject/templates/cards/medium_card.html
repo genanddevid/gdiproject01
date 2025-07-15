@@ -21,6 +21,24 @@
       padding-left: 0 !important;
       padding-right: 0 !important;
     }
+
+    .leadphoto {
+      width: 117px !important;
+      height: 117px !important;
+    }
+
+    .leadcaption {
+      margin-top: 7px;
+      font-size: 16.0px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3 !important;
+      line-clamp: 3 !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4em;
+      height: 4.05em !important;
+    }
   }
 
 
@@ -35,7 +53,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
     <div style="display: flex;">
 
       <!-- Left: Photo Heading of Article -->
-      <div style="width: 100px; height: 100px;">
+      <div class="leadphoto" style="width: 100px; height: 100px;">
         <a href="{{ post.get_absolute_url }} " onclick="openPostModal('{{ post.id }}')">
           <img src="{{ post.picture.url }}" alt="Article Image" 
                style="width: 100%; height: 100%; object-fit: cover;" />
@@ -70,10 +88,10 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
             </div>
           </div>
           <!-- Caption -->
-          <div style="margin-top: 7px; font-size: 15.15px; display: -webkit-box; -webkit-box-orient: vertical; 
-          -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; 
-          height: 3.15em;">
-            <a href="{{ post.get_absolute_url }}" style="color: rgb(37, 37, 37); letter-spacing: -0.4px; 
+          <div class="leadcaption" style="margin-top: 7px; font-size: 15.15px; display: -webkit-box; -webkit-box-orient: vertical; 
+          -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.4em; 
+          height: 2.9em;">
+            <a href="{{ post.get_absolute_url }}" style="color: rgb(37, 37, 37); letter-spacing: 0px; 
             font-family: 'Inter', sans-serif;">
               {{ post.caption }}
             </a>
@@ -81,7 +99,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
         </div>
         <!-- Time -->
         <time datetime="{{ post.posted|date:'c' }}" 
-              style="font-size: 10.9px; color: #676767; font-family: 'Inter', sans-serif; margin-top: -3px; 
+              style="font-size: 10.9px; color: #676767; font-family: 'Inter', sans-serif; margin-top: 0px; 
               ">
           {{ post.posted }}
         </time>

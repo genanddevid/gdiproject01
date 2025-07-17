@@ -161,6 +161,7 @@
   padding-right: 75px;
   padding-top: 25px;
   position: relative;
+  
 }
 
 /* Freely movable close button */
@@ -193,7 +194,7 @@
 }
 @media (max-width: 768px) {
   .my-close-button {
-    top: 25px;
+    top: 10px;
     right: 10px;
     width: 28px !important;
     height: 28px !important;
@@ -210,6 +211,10 @@
     box-sizing: border-box; /* Ensures padding doesn't shrink the element */
     height: 100vh;
   }
+  #modalContent {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
   
 }
 
@@ -226,31 +231,53 @@
   
   
   let touchStartX = 0;
-  let touchEndX = 0;
+let touchEndX = 0;
 
-  const modal = document.getElementById('postModal');
+const modal = document.getElementById('postModal');
 
-  modal.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  });
+modal.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
 
-  modal.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipeGesture();
-  });
+modal.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipeGesture();
+});
 
-  function handleSwipeGesture() {
-    const swipeThreshold = 50; // Minimum distance to be considered a swipe
-    const distance = touchEndX - touchStartX;
+function handleSwipeGesture() {
+  const swipeThreshold = 50;
+  const distance = touchEndX - touchStartX;
 
-    if (Math.abs(distance) > swipeThreshold) {
-      if (distance > 0) {
-        showPreviousPost(); // Swipe right
-      } else {
-        showNextPost(); // Swipe left
-      }
+  if (Math.abs(distance) > swipeThreshold) {
+    if (distance > 0) {
+      animateSwipe('right', showPreviousPost);
+    } else {
+      animateSwipe('left', showNextPost);
     }
   }
+}
+
+function animateSwipe(direction, callback) {
+  const modalContent = document.getElementById('modalContent');
+
+  modalContent.style.transform = `translateX(${direction === 'left' ? '-100%' : '100%'})`;
+  modalContent.style.opacity = '0';
+
+  setTimeout(() => {
+    callback();
+
+    modalContent.style.transition = 'none';
+    modalContent.style.transform = `translateX(${direction === 'left' ? '100%' : '-100%'})`;
+    modalContent.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      modalContent.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      modalContent.style.transform = 'translateX(0)';
+      modalContent.style.opacity = '1';
+    });
+  }, 300);
+}
+
 
 
 

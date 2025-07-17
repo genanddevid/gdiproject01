@@ -235,48 +235,31 @@ let touchEndX = 0;
 
 const modal = document.getElementById('postModal');
 
+// Capture start position
 modal.addEventListener('touchstart', (e) => {
   touchStartX = e.changedTouches[0].screenX;
 });
 
+// Capture end position
 modal.addEventListener('touchend', (e) => {
   touchEndX = e.changedTouches[0].screenX;
   handleSwipeGesture();
 });
 
+// Fast and simple swipe detection
 function handleSwipeGesture() {
-  const swipeThreshold = 50;
+  const swipeThreshold = 50; // Minimum swipe distance to trigger
   const distance = touchEndX - touchStartX;
 
   if (Math.abs(distance) > swipeThreshold) {
     if (distance > 0) {
-      animateSwipe('right', showPreviousPost);
+      showPreviousPost(); // Swipe right
     } else {
-      animateSwipe('left', showNextPost);
+      showNextPost(); // Swipe left
     }
   }
 }
 
-function animateSwipe(direction, callback) {
-  const modalContent = document.getElementById('modalContent');
-
-  modalContent.style.transform = `translateX(${direction === 'left' ? '-100%' : '100%'})`;
-  modalContent.style.opacity = '0';
-
-  setTimeout(() => {
-    callback();
-
-    modalContent.style.transition = 'none';
-    modalContent.style.transform = `translateX(${direction === 'left' ? '100%' : '-100%'})`;
-    modalContent.style.opacity = '0';
-
-    requestAnimationFrame(() => {
-      modalContent.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-      modalContent.style.transform = 'translateX(0)';
-      modalContent.style.opacity = '1';
-    });
-  }, 300);
-}
 
 
 

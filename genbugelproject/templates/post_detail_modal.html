@@ -64,7 +64,7 @@
           {% else %}
             <span class="material-icons is-rounded"
               style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; 
-              background-color: #6d6d6d; border-radius: 50%; font-size: 28px; color: #d9d9d9;">
+              background-color: #6d6d6d; border-radius: 50%; font-size: 60px; color: #d9d9d9;">
               account_circle
             </span>
           {% endif %}
@@ -91,7 +91,8 @@
             font-size: 0.9rem; margin-top: 7px; color:#030303;">{{ post.user.username }}</p>
               {% endif %}
                 </a>             
-            <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; padding-top:2px;color:#131313">
+            <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; 
+            padding-top:2px;color:#131313">
               {{ post.posted }}
             </h1>
           </div>
@@ -99,7 +100,7 @@
 
         <style>
           @media (max-width: 768px) {
-          .media-content{
+          .media-content h1{
             font-size: 0.4rem;
 
           }
@@ -111,8 +112,8 @@
 
 
 <!--Social media posts mixed with paragraphs-->
-<div class="content" style="font-size: 18px; width: 100%; 
-color:#272727; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
+<div class="content" style="font-size: 17px; width: 100%; 
+color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
   {{ content1|safe }}
   <br><br>
 
@@ -383,7 +384,7 @@ color:#272727; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
 
 @media (max-width: 768px) {
   .media-right-container {
-    gap: 100% !important;
+    gap: 12px !important;
     justify-content: space-around !important;
   }
 }
@@ -571,7 +572,7 @@ color:#272727; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
     {% else %}
       <span class="material-icons is-rounded"
         style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; 
-        background-color: #6d6d6d; border-radius: 50%; font-size: 28px; color: #d9d9d9;">
+        background-color: #6d6d6d; border-radius: 50%; font-size: 60px; color: #d9d9d9;">
         account_circle
       </span>
     {% endif %}

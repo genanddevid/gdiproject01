@@ -12,6 +12,7 @@
     .container {
       padding-left: 0 !important;
       padding-right: 0 !important;
+      padding-bottom: 0 !important;
       margin-left: 0 !important;
       margin-top: 0 !important;
       margin-bottom: 0 !important;
@@ -196,6 +197,18 @@
 .close-button:hover {
   background: #eee;
 }
+
+@media (max-width: 768px) {
+  .my-close-button {
+    top: auto;
+    bottom: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
+  }
+}
+
 
 /* Add this new class */
 .no-scroll {

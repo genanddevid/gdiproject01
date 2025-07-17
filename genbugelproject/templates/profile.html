@@ -425,7 +425,7 @@ border-radius: 0; padding-right: 20px !important;">
 <style>
  /* Add these styles for the navigation buttons */
 .modal-nav-btn {
-  position: sticky;
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background-color: rgb(0, 0, 0); /* Semi-transparent background */
@@ -492,9 +492,11 @@ border-radius: 0; padding-right: 20px !important;">
 
 /* Freely movable close button */
 .my-close-button {
-  position: absolute;
+  position: sticky;
   top: 10px; /* Adjust the distance above the modal */
   right: 10px; /* Adjust the distance to the right of the modal */
+  align-self: flex-start; /* align to top inside flex container */
+  z-index: 10001;
   font-size: 25px;
   cursor: pointer;
   background-color: white; /* Optional: Add a background for visibility */
@@ -529,8 +531,8 @@ border-radius: 0; padding-right: 20px !important;">
   }
   .my-modal-content {
     width: 100%;
-    padding-left: 8px;  /* Changed from 75px */
-    padding-right: 8px; /* Changed from 75px */
+    padding-left: 1px;  /* Changed from 75px */
+    padding-right: 1px; /* Changed from 75px */
     padding-top: 25px;
     box-sizing: border-box; /* Ensures padding doesn't shrink the element */
   }

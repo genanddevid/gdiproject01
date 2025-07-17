@@ -96,7 +96,6 @@
 </div>
 
 <style>
-
  /* Add these styles for the navigation buttons */
 .modal-nav-btn {
   position: absolute;
@@ -105,12 +104,10 @@
   background-color: rgb(0, 0, 0); /* Semi-transparent background */
   color: white;
   border: none;
-  
   padding-left: 15px;
   padding-top: 19px;
   padding-bottom: 21px;
   padding-right: 15px;
-
   cursor: pointer;
   font-size: 2em; /* Make arrows larger */
   z-index: 10000; /* Ensure they are above the modal background */
@@ -119,7 +116,6 @@
   user-select: none; /* Prevent text selection */
  /* opacity: 0.8; Slight transparency */
 }
-
 
 .modal-nav-btn:hover {
   background-color: rgba(0, 0, 0, 0.5);
@@ -141,10 +137,8 @@
 
 /* Your existing modal and close button styles here */
  
-
 /* Modal background */
 .my-modal {
-  
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -164,18 +158,16 @@
   overflow-y: auto;
   border-radius: 0px;
   padding-left: 75px;
-            padding-right: 75px;
-            padding-top: 25px;
+  padding-right: 75px;
+  padding-top: 25px;
   position: relative;
 }
-
 
 /* Freely movable close button */
 .my-close-button {
   position: absolute;
   top: 10px; /* Adjust the distance above the modal */
   right: 10px; /* Adjust the distance to the right of the modal */
-
   font-size: 25px;
   cursor: pointer;
   background-color: white; /* Optional: Add a background for visibility */
@@ -188,37 +180,31 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 5px rgba(99, 98, 98, 0.2); /* Optional: Add a subtle shadow */
-  
   /* --- FIX FOR CENTERING THE 'X' --- */
-  padding-bottom: 5px; /* Adjust this value (e.g., 1px, 2px) to visually center the 'X' */
+  padding-bottom: 4px;
+  padding-left: 1px; /* Adjust this value (e.g., 1px, 2px) to visually center the 'X' */
   /* You might also try transform: translateY(1px); instead of padding-bottom for more precise nudging if needed */
 }
 /* Optional: Style on hover */
 .close-button:hover {
   background: #eee;
 }
-
 @media (max-width: 768px) {
   .my-close-button {
     top: 25px;
     right: 10px;
-    
-  }
- 
+  } 
   .modal-nav-btn {
     display: none;
   }
-
   .my-modal-content {
- 
-  width: 100%;
-  /* rest of your styles */
+    width: 100%;
+    padding-left: 15px;  /* Changed from 75px */
+    padding-right: 15px; /* Changed from 75px */
+    padding-top: 20px;
+    box-sizing: border-box; /* Ensures padding doesn't shrink the element */
+  }
 }
-
-
-
-}
-
 
 /* Add this new class */
 .no-scroll {

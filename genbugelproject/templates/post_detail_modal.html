@@ -41,7 +41,7 @@
       <div>
         <p class="title" style="                  
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-          font-size: 30px;
+          font-size: 28px;
           font-weight:600;
           font-family: 'Inter', sans-serif;
           color: rgb(20, 20, 20);
@@ -91,8 +91,8 @@
             font-size: 0.9rem; margin-top: 7px; color:#030303;">{{ post.user.username }}</p>
               {% endif %}
                 </a>             
-            <h1 class="time-posted" style="font-size: 0.8rem; font-weight: 100; letter-spacing: 0.1px; 
-            padding-top:2px;color:#131313">
+            <h1 class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px; 
+            padding-top:2px;color:#0f0f0f">
               {{ post.posted }}
             </h1>
           </div>
@@ -113,7 +113,7 @@
 
 <!--Social media posts mixed with paragraphs-->
 <div class="content" style="font-size: 17px; width: 100%; 
-color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
+color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
   {{ content1|safe }}
   <br><br>
 
@@ -313,8 +313,8 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
         </div>
       </div>
       
-      <div class="media-right-container" style="display: flex; justify-content: space-evenly; 
-      align-items: center; flex-wrap: wrap; gap: 12px;">
+      <div class="media-right-container" style="display: flex; justify-content: space-around; 
+      align-items: center; flex-wrap: wrap; gap: 12px; width: 100%; max-width: 700px; margin: 0 auto;">
 
         <div class="media-right" style="text-align: center;">
           <a href="">
@@ -382,12 +382,7 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.4;">
 }
 
 
-@media (max-width: 768px) {
-  .media-right-container {
-    gap: 12px !important;
-    justify-content: space-around !important;
-  }
-}
+
 
 </style>
 

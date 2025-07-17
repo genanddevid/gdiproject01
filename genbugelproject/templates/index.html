@@ -87,12 +87,11 @@
 
 <!-- Modal container -->
 <div id="postModal" class="my-modal" style="display: none;">
-  <button id="modalPrevBtn" class="modal-nav-btn modal-nav-btn-left" onclick="showPreviousPost()">&#10094;</button>
-  <button class="my-close-button" onclick="closePostModal()">&times;</button>
   <div class="my-modal-content" id="modalContent">
-    
+    <button class="my-close-button" onclick="closePostModal()">&times;</button>
     <div id="modalBody"></div>
   </div>
+  <button id="modalPrevBtn" class="modal-nav-btn modal-nav-btn-left" onclick="showPreviousPost()">&#10094;</button>
   <button id="modalNextBtn" class="modal-nav-btn modal-nav-btn-right" onclick="showNextPost()">&#10095;</button>
 </div>
 
@@ -174,7 +173,7 @@
 .my-close-button {
   position: absolute;
   top: 10px; /* Adjust the distance above the modal */
-  right: 20px; /* Adjust the distance to the right of the modal */
+  right: 10px; /* Adjust the distance to the right of the modal */
 
   font-size: 25px;
   cursor: pointer;
@@ -200,13 +199,18 @@
 
 @media (max-width: 768px) {
   .my-close-button {
-    top: auto;
-    bottom: 10px;
+    top: 25px;
     right: 10px;
     width: 25px;
     height: 25px;
     font-size: 20px;
   }
+ 
+  .modal-nav-btn {
+    display: none;
+  }
+
+
 }
 
 
@@ -221,32 +225,34 @@
 
 <script>
   
+  
   let touchStartX = 0;
   let touchEndX = 0;
 
   const modal = document.getElementById('postModal');
 
-  function handleSwipe() {
-    const swipeDistance = touchEndX - touchStartX;
-
-    // Swipe left to go to next
-    if (swipeDistance < -50) {
-      showNextPost();
-    }
-    // Swipe right to go to previous
-    if (swipeDistance > 50) {
-      showPreviousPost();
-    }
-  }
-
-  modal.addEventListener('touchstart', function (e) {
+  modal.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
   });
 
-  modal.addEventListener('touchend', function (e) {
+  modal.addEventListener('touchend', (e) => {
     touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
+    handleSwipeGesture();
   });
+
+  function handleSwipeGesture() {
+    const swipeThreshold = 50; // Minimum distance to be considered a swipe
+    const distance = touchEndX - touchStartX;
+
+    if (Math.abs(distance) > swipeThreshold) {
+      if (distance > 0) {
+        showPreviousPost(); // Swipe right
+      } else {
+        showNextPost(); // Swipe left
+      }
+    }
+  }
+
 
 
 let allPostIds = []; // Global array to store all post IDs in order

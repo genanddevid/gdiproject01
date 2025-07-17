@@ -492,10 +492,10 @@ border-radius: 0; padding-right: 20px !important;">
 
 /* Freely movable close button */
 .my-close-button {
-  position: sticky;
+  position: fixed;
   top: 10px; /* Adjust the distance above the modal */
   right: 10px; /* Adjust the distance to the right of the modal */
-  align-self: flex-start; /* align to top inside flex container */
+  
   z-index: 10001;
   font-size: 25px;
   cursor: pointer;
@@ -531,8 +531,8 @@ border-radius: 0; padding-right: 20px !important;">
   }
   .my-modal-content {
     width: 100%;
-    padding-left: 1px;  /* Changed from 75px */
-    padding-right: 1px; /* Changed from 75px */
+    padding-left: 1px !important;  /* Changed from 75px */
+    padding-right: 1px !important; /* Changed from 75px */
     padding-top: 25px;
     box-sizing: border-box; /* Ensures padding doesn't shrink the element */
   }

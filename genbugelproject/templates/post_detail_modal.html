@@ -18,26 +18,26 @@
   }
   
 }
-
 </style>
 
-<div class="columns is-mobile is-centered" style="background-color: #f14668;">
-  <div class="column" style="background-color: #ffffff; padding: 0;">
-
+<div class="columns is-mobile is-centered" 
+      style="background-color: #f14668;">
+  <div class="column" 
+        style="background-color: #ffffff; padding: 0;">
     <div class="mobile-fullwidth-image-container">
       <img
         src="{{ post.picture.url }}"
         alt="Post image"
         class="mobile-fullwidth-image"
-        style="width: 100%; height: auto; max-height: 550px; object-fit: cover; object-position: top; border-radius: 0;"
+        style="width: 100%; height: auto; max-height: 550px; object-fit: cover; object-position: top; 
+        border-radius: 0;"
       />
     </div>
-
-    <div class="mya-card" style="box-shadow: none; background-color: #ffffff; padding: 20px;">
+    <div class="mya-card" 
+          style="box-shadow: none; background-color: #ffffff; padding: 20px;">
       
 
-    
-
+      <!-- caption-->
       <div>
         <p class="title" style="                  
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -50,7 +50,7 @@
           {{ post.caption }}
         </p>
       </div>
-
+<!--name of narrator, photo, time posted-->
       <div class="my-card-content" style="width: 100%; padding-top: 30px;">
   <div class="media">
     <div class="media-left">
@@ -71,8 +71,6 @@
         </figure>
       </a>
     </div>
-
-          
           
           <div class="media-content">
             <a href="{% url 'profile' post.user.username %}" style="text-decoration: none;">

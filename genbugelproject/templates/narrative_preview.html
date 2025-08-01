@@ -19,17 +19,23 @@
     }
 
     .box {
-      
       width: 100% !important;
-      
     }
+
+    .forleadphoto img {
+      max-width: 100%;
+    }
+    .forcaption h1{
+      max-width: 100%;
+    }
+
 
    
   }
 </style>
 <div class="container" style="margin-top: 10px; margin-bottom:10px;">
   <div class="box" name="myabox" style="width: 85%; border-radius: 0;">
-    <div style="display: flex; flex-direction: column; align-items:center;">
+    <div class="forleadphoto" style="display: flex; flex-direction: column; align-items:center;">
     
     {% if image_url %}
   
@@ -39,7 +45,7 @@
   <p style="color: #aaa;">No image selected for preview</p>
 {% endif %}
 
-<div style="max-width: 85%; text-align: left; margin-top: 20px;">
+<div class="forcaption" style="max-width: 85%; text-align: left; margin-top: 20px;">
     <h1 class="title is-3" style="margin: 0;">{{ post.caption }}</h1>
 
 

@@ -187,6 +187,7 @@
   <script async src="https://www.instagram.com/embed.js"></script>
 
     <br>
+    <!--
     <div style="display: flex; justify-content: space-between; align-items: center;">
     <a href="{% if edit_mode %}{% url 'edit_post' post_id %}{% else %}{% url 'narrativebuilder' %}{% endif %}"
        class="button is-light">
@@ -199,9 +200,10 @@
         <form method="post" action="{% url 'finalize_new_post' %}">
     {% endif %}
         {% csrf_token %}
-        <button type="submit" class="button is-success">Publish</button>
+        <button type="submit" class="button is-success">Continue to Publish</button>
     </form>
 </div>
+-->
 
   </div>
 </div>

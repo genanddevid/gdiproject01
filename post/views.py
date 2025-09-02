@@ -582,13 +582,16 @@ def index(request):
     # Get all (user, tag) combinations approved by the editor
     approved_combos = ApprovedTagAuthor.objects.all()
 
-    # Filter posts matching any approved (user, tag) combination
-    posts = Post.objects.filter(
-        Q(*[
-            Q(user=combo.author, tag=combo.tag)
-            for combo in approved_combos
-        ], _connector=Q.OR)
-    ).order_by('-posted')
+    if approved_combos.exists():
+        # Only include posts that match approved (user, tag) combos
+        query = Q()
+        for combo in approved_combos:
+            query |= Q(user=combo.author, tag=combo.tag)
+
+        posts = Post.objects.filter(query).order_by('-posted')
+    else:
+        # If no approvals yet, Frontpage should be empty
+        posts = Post.objects.none()
 
     posts = list(posts)  # Convert queryset to list for slicing
 

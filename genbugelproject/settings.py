@@ -159,6 +159,7 @@ LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = '/login/'
 
 
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -170,14 +171,15 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = "Media"  # exact bucket name in Supabase
-AWS_S3_ENDPOINT_URL = "https://cwsmttxbsswxpfovegdx.supabase.co/storage/v1/s3"
+AWS_S3_ENDPOINT_URL = "https://cwsmttxbsswxpfovegdx.storage.supabase.co/storage/v1/s3"
 
-AWS_S3_CUSTOM_DOMAIN = "cwsmttxbsswxpfovegdx.supabase.co/storage/v1/object/public/Media"
+# ✅ Use S3 endpoint + bucket, not object/public
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}"
 
-# Disable signed querystrings since we’re using a Public bucket
+# Disable signed querystrings (optional if bucket is public)
 AWS_QUERYSTRING_AUTH = False  
 
 # Public Media URL for serving files
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/"
 
 

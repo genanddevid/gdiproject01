@@ -151,8 +151,10 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
-#MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = "/opt/render/project/src/media"
+
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
@@ -167,25 +169,25 @@ LOGIN_URL = '/login/'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-INSTALLED_APPS += ['storages']
+##INSTALLED_APPS += ['storages']
 
 # Media / File storage settings
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+##DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+##AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+##AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+##AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 
-AWS_S3_REGION_NAME = "eu-north-1"
+##AWS_S3_REGION_NAME = "eu-north-1"
 
 # ✅ Public domain for your bucket
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+##AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
 
 
 # Disable signed querystrings (optional if bucket is public)
-AWS_QUERYSTRING_AUTH = False  
+##AWS_QUERYSTRING_AUTH = False  
 
 # Public Media URL for serving files
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+##MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
 

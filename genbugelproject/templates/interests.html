@@ -9,16 +9,32 @@
 <style>
 
   @media (max-width: 768px) {
+    .container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      padding-bottom: 0 !important;
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+    }
     .large-card-group {
       width: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
       box-sizing: border-box;
     }
+
+    .post-card {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
     
   }
       </style>
-
+<div class="container">
             <!--large Card  -->
   <div class="large-card-group" style="position: relative; margin-left: 100px; width: 543px;">
     {% for post_item in post_items %}
@@ -27,7 +43,8 @@
 </div>
 
     {% endfor %}
-  </div>       
+  </div>   
+  </div>    
   
 
   <!-- Modal container -->

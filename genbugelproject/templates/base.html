@@ -95,6 +95,7 @@
   justify-content: space-around;
   align-items: center;
   z-index: 1000;
+  margin-top: -10px !important;
 }
 
 .mobile-bottom-nav a {
@@ -390,7 +391,7 @@ body {
       </section>
     </div>
 
-
+<!-- Mobile Bottom Nav (Visible only on mobile) -->
     <div class="mobile-bottom-nav">
   <a href="{% url 'index' %}" class="{% if active_page == 'frontpage' %}is-active{% endif %}">
     <span class="material-icons">flip_to_front</span>

@@ -15,8 +15,8 @@
     }
 
     .mydescription {
-      margin-left: 15px;
-      margin-right: 15px;
+      margin-left: 17px;
+      margin-right: 17px;
     }
     
     .tabs {
@@ -89,7 +89,7 @@
 
 
                 <div class="media-content" style="display: flex; flex-direction: column; align-items: center;">
-                    <h5 style="font-weight: 450; font-size: 25px; margin-bottom: 15px;">@{{ profile.user }}</h5>
+                    <h5 style="font-weight: 450; font-size: 25px; margin-bottom: 13px;">@{{ profile.user }}</h5>
                     <h5 style="font-weight: 500; font-size: 15px;">
                         {% if profile.first_name and profile.last_name %}
                         {{ profile.first_name }} {{ profile.last_name }}
@@ -197,7 +197,7 @@
                 {% else %}
                 {% endif %}
                 <!-- Description -->
-                <div class="mydescription" style="margin-top: 1rem;">
+                <div class="mydescription" style="margin-top: 1.3rem;">
                     <h5 class="title is-5" style="font-weight: 500";>Description</h5>
                     <p style="text-align: justify; font-size: 14px; margin-top: -9px; margin-bottom: 10px;">{% if profile.profile_info %}{{ profile.profile_info }}{% endif %}</p>
                  

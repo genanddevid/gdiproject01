@@ -13,6 +13,11 @@
       margin-right: 0 !important;
       width: 100% !important;
     }
+
+    .mydescription {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
     
     .tabs {
       margin-bottom: 0 !important;
@@ -192,7 +197,7 @@
                 {% else %}
                 {% endif %}
                 <!-- Description -->
-                <div style="margin-top: 1rem;">
+                <div class="mydescription" style="margin-top: 1rem;">
                     <h5 class="title is-5" style="font-weight: 500";>Description</h5>
                     <p style="text-align: justify; font-size: 14px; margin-top: -9px; margin-bottom: 10px;">{% if profile.profile_info %}{{ profile.profile_info }}{% endif %}</p>
                  

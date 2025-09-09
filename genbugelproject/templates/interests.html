@@ -15,20 +15,15 @@
       padding: 0 !important;
       box-sizing: border-box;
     }
-
-    .post-card {
-      width: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
+    
   }
       </style>
 
             <!--large Card  -->
   <div class="large-card-group" style="position: relative; margin-left: 100px; width: 543px;">
-    {% for post in block.posts %}
-      <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
-        {% include "cards/large_card.html" with post_item=post %}
+    {% for post_item in post_items %}
+      <div class="post-card" data-post-id="{{ post_item.id }}" onclick="openPostModal('{{ post_item.id }}', event)">
+  {% include "cards/large_card.html" with post_item=post_item %}
 </div>
 
     {% endfor %}

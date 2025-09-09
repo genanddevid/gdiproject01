@@ -76,7 +76,7 @@
                 <figure class="image is-24x24">
                   <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
 
-                    {% if post.user.profile.picture %}
+                    {% if post_item.user.profile.picture %}
         <img class="is-rounded"
              src="{{ post_item.user.profile.picture.url }}"
              style="width: 24px; height: 24px; object-fit: cover; background-color: #6d6d6d;">

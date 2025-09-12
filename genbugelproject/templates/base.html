@@ -239,12 +239,14 @@ body {
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 55px;
-  right: 1rem;
+  top: 100%;   /* directly under the icon */
+  right: 0;    /* align to the icon's right edge */
   background-color: white;
   border: 1px solid #ccc;
-  padding: 0.5rem;
-  z-index: 1001;
+  border-radius: 6px;
+  padding: 0.5rem 0;
+  z-index: 2000; /* stay above nav */
+  min-width: 160px;
 }
 
 .dropdown:hover .dropdown-menu {

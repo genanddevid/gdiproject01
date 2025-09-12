@@ -685,6 +685,7 @@ def remove_tag_author_approval(request, post_id):
 
     messages.success(request, "Excluded")
     return redirect('postdetails', post_id=post.id)
+    
 
 
 

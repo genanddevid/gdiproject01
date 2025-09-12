@@ -2,12 +2,22 @@
 {% load static %}
 {% block content %}
 
+
+<div style="max-width: 525px; margin: auto;">
 <div class="tabs is-centered">
     <ul>
+        <li>
+            <a href="{% url 'collections_commented_comments' %}">
+            <i class="material-icons">chat_bubble_outline</i>Comments you replied to
+        </a>
+        </li>
         <li class="is-active">
-            <a><i class="material-icons">favorite_border</i>Liked Comments</a>
+          <a>
+            <i class="material-icons">favorite_border</i>Comments you liked
+          </a>
         </li>
     </ul>
+</div>
 </div>
 
 {% for post in posts %}

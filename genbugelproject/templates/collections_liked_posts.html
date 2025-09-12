@@ -3,12 +3,22 @@
 {% load static %}
 
 {% block content %}
+<div style="max-width: 525px; margin: auto;">
 <div class="tabs is-centered">
     <ul>
-        <li class="is-active">
-            <a><i class="material-icons">favorite_border</i>Liked Posts</a>
-        </li>
+        <li data-tab="commented">
+  <a href="{% url 'collections_commented_posts' %}">
+    <i class="material-icons">chat_bubble_outline</i> Posts you commented on
+  </a>
+</li>
+<li class="is-active" data-tab="liked">         
+  <a>
+    <i class="material-icons">favorite_border</i> Posts you liked
+  </a>          
+</li>
+
     </ul>
+</div>
 </div>
 
 <!--<div class="columns is-mobile is-multiline is-centered">-->

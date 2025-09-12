@@ -1,6 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+
+<style>
+
+  
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+    }
+
+    
+
+    .post-card {
+      margin: 0 !important;
+      margin-top: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+
+    
+  }
+</style>
 <div style="max-width: 525px; margin: auto;">
 <div class="tabs is-centered">
     <ul>
@@ -14,7 +41,7 @@
 </div>
 
 <!--<h1 class="title is-5" style="text-align: center; margin-top: 10px;">Your Viewed Posts</h1>-->
-
+  <div class="container">
 {% if viewed_posts %}
     {% for postview in viewed_posts %}
     <div class="post-card" data-post-id="{{ postview.post.id }}" onclick="openPostModal('{{ postview.post.id }}', event)">
@@ -70,6 +97,7 @@
                 </div>
             </div>
         </article>
+    </div>
     </div>
     </div>
     {% endfor %}

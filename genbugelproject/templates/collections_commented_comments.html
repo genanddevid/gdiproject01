@@ -2,22 +2,47 @@
 {% load static %}
 {% block content %}
 
+<style>
+
+  
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+    }
+
+    
+
+    .post-card {
+      margin: 0 !important;
+      margin-top: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+
+  }
+</style>
 
 <div style="max-width: 525px; margin: auto;">
 <div class="tabs is-centered">
     <ul>
         <li class="is-active">
-            <a><i class="material-icons">chat_bubble_outline</i>Comments you replied to</a>
+            <a><i class="material-icons">chat_bubble_outline</i>You replied to</a>
         </li>
         <li>
           <a href="{% url 'collections_liked_comments' %}">         
-            <i class="material-icons">favorite_border</i>Comments you liked
+            <i class="material-icons">favorite_border</i>You liked
           </a>
         </li>
     </ul>
 </div>
 </div>
-
+<div class="container">
 {% for post in posts %}
    
     <!-- First Article Card -->   
@@ -90,6 +115,7 @@
             
 
         </article>
+    </div>
     </div>
    
 

@@ -698,11 +698,11 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
             margin-left: 15px !important;
           }
           .replies-section {
-            margin-left: 10px !important;
+            margin-left: 5px !important;
           }
 
           .replies-section .media-left {
-            margin-right: 6px !important;
+            margin-right: 8px !important;
           }
         }
 
@@ -746,8 +746,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                           style="display: none; margin-left: 30px;">
                           <form method="POST" action="{% url 'submit_reply' reply.id %}">
                             {% csrf_token %}
-                            <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
-                              @{{ reply.user.username }} 
+                            <textarea name="reply" rows="2" style="width: 100%;">@{{ reply.user.username }} 
                             </textarea>
                             <button type="submit">Submit</button>
                           </form>

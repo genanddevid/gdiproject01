@@ -6,6 +6,9 @@
 {% block content %}
 
 
+
+
+
   <div class="column is-12-mobile is-8-desktop is-offset-2-desktop is-10-tablet is-offset-1-tablet" style="background-color: #ffffff; padding: 0;">
 
 <div class="narrative-container" style="min-height: 100vh; background-color: rgb(255, 255, 255); padding: 0;">
@@ -204,17 +207,33 @@
 
             <br>
 
+  <style>
+          #Hphoto {
+            width: 234px;
+            height: 173px;
+            border: 2px dashed red;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+  </style>
+      <div id="Hphoto" class="container"></div>
           <div class="field" style="display: flex;
-  justify-content: center; text-align: center">
+          justify-content: center; text-align: center">
             <p class="control has-icons-left">
               <label class="label is-medium">Choose a file for your lead photo</label>
               {{ form.picture }}
               <span class="icon is-small is-left">
                 <i class="fas fa-lock"></i>
               </span>
-            </p>
-            
-          </div> <br> <br>
+            </p>            
+          </div> 
+          
+          
+          <br> <br>
 
 <div class="field" style="display: flex;
   justify-content: center;">

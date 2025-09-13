@@ -677,23 +677,26 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                 </small>
 
                 <!-- Hidden reply form (revealed when "Reply" is clicked) -->
-                <div class="reply-form-container" id="reply-form-{{ comment.id }}" style="display: none; margin-left: 30px;">
+                <div class="reply-form-container" id="reply-form-{{ comment.id }}">
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
 
                     {% csrf_token %}
-                    <textarea name="reply" rows="2" style="width: 100%;"> <!--placeholder="Write your reply...">-->
-                      @{{ comment.user.username }} 
+                    <textarea name="reply" rows="2" style="width: 100%;">@{{ comment.user.username }} 
                     </textarea>
                     <button type="submit">Submit</button>
                   </form>
                 </div>
         <style>
-          @media (max-width: 768px) {
-          .reply-form-container {
-            margin-left: 20px;
-          }
+          /* Default spacing for larger screens */
+          .reply-form-container,
           .replies-section {
-            margin-left: 20px;
+            margin-left: 30px;
+          }
+
+          @media (max-width: 768px) {
+          .reply-form-container,
+          .replies-section {
+            margin-left: 15px !important;
           }
           
           }
@@ -703,7 +706,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
 
 
                 <!-- Replies section (initially hidden) -->
-                <div class="replies-section" id="replies-{{ comment.id }}" style="display: none; margin-left: 30px;">
+                <div class="replies-section" id="replies-{{ comment.id }}">
 
                   {% for reply in comment.replies.all|slice:":4" %}
                   <article class="media">

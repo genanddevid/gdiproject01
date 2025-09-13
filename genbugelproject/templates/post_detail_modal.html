@@ -681,12 +681,25 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
 
                     {% csrf_token %}
-                    <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
+                    <textarea name="reply" rows="2" style="width: 100%;"> <!--placeholder="Write your reply...">-->
                       @{{ comment.user.username }} 
                     </textarea>
                     <button type="submit">Submit</button>
                   </form>
                 </div>
+        <style>
+          @media (max-width: 768px) {
+          .reply-form-container {
+            margin-left: 20px;
+          }
+          .replies-section {
+            margin-left: 20px;
+          }
+          
+          }
+
+        </style>
+                  
 
 
                 <!-- Replies section (initially hidden) -->

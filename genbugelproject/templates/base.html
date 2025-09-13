@@ -216,11 +216,6 @@ body {
   align-items: center;
   
 }
-.dropdown {
-  position: relative; /* makes menu position relative to this */
-  display: inline-block;
-}
-
 
 
 /* Profile & settings icons right-aligned */
@@ -235,18 +230,23 @@ body {
   color: #6d6d6d;
 }
 
+.dropdown {
+  position: relative; /* anchor for the menu */
+  display: inline-block;
+}
+
 /* Optional dropdown for settings */
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;   /* directly under the icon */
-  right: 0;    /* align to the icon's right edge */
+  top: 100%;   /* directly below the icon */
+  right: 0;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 0.5rem 0;
-  z-index: 2000; /* stay above nav */
   min-width: 160px;
+  z-index: 2000;
 }
 
 .dropdown:hover .dropdown-menu {

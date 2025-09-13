@@ -253,9 +253,7 @@ body {
 }
 
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
+
 
 .dropdown-item {
   display: block;
@@ -302,7 +300,9 @@ body {
       {% endif %}
     </a>
     <div class="dropdown">
+      <div class="dropdown-trigger">
       <span class="material-icons" style="font-size: 24px; color:rgb(20, 20, 20);">more_vert</span>
+      </div>
       <div class="dropdown-menu">
         <a href="#" class="dropdown-item">Change password</a>
         <a href="#" class="dropdown-item">Contact</a>
@@ -319,7 +319,7 @@ body {
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".dropdown").forEach(dropdown => {
-    const trigger = dropdown.querySelector(".dropdown-trigger");
+    const trigger = dropdown.querySelector(".material-icons");
 
     if (trigger) {
       trigger.addEventListener("click", function (e) {

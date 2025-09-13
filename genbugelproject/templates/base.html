@@ -229,18 +229,17 @@ body {
   margin-right: 0.3rem;
   color: #6d6d6d;
 }
-
+/* Override Bulma's defaults */
 .dropdown {
-  position: relative; /* anchor for the menu */
-  display: inline-block;
+  position: relative !important; /* ensure menu anchors to icon */
 }
 
-/* Optional dropdown for settings */
 .dropdown-menu {
   display: none;
-  position: absolute;
-  top: 100%;   /* directly below the icon */
-  right: 0;
+  position: absolute !important;
+  top: 100% !important;    /* sits directly under the icon */
+  right: 0 !important;     /* align to right edge of icon */
+  left: auto !important;   /* cancel Bulma's default "left: 0" */
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -248,6 +247,11 @@ body {
   min-width: 160px;
   z-index: 2000;
 }
+
+.dropdown.is-active .dropdown-menu {
+  display: block !important; /* Bulma expects .is-active instead of hover */
+}
+
 
 .dropdown:hover .dropdown-menu {
   display: block;
@@ -296,6 +300,25 @@ body {
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".dropdown").forEach(dropdown => {
+    dropdown.addEventListener("click", function(e) {
+      e.stopPropagation();
+      this.classList.toggle("is-active");
+    });
+  });
+
+  // Close if you click outside
+  document.addEventListener("click", function() {
+    document.querySelectorAll(".dropdown.is-active").forEach(dropdown => {
+      dropdown.classList.remove("is-active");
+    });
+  });
+});
+</script>
+
 
 
     <!-- Sidebar -->

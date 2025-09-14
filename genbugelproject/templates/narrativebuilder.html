@@ -203,28 +203,76 @@
 
             <br>
 
-  
-         <!-- Step 1: Pick file (separate from Django form) -->
+
+
+
+
+
+
+<style>
+  .custom-file-upload {
+    display: inline-block;
+    padding: 10px 18px;
+    cursor: pointer;
+    border-radius: 6px;
+    background: #3273dc;  /* Bulma primary color */
+    color: white;
+    font-weight: 500;
+  }
+  .custom-file-upload:hover {
+    background: #2759a5;
+  }
+  input[type="file"] {
+    display: none; /* hide the ugly default */
+  }
+</style>
+
+<div style="display: flex; justify-content: center; text-align: center; margin-bottom: 20px;">
+  <label class="label is-medium">Create your lead photo</label>
+  </div>
+  <div style="display: flex; justify-content: center; text-align: center; margin-bottom: 10px;">
+<label for="pick-file" class="custom-file-upload">
+  Upload Lead Photo
+</label>
 <input type="file" id="pick-file" accept="image/*">
+
+</div>
+
+
+
+
+
+         <!-- Step 1: Pick file (separate from Django form) -->
+
 
 <!-- Step 2: Cropping area -->
 <div id="crop-container" style="margin-top: 15px; display: none;">
   <img id="crop-image" style="max-width: 100%; max-height: 400px;">
-</div>
+
 
 <!-- Step 3: Save edited version -->
-<button type="button" id="save-edit">Save Edited Image</button>
+<button type="button" id="save-edit" style="margin-top: 5px; font-weight: 700; font-display:block;">Save Edited Image</button>
+</div>
 
 <!-- Step 4: Actual Django form input (hidden) -->
 <div class="field" style="display: flex; justify-content: center; text-align: center">
   <p class="control has-icons-left">
-    <label class="label is-medium">Choose a file for your lead photo</label>
+    <label for="{{ form.picture.id_for_label }}" class="custom-file-upload">
+  Select Lead Photo
+</label>
     {{ form.picture }} <!-- Django's input -->
     <span class="icon is-small is-left">
       <i class="fas fa-lock"></i>
     </span>
   </p>
 </div>
+
+<style>
+  input[type="file"] {
+  display: none;
+}
+
+</style>
 
             
             
@@ -573,7 +621,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (cropper) cropper.destroy();
 
         cropper = new Cropper(cropImage, {
-          aspectRatio: 16 / 9,
+          aspectRatio: 4 / 3,
           viewMode: 1,
           autoCropArea: 1,
         });

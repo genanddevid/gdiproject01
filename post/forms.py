@@ -79,11 +79,6 @@ class NarrativeBuilderForm(forms.ModelForm):
 
 
 
-        cropped_data = self.data.get('cropped_picture')
-        if cropped_data:
-            format, imgstr = cropped_data.split(';base64,')
-            ext = format.split('/')[-1]
-            instance.picture = ContentFile(base64.b64decode(imgstr), name=f"cropped.{ext}")
 
 
 

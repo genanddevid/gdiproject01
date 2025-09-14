@@ -5,10 +5,6 @@
 {% block body_class %}custom-bg{% endblock %}
 {% block content %}
 
-
-
-
-
   <div class="column is-12-mobile is-8-desktop is-offset-2-desktop is-10-tablet is-offset-1-tablet" style="background-color: #ffffff; padding: 0;">
 
 <div class="narrative-container" style="min-height: 100vh; background-color: rgb(255, 255, 255); padding: 0;">
@@ -207,104 +203,7 @@
 
             <br>
 
-  <style>
-          #Hphoto {
-            width: 234px;
-            height: 173px;
-            border: 2px dashed red;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-  </style>
-
-  <style>
-  /* Final saved photo area */
-  #Hphoto {
-    width: 234px;
-    height: 173px;
-    border: 2px dashed red;
-    margin-top: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* Editing area container */
-  #boxPhotoheading {
-    position: relative; /* was fixed */
-    overflow: hidden;
-    width: 248px;
-    height: 183px;
-    border: 1px solid #ccc;
-    margin-top: 15px;
-  }
-
-  #loadedImage {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 300px;
-    height: auto;
-    cursor: grab;
-  }
-
-  .controls {
-    margin-top: 10px;
-  }
-
-  .controls button {
-    font-size: 11px;
-    background-color: #4caf50;
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: white;
-    border: 1px solid #4caf50;
-    cursor: pointer;
-  }
-
-  .controls input[type="range"] {
-    margin-left: 10px;
-  }
-</style>
-
-<div id="Hphoto" class="container"></div>
-
-<p id="leadphotoText">Choose a file for your lead photo</p>
-<input type="file" id="uploadInput" accept="image/*" />
-
-<div class="outer-container">
-  <div id="boxPhotoheading">
-    <img
-      id="loadedImage"
-      src=""
-      alt="Load an image here"
-    />
-  </div>
-</div>
-
-<div class="outer-container">
-  <div class="controls">
-    <button onclick="freezeImage()">Save</button>
-    <input type="range" id="resizeRange" min="100" max="600" value="300" />
-    <div id="zoomPercentage">Zoom: 100%</div>
-  </div>
-</div>
-
-<!-- Optional embed areas -->
-<div class="outer-container" style="padding: 25px;">
-  <div id="boxEmbedcontainer">
-    <div id="embedContainer"></div>
-  </div>
-  <div id="boxEmbedcontainer2">
-    <div id="embedContainer2"></div>
-  </div>
-</div>
-
-
-      
+  
           <div class="field" style="display: flex;
           justify-content: center; text-align: center">
             <p class="control has-icons-left">
@@ -313,8 +212,18 @@
               <span class="icon is-small is-left">
                 <i class="fas fa-lock"></i>
               </span>
-            </p>            
-          </div> 
+            </p>   
+              </div> 
+            
+            <!-- Cropping preview area -->
+  <div id="crop-container" style="margin-top: 15px; display: none;">
+    <img id="crop-image" style="max-width: 100%; max-height: 400px;"/>
+  </div>
+  
+  <!-- Hidden input to store cropped image -->
+  <input type="hidden" name="cropped_picture" id="cropped_picture">
+            
+            
           
           
           <br> <br>
@@ -634,143 +543,71 @@ form.addEventListener("submit", (e) => {
 });
 
 });
+</script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const fileInput = document.getElementById("id_picture"); // Django assigns id="id_picture"
+  const cropContainer = document.getElementById("crop-container");
+  const cropImage = document.getElementById("crop-image");
+  const hiddenCroppedInput = document.getElementById("cropped_picture");
 
+  let cropper;
 
+  // When a file is chosen
+  fileInput.addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        cropImage.src = e.target.result;
+        cropContainer.style.display = "block";
 
+        // Destroy old cropper if reselecting
+        if (cropper) {
+          cropper.destroy();
+        }
 
-
-
-
-let isDragging = false;
-  let startX, startY;
-  let imgOffsetX = 0,
-    imgOffsetY = 0;
-
-  const loadedImage = document.getElementById("loadedImage");
-  const boxPhotoheading = document.getElementById("boxPhotoheading");
-  const resizeRange = document.getElementById("resizeRange");
-  const zoomPercentage = document.getElementById("zoomPercentage");
-
-  // Load image
-  document
-    .getElementById("uploadInput")
-    .addEventListener("change", function (event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          loadedImage.src = e.target.result;
-          loadedImage.style.width = "300px";
-          loadedImage.style.height = "auto";
-          resetImagePosition();
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-  // Resize with slider
-  resizeRange.addEventListener("input", function () {
-    const newWidth = parseInt(resizeRange.value);
-    loadedImage.style.width = `${newWidth}px`;
-    zoomPercentage.textContent = `Zoom: ${Math.round(
-      (newWidth / 300) * 100
-    )}%`;
-    constrainImagePosition();
+        // Initialize Cropper.js
+        cropper = new Cropper(cropImage, {
+          aspectRatio: 16 / 9, // change this as needed
+          viewMode: 1,
+          autoCropArea: 1,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   });
 
-  // Dragging
-  enableDragging(loadedImage);
+  // Before submitting, replace with cropped image
+  const form = document.getElementById("narrativeForm");
+  form.addEventListener("submit", function (e) {
+    if (cropper) {
+      e.preventDefault(); // stop form while we process
+      cropper.getCroppedCanvas({
+        width: 1200, // final resolution (adjust as needed)
+        height: 675
+      }).toBlob((blob) => {
+        const file = new File([blob], "cropped.jpg", { type: "image/jpeg" });
 
-  function enableDragging(img) {
-    img.addEventListener("mousedown", (event) => startDragging(event, img));
-    document.addEventListener("mousemove", (event) => drag(event, img));
-    document.addEventListener("mouseup", stopDragging);
+        // Put the cropped file into FormData
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
 
-    img.addEventListener("touchstart", (event) =>
-      startDragging(event.touches[0], img)
-    );
-    document.addEventListener("touchmove", (event) =>
-      drag(event.touches[0], img)
-    );
-    document.addEventListener("touchend", stopDragging);
-  }
-
-  function startDragging(event, img) {
-    isDragging = true;
-    startX = event.clientX;
-    startY = event.clientY;
-
-    const rect = img.getBoundingClientRect();
-    imgOffsetX = rect.left - boxPhotoheading.getBoundingClientRect().left;
-    imgOffsetY = rect.top - boxPhotoheading.getBoundingClientRect().top;
-    img.style.cursor = "grabbing";
-  }
-
-  function drag(event, img) {
-    if (isDragging) {
-      const dx = event.clientX - startX;
-      const dy = event.clientY - startY;
-
-      const containerRect = boxPhotoheading.getBoundingClientRect();
-      const imgRect = img.getBoundingClientRect();
-
-      let newLeft = imgOffsetX + dx;
-      let newTop = imgOffsetY + dy;
-
-      newLeft = Math.max(
-        containerRect.width - imgRect.width,
-        Math.min(0, newLeft)
-      );
-      newTop = Math.max(
-        containerRect.height - imgRect.height,
-        Math.min(0, newTop)
-      );
-
-      img.style.left = `${newLeft}px`;
-      img.style.top = `${newTop}px`;
+        // Submit form again (now with cropped file)
+        form.submit();
+      }, "image/jpeg", 0.9);
     }
-  }
-
-  function stopDragging() {
-    isDragging = false;
-    loadedImage.style.cursor = "grab";
-  }
-
-  function constrainImagePosition() {
-    const containerRect = boxPhotoheading.getBoundingClientRect();
-    const imgRect = loadedImage.getBoundingClientRect();
-
-    const newLeft = Math.max(
-      containerRect.width - imgRect.width,
-      Math.min(0, loadedImage.offsetLeft)
-    );
-    const newTop = Math.max(
-      containerRect.height - imgRect.height,
-      Math.min(0, loadedImage.offsetTop)
-    );
-
-    loadedImage.style.left = `${newLeft}px`;
-    loadedImage.style.top = `${newTop}px`;
-  }
-
-  function resetImagePosition() {
-    loadedImage.style.left = "0px";
-    loadedImage.style.top = "0px";
-  }
-
-  // Save snapshot into #Hphoto
-  function freezeImage() {
-    html2canvas(boxPhotoheading).then((canvas) => {
-      const hphotoContainer = document.getElementById("Hphoto");
-      hphotoContainer.innerHTML = "";
-      const imgClone = document.createElement("img");
-      imgClone.src = canvas.toDataURL("image/png");
-      hphotoContainer.appendChild(imgClone);
-    });
-  }
+  });
+});
 </script>
+
+  
+
+
 
 <script async defer src="//www.instagram.com/embed.js"></script>
 

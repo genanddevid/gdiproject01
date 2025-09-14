@@ -52,12 +52,6 @@ class NarrativeBuilderForm(forms.ModelForm):
         if allow_missing_picture:
             self.fields['picture'].required = False
 
-        # Ensure consistent ID and accept attribute for JS
-        self.fields['picture'].widget.attrs.update({
-            'id': 'uploadInput',
-            'accept': 'image/*'
-
-        })
 
 
 

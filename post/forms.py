@@ -76,12 +76,6 @@ class NarrativeBuilderForm(forms.ModelForm):
         # cleaned_data['tag'] is now a Tag instance from clean_tag()
         instance.tag = self.cleaned_data['tag']
 
-
-
-
-
-
-
         if commit:
             instance.save()
 

@@ -204,24 +204,28 @@
             <br>
 
   
-          <div class="field" style="display: flex;
-          justify-content: center; text-align: center">
-            <p class="control has-icons-left">
-              <label class="label is-medium">Choose a file for your lead photo</label>
-              {{ form.picture }}
-              <span class="icon is-small is-left">
-                <i class="fas fa-lock"></i>
-              </span>
-            </p>   
-              </div> 
-            
-            <!-- Cropping preview area -->
-  <div id="crop-container" style="margin-top: 15px; display: none;">
-    <img id="crop-image" style="max-width: 100%; max-height: 400px;"/>
-  </div>
-  
-  <!-- Hidden input to store cropped image -->
-  <input type="hidden" name="cropped_picture" id="cropped_picture">
+         <!-- Step 1: Pick file (separate from Django form) -->
+<input type="file" id="pick-file" accept="image/*">
+
+<!-- Step 2: Cropping area -->
+<div id="crop-container" style="margin-top: 15px; display: none;">
+  <img id="crop-image" style="max-width: 100%; max-height: 400px;">
+</div>
+
+<!-- Step 3: Save edited version -->
+<button type="button" id="save-edit">Save Edited Image</button>
+
+<!-- Step 4: Actual Django form input (hidden) -->
+<div class="field" style="display: flex; justify-content: center; text-align: center">
+  <p class="control has-icons-left">
+    <label class="label is-medium">Choose a file for your lead photo</label>
+    {{ form.picture }} <!-- Django's input -->
+    <span class="icon is-small is-left">
+      <i class="fas fa-lock"></i>
+    </span>
+  </p>
+</div>
+
             
             
           
@@ -546,19 +550,19 @@ form.addEventListener("submit", (e) => {
 </script>
 
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const fileInput = document.getElementById("id_picture"); // Django file input
-  const cropContainer = document.getElementById("crop-container");
+  const pickInput = document.getElementById("pick-file");
   const cropImage = document.getElementById("crop-image");
-  const form = document.getElementById("narrativeForm");
+  const cropContainer = document.getElementById("crop-container");
+  const saveEditBtn = document.getElementById("save-edit");
 
   let cropper;
 
-  // When a file is chosen
-  fileInput.addEventListener("change", function (event) {
+  // When user picks an image
+  pickInput.addEventListener("change", function (event) {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -566,9 +570,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cropImage.src = e.target.result;
         cropContainer.style.display = "block";
 
-        if (cropper) {
-          cropper.destroy();
-        }
+        if (cropper) cropper.destroy();
 
         cropper = new Cropper(cropImage, {
           aspectRatio: 16 / 9,
@@ -580,30 +582,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // On form submit, replace original file with cropped one
-  form.addEventListener("submit", function (e) {
-    if (cropper) {
-      e.preventDefault();
+  // Save edited image to device
+  saveEditBtn.addEventListener("click", function () {
+    if (!cropper) return;
 
-      cropper.getCroppedCanvas({
-        width: 1200,
-        height: 675
-      }).toBlob((blob) => {
-        // Create a new file from the cropped blob
-        const croppedFile = new File([blob], "cropped.jpg", { type: "image/jpeg" });
+    cropper.getCroppedCanvas({
+      width: 1200,
+      height: 675
+    }).toBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "cropped.jpg"; // file saved to device
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-        // Replace original input with cropped file
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(croppedFile);
-        fileInput.files = dataTransfer.files;
-
-        // ✅ Now resubmit the form with only the cropped file
-        form.submit();
-      }, "image/jpeg", 0.9);
-    }
+      alert("Edited image saved! Now select it in the form below.");
+    }, "image/jpeg", 0.9);
   });
 });
+
 </script>
+
+
 
 
   

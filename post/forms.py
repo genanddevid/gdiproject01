@@ -76,6 +76,17 @@ class NarrativeBuilderForm(forms.ModelForm):
         # cleaned_data['tag'] is now a Tag instance from clean_tag()
         instance.tag = self.cleaned_data['tag']
 
+
+
+
+        cropped_data = self.data.get('cropped_picture')
+        if cropped_data:
+            format, imgstr = cropped_data.split(';base64,')
+            ext = format.split('/')[-1]
+            instance.picture = ContentFile(base64.b64decode(imgstr), name=f"cropped.{ext}")
+
+
+
         if commit:
             instance.save()
 

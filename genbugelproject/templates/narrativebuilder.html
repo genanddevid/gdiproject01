@@ -546,8 +546,8 @@ form.addEventListener("submit", (e) => {
 </script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-  <script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
   const fileInput = document.getElementById("id_picture"); // Django assigns id="id_picture"
   const cropContainer = document.getElementById("crop-container");
@@ -581,29 +581,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Before submitting, replace with cropped image
+  // ✅ Before submitting, store cropped image in hidden field
   const form = document.getElementById("narrativeForm");
   form.addEventListener("submit", function (e) {
     if (cropper) {
-      e.preventDefault(); // stop form while we process
+      e.preventDefault(); // stop form temporarily
       cropper.getCroppedCanvas({
-        width: 1200, // final resolution (adjust as needed)
+        width: 1200,
         height: 675
       }).toBlob((blob) => {
-        const file = new File([blob], "cropped.jpg", { type: "image/jpeg" });
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          // Base64 string of cropped image
+          hiddenCroppedInput.value = reader.result;
 
-        // Put the cropped file into FormData
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        fileInput.files = dataTransfer.files;
+          // Clear the original file input so Django doesn't get 2 files
+          fileInput.value = "";
 
-        // Submit form again (now with cropped file)
-        form.submit();
+          // Submit form again (now with base64 in hidden field)
+          form.submit();
+        };
+        reader.readAsDataURL(blob);
       }, "image/jpeg", 0.9);
     }
   });
 });
 </script>
+
 
   
 

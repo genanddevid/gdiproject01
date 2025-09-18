@@ -11,7 +11,8 @@
 .carousel-item {
     min-width: 170px;
     max-width: 180px;   /* don't stretch full width */
-    margin-right: 10px; /* add spacing */
+    margin-left: 12px; /* add spacing */
+
   }
 
   .carousel-item .card {
@@ -78,7 +79,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 line-height: 1.05em;
-                height: 3.5em;">
+                height: 3.35em;">
                 <a href="{% url 'postdetails' post_item.id %}" style="color: rgb(37, 37, 37);
                  font-size: 14px; font-family: 'Inter', sans-serif; letter-spacing: -0.1px;">
                   {{ post_item.caption|truncatechars:90 }}

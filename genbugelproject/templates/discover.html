@@ -197,33 +197,41 @@
 
 <script>
 
+   
   let touchStartX = 0;
-  let touchEndX = 0;
+let touchStartY = 0;
 
-  const modal = document.getElementById('postModal');
+const modal = document.getElementById('postModal');
 
-  modal.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  });
+// Capture start position
+modal.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+});
 
-  modal.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipeGesture();
-  });
+// Capture end position and handle swipe
+modal.addEventListener('touchend', (e) => {
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchEndY = e.changedTouches[0].clientY;
 
-  function handleSwipeGesture() {
-    const swipeThreshold = 50; // Minimum distance to be considered a swipe
-    const distance = touchEndX - touchStartX;
+  handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
+});
 
-    if (Math.abs(distance) > swipeThreshold) {
-      if (distance > 0) {
-        showPreviousPost(); // Swipe right
-      } else {
-        showNextPost(); // Swipe left
-      }
+// Swipe detection with vertical scroll check
+function handleSwipeGesture(startX, startY, endX, endY) {
+  const swipeThreshold = 50; // Minimum horizontal distance to trigger
+  const diffX = endX - startX;
+  const diffY = endY - startY;
+
+  // Only trigger if horizontal movement is greater than vertical
+  if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+    if (diffX > 0) {
+      showPreviousPost(); // Swipe right
+    } else {
+      showNextPost(); // Swipe left
     }
   }
-
+}
   
 let allPostIds = []; // Global array to store all post IDs in order
 let currentPostIndex = -1; // Global variable to store the index of the currently viewed post

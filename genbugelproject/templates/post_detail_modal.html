@@ -681,7 +681,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
 
                     {% csrf_token %}
-                    <textarea name="reply" rows="2" style="width: 100%;"> @{{ comment.user.username }} 
+                    <textarea name="reply" rows="2" style="width: 100%;"> @{{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }} 
                     </textarea>
                     <button type="submit">Submit</button>
                   </form>
@@ -751,7 +751,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                           style="display: none; margin-left: 30px;">
                           <form method="POST" action="{% url 'submit_reply' reply.id %}">
                             {% csrf_token %}
-                            <textarea name="reply" rows="2" style="width: 100%;"> @{{ reply.user.username }} 
+                            <textarea name="reply" rows="2" style="width: 100%;"> @{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }} 
                             </textarea>
                             <button type="submit">Submit</button>
                           </form>
@@ -802,7 +802,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                             style="display: none; margin-left: 30px;">
                             <form method="POST" action="{% url 'submit_reply' reply.id %}">
                               {% csrf_token %}
-                              <textarea name="reply" rows="2" style="width: 100%;">@{{ reply.user.username }} 
+                              <textarea name="reply" rows="2" style="width: 100%;"> @{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }} 
                               </textarea>
                               <button type="submit">Submit</button>
                             </form>

@@ -612,10 +612,10 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
        <article class="media comment-wrapper {% if forloop.counter0 >= 3 %}is-hidden{% endif %}" data-index="{{ forloop.counter0 }}"
 id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}">
           <figure class="media-left">
-            <p class="image is-48x48">
+            <p class="image is-24x24">
               <img class="is-rounded"
                 src="{% if comment.user.profile.picture %}{{ comment.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
-                style="width: 48px; height: 48px; object-fit: cover;">
+                style="width: 24px; height: 24px; object-fit: cover;">
             </p>
           </figure>              
 
@@ -681,7 +681,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
 
                     {% csrf_token %}
-                    <textarea name="reply" rows="2" style="width: 100%;">@{{ comment.user.username }} 
+                    <textarea name="reply" rows="2" style="width: 100%;"> @{{ comment.user.username }} 
                     </textarea>
                     <button type="submit">Submit</button>
                   </form>
@@ -698,7 +698,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
             margin-left: 0px !important;
           }
           .replies-section {
-            margin-left: 0px !important;
+            margin-left: -10px !important;
           }
 
           .replies-section .media-left {
@@ -716,10 +716,10 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                   {% for reply in comment.replies.all|slice:":4" %}
                   <article class="media">
                     <figure class="media-left">
-                      <p class="image is-48x48">
+                      <p class="image is-24x24">
                         <img class="is-rounded"
                         src="{% if reply.user.profile.picture %}{{ reply.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
-                        style="width: 48px; height: 48px; object-fit: cover;">
+                        style="width: 24px; height: 24px; object-fit: cover;">
                       </p>
                     </figure>
                     <div class="media-content">
@@ -746,7 +746,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                           style="display: none; margin-left: 30px;">
                           <form method="POST" action="{% url 'submit_reply' reply.id %}">
                             {% csrf_token %}
-                            <textarea name="reply" rows="2" style="width: 100%;">@{{ reply.user.username }} 
+                            <textarea name="reply" rows="2" style="width: 100%;"> @{{ reply.user.username }} 
                             </textarea>
                             <button type="submit">Submit</button>
                           </form>
@@ -763,10 +763,10 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                     {% for reply in comment.replies.all|slice:"4:" %}
                     <article class="media">
                       <figure class="media-left">
-                        <p class="image is-48x48">
+                        <p class="image is-24x24">
                           <img class="is-rounded"
                           src="{% if reply.user.profile.picture %}{{ reply.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
-                          style="width: 48px; height: 48px; object-fit: cover;">
+                          style="width: 24px; height: 24px; object-fit: cover;">
                         </p>
                       </figure>
                       <div class="media-content">

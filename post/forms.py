@@ -60,8 +60,8 @@ class NarrativeBuilderForm(forms.ModelForm):
         content = self.cleaned_data.get('content')
         if content:
             word_count = len(content.split())
-            if word_count < 250:
-                raise ValidationError(f"Content must be at least 250 words (currently {word_count}).")
+            if word_count < 200:
+                raise ValidationError(f"Content must be at least 200 words (currently {word_count}).")
         return content
 
     def clean_tag(self):

@@ -574,11 +574,11 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
 
       <article class="media">
         <figure class="media-left">
-  <p class="image is-24x24">
+  <p class="image is-48x48">
     {% if request.user.profile.picture %}
       <img class="is-rounded"
         src="{{ request.user.profile.picture.url }}"
-        style="width: 24px; height: 24px; object-fit: cover;">
+        style="width: 48px; height: 48px; object-fit: cover;">
     {% else %}
       <span class="material-icons is-rounded"
         style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; 
@@ -636,7 +636,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                     {% endif %}
                   </span>
                       
-                  <span style="margin: 0; color: #303030;">•</span>
+                  <span style="margin: 0; color: #636363;">•</span>
                   <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
                     {{ comment.date|timesince }} 
                     ago
@@ -698,7 +698,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
             margin-left: 0px !important;
           }
           .replies-section {
-            margin-left: -20px !important;
+            margin-left: -30px !important;
           }
 
           .replies-section .media-left {
@@ -726,7 +726,7 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                       <div class="content">
                         <p>
                           <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
-                          <span style="margin: 0; color: #303030;">•</span>
+                          <span style="margin: 0; color: #636363;">•</span>
                           <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
                     {{ reply.date|timesince }} 
                     ago
@@ -778,7 +778,11 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
                         <div class="content">
                           <p>
                             <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
-                            <small>• {{ reply.date|timesince }} ago</small>
+                            <span style="margin: 0; color: #636363;">•</span>
+                          <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
+                    {{ reply.date|timesince }} 
+                    ago
+                  </span>
                             <br>
                             {{ reply.body }}
                           </p>

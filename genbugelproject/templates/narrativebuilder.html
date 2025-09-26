@@ -493,7 +493,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             contentPreview.textContent = words.length > 0
                 ? words.join(" ")
-                : "Ensure your narrative is at least 250 words in length";
+                : "Ensure your narrative is at least 200 words in length";
         });
     }
 });
@@ -509,7 +509,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const words = content.length > 0 ? content.split(/\s+/).filter(w => w.length > 0) : [];
     const wordCount = words.length;
 
-    wordCountDisplay.textContent = `Word count: ${wordCount} / 250`;
+    wordCountDisplay.textContent = `Word count: ${wordCount} / 200`;
 
     if (wordCount < 250) {
       wordCountDisplay.style.color = "red";

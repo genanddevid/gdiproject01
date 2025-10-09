@@ -176,6 +176,27 @@ def PostDetails(request, post_id):
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 
+def divide_content(paragraphs, parts=3):
+    if not paragraphs:
+        return [[] for _ in range(parts)]
+    
+    # ensure at least as many slots as parts
+    total = len(paragraphs)
+    k, m = divmod(total, parts)
+    result = []
+    start = 0
+    for i in range(parts):
+        end = start + k + (1 if i < m else 0)
+        result.append(paragraphs[start:end])
+        start = end
+
+    # fill empty parts if content is too short
+    while len(result) < parts:
+        result.append([])
+
+    return result
+
+
 def post_modal(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
@@ -217,22 +238,25 @@ def post_modal(request, post_id):
         elif i % 2 == 1 and len(right_recommendations) < 3:
             right_recommendations.append(p)
 
-    paragraphs = post.content.split('\n\n')  # Preserve original paragraph breaks
-    paragraphs = [p.strip() for p in paragraphs if p.strip()]  # Clean empty ones
+    paragraphs = post.content.split('\n\n')
+    paragraphs = [p.strip() for p in paragraphs if p.strip()]
 
+    # Always divide by paragraphs — not raw content
     if post.link1 and post.link2:
         split_parts = divide_content(paragraphs, parts=3)
     elif post.link1:
         split_parts = divide_content(paragraphs, parts=2)
     else:
-        split_parts = [post.content]
+        split_parts = [paragraphs]  # 👈 must stay as a list of paragraphs, not post.content
 
-    # Rejoin paragraphs with double newlines so Django’s linebreaks filter can detect them
-    split_parts = ['\n\n'.join(part) if isinstance(part, list) else part for part in split_parts]
+    # Rejoin paragraphs in each part with double newlines
+    split_parts = ['\n\n'.join(part) for part in split_parts if part]
 
-    content1 = split_parts[0] if len(split_parts) > 0 else ''
-    content2 = split_parts[1] if len(split_parts) > 1 else ''
-    content3 = split_parts[2] if len(split_parts) > 2 else ''
+    # Assign parts safely
+    content1 = split_parts[0] if len(split_parts) >= 1 else ''
+    content2 = split_parts[1] if len(split_parts) >= 2 else ''
+    content3 = split_parts[2] if len(split_parts) >= 3 else ''
+
 
     is_approved = ApprovedTagAuthor.objects.filter(
         author=post.user, tag=post.tag

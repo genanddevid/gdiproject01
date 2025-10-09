@@ -268,42 +268,27 @@ function loadPostContent(postId) {
         .then(html => {
             document.getElementById("modalBody").innerHTML = html;
 
-           // ✅ Instagram: process only once globally
-if (window.instgrm && instgrm.Embeds) {
-  instgrm.Embeds.process();
-} else if (!document.querySelector('script[src="https://www.instagram.com/embed.js"]')) {
-  const instaScript = document.createElement('script');
-  instaScript.src = "https://www.instagram.com/embed.js";
-  instaScript.async = true;
-  instaScript.onload = () => instgrm?.Embeds?.process();
-  document.body.appendChild(instaScript);
-}
+            // Instagram
+            if (window.instgrm && instgrm.Embeds) {
+                instgrm.Embeds.process();
+            }
 
-// ✅ Twitter: only load once globally
-if (window.twttr && window.twttr.widgets) {
-  window.twttr.widgets.load();
-} else if (!document.querySelector('script[src="https://platform.twitter.com/widgets.js"]')) {
-  const twitterScript = document.createElement('script');
-  twitterScript.src = "https://platform.twitter.com/widgets.js";
-  twitterScript.async = true;
-  twitterScript.charset = "utf-8";
-  document.body.appendChild(twitterScript);
-}
+            // Twitter/X
+            const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+            if (existingTwitterScript) existingTwitterScript.remove();
+            const twitterScript = document.createElement('script');
+            twitterScript.src = "https://platform.twitter.com/widgets.js";
+            twitterScript.async = true;
+            twitterScript.charset = "utf-8";
+            document.body.appendChild(twitterScript);
 
-// ✅ TikTok: only load once globally
-if (window.tiktokEmbedLoaded) {
-  window.tiktokEmbedLoaded = false;
-  if (window.tiktok && window.tiktok.Embed) {
-    window.tiktok.Embed.load();
-  }
-} else if (!document.querySelector('script[src="https://www.tiktok.com/embed.js"]')) {
-  const tiktokScript = document.createElement('script');
-  tiktokScript.src = "https://www.tiktok.com/embed.js";
-  tiktokScript.async = true;
-  tiktokScript.onload = () => { window.tiktokEmbedLoaded = true; };
-  document.body.appendChild(tiktokScript);
-}
-
+            // TikTok
+            const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+            if (oldTikTokScript) oldTikTokScript.remove();
+            const tiktokScript = document.createElement('script');
+            tiktokScript.src = "https://www.tiktok.com/embed.js";
+            tiktokScript.async = true;
+            document.body.appendChild(tiktokScript);
 
             // Scroll modal content to top
             document.getElementById('modalContent').scrollTop = 0;

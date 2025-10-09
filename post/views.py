@@ -217,14 +217,18 @@ def post_modal(request, post_id):
         elif i % 2 == 1 and len(right_recommendations) < 3:
             right_recommendations.append(p)
 
-    sentences = split_into_sentences(post.content)
+    paragraphs = post.content.split('\n\n')  # Preserve original paragraph breaks
+    paragraphs = [p.strip() for p in paragraphs if p.strip()]  # Clean empty ones
 
     if post.link1 and post.link2:
-        split_parts = divide_content(sentences, parts=3)
+        split_parts = divide_content(paragraphs, parts=3)
     elif post.link1:
-        split_parts = divide_content(sentences, parts=2)
+        split_parts = divide_content(paragraphs, parts=2)
     else:
         split_parts = [post.content]
+
+    # Rejoin paragraphs with double newlines so Django’s linebreaks filter can detect them
+    split_parts = ['\n\n'.join(part) if isinstance(part, list) else part for part in split_parts]
 
     content1 = split_parts[0] if len(split_parts) > 0 else ''
     content2 = split_parts[1] if len(split_parts) > 1 else ''

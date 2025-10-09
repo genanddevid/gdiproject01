@@ -177,11 +177,21 @@ from django.shortcuts import render, get_object_or_404
 from .models import Post
 
 def divide_content(paragraphs, parts=3):
-    if not paragraphs:
-        return [[] for _ in range(parts)]
-    
-    # ensure at least as many slots as parts
+    paragraphs = [p.strip() for p in paragraphs if p.strip()]
     total = len(paragraphs)
+
+    if total == 0:
+        return [[] for _ in range(parts)]
+
+    # If not enough paragraphs to split evenly
+    if total < parts:
+        # Distribute at least one paragraph to each part until we run out
+        result = [[] for _ in range(parts)]
+        for i, p in enumerate(paragraphs):
+            result[i].append(p)
+        return result
+
+    # Normal even split
     k, m = divmod(total, parts)
     result = []
     start = 0
@@ -189,12 +199,8 @@ def divide_content(paragraphs, parts=3):
         end = start + k + (1 if i < m else 0)
         result.append(paragraphs[start:end])
         start = end
-
-    # fill empty parts if content is too short
-    while len(result) < parts:
-        result.append([])
-
     return result
+
 
 
 def post_modal(request, post_id):

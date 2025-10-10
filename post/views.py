@@ -177,29 +177,47 @@ from django.shortcuts import render, get_object_or_404
 from .models import Post
 
 def divide_content(paragraphs, parts=3):
+    """
+    Divides a list of paragraphs into roughly equal-sized parts,
+    prioritizing readability — ensures no section ends up empty
+    or awkwardly short.
+    """
+    # Clean empty or whitespace-only paragraphs
     paragraphs = [p.strip() for p in paragraphs if p.strip()]
     total = len(paragraphs)
 
+    # If there’s nothing to split, return empty groups
     if total == 0:
         return [[] for _ in range(parts)]
 
-    # If not enough paragraphs to split evenly
-    if total < parts:
-        # Distribute at least one paragraph to each part until we run out
+    # If fewer paragraphs than parts, distribute one per section in order
+    if total <= parts:
         result = [[] for _ in range(parts)]
         for i, p in enumerate(paragraphs):
             result[i].append(p)
         return result
 
-    # Normal even split
+    # --- Balanced even split ---
+    # k = base size of each part
+    # m = how many parts get one extra paragraph
     k, m = divmod(total, parts)
+
     result = []
     start = 0
     for i in range(parts):
         end = start + k + (1 if i < m else 0)
-        result.append(paragraphs[start:end])
+        section = paragraphs[start:end]
+        result.append(section)
         start = end
+
+    # Safety net: merge tiny sections (like if last part has 1 line)
+    # Ensures content feels continuous, not broken
+    for i in range(len(result) - 1):
+        if len(result[i]) == 0 and len(result[i + 1]) > 1:
+            result[i].append(result[i + 1].pop(0))
+
     return result
+
 
 
 
@@ -244,21 +262,25 @@ def post_modal(request, post_id):
         elif i % 2 == 1 and len(right_recommendations) < 3:
             right_recommendations.append(p)
 
-    paragraphs = post.content.split('\n\n')
-    paragraphs = [p.strip() for p in paragraphs if p.strip()]
+    import re
 
-    # Always divide by paragraphs — not raw content
+    # --- Split post.content safely ---
+    # Handles both single and double newlines, trims extra whitespace
+    raw_paragraphs = re.split(r'\n\s*\n+', post.content.strip())
+    paragraphs = [p.strip() for p in raw_paragraphs if p.strip()]
+
+    # --- Decide number of sections ---
     if post.link1 and post.link2:
         split_parts = divide_content(paragraphs, parts=3)
     elif post.link1:
         split_parts = divide_content(paragraphs, parts=2)
     else:
-        split_parts = [paragraphs]  # 👈 must stay as a list of paragraphs, not post.content
+        split_parts = [paragraphs]
 
-    # Rejoin paragraphs in each part with double newlines
+    # --- Rejoin each section into readable text ---
     split_parts = ['\n\n'.join(part) for part in split_parts if part]
 
-    # Assign parts safely
+    # --- Assign them safely ---
     content1 = split_parts[0] if len(split_parts) >= 1 else ''
     content2 = split_parts[1] if len(split_parts) >= 2 else ''
     content3 = split_parts[2] if len(split_parts) >= 3 else ''

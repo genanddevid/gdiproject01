@@ -33,12 +33,8 @@ DEBUG = True
 
 import os
 
-#ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'genbugel-8ef94.ondigitalocean.app',
-]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+#ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'genbugel-8ef94.ondigitalocean.app',]
 
 
 

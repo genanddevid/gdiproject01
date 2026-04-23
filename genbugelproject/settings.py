@@ -35,12 +35,13 @@ DEBUG = os.environ.get('DEBUG', 'False')
 
 import os
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+#ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 #ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'genbugel-8ef94.ondigitalocean.app',]
 
-
-
-
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "127.0.0.1,localhost,gdiproject01-production.up.railway.app"
+).split(",")
 
 # Application definition
 
@@ -108,7 +109,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
-        ssl_require=False  # keep False so SQLite won't break
+       # ssl_require=False  # keep False so SQLite won't break
     )
 }
 

@@ -627,15 +627,9 @@ document.addEventListener("DOMContentLoaded", function () {
   aspectRatio: 4 / 3,
   viewMode: 1,
   autoCropArea: 1,
-  dragMode: 'none', // 👈 disables dragging the whole image
+  
 });
-cropImage.addEventListener('mousedown', function (e) {
-  if (e.target.classList.contains('cropper-face')) {
-    cropper.setDragMode('move'); // allow dragging inside crop box
-  } else {
-    cropper.setDragMode('none'); // disable dragging outside
-  }
-});
+
       };
       reader.readAsDataURL(file);
     }

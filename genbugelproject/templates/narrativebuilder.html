@@ -249,14 +249,6 @@
 <div id="crop-container" style="margin-top: 15px; display: none;">
   <img id="crop-image" style="max-width: 100%; max-height: 400px;">
 
-  <button type="button" id="reset-crop" style="margin-top: 9px;">
-    Reset to Original
-  </button>
-
-  <button type="button" id="save-edit" style="margin-top: 9px; font-weight: 700;">
-    Save Edited Image
-  </button>
-</div>
 
 <!-- Step 3: Save edited version -->
 <button type="button" id="save-edit" style="margin-top: 9px; font-weight: 700; font-display:block;">Save Edited Image</button>
@@ -277,14 +269,11 @@
 
 <style>
   input[type="file"] {
-    display: none;
-  }
+  display: none;
+}
 
-  .cropper-modal {
-    background-color: white !important;
-    opacity: 1 !important;
-  }
 </style>
+
             
             
           
@@ -631,18 +620,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (cropper) cropper.destroy();
 
-cropper = new Cropper(cropImage, {
-  aspectRatio: 4 / 3,
-  viewMode: 1,
-  autoCropArea: 1,
-  zoomable: true,
-  zoomOnWheel: true,
-  zoomOnTouch: true,
-  movable: true,
-  scalable: false,
-  rotatable: false,
-});
-
+        cropper = new Cropper(cropImage, {
+          aspectRatio: 4 / 3,
+          viewMode: 1,
+          autoCropArea: 1,
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -668,14 +650,6 @@ cropper = new Cropper(cropImage, {
       alert("Edited image saved! Now select it in the form below.");
     }, "image/jpeg", 0.9);
   });
-  const resetBtn = document.getElementById("reset-crop");
-
-resetBtn.addEventListener("click", function () {
-  if (!cropper) return;
-
-  cropper.reset();   // restores original image state
-  cropper.clear();   // ensures crop box resets properly
-});
 });
 
 </script>

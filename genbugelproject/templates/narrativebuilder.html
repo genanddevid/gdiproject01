@@ -635,6 +635,12 @@ cropper = new Cropper(cropImage, {
   aspectRatio: 4 / 3,
   viewMode: 1,
   autoCropArea: 1,
+  zoomable: true,
+  zoomOnWheel: true,
+  zoomOnTouch: true,
+  movable: true,
+  scalable: false,
+  rotatable: false,
 });
 
       };
@@ -662,6 +668,14 @@ cropper = new Cropper(cropImage, {
       alert("Edited image saved! Now select it in the form below.");
     }, "image/jpeg", 0.9);
   });
+  const resetBtn = document.getElementById("reset-crop");
+
+resetBtn.addEventListener("click", function () {
+  if (!cropper) return;
+
+  cropper.reset();   // restores original image state
+  cropper.clear();   // ensures crop box resets properly
+});
 });
 
 </script>

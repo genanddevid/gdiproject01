@@ -276,6 +276,14 @@
     background-color: rgb(7, 7, 7) !important;
     opacity: 1 !important;
   }
+
+  #crop-container {
+  touch-action: none;
+}
+
+body {
+  touch-action: pan-y;
+}
 </style>
             
             
@@ -654,6 +662,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }, "image/jpeg", 0.9);
   });
 });
+
+
+
+document.addEventListener("touchmove", function (e) {
+  const cropperContainer = document.getElementById("crop-container");
+
+  if (cropperContainer && cropperContainer.contains(e.target)) {
+    e.preventDefault();
+  }
+}, { passive: false });
 
 </script>
 

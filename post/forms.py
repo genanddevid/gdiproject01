@@ -18,7 +18,7 @@ class NarrativeBuilderForm(forms.ModelForm):
         }), required=True)
 
     tag = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'font-size: 14px; font-family: consolas; width: 100%; word-spacing: -2px;',
+        'style': 'font-size: 13px; font-family: consolas; width: 100%; word-spacing: -1px;',
         'class': 'input is-medium',
         'placeholder': '#(From the headline write the subject of your narrative)'
         }), required=True)

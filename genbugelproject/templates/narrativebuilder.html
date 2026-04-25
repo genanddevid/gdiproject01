@@ -41,14 +41,13 @@
             <p class="control">              
               {{ form.content }}
         
-</p>
-<p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888; text-align: center;">
-  Word count: 0 / 250
-
-              </p>
+            </p>
+            <p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888; text-align: center;">
+                  Work count: 0 / 250
+            </p>
               
               {% if form.content.errors %}
-                <p class="help is-danger" style="font-size: 14px; margin-top: 5px;">
+                <p class="help is-danger" style="font-size: 19px; margin-top: 5px;">
                   {{ form.content.errors.0 }}
                 </p>
               {% endif %}

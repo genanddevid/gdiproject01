@@ -65,7 +65,7 @@
     <div>
         <div style="font-weight: 600; font-size: 14px;">{{ request.user.get_full_name|default:request.user.username }}</div>
         <div style="font-size: 12px; color: #888;">{{ "now"|date:"F j, Y" }} 
-            {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}
+           <!-- {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}-->
         </div>
     </div>
 </div>

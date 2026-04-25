@@ -276,7 +276,6 @@
     background-color: rgb(7, 7, 7) !important;
     opacity: 1 !important;
   }
-  
 </style>
             
             
@@ -611,24 +610,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const cropContainer = document.getElementById("crop-container");
   const saveEditBtn = document.getElementById("save-edit");
 
-  let cropper = null;
-let cropperInitialized = false;
-let isMobile = window.innerWidth <= 768;
-
-function initCropper() {
-  if (!isMobile) {
-    // Desktop behaves normally
-    if (cropper) cropper.destroy();
-
-    cropper = new Cropper(cropImage, {
-      aspectRatio: 4 / 3,
-      viewMode: 1,
-      autoCropArea: 1,
-    });
-
-    cropperInitialized = true;
-  }
-}
+  let cropper;
 
   // When user picks an image
   pickInput.addEventListener("change", function (event) {
@@ -636,22 +618,17 @@ function initCropper() {
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
-  cropImage.src = e.target.result;
-  cropContainer.style.display = "block";
+        cropImage.src = e.target.result;
+        cropContainer.style.display = "block";
 
-  // reset state
-  if (cropper) {
-    cropper.destroy();
-    cropper = null;
-    cropperInitialized = false;
-  }
+        if (cropper) cropper.destroy();
 
-  // IMPORTANT:
-  // DO NOT initialize Cropper immediately on mobile
-  if (!isMobile) {
-    initCropper();
-  }
-};
+        cropper = new Cropper(cropImage, {
+          aspectRatio: 4 / 3,
+          viewMode: 1,
+          autoCropArea: 1,
+        });
+      };
       reader.readAsDataURL(file);
     }
   });
@@ -676,17 +653,6 @@ function initCropper() {
       alert("Edited image saved! Now select it in the form below.");
     }, "image/jpeg", 0.9);
   });
-
-  cropImage.addEventListener("click", function () {
-  if (!isMobile) return;
-
-  // Prevent double-init
-  if (cropperInitialized) return;
-
-  initCropper();
-});
-
-
 });
 
 </script>

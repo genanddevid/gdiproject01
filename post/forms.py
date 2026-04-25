@@ -7,7 +7,7 @@ class NarrativeBuilderForm(forms.ModelForm):
     
     caption = forms.CharField(widget=forms.Textarea(attrs={
         'style': 'font-size: 17px; font-family: consolas;',
-        'class': 'input is-medium custom-caption', 
+        'class': 'input is-medium', 
         'placeholder': 'Write your headline...'
         }), required=True)
 

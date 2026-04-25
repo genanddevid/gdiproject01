@@ -6,13 +6,13 @@ from post.models import Post, Tag
 class NarrativeBuilderForm(forms.ModelForm):
     
     caption = forms.CharField(widget=forms.Textarea(attrs={
-        'style': 'font-size: 17px; font-family: consolas;',
+        'style': 'font-size: 16px; font-family: consolas;',
         'class': 'input is-medium', 
         'placeholder': 'Write your headline...'
         }), required=True)
 
     content = forms.CharField(widget=forms.Textarea(attrs={
-        'style': 'font-size: 17px; font-family: consolas; height: 80px;',
+        'style': 'font-size: 16px; font-family: consolas; height: 80px;',
         'class': 'input is-medium', 
         'placeholder': 'Write your narrative...'
         }), required=True)

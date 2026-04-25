@@ -389,12 +389,33 @@ def preview_narrative(request, post_id=None):
             post = form.save(commit=False)
             post.user = request.user
 
+            # Split content exactly like PostDetails does
+            raw_paragraphs = re.split(r'\n\s*\n+', post.content.strip())
+            paragraphs = [p.strip() for p in raw_paragraphs if p.strip()]
+
+            if post.link1 and post.link2:
+                split_parts = divide_content(paragraphs, parts=3)
+            elif post.link1:
+                split_parts = divide_content(paragraphs, parts=2)
+            else:
+                split_parts = [paragraphs]
+
+            split_parts = ['\n\n'.join(part) for part in split_parts if part]
+
+            content1 = split_parts[0] if len(split_parts) >= 1 else ''
+            content2 = split_parts[1] if len(split_parts) >= 2 else ''
+            content3 = split_parts[2] if len(split_parts) >= 3 else ''
+
             return render(request, 'narrative_preview.html', {
                 'post': post,
                 'image_url': temp_image_url,
-                'edit_mode': bool(post_id),  # useful for "Back to edit"
+                'edit_mode': bool(post_id),
                 'post_id': post_id,
+                'content1': content1,
+                'content2': content2,
+                'content3': content3,
             })
+
 
     # fallback: if something failed
     if post_id:

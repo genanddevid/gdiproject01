@@ -43,11 +43,11 @@
         
             </p>
             <p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888; text-align: center;">
-                  Work count: 0 / 250
+                  Word count: 0 / 250
             </p>
               
               {% if form.content.errors %}
-                <p class="help is-danger" style="font-size: 19px; margin-top: 5px;">
+                <p class="help is-danger" style="font-size: 15px; margin-top: 5px;">
                   {{ form.content.errors.0 }}
                 </p>
               {% endif %}
@@ -511,9 +511,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const words = content.length > 0 ? content.split(/\s+/).filter(w => w.length > 0) : [];
     const wordCount = words.length;
 
-    wordCountDisplay.textContent = `Word count: ${wordCount} / 200`;
+    wordCountDisplay.textContent = `Word count: ${wordCount} / 250`;
 
-    if (wordCount < 200) {
+    if (wordCount < 250) {
       wordCountDisplay.style.color = "red";
     } else {
       wordCountDisplay.style.color = "green";

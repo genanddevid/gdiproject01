@@ -611,7 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Preload first 3 posts silently after page loads
     setTimeout(() => {
-        allPostIds.slice(0, 3).forEach(postId => {
+        allPostIds.slice(0, 2).forEach(postId => {
             if (!postCache[postId]) {
                 fetch(`/modal/${postId}/`)
                     .then(res => res.text())

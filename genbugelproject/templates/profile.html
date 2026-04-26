@@ -603,12 +603,27 @@ let currentPostIndex = -1; // Global variable to store the index of the currentl
 document.addEventListener('DOMContentLoaded', () => {
     const postCards = document.querySelectorAll('.post-card');
     postCards.forEach(card => {
-        const postId = card.dataset.postId; 
+        const postId = card.dataset.postId;
         if (postId) {
             allPostIds.push(postId);
         }
     });
+
+    // Preload first 3 posts silently after page loads
+    setTimeout(() => {
+        allPostIds.slice(0, 3).forEach(postId => {
+            if (!postCache[postId]) {
+                fetch(`/modal/${postId}/`)
+                    .then(res => res.text())
+                    .then(html => {
+                        postCache[postId] = html;
+                    })
+                    .catch(() => {});
+            }
+        });
+    }, 1500); // Wait 1.5s after page load so it doesn't compete with page rendering
 });
+
 
 // Helper function to update the navigation button states
 function updateNavButtons() {

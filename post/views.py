@@ -400,7 +400,8 @@ def preview_narrative(request, post_id=None):
             else:
                 split_parts = [paragraphs]
 
-            split_parts = ['\n\n'.join(part) for part in split_parts if part]
+            #split_parts = ['\n\n'.join(part) for part in split_parts if part]
+            split_parts = ['\n\n'.join(part) if isinstance(part, list) else part for part in split_parts if part]
 
             content1 = split_parts[0] if len(split_parts) >= 1 else ''
             content2 = split_parts[1] if len(split_parts) >= 2 else ''

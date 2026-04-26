@@ -64,10 +64,10 @@
     {% endif %}
     <div>
         <div style="font-weight: 600; font-size: 14px;">{{ request.user.get_full_name|default:request.user.username }}</div>
-        <div style="font-size: 12px; color: #888;">{% now "F j, Y" %}
-    {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}
-</div>
-           <!-- {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}-->
+        <div style="font-size: 12px; color: #888;">{% now "F j, Y, g:i a" %}
+    
+
+           {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}
         </div>
     </div>
 </div>
@@ -77,15 +77,14 @@
     <div class="content" style="font-family: Arial, Helvetica, sans-serif; font-size: 17px; margin-top: 20px;">
     {{ content1|linebreaksbr }}
 </div>
-</div>
-    </div>
-    <br>
-     {% if post.link1 %}
 
+    
+     {% if post.link1 %}
+<br>
     {% if "twitter.com" in post.link1 or "x.com" in post.link1 %}
       {% with post.link1|fix_twitter_url as twitter_link %}
         <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
-          <div style="display: inline-block;">
+          <!--<div style="display: inline-block;">-->
             <blockquote class="twitter-tweet" data-theme="light">
               <a href="{{ twitter_link }}"></a>
             </blockquote>
@@ -137,20 +136,20 @@
 
   {% endif %}
 
-  <br>
+  <!--<br>-->
 
 {% if content2 %}
-  <div class="content" style="font-size: 18px; font-weight:300;">
-    {{ content2|safe }}
+  <div class="content" style="font-size: 17px; font-family:Arial, Helvetica, sans-serif; margin-top: 20px;">
+    {{ content2|linebreaksbr }}
   </div>
 {% endif %}
 <br> 
 {% if post.link2 %}
-
+<br>
     {% if "twitter.com" in post.link2 or "x.com" in post.link2 %}
       {% with post.link2|fix_twitter_url as twitter_link %}
         <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
-          <div style="display: inline-block;">
+         <!-- <div style="display: inline-block;">-->
             <blockquote class="twitter-tweet" data-theme="light">
               <a href="{{ twitter_link }}"></a>
             </blockquote>
@@ -164,7 +163,7 @@
         <blockquote class="tiktok-embed"
                     cite="{{ post.link2 }}"
                     data-video-id="{{ tid }}"
-                    style="max-width: 380px;min-width: 225px; margin: 20px auto; transform:scale(1);">
+                    style="max-width: 380px; min-width: 225px; margin: 20px auto; transform:scale(1);">
           <section> </section>
         </blockquote>
       {% endwith %}
@@ -201,10 +200,10 @@
     
   {% endif %}
 {% endif %}
-<br> <br>
+<!--<br> <br>-->
 {% if content3 %}
-  <div class="content" style="font-size: 18px; font-weight:300;">
-    {{ content3|safe }}
+  <div class="content" style="font-size: 17px; font-family:Arial, Helvetica, sans-serif; margin-top: 20px;">
+    {{ content3|linebreaksbr }}
   </div>
 {% endif %}
 

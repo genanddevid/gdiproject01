@@ -67,7 +67,7 @@
         <div style="font-size: 12px; color: #888;">{% now "F j, Y, g:i a" %}
     
 
-           {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}
+          <!-- {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}-->
         </div>
     </div>
 </div>
@@ -80,7 +80,7 @@
 
     
      {% if post.link1 %}
-<br>
+<!--<br>-->
     {% if "twitter.com" in post.link1 or "x.com" in post.link1 %}
       {% with post.link1|fix_twitter_url as twitter_link %}
         <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
@@ -213,7 +213,7 @@
 
     <br>
     
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px; clear: both;">
     <a href="{% if edit_mode %}{% url 'edit_post' post_id %}{% else %}{% url 'narrativebuilder' %}{% endif %}"
        class="button is-light">
         Back to Edit

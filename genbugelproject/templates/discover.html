@@ -240,12 +240,27 @@ let currentPostIndex = -1; // Global variable to store the index of the currentl
 document.addEventListener('DOMContentLoaded', () => {
     const postCards = document.querySelectorAll('.post-card');
     postCards.forEach(card => {
-        const postId = card.dataset.postId; 
+        const postId = card.dataset.postId;
         if (postId) {
             allPostIds.push(postId);
         }
     });
+
+    // Preload first 3 posts silently after page loads
+    setTimeout(() => {
+        allPostIds.slice(0, 3).forEach(postId => {
+            if (!postCache[postId]) {
+                fetch(`/modal/${postId}/`)
+                    .then(res => res.text())
+                    .then(html => {
+                        postCache[postId] = html;
+                    })
+                    .catch(() => {});
+            }
+        });
+    }, 1500); // Wait 1.5s after page load so it doesn't compete with page rendering
 });
+
 
 // Helper function to update the navigation button states
 function updateNavButtons() {
@@ -259,45 +274,97 @@ function updateNavButtons() {
 }
 
 // Function to load and display post content in modal
-function loadPostContent(postId) {
+// Cache for preloaded posts
+const postCache = {};
+
+function loadPostContent(postId, callback) {
+    // Check cache first — instant if already loaded
+    if (postCache[postId]) {
+        document.getElementById("modalBody").innerHTML = postCache[postId];
+        initEmbeds();
+        document.getElementById('modalContent').scrollTop = 0;
+        if (callback) callback();
+        preloadAdjacentPosts();
+        return;
+    }
+
+    // Show loading indicator
+    document.getElementById("modalBody").innerHTML = `
+        <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
+            <div style="text-align:center;">
+                <div style="width:40px; height:40px; border:3px solid #f3f3f3; 
+                     border-top:3px solid #3273dc; border-radius:50%; 
+                     animation:spin 0.8s linear infinite; margin:0 auto;"></div>
+                <p style="margin-top:15px; color:#888; font-size:14px;">Loading...</p>
+            </div>
+        </div>
+        <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+    `;
+
     fetch(`/modal/${postId}/`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.text();
         })
         .then(html => {
+            postCache[postId] = html; // Store in cache
             document.getElementById("modalBody").innerHTML = html;
-
-            // Instagram
-            if (window.instgrm && instgrm.Embeds) {
-                instgrm.Embeds.process();
-            }
-
-            // Twitter/X
-            const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
-            if (existingTwitterScript) existingTwitterScript.remove();
-            const twitterScript = document.createElement('script');
-            twitterScript.src = "https://platform.twitter.com/widgets.js";
-            twitterScript.async = true;
-            twitterScript.charset = "utf-8";
-            document.body.appendChild(twitterScript);
-
-            // TikTok
-            const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
-            if (oldTikTokScript) oldTikTokScript.remove();
-            const tiktokScript = document.createElement('script');
-            tiktokScript.src = "https://www.tiktok.com/embed.js";
-            tiktokScript.async = true;
-            document.body.appendChild(tiktokScript);
-
-            // Scroll modal content to top
+            initEmbeds();
             document.getElementById('modalContent').scrollTop = 0;
+            if (callback) callback();
+            preloadAdjacentPosts(); // Preload neighbours
         })
         .catch(error => {
             console.error('Error loading post content:', error);
             document.getElementById("modalBody").innerHTML = "<p>Error loading post. Please try again.</p>";
         });
 }
+
+function initEmbeds() {
+    // Instagram
+    if (window.instgrm && instgrm.Embeds) {
+        instgrm.Embeds.process();
+    }
+
+    // Twitter/X
+    const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+    if (existingTwitterScript) existingTwitterScript.remove();
+    const twitterScript = document.createElement('script');
+    twitterScript.src = "https://platform.twitter.com/widgets.js";
+    twitterScript.async = true;
+    twitterScript.charset = "utf-8";
+    document.body.appendChild(twitterScript);
+
+    // TikTok
+    const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (oldTikTokScript) oldTikTokScript.remove();
+    const tiktokScript = document.createElement('script');
+    tiktokScript.src = "https://www.tiktok.com/embed.js";
+    tiktokScript.async = true;
+    document.body.appendChild(tiktokScript);
+}
+
+function preloadAdjacentPosts() {
+    // Silently fetch next and previous posts in background
+    const toPreload = [];
+    if (currentPostIndex + 1 < allPostIds.length) {
+        toPreload.push(allPostIds[currentPostIndex + 1]);
+    }
+    if (currentPostIndex - 1 >= 0) {
+        toPreload.push(allPostIds[currentPostIndex - 1]);
+    }
+
+    toPreload.forEach(postId => {
+        if (!postCache[postId]) {
+            fetch(`/modal/${postId}/`)
+                .then(res => res.text())
+                .then(html => {
+                    postCache[postId] = html;
+                })
+                .catch(() => {}); // Silent fail — don't disrupt UX
+        }
+    });
+  }
 
 function openPostModal(postId, event) {
     if (event) event.preventDefault();

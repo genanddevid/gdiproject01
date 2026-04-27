@@ -315,7 +315,11 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
       align-items: center; flex-wrap: wrap; gap: 12px; width: 100%; max-width: 700px; margin: 0 auto;">
 
         <div class="media-right" style="text-align: center;">
-          <a href="">
+          <!--<a href="">-->
+            <a href=""
+   {% if not request.user.is_authenticated %}
+   onclick="showLoginModal(); return false;"
+   {% endif %}>
             <i class="material-icons" style="color:rgb(134, 134, 129)">
               message
             </i>
@@ -336,30 +340,54 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
         
 
         <div class="media-right" style="text-align: center;">
-  <a href="#" class="like-post-btn {% if liked %}liked{% endif %}" data-post-id="{{ post.id }}">
+  <!--<a href="#" class="like-post-btn {% if liked %}liked{% endif %}" data-post-id="{{ post.id }}">
   <i class="material-icons">thumb_up_alt</i>
-</a>
+</a>-->
+
+  <a href="#"
+     class="{% if request.user.is_authenticated %}like-post-btn {% if liked %}liked{% endif %}{% endif %}"
+     {% if request.user.is_authenticated %}
+     data-post-id="{{ post.id }}"
+     {% else %}
+     onclick="showLoginModal(); return false;"
+     {% endif %}>
+     
+    <i class="material-icons">thumb_up_alt</i>
+  </a>
 
   <p id="like-count-{{ post.id }}">{{ post.likes }}</p>
 </div>
 
-
-
-
   
         {% if favorited is True %}
         <div class="media-right" style="text-align: center;">
-          <a href="{% url 'postfavorite' post.id %}">
+          <!--<a href="{% url 'postfavorite' post.id %}">-->
+            <a href="{% url 'postfavorite' post.id %}"
+   {% if not request.user.is_authenticated %}
+   onclick="showLoginModal(); return false;"
+   {% endif %}>
             <i class="material-icons has-text-link" style="color:rgb(134, 134, 129)">
               bookmark
             </i>
           </a>
+          
+    <i class="material-icons has-text-link" style="color:rgb(134, 134, 129)">
+              bookmark
+            </i>
+          </a>
+
           <p>Saved</p>
         </div>
         {% else %}
 
         <div class="media-right" style="text-align: center;">
-          <a href="#" class="save-post-btn" data-post-id="{{ post.id }}">
+          <!--<a href="#" class="save-post-btn" data-post-id="{{ post.id }}">-->
+            <a href="#"
+   {% if request.user.is_authenticated %}
+   class="save-post-btn" data-post-id="{{ post.id }}"
+   {% else %}
+   onclick="showLoginModal(); return false;"
+   {% endif %}>
             <i class="material-icons" style="color:rgb(134, 134, 129)">
               bookmark
             </i>

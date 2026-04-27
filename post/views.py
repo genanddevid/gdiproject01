@@ -63,13 +63,13 @@ def divide_content(sentences, parts=2):
 
 
 
-@login_required
+#@login_required
 def index(request):
     return render(request, 'index.html')
     
 
 
-@login_required
+#@login_required
 def interests_view(request):
     user = request.user
     posts = Stream.objects. filter(user=user)
@@ -655,7 +655,7 @@ from django.db.models import Q  # Make sure this is at the top
 
 
 
-@login_required
+#@login_required
 def index(request):
     # Get all (user, tag) combinations approved by the editor
     approved_combos = ApprovedTagAuthor.objects.all()

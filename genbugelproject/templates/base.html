@@ -291,7 +291,16 @@ body {
     </a>
   </div>
   <div class="right-icons">
-    <a href="{% url 'profile' request.user %}" class="has-text-black">
+    {% if not request.user.is_authenticated %}
+    <button onclick="showLoginModal()"
+        style="background:none; border:1px solid #ccc; border-radius:4px;
+        padding:4px 12px; font-size:13px; cursor:pointer; margin-right:8px;">
+        Log in
+    </button>
+    {% endif %}
+    <a href="{% if request.user.is_authenticated %}{% url 'profile' request.user %}{% else %}#{% endif %}"
+        {% if not request.user.is_authenticated %}onclick="showLoginModal(); return false;"{% endif %}
+        class="has-text-black">
 {% if request.user.profile.picture %}
       <img src="{{ request.user.profile.picture.url }}" 
       style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;"
@@ -374,8 +383,21 @@ document.addEventListener("DOMContentLoaded", function () {
               Interests
           </a>
 
-          <a href="{% url 'narrativebuilder' %}" 
-          class="button custom-button {% if active_page == 'narrativebuilder' %}is-active{% endif %}" 
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'narrativebuilder' %}"
+            class="button custom-button {% if active_page == 'narrativebuilder' %}is-active{% endif %}"
+            style="margin-bottom: 0px;">
+          {% else %}
+          <button onclick="showLoginModal()"
+            class="button custom-button"
+            style="margin-bottom: 0px;">
+          {% endif %}
+            <span class="material-symbols-outlined" style="font-size: 24px; margin-right: 8px;">
+              stylus_fountain_pen
+            </span>
+            Narrative Builder
+          {% if request.user.is_authenticated %}</a>{% else %}</button>{% endif %}
+
           style="margin-bottom: 0px;">
             <span class="material-symbols-outlined" style="font-size: 24px; margin-right: 8px;">
               stylus_fountain_pen
@@ -392,25 +414,62 @@ document.addEventListener("DOMContentLoaded", function () {
               Discover
           </a>  
           
-          <a href="{% url 'all_collections' %}" 
+          <!--<a href="{% url 'all_collections' %}" 
           class="button custom-button {% if active_page == 'all_collections' %}is-active{% endif %}" 
           style="margin-bottom: 0px;">
             <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
               bookmark_border
             </span>
               Collections
-          </a>     
-          
+          </a>  -->   
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'all_collections' %}"
+            class="button custom-button {% if active_page == 'all_collections' %}is-active{% endif %}"
+            style="margin-bottom: 0px;">
+          {% else %}
+          <button onclick="showLoginModal()"
+            class="button custom-button"
+            style="margin-bottom: 0px;">
+          {% endif %}
+            <span class="material-icons" style="font-size: 24px; margin-right: 8px;">
+              bookmark_border
+            </span>
+            Collectiions
+          {% if request.user.is_authenticated %}</a>{% else %}</button>{% endif %}
+
           
 
-          <a href="{% url 'profile' request.user %}" 
+          {% if not request.user.is_authenticated %}
+          <button onclick="showLoginModal()"
+            class="button custom-button"
+            style="margin-bottom:0px; color:#3273dc; font-weight:500;">
+            <span class="material-icons" style="font-size:24px; margin-right:8px;">login</span>
+            Log in
+          </button>
+          {% endif %}
+          <!--<a href="{% url 'profile' request.user %}" 
           class="button custom-button {% if active_page == 'profile' %}is-active{% endif %}" 
           style="margin-left: 0px; margin-bottom: 0px;">        
             <img src="{% if request.user.profile.picture %}{{ request.user.profile.picture.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
               alt="Profile Picture"
               style="width: 24px; height: 24px; border-radius: 50%; margin-right: 10px; object-fit: cover;">
               {{ request.user }}
-          </a>    
+          </a> -->
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'profile' request.user %}"
+            class="button custom-button {% if active_page == 'profile' %}is-active{% endif %}"
+            style="margin-bottom: 0px;">
+          {% else %}
+          <button onclick="showLoginModal()"
+            class="button custom-button"
+            style="margin-bottom: 0px;">
+          {% endif %}
+            <img src="{% if request.user.profile.picture %}{{ request.user.profile.picture.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+              alt="Profile Picture"
+              style="width: 24px; height: 24px; border-radius: 50%; margin-right: 10px; object-fit: cover;">
+              {{ request.user }}
+          {% if request.user.is_authenticated %}</a>{% else %}</button>{% endif %}
+
 
         </div>
       
@@ -452,18 +511,34 @@ document.addEventListener("DOMContentLoaded", function () {
     <span class="material-icons">check_circle_outline</span>
     <p class="subtitle">INTERESTS</p>
   </a>
-  <a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">
+  <!--<a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">
     <span class="material-symbols-outlined" style="font-size: 30px; margin-left: 4px; font-weight: 300;">stylus_fountain_pen</span>
     
-  </a>
+  </a>-->
+{% if request.user.is_authenticated %}
+<a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">
+{% else %}
+<a href="#" onclick="showLoginModal(); return false;">
+{% endif %}
+    <span class="material-symbols-outlined" style="font-size: 30px; margin-left: 4px; font-weight: 300;">stylus_fountain_pen</span>
+</a>
+
+
   <a href="{% url 'discover' %}" class="{% if active_page == 'discover' %}is-active{% endif %}">
     <span class="material-icons">explore</span>
     <p class="subtitle">DISCOVER</p>
   </a>
-  <a href="{% url 'all_collections' %}" class="{% if active_page == 'all_collections' %}is-active{% endif %}">
+  <!--<a href="{% url 'all_collections' %}" class="{% if active_page == 'all_collections' %}is-active{% endif %}">
     <span class="material-icons">bookmark_border</span>
     <p class="subtitle">COLLECTIONS</p>
-  </a>
+  </a>-->
+  {% if request.user.is_authenticated %}
+<a href="{% url 'all_collections' %}" class="{% if active_page == 'all_collections' %}is-active{% endif %}">
+{% else %}
+<a href="#" onclick="showLoginModal(); return false;">
+{% endif %}
+    <span class="material-icons">bookmark_border</span>
+    <p class="subtitle">COLLECTIONS</p></a>
 </div>
 
 
@@ -471,6 +546,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
   <script async defer src="https://www.instagram.com/embed.js"></script>
+
+  <!-- Login Modal -->
+<div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:8px; padding:40px; max-width:400px; width:90%;
+        position:relative;">
+        <!-- Close button -->
+        <button onclick="closeLoginModal()"
+            style="position:absolute; top:12px; right:16px; background:none; border:none;
+            font-size:24px; cursor:pointer; color:#888;">×</button>
+
+        <h1 style="font-weight:500; font-size:32px; margin-bottom:24px;">Baytruyen</h1>
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <div class="field">
+                <p class="control">
+                    <input class="input" type="text" name="username"
+                        placeholder="Username" required autofocus>
+                </p>
+            </div>
+            <div class="field">
+                <p class="control">
+                    <input class="input" type="password" name="password"
+                        placeholder="Password" required>
+                </p>
+            </div>
+            <div class="field has-text-centered" style="margin-top:20px;">
+                <button type="submit"
+                    style="font-size:18px; font-weight:500; width:130px; height:36px;
+                    background:none; border:1px solid #ccc; border-radius:4px; cursor:pointer;">
+                    Log in
+                </button>
+            </div>
+            <div class="has-text-centered" style="margin-top:16px;">
+                <a href="{% url 'signup' %}" style="color:#3273dc; text-decoration:underline;">
+                    Create an account
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function showLoginModal() {
+    const modal = document.getElementById('loginModal');
+    modal.style.display = 'flex';
+}
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    modal.style.display = 'none';
+}
+// Close if clicking outside the modal box
+document.getElementById('loginModal').addEventListener('click', function(e) {
+    if (e.target === this) closeLoginModal();
+});
+</script>
+
+
 </body>
 
 <!--11:11 7Jun25-->

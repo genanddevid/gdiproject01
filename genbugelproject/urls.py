@@ -29,7 +29,7 @@ from authy.views import UserProfile, follow, discover_view
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    
+    path('', views.index, name='index'),  # 👈 ADD THIS FIRST
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     path('narrative_builder/', NarrativeBuilder, name='narrativebuilder'),

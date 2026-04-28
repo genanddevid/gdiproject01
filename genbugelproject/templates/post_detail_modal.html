@@ -329,12 +329,12 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
         </div>  
 
         <div class="media-right" style="text-align: center;">
-          <a href="">
+          <a href="#" onclick="sharePost('{{ post.caption }}', '{{ request.scheme }}://{{ request.get_host }}/post/{{ post.id }}/'); return false;">
             <i class="material-icons" style="color:rgb(134, 134, 129)">
               share
             </i>
           </a>
-          <p>Share</p>
+          <p id="share-label-{{ post.id }}">Share</p>
         </div>
 
         
@@ -1056,6 +1056,35 @@ document.querySelectorAll('.show-more-replies-btn').forEach(button => {
     document.querySelectorAll('.custom-message').forEach(el => el.style.display = 'none');
   }, 4000); // 10 seconds
 
+function sharePost(title, url) {
+    if (navigator.share) {
+        // Mobile native share sheet
+        navigator.share({
+            title: title,
+            text: 'Read this on Baytruyen: ' + title,
+            url: url,
+        }).catch(() => {});
+    } else {
+        // Desktop fallback — copy to clipboard
+        navigator.clipboard.writeText(url).then(() => {
+            // Find the share label near the clicked button
+            const allShareLabels = document.querySelectorAll('[id^="share-label-"]');
+            allShareLabels.forEach(label => {
+                if (label.textContent === 'Share' || label.textContent === '✓ Copied!') {
+                    label.textContent = '✓ Copied!';
+                    label.style.color = '#3273dc';
+                    setTimeout(() => {
+                        label.textContent = 'Share';
+                        label.style.color = '';
+                    }, 2000);
+                }
+            });
+        }).catch(() => {
+            // Final fallback if clipboard also fails
+            prompt('Copy this link:', url);
+        });
+    }
+}
 
 
 

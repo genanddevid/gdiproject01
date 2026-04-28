@@ -329,12 +329,11 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
         </div>  
 
         <div class="media-right" style="text-align: center;">
-          <a href="#" onclick="sharePost('{{ post.caption }}', '{{ request.scheme }}://{{ request.get_host }}/post/{{ post.id }}/'); return false;">
-            <i class="material-icons" style="color:rgb(134, 134, 129)">
-              share
-            </i>
-          </a>
-          <p id="share-label">Share</p>
+          <a href="#" onclick="sharePost('{{ post.caption }}', window.location.href); return false;">
+    <i class="material-icons" style="color:rgb(134, 134, 129)">share</i>
+</a>
+<p id="share-label">Share</p>
+
         </div>
 
         
@@ -1050,12 +1049,6 @@ document.querySelectorAll('.show-more-replies-btn').forEach(button => {
 
 
 
-
-  
-  setTimeout(() => {
-    document.querySelectorAll('.custom-message').forEach(el => el.style.display = 'none');
-  }, 4000); // 10 seconds
-
 function sharePost(title, url) {
     if (navigator.share) {
         // Mobile native share sheet
@@ -1085,6 +1078,15 @@ function sharePost(title, url) {
         });
     }
 }
+
+
+
+  
+  setTimeout(() => {
+    document.querySelectorAll('.custom-message').forEach(el => el.style.display = 'none');
+  }, 4000); // 10 seconds
+
+
 
 
 

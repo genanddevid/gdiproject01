@@ -353,7 +353,8 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
     <i class="material-icons" style="color:rgb(134, 134, 129)">thumb_up_alt</i>
 </a>
 {% endif %}
-
+<p id="like-count-{{ post.id }}">{{ post.likes }}</p>
+</div>
   
   
         {% if favorited is True %}

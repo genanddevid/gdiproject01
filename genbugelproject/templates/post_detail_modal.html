@@ -344,34 +344,23 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
   <i class="material-icons">thumb_up_alt</i>
 </a>-->
 
-  <a href="#"
-     class="{% if request.user.is_authenticated %}like-post-btn {% if liked %}liked{% endif %}{% endif %}"
-     {% if request.user.is_authenticated %}
-     data-post-id="{{ post.id }}"
-     {% else %}
-     onclick="showLoginModal(); return false;"
-     {% endif %}>
-     
+{% if request.user.is_authenticated %}
+<a href="#" class="like-post-btn {% if liked %}liked{% endif %}" data-post-id="{{ post.id }}">
     <i class="material-icons">thumb_up_alt</i>
-  </a>
+</a>
+{% else %}
+<a href="#" onclick="showLoginModal(); return false;">
+    <i class="material-icons" style="color:rgb(134, 134, 129)">thumb_up_alt</i>
+</a>
+{% endif %}
 
-  <p id="like-count-{{ post.id }}">{{ post.likes }}</p>
-</div>
-
+  
   
         {% if favorited is True %}
         <div class="media-right" style="text-align: center;">
-          <!--<a href="{% url 'postfavorite' post.id %}">-->
-            <a href="{% url 'postfavorite' post.id %}"
-   {% if not request.user.is_authenticated %}
-   onclick="showLoginModal(); return false;"
-   {% endif %}>
+          <a href="{% url 'postfavorite' post.id %}">
+               
             <i class="material-icons has-text-link" style="color:rgb(134, 134, 129)">
-              bookmark
-            </i>
-          </a>
-          
-    <i class="material-icons has-text-link" style="color:rgb(134, 134, 129)">
               bookmark
             </i>
           </a>
@@ -381,17 +370,20 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
         {% else %}
 
         <div class="media-right" style="text-align: center;">
-          <!--<a href="#" class="save-post-btn" data-post-id="{{ post.id }}">-->
-            <a href="#"
-   {% if request.user.is_authenticated %}
-   class="save-post-btn" data-post-id="{{ post.id }}"
-   {% else %}
-   onclick="showLoginModal(); return false;"
-   {% endif %}>
+          <!--<a href="#" class="save-post-btn" data-post-id="{{ post.id }}">
             <i class="material-icons" style="color:rgb(134, 134, 129)">
               bookmark
             </i>
-          </a>
+          </a>-->
+          {% if request.user.is_authenticated %}
+<a href="#" class="save-post-btn" data-post-id="{{ post.id }}">
+    <i class="material-icons" style="color:rgb(134, 134, 129)">bookmark</i>
+</a>
+{% else %}
+<a href="#" onclick="showLoginModal(); return false;">
+    <i class="material-icons" style="color:rgb(134, 134, 129)">bookmark</i>
+</a>
+{% endif %}
           <p>Save</p>
         </div>  
         {% endif %}
@@ -601,10 +593,50 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
 
       <br>
 
-      <article class="media">
+      <!---<article class="media">
         <figure class="media-left">
   <p class="image is-48x48">
-    {% if request.user.profile.picture %}
+    {% if request.user.profile.picture %}-->
+    <article class="media">
+  <figure class="media-left">
+    <p class="image is-48x48">
+      {% if request.user.is_authenticated and request.user.profile.picture %}
+        <img class="is-rounded"
+            src="{{ request.user.profile.picture.url }}"
+            style="width: 48px; height: 48px; object-fit: cover;">
+      {% else %}
+        <span class="material-icons is-rounded"
+            style="width: 48px; height: 48px; display: inline-flex; align-items: center;
+            justify-content: center; background-color: #6d6d6d; border-radius: 50%;
+            font-size: 60px; color: #d9d9d9;">
+            account_circle
+        </span>
+      {% endif %}
+    </p>
+  </figure>
+  <div class="media-content">
+    {% if request.user.is_authenticated %}
+    <form id="modal-comment-form" method="post" data-post-id="{{ post.id }}">
+        {% csrf_token %}
+        <div class="field">
+            <p class="control">{{ form.body }}</p>
+        </div>
+        <div class="field">
+            <p class="control">
+                <button type="submit" class="button">Post comment</button>
+            </p>
+        </div>
+    </form>
+    {% else %}
+    <div onclick="showLoginModal()"
+        style="border: 1px solid #ddd; border-radius: 4px; padding: 10px 14px;
+        color: #aaa; cursor: pointer; font-size: 14px;">
+        Log in to leave a comment...
+    </div>
+    {% endif %}
+  </div>
+</article>
+
       <img class="is-rounded"
         src="{{ request.user.profile.picture.url }}"
         style="width: 48px; height: 48px; object-fit: cover;">
@@ -890,13 +922,22 @@ id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}"
 
 
 
-document.querySelectorAll('.like-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
+//document.querySelectorAll('.like-btn').forEach(btn => {
+   // btn.addEventListener('click', function(e) {
      
+       // e.preventDefault();
+
+        //const commentId = this.dataset.commentId;
+
+       // fetch(`/comment/${commentId}/like/`, {
+  document.querySelectorAll('.like-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
         e.preventDefault();
-
+        {% if not request.user.is_authenticated %}
+        showLoginModal();
+        return;
+        {% endif %}
         const commentId = this.dataset.commentId;
-
         fetch(`/comment/${commentId}/like/`, {
             method: 'POST',
             headers: {
@@ -949,10 +990,18 @@ function getCookie(name) {
 }
 
 
-document.querySelectorAll('.reply-btn').forEach(btn => {
-  btn.addEventListener('click', function(event) {
-    event.preventDefault();
-    const commentId = this.getAttribute('data-comment-id');
+//document.querySelectorAll('.reply-btn').forEach(btn => {
+ // btn.addEventListener('click', function(event) {
+    //event.preventDefault();
+   // const commentId = this.getAttribute('data-comment-id');
+   document.querySelectorAll('.reply-btn').forEach(btn => {
+    btn.addEventListener('click', function(event) {
+        event.preventDefault();
+        {% if not request.user.is_authenticated %}
+        showLoginModal();
+        return;
+        {% endif %}
+        const commentId = this.getAttribute('data-comment-id');
     const replyForm = document.getElementById(`reply-form-${commentId}`);
     replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
   });

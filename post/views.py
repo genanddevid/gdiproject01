@@ -70,24 +70,40 @@ def index(request):
 
 
 #@login_required
-def interests_view(request):
-    user = request.user
-    posts = Stream.objects. filter(user=user)
+#def interests_view(request):
+    #user = request.user
+    #posts = Stream.objects. filter(user=user)
 
-    group_ids = []
+    #group_ids = []
 
-    for post in posts:
-        group_ids.append(post.post_id)
+    #for post in posts:
+     #   group_ids.append(post.post_id)
 
-    post_items = Post.objects.filter(id__in=group_ids).all().order_by('-posted')
+    #post_items = Post.objects.filter(id__in=group_ids).all().order_by('-posted')
+
+    #template = loader.get_template('interests.html')
+
+    #context = {
+     #   'post_items': post_items,
+     #   'active_page': 'interests',
+   # }
+
+   # return HttpResponse(template.render(context, request))
+
+   def interests_view(request):
+    if not request.user.is_authenticated:
+        post_items = Post.objects.none()
+    else:
+        user = request.user
+        posts = Stream.objects.filter(user=user)
+        group_ids = [post.post_id for post in posts]
+        post_items = Post.objects.filter(id__in=group_ids).order_by('-posted')
 
     template = loader.get_template('interests.html')
-
     context = {
         'post_items': post_items,
         'active_page': 'interests',
     }
-
     return HttpResponse(template.render(context, request))
 
 
@@ -221,27 +237,63 @@ def divide_content(paragraphs, parts=3):
 
 
 
-def post_modal(request, post_id):
+#def post_modal(request, post_id):
+    #post = get_object_or_404(Post, id=post_id)
+    #user = request.user
+
+    #if request.user.is_authenticated:
+       # PostView.objects.get_or_create(user=request.user, post=post)
+
+    #liked = Likes.objects.filter(user=user, post=post).exists()
+   # form = CommentForm()
+    #favorited = False
+    #comments = Comment.objects.filter(post=post).order_by('date')
+
+    #if request.method == 'POST':
+       # form = CommentForm(request.POST)
+        #if form.is_valid():
+          #  comment = form.save(commit=False)
+          #  comment.post = post
+           # comment.user = user
+           # comment.save()
+          #  form = CommentForm()  # reset form
+           # comments = Comment.objects.filter(post=post).order_by('date')  
+
+   # if request.user.is_authenticated:
+       # profile = Profile.objects.get(user=request.user)
+      #  if profile.favorites.filter(id=post_id).exists():
+          #  favorited = True
+
+    #total_comment_count = Comment.objects.filter(post=post).count()
+
+    #all_other_posts = Post.objects.exclude(id=post.id).exclude(user=request.user).order_by('id')
+
+
+
+
+
+    def post_modal(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
     if request.user.is_authenticated:
         PostView.objects.get_or_create(user=request.user, post=post)
 
-    liked = Likes.objects.filter(user=user, post=post).exists()
+    # Guest-safe liked check
+    liked = Likes.objects.filter(user=user, post=post).exists() if request.user.is_authenticated else False
     form = CommentForm()
     favorited = False
     comments = Comment.objects.filter(post=post).order_by('date')
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
             comment.user = user
             comment.save()
-            form = CommentForm()  # reset form
-            comments = Comment.objects.filter(post=post).order_by('date')  
+            form = CommentForm()
+            comments = Comment.objects.filter(post=post).order_by('date')
 
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
@@ -250,7 +302,21 @@ def post_modal(request, post_id):
 
     total_comment_count = Comment.objects.filter(post=post).count()
 
-    all_other_posts = Post.objects.exclude(id=post.id).exclude(user=request.user).order_by('id')
+    # Guest-safe recommendations — don't exclude by user if anonymous
+    if request.user.is_authenticated:
+        all_other_posts = Post.objects.exclude(id=post.id).exclude(user=request.user).order_by('id')
+    else:
+        all_other_posts = Post.objects.exclude(id=post.id).order_by('id')
+
+
+    
+
+
+
+
+
+
+
     left_recommendations = []
     right_recommendations = []
 
@@ -654,8 +720,6 @@ from .models import Post, ApprovedTagAuthor
 from django.db.models import Q  # Make sure this is at the top
 
 
-
-#@login_required
 def index(request):
     # Get all (user, tag) combinations approved by the editor
     approved_combos = ApprovedTagAuthor.objects.all()

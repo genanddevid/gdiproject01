@@ -869,6 +869,35 @@ document.getElementById('modalBody').addEventListener('click', function (event) 
 document.getElementById('modalBody').addEventListener('click', function (event) {
   const target = event.target;
 
+  // Share button
+    if (target.closest('#share-btn')) {
+        event.preventDefault();
+        const shareBtn = target.closest('#share-btn');
+        const title = shareBtn.dataset.caption || document.title;
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: 'Read this on Baytruyen: ' + title,
+                url: url,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                const label = document.getElementById('share-label');
+                if (label) {
+                    label.textContent = '✓ Copied!';
+                    label.style.color = '#3273dc';
+                    setTimeout(() => {
+                        label.textContent = 'Share';
+                        label.style.color = '';
+                    }, 2000);
+                }
+            }).catch(() => { prompt('Copy this link:', url); });
+        }
+        return;
+    }
+
+
   if (target.closest('.save-post-btn')) {
   event.preventDefault();
 

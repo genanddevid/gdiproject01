@@ -1049,6 +1049,17 @@ document.querySelectorAll('.show-more-replies-btn').forEach(button => {
 
 
 
+
+
+
+
+
+  
+  setTimeout(() => {
+    document.querySelectorAll('.custom-message').forEach(el => el.style.display = 'none');
+  }, 4000); // 10 seconds
+
+
 const shareBtn = document.getElementById('share-btn');
 if (shareBtn) {
     shareBtn.addEventListener('click', function(e) {
@@ -1078,17 +1089,6 @@ if (shareBtn) {
         }
     });
 }
-
-
-
-
-  
-  setTimeout(() => {
-    document.querySelectorAll('.custom-message').forEach(el => el.style.display = 'none');
-  }, 4000); // 10 seconds
-
-
-
 
 
 

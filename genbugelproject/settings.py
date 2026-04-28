@@ -169,6 +169,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 LOGIN_URL = '/login/'
 
+
 CSRF_TRUSTED_ORIGINS = [
     "https://gdiproject01-production.up.railway.app",
 ]

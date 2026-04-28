@@ -329,10 +329,10 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
         </div>  
 
         <div class="media-right" style="text-align: center;">
-          <a href="#" onclick="sharePost('{{ post.caption }}', window.location.href); return false;">
+          <a href="#" id= "share-btn" data-caption="{{ post.caption }}">
     <i class="material-icons" style="color:rgb(134, 134, 129)">share</i>
 </a>
-<p id="share-label">Shane</p>
+<p id="share-label">Share</p>
 
         </div>
 
@@ -384,7 +384,7 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
     <i class="material-icons" style="color:rgb(134, 134, 129)">bookmark</i>
 </a>
 {% endif %}
-          <p>Sane</p>
+          <p>Save</p>
         </div>  
         {% endif %}
       </div>
@@ -1049,21 +1049,22 @@ document.querySelectorAll('.show-more-replies-btn').forEach(button => {
 
 
 
-function sharePost(title, url) {
-    if (navigator.share) {
-        // Mobile native share sheet
-        navigator.share({
-            title: title,
-            text: 'Read this on Baytruyen: ' + title,
-            url: url,
-        }).catch(() => {});
-    } else {
-        // Desktop fallback — copy to clipboard
-        navigator.clipboard.writeText(url).then(() => {
-            // Find the share label near the clicked button
-            const allShareLabels = document.querySelectorAll('[id^="share-label-"]');
-            allShareLabels.forEach(label => {
-                if (label.textContent === 'Share' || label.textContent === '✓ Copied!') {
+const shareBtn = document.getElementById('share-btn');
+if (shareBtn) {
+    shareBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const title = this.dataset.caption;
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: 'Read this on Baytruyen: ' + title,
+                url: url,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                const label = document.getElementById('share-label');
+                if (label) {
                     label.textContent = '✓ Copied!';
                     label.style.color = '#3273dc';
                     setTimeout(() => {
@@ -1071,13 +1072,13 @@ function sharePost(title, url) {
                         label.style.color = '';
                     }, 2000);
                 }
+            }).catch(() => {
+                prompt('Copy this link:', url);
             });
-        }).catch(() => {
-            // Final fallback if clipboard also fails
-            prompt('Copy this link:', url);
-        });
-    }
+        }
+    });
 }
+
 
 
 

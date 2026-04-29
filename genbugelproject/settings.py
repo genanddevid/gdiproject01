@@ -172,6 +172,8 @@ LOGIN_URL = '/login/'
 
 CSRF_TRUSTED_ORIGINS = [
     "https://gdiproject01-production.up.railway.app",
+    "https://baytruyen.com",
+    "https://www.baytruyen.com",
 ]
 
 # Default primary key field type

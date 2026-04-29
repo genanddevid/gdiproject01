@@ -291,10 +291,41 @@ function loadPostContent(postId, callback) {
         .then(html => {
             postCache[postId] = html; // Store in cache
             document.getElementById("modalBody").innerHTML = html;
-            initEmbeds();
-            document.getElementById('modalContent').scrollTop = 0;
-            if (callback) callback();
-            preloadAdjacentPosts(); // Preload neighbours
+initEmbeds();
+document.getElementById('modalContent').scrollTop = 0;
+
+// Wire up share button
+const shareBtn = document.getElementById('share-btn');
+if (shareBtn) {
+    shareBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const title = this.dataset.caption || 'Baytruyen';
+        const postId = this.dataset.postId || '';
+        const url = 'https://baytruyen.com/post/' + postId + '/';
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: 'Read this on Baytruyen: ' + title,
+                url: url,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                const label = document.getElementById('share-label');
+                if (label) {
+                    label.textContent = '✓ Copied!';
+                    label.style.color = '#3273dc';
+                    setTimeout(() => {
+                        label.textContent = 'Share';
+                        label.style.color = '';
+                    }, 2000);
+                }
+            }).catch(() => { prompt('Copy this link:', url); });
+        }
+    });
+}
+
+if (callback) callback();
+preloadAdjacentPosts();
         })
         .catch(error => {
             console.error('Error loading post content:', error);

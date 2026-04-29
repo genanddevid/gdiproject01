@@ -39,7 +39,7 @@ import os
 #ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'genbugel-8ef94.ondigitalocean.app',]
 
 ALLOWED_HOSTS = os.environ.get(
-    #"ALLOWED_HOSTS",
+    "ALLOWED_HOSTS",
     "127.0.0.1,localhost,gdiproject01-production.up.railway.app, baytruyen.com, www.baytruyen.com"
 ).split(",")
 

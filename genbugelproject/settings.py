@@ -40,7 +40,7 @@ import os
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
-    "127.0.0.1,localhost,gdiproject01-production.up.railway.app"
+    "127.0.0.1,localhost,gdiproject01-production.up.railway.app, baytruyen.com, www.baytruyen.com"
 ).split(",")
 
 # Application definition

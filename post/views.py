@@ -180,54 +180,9 @@ def interests_view(request):
 
 
 def PostDetails(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    user = request.user
-
-    if user.is_authenticated:
-        PostView.objects.get_or_create(user=user, post=post)
-
-    liked = Likes.objects.filter(user=user, post=post).exists() if user.is_authenticated else False
-    form = CommentForm()
-    favorited = False
-    comments = Comment.objects.filter(post=post).order_by('date')
-
-    if request.method == 'POST' and user.is_authenticated:
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.user = user
-            comment.save()
-            return HttpResponseRedirect(reverse('postdetails', args=[post_id]))
-
-    if user.is_authenticated:
-        profile = Profile.objects.get(user=user)
-        if profile.favorites.filter(id=post_id).exists():
-            favorited = True
-
-    total_comment_count = Comment.objects.filter(post=post).count()
-    left_recommendations, right_recommendations = get_recommendations(post, user)
-    content1, content2, content3 = split_content_for_post(post)
-
-    is_approved = ApprovedTagAuthor.objects.filter(
-        author=post.user, tag=post.tag
-    ).exists()
-
-    return render(request, 'post_detail.html', {
-        'post': post,
-        'liked': liked,
-        'favorited': favorited,
-        'form': form,
-        'comments': comments,
-        'total_comment_count': total_comment_count,
-        'left_recommendations': left_recommendations,
-        'right_recommendations': right_recommendations,
-        'content1': content1,
-        'content2': content2,
-        'content3': content3,
-        'is_approved': is_approved,
-    })
-
+    # Redirect to index with modal auto-open for this post
+    return redirect(f'/?open={post_id}')
+    
 
 
 def post_modal(request, post_id):

@@ -281,6 +281,14 @@ document.addEventListener('DOMContentLoaded', () => {
             allPostIds.push(postId);
         }
     });
+
+    // Auto-open post if ?open= param is in URL (for shared links)
+    const urlParams = new URLSearchParams(window.location.search);
+    const openPostId = urlParams.get('open');
+    if (openPostId) {
+        openPostModal(openPostId, null);
+        window.history.replaceState({}, document.title, '/');
+    }
 });
 
 // Helper function to update the navigation button states

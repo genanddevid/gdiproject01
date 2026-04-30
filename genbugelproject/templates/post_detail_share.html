@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block og_tags %}
+<meta property="og:title" content="{{ post.caption }}" />
+<meta property="og:description" content="{{ post.content|truncatewords:30 }}" />
+<meta property="og:image" content="{{ post.picture.url }}" />
+<meta property="og:url" content="https://www.baytruyen.com/{{ post.id }}" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Baytruyen" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ post.caption }}" />
+<meta name="twitter:description" content="{{ post.content|truncatewords:30 }}" />
+<meta name="twitter:image" content="{{ post.picture.url }}" />
+{% endblock %}
+
+{% block content %}
+<!-- Auto-open this post in modal -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Small delay to let page render first
+    setTimeout(function() {
+        openPostModal('{{ post.id }}', null);
+    }, 300);
+});
+</script>
+
+<!-- Include the full index page content -->
+{% include 'index.html' %}
+{% endblock %}

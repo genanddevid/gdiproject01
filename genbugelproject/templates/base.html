@@ -5,6 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block og_tags %}
+<meta property="og:site_name" content="Baytruyen" />
+<meta property="og:type" content="website" />
+{% endblock %}
     <title>Baytruyen</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">

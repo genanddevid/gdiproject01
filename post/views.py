@@ -183,14 +183,15 @@ def PostDetails(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
-    PostView.objects.get_or_create(user=user, post=post)
+    if user.is_authenticated:
+        PostView.objects.get_or_create(user=user, post=post)
 
-    liked = Likes.objects.filter(user=user, post=post).exists()
+    liked = Likes.objects.filter(user=user, post=post).exists() if user.is_authenticated else False
     form = CommentForm()
     favorited = False
     comments = Comment.objects.filter(post=post).order_by('date')
 
-    if request.method == 'POST':
+    if request.method == 'POST' and user.is_authenticated:
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
@@ -199,9 +200,10 @@ def PostDetails(request, post_id):
             comment.save()
             return HttpResponseRedirect(reverse('postdetails', args=[post_id]))
 
-    profile = Profile.objects.get(user=user)
-    if profile.favorites.filter(id=post_id).exists():
-        favorited = True
+    if user.is_authenticated:
+        profile = Profile.objects.get(user=user)
+        if profile.favorites.filter(id=post_id).exists():
+            favorited = True
 
     total_comment_count = Comment.objects.filter(post=post).count()
     left_recommendations, right_recommendations = get_recommendations(post, user)
@@ -225,6 +227,7 @@ def PostDetails(request, post_id):
         'content3': content3,
         'is_approved': is_approved,
     })
+
 
 
 def post_modal(request, post_id):

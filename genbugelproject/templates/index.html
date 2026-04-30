@@ -295,51 +295,99 @@ function updateNavButtons() {
 }
 
 // Function to load and display post content in modal
+const postCache = {};
+
 function loadPostContent(postId) {
+    if (postCache[postId]) {
+        document.getElementById("modalBody").innerHTML = postCache[postId];
+        initEmbedsIndex();
+        wirShareBtn();
+        document.getElementById('modalContent').scrollTop = 0;
+        preloadAdjacentPostsIndex();
+        return;
+    }
+
+    document.getElementById("modalBody").innerHTML = `
+        <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
+            <div style="text-align:center;">
+                <div style="width:40px; height:40px; border:3px solid #f3f3f3;
+                     border-top:3px solid #3273dc; border-radius:50%;
+                     animation:spin 0.8s linear infinite; margin:0 auto;"></div>
+                <p style="margin-top:15px; color:#888; font-size:14px;">Loading...</p>
+            </div>
+        </div>
+        <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+    `;
+
     fetch(`/modal/${postId}/`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.text();
         })
         .then(html => {
+            postCache[postId] = html;
             document.getElementById("modalBody").innerHTML = html;
-
-            // 🔁 Collect all recommended posts in the modal to enable navigation
-            const recPostElements = document.querySelectorAll('[data-post-id]');
-            allPostIds = Array.from(recPostElements).map(el => el.dataset.postId);
-
-            // Set currentPostIndex to this post
-            currentPostIndex = allPostIds.indexOf(postId);
-
-            // Instagram
-            if (window.instgrm && instgrm.Embeds) {
-                instgrm.Embeds.process();
-            }
-
-            // Twitter/X
-            const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
-            if (existingTwitterScript) existingTwitterScript.remove();
-            const twitterScript = document.createElement('script');
-            twitterScript.src = "https://platform.twitter.com/widgets.js";
-            twitterScript.async = true;
-            twitterScript.charset = "utf-8";
-            document.body.appendChild(twitterScript);
-
-            // TikTok
-            const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
-            if (oldTikTokScript) oldTikTokScript.remove();
-            const tiktokScript = document.createElement('script');
-            tiktokScript.src = "https://www.tiktok.com/embed.js";
-            tiktokScript.async = true;
-            document.body.appendChild(tiktokScript);
-
-            // Scroll modal content to top
+            initEmbedsIndex();
+            wirShareBtn();
             document.getElementById('modalContent').scrollTop = 0;
+            preloadAdjacentPostsIndex();
         })
         .catch(error => {
             console.error('Error loading post content:', error);
             document.getElementById("modalBody").innerHTML = "<p>Error loading post. Please try again.</p>";
         });
+}
+
+function initEmbedsIndex() {
+    if (window.instgrm && instgrm.Embeds) instgrm.Embeds.process();
+    const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+    if (existingTwitterScript) existingTwitterScript.remove();
+    const twitterScript = document.createElement('script');
+    twitterScript.src = "https://platform.twitter.com/widgets.js";
+    twitterScript.async = true;
+    twitterScript.charset = "utf-8";
+    document.body.appendChild(twitterScript);
+    const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (oldTikTokScript) oldTikTokScript.remove();
+    const tiktokScript = document.createElement('script');
+    tiktokScript.src = "https://www.tiktok.com/embed.js";
+    tiktokScript.async = true;
+    document.body.appendChild(tiktokScript);
+}
+
+function wirShareBtn() {
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const title = this.dataset.caption || 'Baytruyen';
+            const postId = this.dataset.postId || '';
+            const url = 'https://baytruyen.com/post/' + postId + '/';
+            if (navigator.share) {
+                navigator.share({ title: title, text: 'Read this on Baytruyen: ' + title, url: url }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    const label = document.getElementById('share-label');
+                    if (label) {
+                        label.textContent = '✓ Copied!';
+                        label.style.color = '#3273dc';
+                        setTimeout(() => { label.textContent = 'Share'; label.style.color = ''; }, 2000);
+                    }
+                }).catch(() => { prompt('Copy this link:', url); });
+            }
+        });
+    }
+}
+
+function preloadAdjacentPostsIndex() {
+    const toPreload = [];
+    if (currentPostIndex + 1 < allPostIds.length) toPreload.push(allPostIds[currentPostIndex + 1]);
+    if (currentPostIndex - 1 >= 0) toPreload.push(allPostIds[currentPostIndex - 1]);
+    toPreload.forEach(postId => {
+        if (!postCache[postId]) {
+            fetch(`/modal/${postId}/`).then(res => res.text()).then(html => { postCache[postId] = html; }).catch(() => {});
+        }
+    });
 }
 
 function openPostModal(postId, event) {

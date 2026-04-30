@@ -396,9 +396,9 @@ document.addEventListener("DOMContentLoaded", function () {
             class="button custom-button"
             style="margin-bottom: 0px;">
           {% endif %}
-            <span class="material-symbols-outlined" style="font-size: 24px; margin-right: 8px;">
-              stylus_fountain_pen
-            </span>
+            <img src="{% static 'img/narrative-icon.png' %}" 
+     style="width: 24px; height: 24px; margin-right: 8px; object-fit: contain;">
+
             Narrative Builder
           {% if request.user.is_authenticated %}</a>{% else %}</button>{% endif %}
 
@@ -531,7 +531,8 @@ document.addEventListener("DOMContentLoaded", function () {
 {% else %}
 <a href="#" onclick="showLoginModal(); return false;">
 {% endif %}
-    <span class="material-symbols-outlined" style="font-size: 30px; margin-left: 4px; font-weight: 300;">stylus_fountain_pen</span>
+    <img src="{% static 'img/narrative-icon.png' %}" 
+     style="width: 24px; height: 24px; margin-right: 8px; object-fit: contain;">
 </a>
 
 

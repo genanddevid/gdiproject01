@@ -178,7 +178,7 @@ def interests_view(request):
     return HttpResponse(template.render(context, request))
 
 
-@login_required
+
 def PostDetails(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user

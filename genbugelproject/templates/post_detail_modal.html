@@ -1066,7 +1066,7 @@ if (shareBtn) {
         e.preventDefault();
         const title = this.dataset.caption;
         const postId = this.dataset.postId || '';
-        const url = postId ? 'https://www.baytruyen.com/post/' + postId + '/' : window.location.href;
+        const url = postId ? 'https://www.baytruyen.com/' + postId : window.location.href;
         if (navigator.share) {
             navigator.share({
                 title: title,

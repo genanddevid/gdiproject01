@@ -299,9 +299,11 @@ const shareBtn = document.getElementById('share-btn');
 if (shareBtn) {
     shareBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        const title = this.dataset.caption || 'Baytruyen';
+        const title = this.dataset.caption;
         const postId = this.dataset.postId || '';
-        const url = 'https://www.baytruyen.com/post/' + postId + '/';
+        const url = postId ? 'https://www.baytruyen.com/' + postId : window.location.href;
+
+      
         if (navigator.share) {
             navigator.share({
                 title: title,

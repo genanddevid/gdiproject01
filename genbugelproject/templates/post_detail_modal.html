@@ -329,7 +329,7 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
         </div>  
 
         <div class="media-right" style="text-align: center;">
-          <a href="#" id= "share-btn" data-caption="{{ post.caption }}">
+          <a href="#" id= "share-btn" data-caption="{{ post.caption }}" data-post-id="{{ post.id }}">
     <i class="material-icons" style="color:rgb(134, 134, 129)">share</i>
 </a>
 <p id="share-label">Share</p>
@@ -1065,7 +1065,8 @@ if (shareBtn) {
     shareBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const title = this.dataset.caption;
-        const url = window.location.href;
+        const postId = this.dataset.postId || '';
+        const url = postId ? 'https://www.baytruyen.com/post/' + postId + '/' : window.location.href;
         if (navigator.share) {
             navigator.share({
                 title: title,

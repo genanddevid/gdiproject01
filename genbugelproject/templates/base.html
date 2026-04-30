@@ -439,14 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           
 
-          {% if not request.user.is_authenticated %}
-          <button onclick="showLoginModal()"
-            class="button custom-button"
-            style="margin-bottom:0px; color:#3273dc; font-weight:500;">
-            <span class="material-icons" style="font-size:24px; margin-right:8px;">login</span>
-            Log in
-          </button>
-          {% endif %}
+          
           <!--<a href="{% url 'profile' request.user %}" 
           class="button custom-button {% if active_page == 'profile' %}is-active{% endif %}" 
           style="margin-left: 0px; margin-bottom: 0px;">        
@@ -471,7 +464,21 @@ document.addEventListener("DOMContentLoaded", function () {
           {% if request.user.is_authenticated %}</a>{% else %}</button>{% endif %}
 
 
+          
+
+
         </div>
+
+
+
+        {% if not request.user.is_authenticated %}
+          <button onclick="showLoginModal()"
+            class="button custom-button"
+            style="margin-bottom:0px; color:#3273dc; font-weight:500;">
+            <span class="material-icons" style="font-size:24px; margin-right:8px;">login</span>
+            Log in
+          </button>
+          {% endif %}
       
 
         <div class="navbar-item has-dropdown is-hoverable" style="margin-top: 20px;">

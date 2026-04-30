@@ -180,7 +180,19 @@ def interests_view(request):
 
 
 def PostDetails(request, post_id):
-    # Redirect to index with modal auto-open for this post
+    post = get_object_or_404(Post, id=post_id)
+    
+    # Detect if request is from a social media scraper (WhatsApp, Facebook etc.)
+    user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
+    scrapers = ['whatsapp', 'facebookexternalhit', 'twitterbot', 'linkedinbot', 'telegrambot', 'slackbot']
+    
+    is_scraper = any(scraper in user_agent for scraper in scrapers)
+    
+    if is_scraper:
+        # Serve OG tags page for scrapers
+        return render(request, 'post_og.html', {'post': post})
+    
+    # Regular users get redirected to frontpage with modal
     return redirect(f'/?open={post_id}')
     
 

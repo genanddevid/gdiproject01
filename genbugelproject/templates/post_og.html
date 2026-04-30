@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta property="og:title" content="{{ post.caption }}" />
+    <meta property="og:description" content="{{ post.content|truncatewords:30 }}" />
+    {% if post.picture %}
+    <meta property="og:image" content="https://www.baytruyen.com{{ post.picture.url }}" />
+    {% endif %}
+    <meta property="og:url" content="https://www.baytruyen.com/{{ post.id }}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Baytruyen" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ post.caption }}" />
+    <meta name="twitter:description" content="{{ post.content|truncatewords:30 }}" />
+    {% if post.picture %}
+    <meta name="twitter:image" content="https://www.baytruyen.com{{ post.picture.url }}" />
+    {% endif %}
+    <!-- Redirect human visitors immediately -->
+    <meta http-equiv="refresh" content="0;url=/?open={{ post.id }}" />
+</head>
+<body>
+    <p>Redirecting to Baytruyen...</p>
+</body>
+</html>

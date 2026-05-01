@@ -516,11 +516,11 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="mobile-bottom-nav">
   <a href="{% url 'index' %}" class="{% if active_page == 'frontpage' %}is-active{% endif %}">
     <span class="material-icons">flip_to_front</span>
-    <p class="subtitle">FRONTPAGE</p>
+    <p class="subtitle">Frontpage</p>
   </a>
   <a href="{% url 'interests' %}" class="{% if active_page == 'interests' %}is-active{% endif %}">
     <span class="material-icons">check_circle_outline</span>
-    <p class="subtitle">INTERESTS</p>
+    <p class="subtitle">Interests</p>
   </a>
   <!--<a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">
     <span class="material-symbols-outlined" style="font-size: 30px; margin-left: 4px; font-weight: 300;">stylus_fountain_pen</span>
@@ -532,13 +532,13 @@ document.addEventListener("DOMContentLoaded", function () {
 <a href="#" onclick="showLoginModal(); return false;">
 {% endif %}
     <img src="{% static 'img/narrative-icon.png' %}" 
-     style="width: 36px; height: 36px; margin-right: 8px; object-fit: contain;">
+     style="width: 44px; height: 44px; margin-right: 8px; object-fit: contain;">
 </a>
 
 
   <a href="{% url 'discover' %}" class="{% if active_page == 'discover' %}is-active{% endif %}">
     <span class="material-icons">explore</span>
-    <p class="subtitle">DISCOVER</p>
+    <p class="subtitle">Discover</p>
   </a>
   <!--<a href="{% url 'all_collections' %}" class="{% if active_page == 'all_collections' %}is-active{% endif %}">
     <span class="material-icons">bookmark_border</span>
@@ -550,7 +550,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <a href="#" onclick="showLoginModal(); return false;">
 {% endif %}
     <span class="material-icons">bookmark_border</span>
-    <p class="subtitle">COLLECTIONS</p></a>
+    <p class="subtitle">Collections</p></a>
 </div>
 
 
@@ -588,9 +588,9 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="field has-text-centered" style="margin-top:20px;">
                 <button type="submit"
-                    style="font-size:18px; font-weight:500; width:130px; height:36px; border:1px solid #be0505; 
-                    border-radius:4px; cursor:pointer; background-color:#be0505 ;">
-                  Log on
+                    style="font-size:18px; font-weight:500; width:130px; height:36px;
+                    background:none; border:1px solid #be0505; border-radius:4px; cursor:pointer;">
+                    Log in
                 </button>
             </div>
             <div class="has-text-centered" style="margin-top:16px;">

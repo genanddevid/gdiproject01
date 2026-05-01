@@ -33,7 +33,7 @@ from authy.forms import SignupForm, ChangePasswordForm, EditProfileForm
 from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, login
 
 from authy.models import Profile
 from post.models import Post, Follow, Likes, Stream
@@ -261,16 +261,17 @@ def Signup(request):
 			username = form.cleaned_data.get('username')
 			email = form.cleaned_data.get('email')
 			password = form.cleaned_data.get('password')
-			User.objects.create_user(username=username, email=email, password=password)
-			return redirect('edit-profile')
+			user = User.objects.create_user(username=username, email=email, password=password)
+			login(request, user, backend='genbugelproject.backends.EmailOrUsernameBackend')
+			return redirect('profile', username=username)
 	else:
 		form = SignupForm()
-	
 	context = {
 		'form':form,
 	}
 
 	return render(request, 'signup.html', context)
+
 
 
 @login_required

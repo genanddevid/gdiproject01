@@ -562,59 +562,161 @@ document.addEventListener("DOMContentLoaded", function () {
   <script async defer src="https://www.instagram.com/embed.js"></script>
 
   <!-- Login Modal -->
+<!-- Login Modal -->
 <div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
-    <div style="background:white; border-radius:8px; padding:40px; max-width:400px; width:90%;
-        position:relative;">
+    background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:16px; padding:32px 28px; max-width:380px; width:90%;
+        position:relative; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+        
         <!-- Close button -->
         <button onclick="closeLoginModal()"
-            style="position:absolute; top:12px; right:16px; background:none; border:none;
-            font-size:24px; cursor:pointer; color:#888;">×</button>
+            style="position:absolute; top:14px; right:16px; background:none; border:none;
+            font-size:22px; cursor:pointer; color:#888; line-height:1;">×</button>
 
-        <h1 style="font-weight:500; font-size:32px; margin-bottom:24px;">Baytruyen</h1>
+        <!-- Title -->
+        <h2 style="font-weight:600; font-size:26px; margin-bottom:8px; text-align:center;">
+            Log in to Baytruyen
+        </h2>
+        <p style="text-align:center; color:#888; font-size:14px; margin-bottom:24px;">
+            Read and share stories that matter
+        </p>
+
+        <!-- Use phone/email -->
+        <button onclick="showEmailLogin()"
+            style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd;
+            border-radius:50px; font-size:15px; font-weight:500; cursor:pointer;
+            background:white; display:flex; align-items:center; gap:12px;">
+            <span class="material-icons" style="font-size:20px; color:#444;">person</span>
+            Use phone / email
+        </button>
+
+        <!-- Google -->
+        <button onclick="alert('Coming soon')"
+            style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd;
+            border-radius:50px; font-size:15px; font-weight:500; cursor:pointer;
+            background:white; display:flex; align-items:center; gap:12px;">
+            <img src="https://www.google.com/favicon.ico" style="width:20px; height:20px;">
+            Continue with Google
+        </button>
+
+        <!-- TikTok -->
+        <button onclick="alert('Coming soon')"
+            style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd;
+            border-radius:50px; font-size:15px; font-weight:500; cursor:pointer;
+            background:white; display:flex; align-items:center; gap:12px;">
+            <img src="https://www.tiktok.com/favicon.ico" style="width:20px; height:20px;">
+            Continue with TikTok
+        </button>
+
+        <!-- Facebook -->
+        <button onclick="alert('Coming soon')"
+            style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd;
+            border-radius:50px; font-size:15px; font-weight:500; cursor:pointer;
+            background:white; display:flex; align-items:center; gap:12px;">
+            <img src="https://www.facebook.com/favicon.ico" style="width:20px; height:20px;">
+            Continue with Facebook
+        </button>
+
+        <!-- X / Twitter -->
+        <button onclick="alert('Coming soon')"
+            style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd;
+            border-radius:50px; font-size:15px; font-weight:500; cursor:pointer;
+            background:white; display:flex; align-items:center; gap:12px;">
+            <svg style="width:20px; height:20px;" viewBox="0 0 24 24" fill="black">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            Continue with X
+        </button>
+
+        <!-- Apple -->
+        <button onclick="alert('Coming soon')"
+            style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd;
+            border-radius:50px; font-size:15px; font-weight:500; cursor:pointer;
+            background:white; display:flex; align-items:center; gap:12px;">
+            <svg style="width:20px; height:20px;" viewBox="0 0 24 24" fill="black">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            Continue with Apple
+        </button>
+
+        <p style="text-align:center; margin-top:16px; font-size:13px; color:#888;">
+            Don't have an account? 
+            <a href="{% url 'signup' %}" style="color:#000; font-weight:600; text-decoration:underline;">
+                Sign up
+            </a>
+        </p>
+    </div>
+</div>
+
+<!-- Email Login Panel (hidden by default) -->
+<div id="emailLoginPanel" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.6); z-index:10000; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:16px; padding:32px 28px; max-width:380px; width:90%;
+        position:relative; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+        
+        <button onclick="hideEmailLogin()"
+            style="position:absolute; top:14px; left:16px; background:none; border:none;
+            font-size:22px; cursor:pointer; color:#888;">←</button>
+        
+        <button onclick="hideEmailLogin(); closeLoginModal();"
+            style="position:absolute; top:14px; right:16px; background:none; border:none;
+            font-size:22px; cursor:pointer; color:#888;">×</button>
+
+        <h2 style="font-weight:600; font-size:24px; margin-bottom:24px; text-align:center; margin-top:8px;">
+            Log in
+        </h2>
 
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ request.path }}">
-            <div class="field">
-                <p class="control">
-                    <input class="input" type="text" name="username"
-                        placeholder="Username" required autofocus>
-                </p>
+            <div class="field" style="margin-bottom:12px;">
+                <input class="input" type="text" name="username"
+                    placeholder="Username or email"
+                    style="border-radius:8px; padding:12px; font-size:15px;" required autofocus>
             </div>
-            <div class="field">
-                <p class="control">
-                    <input class="input" type="password" name="password"
-                        placeholder="Password" required>
-                </p>
+            <div class="field" style="margin-bottom:20px;">
+                <input class="input" type="password" name="password"
+                    placeholder="Password"
+                    style="border-radius:8px; padding:12px; font-size:15px;" required>
             </div>
-            <div class="field has-text-centered" style="margin-top:20px;">
-                <button type="submit"
-                    style="font-size:18px; font-weight:500; width:130px; height:36px;
-                    background:none; border:1px solid rgb(48, 44, 44); border-radius:4px; cursor:pointer;">
-                    Log in
-                </button>
-            </div>
-            <div class="has-text-centered" style="margin-top:16px;">
-                <a href="{% url 'signup' %}" style="color:#3273dc; text-decoration:underline;">
-                    Create an account
+            <button type="submit"
+                style="width:100%; padding:12px; background:#000; color:white;
+                border:none; border-radius:50px; font-size:16px; font-weight:600; cursor:pointer;">
+                Log in
+            </button>
+            <div style="text-align:center; margin-top:16px;">
+                <a href="{% url 'password_reset' %}" style="color:#888; font-size:13px;">
+                    Forgot password?
                 </a>
             </div>
         </form>
     </div>
 </div>
 
+
+
+
+
 <script>
 function showLoginModal() {
-    const modal = document.getElementById('loginModal');
-    modal.style.display = 'flex';
+    document.getElementById('loginModal').style.display = 'flex';
 }
 function closeLoginModal() {
-    const modal = document.getElementById('loginModal');
-    modal.style.display = 'none';
+    document.getElementById('loginModal').style.display = 'none';
+    document.getElementById('emailLoginPanel').style.display = 'none';
 }
-// Close if clicking outside the modal box
+function showEmailLogin() {
+    document.getElementById('loginModal').style.display = 'none';
+    document.getElementById('emailLoginPanel').style.display = 'flex';
+}
+function hideEmailLogin() {
+    document.getElementById('emailLoginPanel').style.display = 'none';
+    document.getElementById('loginModal').style.display = 'flex';
+}
 document.getElementById('loginModal').addEventListener('click', function(e) {
+    if (e.target === this) closeLoginModal();
+});
+document.getElementById('emailLoginPanel').addEventListener('click', function(e) {
     if (e.target === this) closeLoginModal();
 });
 </script>

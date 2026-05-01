@@ -1,107 +1,74 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Signup to Baytruyen</title>
-    <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-  </head>
-  <body>
+{% block content %}
+<div style="max-width: 400px; margin: 60px auto; padding: 40px 28px;
+    background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
 
+    <h2 style="font-weight: 600; font-size: 26px; margin-bottom: 8px; text-align: center;">
+        Create your account
+    </h2>
+    <p style="text-align: center; color: #888; font-size: 14px; margin-bottom: 28px;">
+        Join Baytruyen and start sharing stories
+    </p>
 
-  <section class="section">
-    <div class="container">
-
-<div class="columns is-mobile is-centered">
-  <div class="column" style="max-width: 400px;">
-
-    <div class="card" style="border-radius: 0;">
-      <div class="px-5 py-4 is-flex is-align-items-center" style="justify-content: flex-start; margin-bottom: 0px;">
-                
-                <h1 style="                                    
-                  font-weight: 500;
-                  font-size: 38px;                  
-                 ">
-                Baytruyen
-                </h1>
-              </div>
-    <div class="card-content has-text-centered">   
-     
-  <form method="post" action="" role="form">
-    {% csrf_token %}
-    <h1 style="font-weight: 500; font-size: 22px;">Create an account</h1>
-    <br>
-    
-
-    <div class="field mb-4">
-      <p class="control has-icons-left">
-        {{ form.username }}
-        <span class="icon is-small is-left">
-          <i class="fas fa-user"></i>
-        </span>
-      </p>
+    {% if form.errors %}
+    <div style="background: #fff0f0; border: 1px solid #ffcccc; border-radius: 8px;
+        padding: 10px 14px; margin-bottom: 16px; color: #cc0000; font-size: 14px;">
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                {{ error }}<br>
+            {% endfor %}
+        {% endfor %}
     </div>
+    {% endif %}
 
-    <div class="field mb-4">
-      <p class="control has-icons-left">
-        {{ form.email }}
-        <span class="icon is-small is-left">
-          <i class="fas fa-envelope"></i>
-        </span>
-      </p>
-    </div>
+    <form method="post" action="">
+        {% csrf_token %}
 
-    <div class="field mb-4">
-      <p class="control has-icons-left">
-        {{ form.password }}
-        <span class="icon is-small is-left">
-          <i class="fas fa-lock"></i>
-        </span>
-      </p>
-    </div>
+        <div style="margin-bottom: 12px;">
+            <input type="text" name="username" placeholder="Username"
+                value="{{ form.username.value|default:'' }}"
+                style="width: 100%; padding: 12px; border: 1px solid #ddd;
+                border-radius: 8px; font-size: 15px; box-sizing: border-box;"
+                required autofocus>
+        </div>
 
-    <div class="field mb-4">
-      <p class="control has-icons-left">
-        {{ form.confirm_password }}
-        <span class="icon is-small is-left">
-          <i class="fas fa-lock"></i>
-        </span>
-      </p>
-    </div>
+        <div style="margin-bottom: 12px;">
+            <input type="email" name="email" placeholder="Email address"
+                value="{{ form.email.value|default:'' }}"
+                style="width: 100%; padding: 12px; border: 1px solid #ddd;
+                border-radius: 8px; font-size: 15px; box-sizing: border-box;"
+                required>
+        </div>
 
-    <div class="field">
-      <p class="control">
-        <button type="submit" class="button" style="background-color: #61c5ff; width: 280px; height: 45px;" >
-          Create
+        <div style="margin-bottom: 12px;">
+            <input type="password" name="password" placeholder="Password"
+                style="width: 100%; padding: 12px; border: 1px solid #ddd;
+                border-radius: 8px; font-size: 15px; box-sizing: border-box;"
+                required>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <input type="password" name="confirm_password" placeholder="Confirm password"
+                style="width: 100%; padding: 12px; border: 1px solid #ddd;
+                border-radius: 8px; font-size: 15px; box-sizing: border-box;"
+                required>
+        </div>
+
+        <button type="submit"
+            style="width: 100%; padding: 12px; background: #000; color: white;
+            border: none; border-radius: 50px; font-size: 16px;
+            font-weight: 600; cursor: pointer;">
+            Create account
         </button>
-      </p>
-    </div>
-    
-    <div class="field mt-4">
-  <p class="control">
-    <a href="{% url 'login' %}" class="button is-text" style="width: 280px;">
-      Already have an account? Login
-    </a>
-  </p>
+
+        <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #888;">
+            Already have an account?
+            <a href="{% url 'login' %}" style="color: #000; font-weight: 600; text-decoration: underline;">
+                Log in
+            </a>
+        </p>
+    </form>
 </div>
-
-  </form>
-</div>
-
-
-
-      </div>
-</div>
-
-
-    </div>
-  </section>
-
-    
-  </div>
-
+{% endblock %}

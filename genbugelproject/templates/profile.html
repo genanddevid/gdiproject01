@@ -112,9 +112,7 @@
                     </h5>           
                     
                     <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
-                        <button id="toggleStatBtn" class="button is-link" onclick="toggleProfileStats()">
-                            <i id="toggleIcon" class="material-icons md-dark">arrow_drop_down</i>
-                        </button>
+                        
                         
                         {% if user.is_authenticated and user == profile.user %}
                             <a href="{% url 'edit-profile' %}" class="button is-link">Edit</a>
@@ -163,7 +161,7 @@
 
                 <!-- Subscribers -->
                  {% if user.is_authenticated and user == profile.user %}
-                 <div id="profileStatsBlock">
+                 <div id="profileStatsBlock" style="width: 100%;">
                 <nav class="level is-mobile profile-stats-nav">
 
                     
@@ -209,7 +207,7 @@
                 {% endif %}
                 <!-- Description -->
                 <div class="mydescription" style="margin-top: 1.3rem;">
-                    <h5 class="title is-5" style="font-weight: 500";>Description</h5>
+                    
                     <p style="text-align: justify; font-size: 14px; margin-top: -9px; margin-bottom: 10px;">{% if profile.profile_info %}{{ profile.profile_info }}{% endif %}</p>
                  
                 </div>
@@ -374,7 +372,7 @@ border-radius: 0; padding-right: 20px !important;">
   <div style="text-align: center;">
   <br>
   <a href="{% url 'narrativebuilder' %}">
-  <h5 class="title is-5">Write your first Narrative</h5>
+  <h5 class="title is-5" style="font-weight: 400; color: #555;">Start writing. The world is listening.</h5>
   </a>
 </div>
 

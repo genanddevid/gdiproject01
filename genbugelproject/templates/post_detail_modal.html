@@ -638,6 +638,24 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
 </article>
 
       
+
+        <div class="media-content">
+                <form id="modal-comment-form" method="post" data-post-id="{{ post.id }}">
+  {% csrf_token %}
+  <div class="field">
+    <p class="control">
+      {{ form.body }}
+    </p>
+  </div>
+  <div class="field">
+    <p class="control">
+      <button type="submit" class="button">Post comment</button>
+    </p>
+  </div>
+</form>
+         
+        </div>
+      </article>
             
       {% for comment in comments %}
       {% if not comment.parent %}

@@ -112,7 +112,9 @@
                     </h5>           
                     
                     <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
-                        
+                        <button id="toggleStatBtn" class="button is-link" onclick="toggleProfileStats()">
+                            <i id="toggleIcon" class="material-icons md-dark">arrow_drop_down</i>
+                        </button>
                         
                         {% if user.is_authenticated and user == profile.user %}
                             <a href="{% url 'edit-profile' %}" class="button is-link">Edit</a>
@@ -217,7 +219,7 @@
 <div class="tabs is-centered">
     <ul>
         <li class="is-active">
-            <a><i class="material-icons">dashboard</i>Posts</a>
+            <a><i class="material-icons">article</i>Posts</a>
         </li>
         <!--<li class="is-active">
             <a><i class="material-icons">save_alt</i>Saved</a>

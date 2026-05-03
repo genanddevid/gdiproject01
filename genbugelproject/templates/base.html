@@ -313,6 +313,7 @@ body {
       <span class="material-icons">account_circle</span>
       {% endif %}
     </a>
+    {% if is_own_profile %}
     <div class="dropdown">
       <div class="dropdown-trigger">
       <span class="material-icons" style="font-size: 24px; color:rgb(20, 20, 20);">more_vert</span>
@@ -327,6 +328,7 @@ body {
         </form>
       </div>
     </div>
+    {% endif %}
   </div>
 </div>
 

@@ -102,6 +102,7 @@ def UserProfile(request, username):
 		#'comment_count': comment_count,
 		'follow_status':follow_status,
 		'active_page': 'profile',
+		'is_own_profile': request.user.is_authenticated and request.user.username == username,
 	}
 
 	return HttpResponse(template.render(context, request))

@@ -372,7 +372,7 @@ function wirShareBtn() {
         const postId = this.dataset.postId || '';
         const url = postId ? 'https://www.baytruyen.com/' + postId : window.location.href;
             if (navigator.share) {
-                navigator.share({ title: title, text: 'Read this on Baytruyen: ' + title, url: url }).catch(() => {});
+                navigator.share({ title: title, url: url }).catch(() => {});
             } else {
                 navigator.clipboard.writeText(url).then(() => {
                     const label = document.getElementById('share-label');

@@ -5,7 +5,9 @@
     <meta property="og:title" content="{{ post.caption }}" />
     <meta property="og:description" content="{{ post.content|truncatewords:30 }}" />
     {% if post.picture %}
-    <meta property="og:image" content="https://www.baytruyen.com{{ post.picture.url }}" />
+    <meta property="og:image" content="{{ post.picture.url }}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
     {% endif %}
     <meta property="og:url" content="https://www.baytruyen.com/{{ post.id }}" />
     <meta property="og:type" content="article" />

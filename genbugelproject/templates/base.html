@@ -231,7 +231,7 @@ body {
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-right: 0.6rem;
+  margin-right: 0.9rem;
   color: #6d6d6d;
 }
 /* Override Bulma's defaults */
@@ -316,15 +316,44 @@ body {
     {% if is_own_profile %}
     <div class="dropdown">
       <div class="dropdown-trigger">
-      <span class="material-icons" style="font-size: 24px; color:rgb(20, 20, 20);">more_vert</span>
+        <span class="material-icons" style="font-size: 24px; color:rgb(20, 20, 20);">more_vert</span>
       </div>
-      <div class="dropdown-menu">
-        <a href="#" class="dropdown-item">Change password</a>
-        <a href="#" class="dropdown-item">Contact</a>
-        <a href="#" class="dropdown-item">Report an issue</a>
+      <div class="dropdown-menu" style="
+        min-width: 220px;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+        border: none;
+        padding: 8px 0;
+        overflow: hidden;
+      ">
+        <a href="#" class="dropdown-item" style="
+          display: flex; align-items: center; gap: 14px;
+          padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">
+          <span class="material-icons" style="font-size:20px; color:#1a1a1a;">lock_outline</span>
+          Change password
+        </a>
+        <a href="#" class="dropdown-item" style="
+          display: flex; align-items: center; gap: 14px;
+          padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">
+          <span class="material-icons" style="font-size:20px; color:#1a1a1a;">mail_outline</span>
+          Contact
+        </a>
+        <a href="#" class="dropdown-item" style="
+          display: flex; align-items: center; gap: 14px;
+          padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">
+          <span class="material-icons" style="font-size:20px; color:#1a1a1a;">flag_outlined</span>
+          Report an issue
+        </a>
+        <div style="height: 1px; background: #f0f0f0; margin: 4px 0;"></div>
         <form method="POST" action="{% url 'logout' %}">
           {% csrf_token %}
-          <button type="submit" class="dropdown-item">Log out</button>
+          <button type="submit" class="dropdown-item" style="
+            display: flex; align-items: center; gap: 14px;
+            padding: 13px 20px; font-size: 15px; color: #e0245e; font-weight: 500;
+            width: 100%; background: none; border: none; cursor: pointer; text-align: left;">
+            <span class="material-icons" style="font-size:20px; color:#e0245e;">logout</span>
+            Log out
+          </button>
         </form>
       </div>
     </div>

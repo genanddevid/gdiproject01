@@ -528,14 +528,14 @@ document.addEventListener("DOMContentLoaded", function () {
 {% else %}
 <a href="#" onclick="showLoginModal(); return false;">
 {% endif %}
-<a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">
+<!--<a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">-->
     <span class="material-symbols-outlined" style="font-size: 30px; margin-left: 4px; font-weight: 300;">stylus_fountain_pen</span>
     <p class="subtitle"></p>
   </a>
 <!--This is for mobile-->
     <!--<img src="{% static 'img/narrative-icon.png' %}" 
      style="width: 30px; height: 30px; margin-right: 0px; object-fit: contain;">-->
-</a>
+
 
 
   <a href="{% url 'discover' %}" class="{% if active_page == 'discover' %}is-active{% endif %}">

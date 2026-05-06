@@ -20,7 +20,7 @@
 
     .box {
       width: 100% !important;
-      padding: 12px !important;
+      padding: 0 !important;
     }
 
     .forleadphoto img {
@@ -47,11 +47,11 @@
 </style>
 <div class="container" style="margin-top: 10px; margin-bottom:10px;">
   <div class="box" style="width: 100%; border-radius: 0; padding: 0;">
-    <div class="forleadphoto" style="display: flex; flex-direction: column; align-items:center;">
+    <div class="forleadphoto" style="display: flex; flex-direction: column; align-items:center; margin-left: -12px; margin-right: -12px;">
     
     {% if image_url %}
   
-    <img src="{{ image_url }}" alt="Preview Image" style="max-width:100%; display: block;">
+    <img src="{{ image_url }}" alt="Preview Image" style="max-width:100%; display: block; object-fit: cover; object-position: top;">
 
 {% else %}
   <div style="width: 85%; height: 200px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; border: 2px dashed #ddd; border-radius: 4px;">

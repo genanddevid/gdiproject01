@@ -262,7 +262,11 @@
     <label for="{{ form.picture.id_for_label }}" class="custom-file-upload">
   Select Lead Photo
 </label>
-    {{ form.picture }} <!-- Django's input -->
+<input type="file"
+  name="{{ form.picture.name }}"
+  id="{{ form.picture.id_for_label }}"
+  accept="image/*">
+    <!--{{ form.picture }} --><!-- Django's input -->
     <span class="icon is-small is-left">
       <i class="fas fa-lock"></i>
     </span>

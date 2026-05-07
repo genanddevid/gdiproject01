@@ -51,19 +51,19 @@
         </p>
       </div>
 <!--name of narrator, photo, time posted-->
-      <div class="my-card-content" style="width: 100%; padding-top: 30px;">
+      <div class="my-card-content" style="width: 100%; padding-top: 15px;">
   <div class="media">
     <div class="media-left">
       <a href="{% url 'profile' post.user.username %}">
-        <figure class="image is-48x48">
+        <figure class="image is-38x38">
 
           {% if post.user.profile.picture %}
             <img class="is-rounded"
               src="{{ post.user.profile.picture.url }}"
-              style="width: 48px; height: 48px; object-fit: cover;">
+              style="width: 38px; height: 38px; object-fit: cover;">
           {% else %}
             <span class="material-icons is-rounded"
-              style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; 
+              style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; 
               background-color: #6d6d6d; border-radius: 50%; font-size: 60px; color: #d9d9d9;">
               account_circle
             </span>

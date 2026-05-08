@@ -134,14 +134,14 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
         <blockquote class="tiktok-embed"
                     cite="{{ post.link1 }}"
                     data-video-id="{{ tid }}"
-                    style="max-width: 380px;min-width: 225px; margin: 15px auto; transform:scale(1);">
+                    style="max-width: 380px;min-width: 225px; margin: 13px auto; transform:scale(1);">
           <section> </section>
         </blockquote>
       {% endwith %}
 
     {% elif "youtu" in post.link1 %}
       {% with post.link1|youtube_id as vid %}
-        <div class="youtube-fallback" style="text-align:center; margin-bottom:15px;">
+        <div class="youtube-fallback" style="text-align:center; margin-bottom:13px;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
             <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
             <div style="
@@ -158,7 +158,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% else %}
-      <div class="instagram-wrapper" style="text-align: center; margin: 15px 0;">
+      <div class="instagram-wrapper" style="text-align: center; margin: 13px 2px;">
         <div style="display: inline-block; max-width: 400px; width: 100%;">
           <blockquote 
             class="instagram-media" 
@@ -228,7 +228,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% else %}
-      <div class="instagram-wrapper" style="text-align: center; margin: 15px 0;">
+      <div class="instagram-wrapper" style="text-align: center; margin: 13px 2px;">
         <div style="display: inline-block; max-width: 400px; width: 100%;">
           <blockquote 
             class="instagram-media" 
@@ -312,7 +312,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       </div>
       
       <div class="media-right-container" style="display: flex;  
-      align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; max-width: 700px; margin: 0 auto;">
+      align-items: center; flex-wrap: wrap; gap: 13px; width: 100%; max-width: 700px; margin: 0 auto;">
 
         <div class="media-right" style="text-align: center;">
           <!--<a href="">-->
@@ -443,13 +443,13 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       <div class="recommendation-wrapper">
 
       <div id="recommendations-Container" style="
-    background-color: #ffffff;
+    
     font-size: 25px;
     color:#000000;
     font-family: 'Times New Roman', Times, serif;
     font-weight: bolder;
     padding: 0px 0px;
-    border-bottom: 1px solid #ffffff;
+    
     margin-top: 20px;
     margin-bottom: 10px;
     letter-spacing: -0.25px;

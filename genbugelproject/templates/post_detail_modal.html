@@ -312,7 +312,7 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
       </div>
       
       <div class="media-right-container" style="display: flex; justify-content: space-around; 
-      align-items: center; flex-wrap: wrap; gap: 12px; width: 100%; max-width: 700px; margin: 0 auto;">
+      align-items: center; flex-wrap: wrap; gap: 11px; width: 100%; max-width: 700px; margin: 0 auto;">
 
         <div class="media-right" style="text-align: center;">
           <!--<a href="">-->
@@ -320,12 +320,12 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
    {% if not request.user.is_authenticated %}
    onclick="showLoginModal(); return false;"
    {% endif %}>
-            <i class="material-icons" style="color:rgb(134, 134, 129)">
+            <i class="material-icons" style="color:rgb(121, 16, 16)">
               message
             </i>
           </a>
           <!--<p>{{ total_comment_count|short_number }}</p>-->
-          <p>{{ total_comment_count|intcomma }}</p>
+          <p style="font-weight: bold;">{{ total_comment_count|intcomma }}</p>
         </div>  
 
         <div class="media-right" style="text-align: center;">
@@ -349,10 +349,10 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
 </a>
 {% else %}
 <a href="#" onclick="showLoginModal(); return false;">
-    <i class="material-icons" style="color:rgb(134, 134, 129)">thumb_up_alt</i>
+    <i class="material-icons" style="color:rgb(121, 16, 16)">thumb_up_alt</i>
 </a>
 {% endif %}
-<p id="like-count-{{ post.id }}">{{ post.likes }}</p>
+<p id="like-count-{{ post.id }}" style="font-weight: bold;">{{ post.likes }}</p>
 </div>
   
   
@@ -360,12 +360,12 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
         <div class="media-right" style="text-align: center;">
           <a href="{% url 'postfavorite' post.id %}">
                
-            <i class="material-icons has-text-link" style="color:rgb(134, 134, 129)">
+            <i class="material-icons has-text-link" style="color:rgb(121, 16, 16)">
               bookmark
             </i>
           </a>
 
-          <p>Saved</p>
+          <p style="font-weight: bold;">Saved</p>
         </div>
         {% else %}
 
@@ -377,14 +377,14 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
           </a>-->
           {% if request.user.is_authenticated %}
 <a href="#" class="save-post-btn" data-post-id="{{ post.id }}">
-    <i class="material-icons" style="color:rgb(134, 134, 129)">bookmark</i>
+    <i class="material-icons" style="color:rgb(121, 16, 16)">bookmark</i>
 </a>
 {% else %}
 <a href="#" onclick="showLoginModal(); return false;">
-    <i class="material-icons" style="color:rgb(134, 134, 129)">bookmark</i>
+    <i class="material-icons" style="color:rgb(121, 16, 16)">bookmark</i>
 </a>
 {% endif %}
-          <p>Save</p>
+          <p style="font-weight: bold;">Save</p>
         </div>  
         {% endif %}
       </div>
@@ -392,7 +392,7 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
       <style>
 
   .like-post-btn i {
-  color: rgb(134, 134, 129); /* default */
+  color: rgb(121, 16, 16); /* default */
 }
 
 .like-post-btn.liked i {
@@ -444,7 +444,7 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
 
       <div id="recommendations-Container" style="
     background-color: #ffffff;
-    font-size: 30px;
+    font-size: 25px;
     color:#000000;
     font-family: 'Times New Roman', Times, serif;
     font-weight: bold;
@@ -452,6 +452,7 @@ color:#303030; font-family:Arial, Helvetica, sans-serif; line-height: 1.5;">
     border-bottom: 1px solid #ffffff;
     margin-top: 20px;
     margin-bottom: 10px;
+    letter-spacing: -0.25px;
 ">
     Related Narratives
 </div>

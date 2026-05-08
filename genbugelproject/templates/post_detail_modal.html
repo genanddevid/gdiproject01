@@ -34,17 +34,17 @@
       />
     </div>
     <div class="mya-card" 
-          style="box-shadow: none; background-color: #ffffff; padding: 15px;">
+          style="box-shadow: none; background-color: #ffffff; padding: 12px;">
       
 
       <!-- caption-->
       <div>
         <p class="title" style="                  
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-          font-size: 32px;
+          font-size: 30px;
           font-weight:600;
           font-family: 'Times New Roman', Times, serif;
-          color: rgb(32, 32, 32);
+          color: rgb(19, 19, 19);
           letter-spacing: -0.8px;
           width: 100%;">
           {{ post.caption }}
@@ -111,7 +111,7 @@
 
 <!--Social media posts mixed with paragraphs-->
 <div class="content" style="font-size: 17px; width: 100%; 
-color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; line-height: 1.5;">
+color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; line-height: 1.5;">
   {{ content1|linebreaks }}
   <br>
 
@@ -119,7 +119,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
     {% if "twitter.com" in post.link1 or "x.com" in post.link1 %}
       {% with post.link1|fix_twitter_url as twitter_link %}
-        <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
+        <div class="x-wrapper" style="text-align: center; margin: 15px 0;">
           <div style="display: inline-block;">
             <blockquote class="twitter-tweet" data-theme="light">
               <a href="{{ twitter_link }}"></a>
@@ -134,14 +134,14 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
         <blockquote class="tiktok-embed"
                     cite="{{ post.link1 }}"
                     data-video-id="{{ tid }}"
-                    style="max-width: 380px;min-width: 225px; margin: 20px auto; transform:scale(1);">
+                    style="max-width: 380px;min-width: 225px; margin: 15px auto; transform:scale(1);">
           <section> </section>
         </blockquote>
       {% endwith %}
 
     {% elif "youtu" in post.link1 %}
       {% with post.link1|youtube_id as vid %}
-        <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <div class="youtube-fallback" style="text-align:center; margin-bottom:15px;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
             <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
             <div style="
@@ -158,7 +158,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% else %}
-      <div class="instagram-wrapper" style="text-align: center; margin: 20px 0;">
+      <div class="instagram-wrapper" style="text-align: center; margin: 15px 0;">
         <div style="display: inline-block; max-width: 400px; width: 100%;">
           <blockquote 
             class="instagram-media" 
@@ -178,7 +178,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
 
 {% if content2 %}
-  <div class="content" style="font-size: 17px; width: 100%; color:#1b1b1b; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
+  <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content2|linebreaks }}
   </div>
 {% endif %}
@@ -189,7 +189,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
     {% if "twitter.com" in post.link2 or "x.com" in post.link2 %}
       {% with post.link2|fix_twitter_url as twitter_link %}
-        <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
+        <div class="x-wrapper" style="text-align: center; margin: 15px 0;">
           <div style="display: inline-block;">
             <blockquote class="twitter-tweet" data-theme="light">
               <a href="{{ twitter_link }}"></a>
@@ -204,14 +204,14 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
         <blockquote class="tiktok-embed"
                     cite="{{ post.link2 }}"
                     data-video-id="{{ tid }}"
-                    style="max-width: 380px;min-width: 225px; margin: 20px auto; transform:scale(1);">
+                    style="max-width: 380px;min-width: 225px; margin: 15px auto; transform:scale(1);">
           <section> </section>
         </blockquote>
       {% endwith %}
 
     {% elif "youtu" in post.link2 %}
       {% with post.link2|youtube_id as vid %}
-        <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <div class="youtube-fallback" style="text-align:center; margin-bottom:15px;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
             <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
             <div style="
@@ -228,7 +228,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% else %}
-      <div class="instagram-wrapper" style="text-align: center; margin: 20px 0;">
+      <div class="instagram-wrapper" style="text-align: center; margin: 15px 0;">
         <div style="display: inline-block; max-width: 400px; width: 100%;">
           <blockquote 
             class="instagram-media" 
@@ -244,7 +244,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 {% endif %}
 <br> 
 {% if content3 %}
-  <div class="content" style="font-size: 17px; width: 100%; color:#1b1b1b; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
+  <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content3|linebreaks }}
   </div>
 {% endif %}
@@ -311,8 +311,8 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
         </div>
       </div>
       
-      <div class="media-right-container" style="display: flex; justify-content: space-around; 
-      align-items: center; flex-wrap: wrap; gap: 11px; width: 100%; max-width: 700px; margin: 0 auto;">
+      <div class="media-right-container" style="display: flex;  
+      align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; max-width: 700px; margin: 0 auto;">
 
         <div class="media-right" style="text-align: center;">
           <!--<a href="">-->
@@ -325,14 +325,14 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
             </i>
           </a>
           <!--<p>{{ total_comment_count|short_number }}</p>-->
-          <p style="font-weight: bold;">{{ total_comment_count|intcomma }}</p>
+          <p style="font-weight: bolder;">{{ total_comment_count|intcomma }}</p>
         </div>  
 
         <div class="media-right" style="text-align: center;">
           <a href="#" id= "share-btn" data-caption="{{ post.caption }}" data-post-id="{{ post.id }}">
     <i class="material-icons" style="color:rgb(121, 16, 16)">share</i>
 </a>
-<p id="share-label" style="font-weight: bold;">Share</p>
+<p id="share-label" style="font-weight: bolder;">Share</p>
 
         </div>
 
@@ -352,7 +352,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
     <i class="material-icons" style="color:rgb(121, 16, 16)">thumb_up_alt</i>
 </a>
 {% endif %}
-<p id="like-count-{{ post.id }}" style="font-weight: bold;">{{ post.likes }}</p>
+<p id="like-count-{{ post.id }}" style="font-weight: bolder;">{{ post.likes }}</p>
 </div>
   
   
@@ -365,7 +365,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
             </i>
           </a>
 
-          <p style="font-weight: bold;">Saved</p>
+          <p style="font-weight: bolder;">Saved</p>
         </div>
         {% else %}
 
@@ -384,7 +384,7 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
     <i class="material-icons" style="color:rgb(121, 16, 16)">bookmark</i>
 </a>
 {% endif %}
-          <p style="font-weight: bold;">Save</p>
+          <p style="font-weight: bolder;">Save</p>
         </div>  
         {% endif %}
       </div>
@@ -447,8 +447,8 @@ color:#303030; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
     font-size: 25px;
     color:#000000;
     font-family: 'Times New Roman', Times, serif;
-    font-weight: bold;
-    padding: 8px 0px;
+    font-weight: bolder;
+    padding: 0px 0px;
     border-bottom: 1px solid #ffffff;
     margin-top: 20px;
     margin-bottom: 10px;

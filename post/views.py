@@ -510,38 +510,45 @@ def remove_tag_author_approval(request, post_id):
 def improve_writing(request):
     if request.method == 'POST':
         import json
-        data = json.loads(request.body)
-        original_text = data.get('text', '')
-        
-        if not original_text.strip():
-            return JsonResponse({'error': 'No text provided'}, status=400)
-        
-        client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
-        
-        completion = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[
-                {
-                    "role": "system",
-                    "content": """You are an expert editor for Baytruyen, a news-style writing platform. 
-                    Your job is to improve the writer's text while preserving their voice, facts and meaning.
-                    - Fix grammar and spelling errors
-                    - Improve sentence structure and flow
-                    - Make it read like a professional news article
-                    - Keep the same facts and story — do not add new information
-                    - Maintain the writer's personal voice and perspective
-                    - Return only the improved text, no explanations or commentary"""
-                },
-                {
-                    "role": "user", 
-                    "content": f"Please improve this writing:\n\n{original_text}"
-                }
-            ],
-            temperature=0.7,
-            max_tokens=2000,
-        )
-        
-        improved_text = completion.choices[0].message.content
-        return JsonResponse({'improved': improved_text})
+        try:
+            data = json.loads(request.body)
+            original_text = data.get('text', '')
+            
+            if not original_text.strip():
+                return JsonResponse({'error': 'No text provided'}, status=400)
+            
+            api_key = os.environ.get('GROQ_API_KEY')
+            if not api_key:
+                return JsonResponse({'error': 'API key not configured'}, status=500)
+            
+            client = Groq(api_key=api_key)
+            
+            completion = client.chat.completions.create(
+                model="llama3-8b-8192",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """You are an expert editor for Baytruyen, a news-style writing platform. 
+                        Improve the writer's text while preserving their voice, facts and meaning.
+                        - Fix grammar and spelling errors
+                        - Improve sentence structure and flow
+                        - Make it read like a professional news article
+                        - Keep the same facts and story
+                        - Return only the improved text, no explanations"""
+                    },
+                    {
+                        "role": "user", 
+                        "content": f"Please improve this writing:\n\n{original_text}"
+                    }
+                ],
+                temperature=0.7,
+                max_tokens=2000,
+            )
+            
+            improved_text = completion.choices[0].message.content
+            return JsonResponse({'improved': improved_text})
+            
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)

@@ -682,14 +682,14 @@ document.getElementById('improveBtn').addEventListener('click', function() {
             document.getElementById('improvementPanel').style.display = 'block';
             document.getElementById('improvementPanel').scrollIntoView({ behavior: 'smooth' });
         } else {
-            alert('Something went wrong. Please try again.');
+            alert('Error: ' + (data.error || 'Something went wrong. Please try again.'));
         }
         btn.textContent = '✨ Improve my writing';
         btn.disabled = false;
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Something went wrong. Please try again.');
+        alert('Error: ' + (data.error || 'Something went wrong. Please try again.'));
         btn.textContent = '✨ Improve my writing';
         btn.disabled = false;
     });

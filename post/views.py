@@ -10,9 +10,11 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.files import File
 from django.db.models import Q
+from groq import Groq
 import re
 import math
 import uuid
+import os
 
 # Models
 from post.models import Post, Stream, Tag, Likes, PostView, SavedItem, ApprovedTagAuthor
@@ -502,3 +504,44 @@ def remove_tag_author_approval(request, post_id):
     ApprovedTagAuthor.objects.filter(author=post.user, tag=post.tag).delete()
     messages.success(request, "Excluded")
     return redirect('postdetails', post_id=post.id)
+
+
+
+    def improve_writing(request):
+    if request.method == 'POST':
+        import json
+        data = json.loads(request.body)
+        original_text = data.get('text', '')
+        
+        if not original_text.strip():
+            return JsonResponse({'error': 'No text provided'}, status=400)
+        
+        client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
+        
+        completion = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """You are an expert editor for Baytruyen, a news-style writing platform. 
+                    Your job is to improve the writer's text while preserving their voice, facts and meaning.
+                    - Fix grammar and spelling errors
+                    - Improve sentence structure and flow
+                    - Make it read like a professional news article
+                    - Keep the same facts and story — do not add new information
+                    - Maintain the writer's personal voice and perspective
+                    - Return only the improved text, no explanations or commentary"""
+                },
+                {
+                    "role": "user", 
+                    "content": f"Please improve this writing:\n\n{original_text}"
+                }
+            ],
+            temperature=0.7,
+            max_tokens=2000,
+        )
+        
+        improved_text = completion.choices[0].message.content
+        return JsonResponse({'improved': improved_text})
+    
+    return JsonResponse({'error': 'Method not allowed'}, status=405)

@@ -45,6 +45,45 @@
             <p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888; text-align: center;">
                   Word count: 0 / 250
             </p>
+
+            <!-- AI Writing Assistant -->
+<div style="text-align: center; margin-top: 16px;">
+    <button type="button" id="improveBtn" 
+        style="background: #000; color: white; border: none; border-radius: 50px; 
+        padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;">
+        ✨ Improve my writing
+    </button>
+</div>
+
+<!-- Side by side comparison -->
+<div id="improvementPanel" style="display: none; margin-top: 20px;">
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 280px;">
+            <p style="font-weight: 600; font-size: 13px; color: #888; margin-bottom: 8px;">YOUR VERSION</p>
+            <div id="originalText" style="background: #f9f9f9; padding: 14px; border-radius: 8px; 
+                font-size: 15px; line-height: 1.6; white-space: pre-wrap; max-height: 400px; overflow-y: auto;">
+            </div>
+        </div>
+        <div style="flex: 1; min-width: 280px;">
+            <p style="font-weight: 600; font-size: 13px; color: #3273dc; margin-bottom: 8px;">✨ IMPROVED VERSION</p>
+            <div id="improvedText" style="background: #f0f7ff; padding: 14px; border-radius: 8px; 
+                font-size: 15px; line-height: 1.6; white-space: pre-wrap; max-height: 400px; overflow-y: auto;">
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 16px; justify-content: center;">
+        <button type="button" id="useImprovedBtn"
+            style="background: #3273dc; color: white; border: none; border-radius: 50px;
+            padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;">
+            Use improved version
+        </button>
+        <button type="button" id="keepOriginalBtn"
+            style="background: #f5f5f5; color: #333; border: none; border-radius: 50px;
+            padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;">
+            Keep my version
+        </button>
+    </div>
+</div>
               
               {% if form.content.errors %}
                 <p class="help is-danger" style="font-size: 15px; margin-top: 5px;">
@@ -603,6 +642,87 @@ document.addEventListener("DOMContentLoaded", function () {
     }, "image/jpeg", 0.9);
   });
 });
+
+
+
+
+
+// AI Writing Assistant
+document.getElementById('improveBtn').addEventListener('click', function() {
+    const contentField = document.querySelector('textarea[name="content"]');
+    const originalText = contentField.value.trim();
+    
+    if (!originalText) {
+        alert('Please write something first before improving.');
+        return;
+    }
+    
+    if (originalText.split(/\s+/).length < 50) {
+        alert('Please write at least 50 words before using the writing assistant.');
+        return;
+    }
+    
+    const btn = document.getElementById('improveBtn');
+    btn.textContent = '✨ Improving...';
+    btn.disabled = true;
+    
+    fetch('/improve-writing/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ text: originalText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.improved) {
+            document.getElementById('originalText').textContent = originalText;
+            document.getElementById('improvedText').textContent = data.improved;
+            document.getElementById('improvementPanel').style.display = 'block';
+            document.getElementById('improvementPanel').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            alert('Something went wrong. Please try again.');
+        }
+        btn.textContent = '✨ Improve my writing';
+        btn.disabled = false;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+        btn.textContent = '✨ Improve my writing';
+        btn.disabled = false;
+    });
+});
+
+document.getElementById('useImprovedBtn').addEventListener('click', function() {
+    const improved = document.getElementById('improvedText').textContent;
+    const contentField = document.querySelector('textarea[name="content"]');
+    contentField.value = improved;
+    contentField.dispatchEvent(new Event('input'));
+    document.getElementById('improvementPanel').style.display = 'none';
+    contentField.scrollIntoView({ behavior: 'smooth' });
+});
+
+document.getElementById('keepOriginalBtn').addEventListener('click', function() {
+    document.getElementById('improvementPanel').style.display = 'none';
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
 </script>
 

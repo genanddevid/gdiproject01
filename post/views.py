@@ -507,7 +507,7 @@ def remove_tag_author_approval(request, post_id):
 
 
 
-    def improve_writing(request):
+def improve_writing(request):
     if request.method == 'POST':
         import json
         data = json.loads(request.body)

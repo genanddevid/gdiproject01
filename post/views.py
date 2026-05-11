@@ -557,7 +557,7 @@ def improve_writing(request):
 
 
 
-    def auto_tag_post(post):
+def auto_tag_post(post):
     """Automatically generate semantic tags for a post using Groq"""
     try:
         client = Groq(api_key=os.environ.get('GROQ_API_KEY'))

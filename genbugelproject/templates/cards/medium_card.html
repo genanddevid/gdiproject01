@@ -5,7 +5,7 @@
   @media (max-width: 768px) {
     .box {
       margin: 0 !important;
-      border-radius: 10% !important;
+      border-radius: 0 !important;
       max-width: 100% !important;
       padding-left: 0px !important;
       margin-top: -5px !important;
@@ -25,7 +25,6 @@
     .leadphoto {
       width: 117px !important;
       height: 117px !important;
-      border-radius: 10% !important;
     }
 
     .leadcaption {
@@ -39,7 +38,6 @@
       text-overflow: ellipsis;
       line-height: 1.4em;
       height: 4.05em !important;
-      color: #1b1b1b !important;
     }
   }
 
@@ -94,7 +92,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
                   {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
                 </p>
                 {% else %}
-                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">{{ post.user.username }}</p>
+                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0; ">{{ post.user.username }}</p>
                 {% endif %}
               </a>
             </div>
@@ -103,7 +101,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
           <div class="leadcaption" style="margin-top: 7px; font-size: 15.15px; display: -webkit-box; -webkit-box-orient: vertical; 
           -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.4em; 
           height: 2.9em;">
-            <a href="{{ post.get_absolute_url }}" style="color: rgb(37, 37, 37); letter-spacing: 0px; 
+            <a href="{{ post.get_absolute_url }}" style="color: rgb(20, 20, 20); letter-spacing: 0px; 
             font-family: 'Inter', sans-serif;">
               {{ post.caption }}
             </a>

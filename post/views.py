@@ -259,7 +259,7 @@ def NarrativeBuilder(request):
             post_instance = form.save(commit=False)
             post_instance.user = request.user
             post_instance.save()
-            threading.Thread(target=auto_tag_post, args=(post_instance,), daemon=True).start()
+            
             request.session.pop('preview_data', None)
             return redirect(reverse('profile', kwargs={'username': request.user.username}))
     else:
@@ -470,7 +470,7 @@ def finalize_new_post(request):
                 with default_storage.open(picture_path, 'rb') as f:
                     post.picture.save(picture_path.split('/')[-1], File(f))
             post.save()
-            threading.Thread(target=auto_tag_post, args=(post,), daemon=True).start()
+            
             request.session.pop('preview_data', None)
             return redirect('profile', username=request.user.username)
 

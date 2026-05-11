@@ -25,6 +25,7 @@
     .leadphoto {
       width: 117px !important;
       height: 117px !important;
+      border-radius: 10px !important;
     }
 
     .leadcaption {
@@ -38,6 +39,7 @@
       text-overflow: ellipsis;
       line-height: 1.4em;
       height: 4.05em !important;
+      color: #202020 !important;
     }
   }
 
@@ -53,7 +55,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
     <div style="display: flex;">
 
       <!-- Left: Photo Heading of Article -->
-      <div class="leadphoto" style="width: 100px; height: 100px; border-radius: 10px;">
+      <div class="leadphoto" style="width: 100px; height: 100px;">
         <a href="{{ post.get_absolute_url }} " onclick="openPostModal('{{ post.id }}')">
           <img src="{{ post.picture.url }}" alt="Article Image" 
                style="width: 100%; height: 100%; object-fit: cover; object-position: top;" />
@@ -88,11 +90,11 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
             <div class="media-content" style="margin-left: -10px;">
               <a href="{% url 'profile' post.user.username %}" onclick="event.stopPropagation();">
                 {% if post.user.profile.first_name %}
-                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0; color: #575757;">
+                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">
                   {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
                 </p>
                 {% else %}
-                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0; color: #575757;">{{ post.user.username }}</p>
+                <p class="title is-4" style="font-weight:600; font-size: 12px; margin: 0;">{{ post.user.username }}</p>
                 {% endif %}
               </a>
             </div>
@@ -101,7 +103,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
           <div class="leadcaption" style="margin-top: 7px; font-size: 15.15px; display: -webkit-box; -webkit-box-orient: vertical; 
           -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.4em; 
           height: 2.9em;">
-            <a href="{{ post.get_absolute_url }}" style="color: rgb(20, 20, 20); letter-spacing: 0px; 
+            <a href="{{ post.get_absolute_url }}" style="color: rgb(37, 37, 37); letter-spacing: 0px; 
             font-family: 'Inter', sans-serif;">
               {{ post.caption }}
             </a>

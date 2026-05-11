@@ -17,7 +17,7 @@ import uuid
 import os
 
 # Models
-from post.models import Post, Stream, Tag, Likes, PostView, SavedItem, ApprovedTagAuthor
+from post.models import Post, Stream, Tag, Likes, PostView, SavedItem, ApprovedTagAuthor, SemanticTag
 from authy.models import Profile
 from comment.models import Comment
 
@@ -258,6 +258,7 @@ def NarrativeBuilder(request):
             post_instance = form.save(commit=False)
             post_instance.user = request.user
             post_instance.save()
+            auto_tag_post(post_instance)
             request.session.pop('preview_data', None)
             return redirect(reverse('profile', kwargs={'username': request.user.username}))
     else:
@@ -468,6 +469,7 @@ def finalize_new_post(request):
                 with default_storage.open(picture_path, 'rb') as f:
                     post.picture.save(picture_path.split('/')[-1], File(f))
             post.save()
+            auto_tag_post(post)
             request.session.pop('preview_data', None)
             return redirect('profile', username=request.user.username)
 
@@ -552,3 +554,63 @@ def improve_writing(request):
             return JsonResponse({'error': str(e)}, status=500)
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+
+    def auto_tag_post(post):
+    """Automatically generate semantic tags for a post using Groq"""
+    try:
+        client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
+        
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """You are a semantic tagging system. Extract named entities and topics from the article and return them as JSON only.
+                    
+For each entity extract:
+- entity: the specific name or topic (e.g. "Daniel Dubois")
+- category: the direct category (e.g. "Boxing")  
+- parent_category: one level up (e.g. "Combat Sports")
+- grandparent_category: two levels up (e.g. "Sports")
+
+Return ONLY valid JSON in this exact format, no other text:
+{
+  "tags": [
+    {"entity": "Daniel Dubois", "category": "Boxing", "parent_category": "Combat Sports", "grandparent_category": "Sports"},
+    {"entity": "Fabio Wardley", "category": "Boxing", "parent_category": "Combat Sports", "grandparent_category": "Sports"}
+  ]
+}
+
+Extract maximum 8 most relevant entities."""
+                },
+                {
+                    "role": "user",
+                    "content": f"Title: {post.caption}\n\nContent: {post.content[:1000]}"
+                }
+            ],
+            temperature=0.3,
+            max_tokens=800,
+        )
+        
+        import json
+        response_text = completion.choices[0].message.content.strip()
+        data = json.loads(response_text)
+        
+        # Delete existing semantic tags for this post
+        SemanticTag.objects.filter(post=post).delete()
+        
+        # Save new tags
+        for tag_data in data.get('tags', []):
+            SemanticTag.objects.create(
+                post=post,
+                entity=tag_data.get('entity', ''),
+                category=tag_data.get('category', ''),
+                parent_category=tag_data.get('parent_category', ''),
+                grandparent_category=tag_data.get('grandparent_category', '')
+            )
+    except Exception as e:
+        print(f"Auto-tagging failed: {e}")
+        # Silent fail — don't interrupt publishing
+

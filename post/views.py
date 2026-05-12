@@ -606,19 +606,12 @@ def improve_writing(request):
 
 @login_required  
 def run_tagging_now(request):
-    if request.user.username != 'migaja':
-        return HttpResponse('Unauthorized', status=403)
-    
-    from post.models import Post, SemanticTag
-    
-    untagged = list(Post.objects.filter(semantic_tags__isnull=True)[:3])
-    count = len(untagged)
-    
-    for post in untagged:
-        auto_tag_post(post)
-    
-    remaining = Post.objects.filter(semantic_tags__isnull=True).count()
-    return HttpResponse(f'Tagged {count} posts. {remaining} remaining. Refresh to tag more.')
+    try:
+        from post.models import Post, SemanticTag
+        count = Post.objects.filter(semantic_tags__isnull=True).count()
+        return HttpResponse(f'Found {count} untagged posts. Ready to tag.')
+    except Exception as e:
+        return HttpResponse(f'Error: {str(e)}', status=200)
 
 
 

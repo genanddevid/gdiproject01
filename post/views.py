@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.files import File
 from django.db.models import Q
-from groq import Groq
+
 import re
 import math
 import uuid
@@ -510,6 +510,7 @@ def remove_tag_author_approval(request, post_id):
 def improve_writing(request):
     if request.method == 'POST':
         import json
+        from groq import Groq
         try:
             data = json.loads(request.body)
             original_text = data.get('text', '')

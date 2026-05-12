@@ -15,6 +15,7 @@ import re
 import math
 import uuid
 import os
+import json
 
 # Models
 from post.models import Post, Stream, Tag, Likes, PostView, SavedItem, ApprovedTagAuthor
@@ -504,6 +505,52 @@ def remove_tag_author_approval(request, post_id):
     ApprovedTagAuthor.objects.filter(author=post.user, tag=post.tag).delete()
     messages.success(request, "Excluded")
     return redirect('postdetails', post_id=post.id)
+
+
+
+def auto_tag_post(post):
+    try:
+        from groq import Groq
+        from post.models import SemanticTag
+        
+        client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """Extract named entities from this article as JSON only. No other text.
+Format:
+{"tags": [{"entity": "Name", "category": "Direct category", "parent_category": "One level up", "grandparent_category": "Two levels up"}]}
+Maximum 8 entities."""
+                },
+                {
+                    "role": "user",
+                    "content": f"Title: {post.caption}\n\nContent: {post.content[:800]}"
+                }
+            ],
+            temperature=0.3,
+            max_tokens=500,
+        )
+        
+        response_text = completion.choices[0].message.content.strip()
+        if '```' in response_text:
+            response_text = response_text.split('```')[1].replace('json', '').strip()
+        
+        data = json.loads(response_text)
+        SemanticTag.objects.filter(post=post).delete()
+        
+        for tag in data.get('tags', []):
+            SemanticTag.objects.create(
+                post=post,
+                entity=tag.get('entity', ''),
+                category=tag.get('category', ''),
+                parent_category=tag.get('parent_category', ''),
+                grandparent_category=tag.get('grandparent_category', '')
+            )
+        print(f"Tagged: {post.caption[:50]}")
+    except Exception as e:
+        print(f"Tagging failed for {post.id}: {e}")
 
 
 

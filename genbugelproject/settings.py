@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+import pillow_avif # noqa: F401
 
 load_dotenv()
 

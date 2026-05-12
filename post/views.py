@@ -603,4 +603,26 @@ def improve_writing(request):
 
 
 
+
+@login_required  
+def run_tagging_now(request):
+    if request.user.username != 'migaja':
+        return HttpResponse('Unauthorized', status=403)
+    
+    from post.models import Post, SemanticTag
+    from django.db import connection
+    
+    # Only tag 5 posts at a time to avoid connection pool exhaustion
+    untagged = Post.objects.filter(semantic_tags__isnull=True)[:5]
+    count = untagged.count()
+    
+    for post in untagged:
+        auto_tag_post(post)
+        connection.close()  # Release connection after each post
+    
+    remaining = Post.objects.filter(semantic_tags__isnull=True).count()
+    return HttpResponse(f'Tagged {count} posts. {remaining} posts remaining. Refresh to tag more.')
+
+
+
     

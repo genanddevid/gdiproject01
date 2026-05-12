@@ -122,17 +122,7 @@ class ApprovedTagAuthor(models.Model):
 
 
 
-class SemanticTag(models.Model):
-    """AI-generated invisible tags for algorithm and ad matching"""
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='semantic_tags')
-    entity = models.CharField(max_length=100)  # e.g. "Daniel Dubois"
-    category = models.CharField(max_length=100)  # e.g. "Boxing"
-    parent_category = models.CharField(max_length=100, blank=True)  # e.g. "Combat Sports"
-    grandparent_category = models.CharField(max_length=100, blank=True)  # e.g. "Sports"
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.entity} → {self.category} → {self.parent_category}"
 
 
 

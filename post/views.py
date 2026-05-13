@@ -608,11 +608,17 @@ def improve_writing(request):
 def run_tagging_now(request):
     try:
         from post.models import Post, SemanticTag
-        count = Post.objects.filter(semantic_tags__isnull=True).count()
-        return HttpResponse(f'Found {count} untagged posts. Ready to tag.')
+        
+        untagged = list(Post.objects.filter(semantic_tags__isnull=True)[:3])
+        count = len(untagged)
+        
+        for post in untagged:
+            auto_tag_post(post)
+        
+        remaining = Post.objects.filter(semantic_tags__isnull=True).count()
+        return HttpResponse(f'Tagged {count} posts. {remaining} remaining. Refresh to tag more.')
     except Exception as e:
-        return HttpResponse(f'Error: {str(e)}', status=200)
-
+        return HttpResponse(f'Error: {str(e)}')
 
 
 

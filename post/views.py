@@ -512,45 +512,76 @@ def auto_tag_post(post):
     try:
         from groq import Groq
         from post.models import SemanticTag
-        
+
         client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
                 {
                     "role": "system",
-                    "content": """Extract named entities from this article as JSON only. No other text.
-Format:
-{"tags": [{"entity": "Name", "category": "Direct category", "parent_category": "One level up", "grandparent_category": "Two levels up"}]}
+                    "content": """Extract named entities from this headline and return ONLY valid JSON. No explanations, no extra text.
+
+Classify each entity using a hybrid ontology:
+
+1. HIERARCHY (strict parent-child chain, stop when next level becomes artificial):
+   Daniel Dubois → Heavyweight Boxing → Boxing → Combat Sports → Sports
+   Cristiano Ronaldo → Football → Sports
+   Jerome Powell → Monetary Policy → Central Banking → Economics
+
+2. SEMANTIC LABELS (flat, non-hierarchical — profession, identity, domain):
+   Elon Musk → labels: Entrepreneur, Tech Billionaire, AI Industry, Space Technology
+   Daniel Dubois → labels: Professional Boxer, Heavyweight Athlete
+
+Rules:
+- Extract from headline only
+- NEVER use generic labels like Person, Individual, Human, Thing, Place
+- Allow uneven depth — don't force equal levels
+- One entity can belong to multiple semantic labels simultaneously
+
+Return ONLY this JSON structure:
+{
+  "tags": [
+    {
+      "entity": "Name",
+      "category": "Most specific domain",
+      "parent_category": "Broader category or null",
+      "grandparent_category": "Broadest category or null",
+      "semantic_labels": ["label1", "label2"]
+    }
+  ]
+}
 Maximum 8 entities."""
                 },
                 {
                     "role": "user",
-                    "content": f"Title: {post.caption}\n\nContent: {post.content[:800]}"
+                    "content": f"Headline: {post.caption}"
                 }
             ],
             temperature=0.3,
-            max_tokens=500,
+            max_tokens=600,
         )
-        
+
         response_text = completion.choices[0].message.content.strip()
         if '```' in response_text:
             response_text = response_text.split('```')[1].replace('json', '').strip()
-        
+
         data = json.loads(response_text)
         SemanticTag.objects.filter(post=post).delete()
-        
+
         for tag in data.get('tags', []):
+            labels = tag.get('semantic_labels', [])
             SemanticTag.objects.create(
                 post=post,
                 entity=tag.get('entity', ''),
                 category=tag.get('category', ''),
-                parent_category=tag.get('parent_category', ''),
-                grandparent_category=tag.get('grandparent_category', '')
+                parent_category=tag.get('parent_category', '') or '',
+                grandparent_category=tag.get('grandparent_category', '') or '',
+                semantic_labels=', '.join(labels) if labels else ''
             )
         print(f"Tagged: {post.caption[:50]}")
     except Exception as e:
         print(f"Tagging failed for {post.id}: {e}")
+
 
 
 

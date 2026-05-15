@@ -129,6 +129,7 @@ class SemanticTag(models.Model):
     category = models.CharField(max_length=100)
     parent_category = models.CharField(max_length=100, blank=True)
     grandparent_category = models.CharField(max_length=100, blank=True)
+    semantic_labels = models.TextField(blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

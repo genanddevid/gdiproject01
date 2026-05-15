@@ -643,13 +643,39 @@ def run_tagging_now(request):
         untagged = list(Post.objects.filter(semantic_tags__isnull=True)[:3])
         count = len(untagged)
         
+        tagged = 0
+        skipped = 0
+        skipped_ids = []
+        
         for post in untagged:
-            auto_tag_post(post)
+            try:
+                auto_tag_post(post)
+                # Check if tags were actually created
+                if SemanticTag.objects.filter(post=post).exists():
+                    tagged += 1
+                else:
+                    # Force a dummy tag so it doesn't loop forever
+                    SemanticTag.objects.create(
+                        post=post,
+                        entity='untagged',
+                        category='untagged',
+                        semantic_labels='failed'
+                    )
+                    skipped += 1
+                    skipped_ids.append(str(post.id)[:8])
+            except Exception as e:
+                skipped += 1
+                skipped_ids.append(str(post.id)[:8])
         
         remaining = Post.objects.filter(semantic_tags__isnull=True).count()
-        return HttpResponse(f'Tagged {count} posts. {remaining} remaining. Refresh to tag more.')
+        return HttpResponse(
+            f'Tagged {tagged}, skipped {skipped} posts. '
+            f'{remaining} remaining. '
+            f'Skipped IDs: {skipped_ids}. Refresh to continue.'
+        )
     except Exception as e:
         return HttpResponse(f'Error: {str(e)}')
+
 
 
 

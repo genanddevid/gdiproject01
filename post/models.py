@@ -136,6 +136,27 @@ class SemanticTag(models.Model):
         return f"{self.entity} → {self.category} → {self.parent_category}"
 
 
+class UserInterest(models.Model):
+    """Tracks which entities a user has shown interest in through clicks"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interests')
+    entity = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    parent_category = models.CharField(max_length=100, blank=True)
+    grandparent_category = models.CharField(max_length=100, blank=True)
+    semantic_labels = models.TextField(blank=True, default='')
+    click_count = models.IntegerField(default=1)
+    last_clicked = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'entity')
+        ordering = ['-click_count', '-last_clicked']
+
+    def __str__(self):
+        return f"{self.user.username} → {self.entity} ({self.click_count} clicks)"
+
+
+
 
 
 

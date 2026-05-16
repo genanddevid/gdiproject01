@@ -327,7 +327,7 @@ function loadPostContent(postId) {
         <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
     `;
 
-    fetch(`/modal/${postId}/`)
+    fetch(`/modal/${postId}/?track=1`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.text();

@@ -204,11 +204,14 @@ def post_modal(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
+    
     if user.is_authenticated:
         PostView.objects.get_or_create(user=user, post=post)
     
-        # Record interest from semantic tags
-        from post.models import SemanticTag, UserInterest
+        # Record interest only on explicit opens
+        if request.method == 'GET' and request.GET.get('track') == '1':
+            from post.models import SemanticTag, UserInterest  
+
         semantic_tags = SemanticTag.objects.filter(post=post)
         for tag in semantic_tags:
             interest, created = UserInterest.objects.get_or_create(

@@ -205,26 +205,26 @@ def post_modal(request, post_id):
     user = request.user
 
     if user.is_authenticated:
-    PostView.objects.get_or_create(user=user, post=post)
+        PostView.objects.get_or_create(user=user, post=post)
     
-    # Record interest from semantic tags
-    from post.models import SemanticTag, UserInterest
-    semantic_tags = SemanticTag.objects.filter(post=post)
-    for tag in semantic_tags:
-        interest, created = UserInterest.objects.get_or_create(
-            user=user,
-            entity=tag.entity,
-            defaults={
-                'category': tag.category,
-                'parent_category': tag.parent_category,
-                'grandparent_category': tag.grandparent_category,
-                'semantic_labels': tag.semantic_labels,
-                'click_count': 1,
-            }
-        )
-        if not created:
-            interest.click_count += 1
-            interest.save()
+        # Record interest from semantic tags
+        from post.models import SemanticTag, UserInterest
+        semantic_tags = SemanticTag.objects.filter(post=post)
+        for tag in semantic_tags:
+            interest, created = UserInterest.objects.get_or_create(
+                user=user,
+                entity=tag.entity,
+                defaults={
+                    'category': tag.category,
+                    'parent_category': tag.parent_category,
+                    'grandparent_category': tag.grandparent_category,
+                    'semantic_labels': tag.semantic_labels,
+                    'click_count': 1,
+                }
+            )
+            if not created:
+                interest.click_count += 1
+                interest.save()
 
     liked = Likes.objects.filter(user=user, post=post).exists() if user.is_authenticated else False
     form = CommentForm()

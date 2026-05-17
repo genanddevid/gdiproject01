@@ -12,22 +12,6 @@ def signup_view(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 from django.shortcuts import render, redirect, get_object_or_404
 from authy.forms import SignupForm, ChangePasswordForm, EditProfileForm
 from django.contrib.auth.models import User
@@ -367,12 +351,93 @@ def follow(request, username, option):
 
 
 def discover_view(request):
-    posts = Post.objects.all().order_by('-created_at')  # newest first
-    context = {
+    from post.models import SemanticTag, UserInterest
+    
+    if not request.user.is_authenticated:
+        # Guest users see all posts ordered by likes
+        posts = Post.objects.all().order_by('-likes', '-posted')
+        return render(request, 'discover.html', {
+            'posts': posts,
+            'active_page': 'discover',
+        })
+    
+    user = request.user
+    
+    # Get user's interests
+    user_interests = UserInterest.objects.filter(user=user)
+    interest_entities = set(ui.entity for ui in user_interests)
+    interest_categories = set(ui.category for ui in user_interests)
+    interest_parent_categories = set(ui.parent_category for ui in user_interests if ui.parent_category)
+    interest_grandparent_categories = set(ui.grandparent_category for ui in user_interests if ui.grandparent_category)
+    
+    # Get followed writers
+    followed_user_ids = set(
+        Follow.objects.filter(follower=user).values_list('following_id', flat=True)
+    )
+    
+    # Build exclusion sets from semantic tags
+    # Exclude entity matches
+    entity_excluded_post_ids = set(
+        SemanticTag.objects.filter(entity__in=interest_entities)
+        .values_list('post_id', flat=True)
+    )
+    
+    # Exclude category matches
+    category_excluded_post_ids = set(
+        SemanticTag.objects.filter(category__in=interest_categories)
+        .values_list('post_id', flat=True)
+    )
+    
+    # Exclude parent category matches
+    parent_excluded_post_ids = set(
+        SemanticTag.objects.filter(parent_category__in=interest_parent_categories)
+        .values_list('post_id', flat=True)
+    )
+    
+    # All excluded post IDs
+    all_excluded_ids = entity_excluded_post_ids | category_excluded_post_ids | parent_excluded_post_ids
+    
+    # Also exclude posts from followed writers
+    followed_post_ids = set(
+        Post.objects.filter(user_id__in=followed_user_ids)
+        .values_list('id', flat=True)
+    )
+    all_excluded_ids = all_excluded_ids | followed_post_ids
+    
+    # Get all remaining posts for Discover
+    discover_posts = Post.objects.exclude(id__in=all_excluded_ids)
+    
+    # Score each post
+    scored_posts = []
+    for post in discover_posts:
+        score = post.likes  # Base score is likes
+        
+        # Check if post is a true opposite
+        # (grandparent categories have zero overlap with user interests)
+        post_grandparent_cats = set(
+            SemanticTag.objects.filter(post=post)
+            .values_list('grandparent_category', flat=True)
+        )
+        
+        is_opposite = (
+            post_grandparent_cats and
+            not post_grandparent_cats & interest_grandparent_categories
+        )
+        
+        if is_opposite:
+            score += 3  # Boost opposites slightly
+        
+        scored_posts.append((score, post))
+    
+    # Sort by score descending
+    scored_posts.sort(key=lambda x: x[0], reverse=True)
+    posts = [post for score, post in scored_posts]
+    
+    return render(request, 'discover.html', {
         'posts': posts,
-        'active_page': 'discover', # Add active_page here
-    }
-    return render(request, 'discover.html', context)
+        'active_page': 'discover',
+    })
+
 
 
 

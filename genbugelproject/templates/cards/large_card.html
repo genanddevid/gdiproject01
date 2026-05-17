@@ -27,7 +27,7 @@
       margin: 0 !important;
       padding: 0 !important;
       box-sizing: border-box;
-      border-radius: 0 !important;
+      border-radius: 6px !important;
       box-shadow: none !important;
     }
 
@@ -111,13 +111,13 @@ margin-top: -20px !important;
               </div>
             </div>
                
-            <div class="content" style="margin-top: 7px; font-size: 18.15px; display: -webkit-box; -webkit-box-orient: vertical; 
+            <div class="content" style="margin-top: 7px; font-weight:600; font-size: 18.15px; display: -webkit-box; -webkit-box-orient: vertical; 
           -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.4em; 
           height: 3.0em;">
               <a href="{% url 'postdetails' post_item.id %}" style="
                 
-                font-family: 'Inter', sans-serif; color: rgb(37, 37, 37);
-                letter-spacing: -0.4px;
+                font-family: 'Inter', sans-serif; color: rgb(19, 19, 19);
+                letter-spacing: -0.4px; 
                 
                 ">
                 {{ post_item.caption }}

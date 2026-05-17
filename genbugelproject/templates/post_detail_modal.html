@@ -30,7 +30,7 @@
         alt="Post image"
         class="mobile-fullwidth-image"
         style="width: 100%; height: auto; max-height: 550px; object-fit: cover; object-position: top; 
-        border-radius: 0;"
+        border-radius: 6px;"
       />
     </div>
     <div class="mya-card" 
@@ -312,7 +312,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       </div>
       
       <div class="media-right-container" style="display: flex;  justify-content: space-evenly;
-      align-items: center; flex-wrap: wrap;  width: 100%; max-width: 700px; margin: 0 auto;">
+      align-items: center; flex-wrap: wrap;  width: 100%; max-width: 700px; margin: 0 auto; margin-top: -20px;">
 
         <div class="media-right" style="text-align: center;">
           <!--<a href="">-->
@@ -320,7 +320,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
    {% if not request.user.is_authenticated %}
    onclick="showLoginModal(); return false;"
    {% endif %}>
-            <i class="material-icons" style="color:rgb(121, 16, 16)">
+            <i class="material-icons" style="color:rgb(76, 76, 76)">
               message
             </i>
           </a>
@@ -330,7 +330,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
         <div class="media-right" style="text-align: center;">
           <a href="#" id= "share-btn" data-caption="{{ post.caption }}" data-post-id="{{ post.id }}">
-    <i class="material-icons" style="color:rgb(121, 16, 16)">share</i>
+    <i class="material-icons" style="color:rgb(76, 76, 76)">share</i>
 </a>
 <p id="share-label" style="font-weight: bolder;">Share</p>
 
@@ -349,7 +349,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 </a>
 {% else %}
 <a href="#" onclick="showLoginModal(); return false;">
-    <i class="material-icons" style="color:rgb(121, 16, 16)">thumb_up_alt</i>
+    <i class="material-icons" style="color:rgb(76, 76, 76)">thumb_up_alt</i>
 </a>
 {% endif %}
 <p id="like-count-{{ post.id }}" style="font-weight: bolder;">{{ post.likes }}</p>
@@ -360,7 +360,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
         <div class="media-right" style="text-align: center;">
           <a href="{% url 'postfavorite' post.id %}">
                
-            <i class="material-icons has-text-link" style="color:rgb(121, 16, 16)">
+            <i class="material-icons has-text-link" style="color:rgb(76, 76, 76)">
               bookmark
             </i>
           </a>
@@ -377,11 +377,11 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
           </a>-->
           {% if request.user.is_authenticated %}
 <a href="#" class="save-post-btn" data-post-id="{{ post.id }}">
-    <i class="material-icons" style="color:rgb(121, 16, 16)">bookmark</i>
+    <i class="material-icons" style="color:rgb(76, 76, 76)">bookmark</i>
 </a>
 {% else %}
 <a href="#" onclick="showLoginModal(); return false;">
-    <i class="material-icons" style="color:rgb(121, 16, 16)">bookmark</i>
+    <i class="material-icons" style="color:rgb(76, 76, 76)">bookmark</i>
 </a>
 {% endif %}
           <p style="font-weight: bolder;">Save</p>
@@ -392,7 +392,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       <style>
 
   .like-post-btn i {
-  color: rgb(121, 16, 16); /* default */
+  color: rgb(76, 76, 76); /* default */
 }
 
 .like-post-btn.liked i {
@@ -510,7 +510,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
                   </div>
                 </div>
 
-                <div style="margin-top: 7px; font-size: 15.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 2.4em;">
+                <div style="margin-top: 7px; font-size: 15.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
                   <a href="#" onclick="event.preventDefault(); openPostModal('{{ post.id }}', event);"
  style="color: inherit; text-decoration: none;">
                     {{ post.caption }}
@@ -566,12 +566,12 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
                         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                         font-size: 12px;
                         margin: 0;
-                        ">{{ post.user.username }}
+                        ">{% if post.user.profile.first_name %}{{ post.user.profile.first_name }} {{ post.user.profile.last_name }}{% else %}{{ post.user.username }}{% endif %}
                     </p>
                   </div>
                 </div>
 
-                <div style="margin-top: 7px; font-size: 16.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 2.4em;">
+                <div style="margin-top: 7px; font-size: 16.0px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
                   <a href="#" onclick="openPostModal('{{ post.id }}', event)"
  style="color: inherit; text-decoration: none;">
                     {{ post.caption }}

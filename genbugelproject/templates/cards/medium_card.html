@@ -57,7 +57,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
       <div class="leadphoto" style="width: 100px; height: 100px;">
         <a href="{{ post.get_absolute_url }} " onclick="openPostModal('{{ post.id }}')">
           <img src="{{ post.picture.url }}" alt="Article Image" 
-               style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 7.0px;" />
+               style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 8.2px;" />
         </a>
       </div>
 
@@ -86,14 +86,14 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
                 </figure>
               </a>                           
             </div>
-            <div class="media-content" style="margin-left: -10px;">
+            <div class="media-content" style="margin-left: -10px; overflow: hidden;">
               <a href="{% url 'profile' post.user.username %}" onclick="event.stopPropagation();">
                 {% if post.user.profile.first_name %}
-                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; font-size: 12px; margin: 0; font-family: 'Inter', sans-serif;">
+                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; font-size: 13px; margin: 0; font-family: 'Inter', sans-serif;">
                   {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
                 </p>
                 {% else %}
-                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; font-size: 12px; margin: 0; font-family: 'Inter', sans-serif;">{{ post.user.username }}</p>
+                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; font-size: 13px; margin: 0; font-family: 'Inter', sans-serif;">{{ post.user.username }}</p>
                 {% endif %}
               </a>
             </div>

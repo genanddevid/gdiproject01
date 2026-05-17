@@ -88,24 +88,92 @@ def split_content_for_post(post):
 
 
 def get_recommendations(post, user):
-    """Get left and right recommendations excluding current post."""
-    if user.is_authenticated:
-        all_other_posts = Post.objects.exclude(id=post.id).exclude(user=user).order_by('id')
-    else:
-        all_other_posts = Post.objects.exclude(id=post.id).order_by('id')
+    """Get recommendations based on entity and category matches - 50/50 split."""
+    from post.models import SemanticTag
+    
+    try:
+        # Get current post's entities and categories
+        current_tags = SemanticTag.objects.filter(post=post)
+        current_entities = set(current_tags.values_list('entity', flat=True))
+        current_categories = set(current_tags.values_list('category', flat=True))
+        
+        # If no tags found fall back immediately
+        if not current_entities and not current_categories:
+            base_exclude = Post.objects.exclude(id=post.id)
+            if user.is_authenticated:
+                base_exclude = base_exclude.exclude(user=user)
+            fallback = list(base_exclude.order_by('-likes')[:6])
+            return fallback[:3], fallback[3:]
+        
+        # Base exclusions
+        base_exclude = Post.objects.exclude(id=post.id)
+        if user.is_authenticated:
+            base_exclude = base_exclude.exclude(user=user)
+        
+        # 50% — same entity posts
+        entity_matched_ids = set(
+            SemanticTag.objects.filter(entity__in=current_entities)
+            .exclude(post=post)
+            .values_list('post_id', flat=True)
+        )
+        entity_posts = list(
+            base_exclude.filter(id__in=entity_matched_ids)
+            .order_by('-likes')[:6]
+        )
+        
+        # 50% — same category posts (excluding entity matches)
+        category_matched_ids = set(
+            SemanticTag.objects.filter(category__in=current_categories)
+            .exclude(post=post)
+            .values_list('post_id', flat=True)
+        ) - entity_matched_ids
+        
+        category_posts = list(
+            base_exclude.filter(id__in=category_matched_ids)
+            .order_by('-likes')[:6]
+        )
+        
+        # If not enough matches fall back to liked posts
+        if not entity_posts and not category_posts:
+            fallback = list(base_exclude.order_by('-likes')[:6])
+            return fallback[:3], fallback[3:]
+        
+        # Interleave entity and category posts
+        combined = []
+        max_len = max(len(entity_posts), len(category_posts))
+        for i in range(max_len):
+            if i < len(entity_posts):
+                combined.append(entity_posts[i])
+            if i < len(category_posts):
+                combined.append(category_posts[i])
+        
+        # Remove duplicates
+        seen = set()
+        unique_combined = []
+        for p in combined:
+            if p.id not in seen:
+                seen.add(p.id)
+                unique_combined.append(p)
+        
+        # Split into left and right
+        mid = len(unique_combined) // 2
+        left_recommendations = unique_combined[:mid]
+        right_recommendations = unique_combined[mid:]
+        
+        return left_recommendations, right_recommendations
+        
+    except Exception as e:
+        # Silent fallback — never let recommendations break article loading
+        print(f"Recommendations failed: {e}")
+        base_exclude = Post.objects.exclude(id=post.id)
+        fallback = list(base_exclude.order_by('-likes')[:6])
+        return fallback[:3], fallback[3:]
 
-    left_recommendations = []
-    right_recommendations = []
 
-    for i, p in enumerate(all_other_posts):
-        if len(left_recommendations) >= 3 and len(right_recommendations) >= 3:
-            break
-        if i % 2 == 0 and len(left_recommendations) < 3:
-            left_recommendations.append(p)
-        elif i % 2 == 1 and len(right_recommendations) < 3:
-            right_recommendations.append(p)
 
-    return left_recommendations, right_recommendations
+
+
+
 
 
 # ─── Views ───────────────────────────────────────────────────────────────────

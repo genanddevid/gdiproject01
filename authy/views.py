@@ -404,8 +404,8 @@ def discover_view(request):
     )
     all_excluded_ids = all_excluded_ids | followed_post_ids
     
-    # Get all remaining posts for Discover
-    discover_posts = Post.objects.exclude(id__in=all_excluded_ids)
+    # Get all remaining posts for Discover (exclude own posts)
+    discover_posts = Post.objects.exclude(id__in=all_excluded_ids).exclude(user=user)
     
     # Score each post
     scored_posts = []

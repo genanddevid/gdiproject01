@@ -310,8 +310,6 @@ function loadPostContent(postId) {
         document.getElementById("modalBody").innerHTML = postCache[postId];
         initEmbeds();
         document.getElementById('modalContent').scrollTop = 0;
-        // Track interest even on cache hit
-        fetch(`/modal/${postId}/?track=1`).catch(() => {});
         if (callback) callback();
         preloadAdjacentPosts();
         return;

@@ -244,98 +244,93 @@ def interests_view(request):
     from post.models import UserInterest, SemanticTag
     import random
     from django.utils import timezone
-    from datetime import timedelta
 
     user = request.user
     now = timezone.now()
 
-    # Get user's interests
-    user_interests = UserInterest.objects.filter(user=user)
-    interest_entities = set(ui.entity for ui in user_interests)
-    interest_categories = set(ui.category for ui in user_interests)
-    interest_parent_categories = set(ui.parent_category for ui in user_interests if ui.parent_category)
+    try:
+        user_interests = UserInterest.objects.filter(user=user)
+        interest_entities = set(ui.entity for ui in user_interests)
+        interest_categories = set(ui.category for ui in user_interests)
 
-    # Get followed users' posts
-    followed_posts = Stream.objects.filter(user=user)
-    followed_post_ids = set(s.post_id for s in followed_posts)
+        followed_posts = Stream.objects.filter(user=user)
+        followed_post_ids = set(s.post_id for s in followed_posts)
 
-    # Get entity-matched posts
-    entity_matched_ids = set(
-        SemanticTag.objects.filter(entity__in=interest_entities)
-        .values_list('post_id', flat=True)
-    )
+        entity_matched_ids = set(
+            SemanticTag.objects.filter(entity__in=interest_entities)
+            .values_list('post_id', flat=True)
+        ) if interest_entities else set()
 
-    # Get category-matched posts
-    category_matched_ids = set(
-        SemanticTag.objects.filter(category__in=interest_categories)
-        .values_list('post_id', flat=True)
-    )
+        category_matched_ids = set(
+            SemanticTag.objects.filter(category__in=interest_categories)
+            .values_list('post_id', flat=True)
+        ) if interest_categories else set()
 
-    # Combine all relevant post IDs
-    all_relevant_ids = followed_post_ids | entity_matched_ids | category_matched_ids
+        all_relevant_ids = followed_post_ids | entity_matched_ids | category_matched_ids
 
-    if not all_relevant_ids:
-        return render(request, 'interests.html', {
-            'post_items': post_items,
-            'active_page': 'interests',
-        })
+        if not all_relevant_ids:
+            return render(request, 'interests.html', {
+                'post_items': [],
+                'active_page': 'interests',
+            })
 
-    # Fetch all relevant posts
-    all_posts = Post.objects.filter(id__in=all_relevant_ids)
+        all_posts = Post.objects.filter(id__in=all_relevant_ids)
 
-    # Score each post
-    scored_posts = []
-    for i, post in enumerate(all_posts):
-        score = 0
+        scored_posts = []
+        for i, post in enumerate(all_posts):
+            try:
+                score = 0
 
-        # Recency boost
-        try:
-            age = (now - post.posted).days
-            if age <= 7:
-                score += 5
-            elif age <= 30:
-                score += 2
-        except Exception:
-            pass
+                try:
+                    age = (now - post.posted).days
+                    if age <= 7:
+                        score += 5
+                    elif age <= 30:
+                        score += 2
+                except Exception:
+                    pass
 
-        # Likes
-        score += post.likes
+                score += post.likes
 
-        # Followed user boost
-        if post.id in followed_post_ids:
-            score += 2
+                if post.id in followed_post_ids:
+                    score += 2
 
-        # Entity match boost (strongest signal)
-        post_entities = set(
-            SemanticTag.objects.filter(post=post)
-            .values_list('entity', flat=True)
-        )
-        if post_entities & interest_entities:
-            score += 3
+                try:
+                    post_entities = set(
+                        SemanticTag.objects.filter(post=post)
+                        .values_list('entity', flat=True)
+                    )
+                    if post_entities & interest_entities:
+                        score += 3
 
-        # Category match boost
-        post_categories = set(
-            SemanticTag.objects.filter(post=post)
-            .values_list('category', flat=True)
-        )
-        if post_categories & interest_categories:
-            score += 2
+                    post_categories = set(
+                        SemanticTag.objects.filter(post=post)
+                        .values_list('category', flat=True)
+                    )
+                    if post_categories & interest_categories:
+                        score += 2
+                except Exception:
+                    pass
 
-        # Unpredictability — every 4th post gets random boost
-        if i % 4 == 3:
-            score += random.randint(1, 3)
+                if i % 4 == 3:
+                    score += random.randint(1, 3)
 
-        scored_posts.append((score, post))
+                scored_posts.append((score, post))
 
-    # Sort by score descending
-    scored_posts.sort(key=lambda x: x[0], reverse=True)
-    post_items = [post for score, post in scored_posts]
+            except Exception:
+                continue
+
+        scored_posts.sort(key=lambda x: x[0], reverse=True)
+        post_items = [post for score, post in scored_posts]
+
+    except Exception as e:
+        print(f"Interests feed error: {e}")
+        post_items = []
 
     return render(request, 'interests.html', {
         'post_items': post_items,
         'active_page': 'interests',
     })
-
 
 
 def PostDetails(request, post_id):

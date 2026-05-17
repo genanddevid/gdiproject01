@@ -165,20 +165,107 @@ def index(request):
     })
 
 
+
 def interests_view(request):
     if not request.user.is_authenticated:
-        post_items = Post.objects.none()
-    else:
-        posts = Stream.objects.filter(user=request.user)
-        group_ids = [post.post_id for post in posts]
-        post_items = Post.objects.filter(id__in=group_ids).order_by('-posted')
+        return render(request, 'interests.html', {
+            'post_items': [],
+            'active_page': 'interests',
+        })
 
-    template = loader.get_template('interests.html')
-    context = {
+    from post.models import UserInterest, SemanticTag
+    import random
+    from django.utils import timezone
+    from datetime import timedelta
+
+    user = request.user
+    now = timezone.now()
+
+    # Get user's interests
+    user_interests = UserInterest.objects.filter(user=user)
+    interest_entities = set(ui.entity for ui in user_interests)
+    interest_categories = set(ui.category for ui in user_interests)
+    interest_parent_categories = set(ui.parent_category for ui in user_interests if ui.parent_category)
+
+    # Get followed users' posts
+    followed_posts = Stream.objects.filter(user=user)
+    followed_post_ids = set(s.post_id for s in followed_posts)
+
+    # Get entity-matched posts
+    entity_matched_ids = set(
+        SemanticTag.objects.filter(entity__in=interest_entities)
+        .values_list('post_id', flat=True)
+    )
+
+    # Get category-matched posts
+    category_matched_ids = set(
+        SemanticTag.objects.filter(category__in=interest_categories)
+        .values_list('post_id', flat=True)
+    )
+
+    # Combine all relevant post IDs
+    all_relevant_ids = followed_post_ids | entity_matched_ids | category_matched_ids
+
+    if not all_relevant_ids:
+        # New user with no interests and no followings
+        post_items = Post.objects.all().order_by('-posted')[:20]
+        return render(request, 'interests.html', {
+            'post_items': post_items,
+            'active_page': 'interests',
+        })
+
+    # Fetch all relevant posts
+    all_posts = Post.objects.filter(id__in=all_relevant_ids)
+
+    # Score each post
+    scored_posts = []
+    for i, post in enumerate(all_posts):
+        score = 0
+
+        # Recency boost
+        age = (now - post.posted).days
+        if age <= 7:
+            score += 5
+        elif age <= 30:
+            score += 2
+
+        # Likes
+        score += post.likes
+
+        # Followed user boost
+        if post.id in followed_post_ids:
+            score += 2
+
+        # Entity match boost (strongest signal)
+        post_entities = set(
+            SemanticTag.objects.filter(post=post)
+            .values_list('entity', flat=True)
+        )
+        if post_entities & interest_entities:
+            score += 3
+
+        # Category match boost
+        post_categories = set(
+            SemanticTag.objects.filter(post=post)
+            .values_list('category', flat=True)
+        )
+        if post_categories & interest_categories:
+            score += 2
+
+        # Unpredictability — every 4th post gets random boost
+        if i % 4 == 3:
+            score += random.randint(1, 3)
+
+        scored_posts.append((score, post))
+
+    # Sort by score descending
+    scored_posts.sort(key=lambda x: x[0], reverse=True)
+    post_items = [post for score, post in scored_posts]
+
+    return render(request, 'interests.html', {
         'post_items': post_items,
         'active_page': 'interests',
-    }
-    return HttpResponse(template.render(context, request))
+    })
 
 
 

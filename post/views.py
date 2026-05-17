@@ -289,11 +289,14 @@ def interests_view(request):
         score = 0
 
         # Recency boost
-        age = (now - post.posted).days
-        if age <= 7:
-            score += 5
-        elif age <= 30:
-            score += 2
+        try:
+            age = (now - post.posted).days
+            if age <= 7:
+                score += 5
+            elif age <= 30:
+                score += 2
+        except Exception:
+            pass
 
         # Likes
         score += post.likes

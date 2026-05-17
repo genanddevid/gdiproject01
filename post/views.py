@@ -275,8 +275,6 @@ def interests_view(request):
     all_relevant_ids = followed_post_ids | entity_matched_ids | category_matched_ids
 
     if not all_relevant_ids:
-        # New user with no interests and no followings
-        post_items = Post.objects.all().order_by('-posted')[:20]
         return render(request, 'interests.html', {
             'post_items': post_items,
             'active_page': 'interests',
@@ -359,30 +357,28 @@ def post_modal(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
-    
     if user.is_authenticated:
         PostView.objects.get_or_create(user=user, post=post)
     
         # Record interest only on explicit opens
         if request.method == 'GET' and request.GET.get('track') == '1':
-            from post.models import SemanticTag, UserInterest  
-
-        semantic_tags = SemanticTag.objects.filter(post=post)
-        for tag in semantic_tags:
-            interest, created = UserInterest.objects.get_or_create(
-                user=user,
-                entity=tag.entity,
-                defaults={
-                    'category': tag.category,
-                    'parent_category': tag.parent_category,
-                    'grandparent_category': tag.grandparent_category,
-                    'semantic_labels': tag.semantic_labels,
-                    'click_count': 1,
-                }
-            )
-            if not created:
-                interest.click_count += 1
-                interest.save()
+            from post.models import SemanticTag, UserInterest
+            semantic_tags = SemanticTag.objects.filter(post=post)
+            for tag in semantic_tags:
+                interest, created = UserInterest.objects.get_or_create(
+                    user=user,
+                    entity=tag.entity,
+                    defaults={
+                        'category': tag.category,
+                        'parent_category': tag.parent_category,
+                        'grandparent_category': tag.grandparent_category,
+                        'semantic_labels': tag.semantic_labels,
+                        'click_count': 1,
+                    }
+                )
+                if not created:
+                    interest.click_count += 1
+                    interest.save()
 
     liked = Likes.objects.filter(user=user, post=post).exists() if user.is_authenticated else False
     form = CommentForm()

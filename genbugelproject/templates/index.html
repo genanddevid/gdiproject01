@@ -62,7 +62,7 @@
   <!-- Scroll Cards -->
   {% elif block.type == "scroll" %}
   <div class="carousel-container responsive-group">
-    <div class="carousel-track" style="display: flex; gap: 0; scroll-snap-type: x mandatory; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+    <div class="carousel-track" style="display: flex; gap: 0; border-radius: 5px; scroll-snap-type: x mandatory; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
       {% for post in block.posts %}
         <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
           {% include "cards/small_card.html" with post_item=post %}

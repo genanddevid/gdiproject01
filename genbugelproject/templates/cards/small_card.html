@@ -56,7 +56,7 @@
         <div class="carousel-item">
           <!-- Your card template starts -->
     
-          <div class="card" style="padding: 1.0rem 1rem 0.251rem 1.0rem; box-shadow: none; border-radius: 0px;">
+          <div class="card" style="padding: 1.0rem 1rem 0.251rem 1.0rem; box-shadow: none; border-radius: 5px;">
             <div class="card-image">
               <figure class="image is-4by3" style="margin: 0;">
                 <a href="{% url 'postdetails' post_item.id %}" onclick="openPostModal('{{ post_item.id }}')">
@@ -78,8 +78,8 @@
                 </div>
                 <div class="media-content" style="margin-left: -10px;">
                   <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
-                    <p class="title is-4" style="font-size: 10.8px; font-weight: 600; 
-                    margin: 0px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:rgb(44, 44, 44);">
+                    <p class="title is-4" style="font-size: 10.8px; font-weight: 500; 
+                    margin: 0px; color: rgb(59, 59, 59); font-family: 'Inter', sans-serif;">
                       {% if post_item.user.profile.first_name %}
                         {{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}
                       {% else %}
@@ -91,6 +91,7 @@
               </div>
               <div class="content" style="
                 margin-top: -12px;
+                color: rgb(7, 7, 7);
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 3;
@@ -105,7 +106,7 @@
                 </a>
               </div>
               <div style="margin-top: -20px;">
-                <time style="color: #676767; font-family: 'Inter', sans-serif; font-size: 10.9px;">
+                <time style="color: rgb(59, 59, 59); font-family: 'Inter', sans-serif; font-size: 10.9px;">
                   {{ post_item.posted }}
                 </time>
               </div>

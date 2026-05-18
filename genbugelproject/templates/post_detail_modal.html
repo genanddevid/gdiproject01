@@ -419,30 +419,105 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
 
        {% if user.is_authenticated and user.username == 'migaja' %}
-  <div style="text-align: center; margin-top: 1rem;">
+<div style="text-align: center; margin-top: 1rem;">
+    
+    <button onclick="openFrontpagePanel('{{ post.id }}', {{ is_approved|yesno:'true,false' }})"
+        class="button {% if is_approved %}is-danger{% else %}is-info{% endif %}"
+        id="frontpage-btn-{{ post.id }}">
+        {% if is_approved %}Remove from Frontpage{% else %}Add to Frontpage{% endif %}
+    </button>
 
-    {% if is_approved %}
-      <form method="post" action="{% url 'remove_tag_author_approval' post.id %}">
-        {% csrf_token %}
-        <button type="submit" class="button is-danger">Exclude combo from Frontpage</button>
-      </form>
-    {% else %}
-      <form method="post" action="{% url 'approve_tag_author' post.id %}">
-        {% csrf_token %}
-        <button type="submit" class="button is-info">Include combo in Frontpage</button>
-      </form>
+    <!-- Entity picker panel -->
+    <div id="frontpage-panel-{{ post.id }}" style="display:none; margin-top:1rem; 
+        border:1px solid #ddd; border-radius:8px; padding:16px; text-align:left;
+        background:#fff; max-width:400px; margin-left:auto; margin-right:auto;">
+        <p style="font-weight:600; margin-bottom:12px;" id="frontpage-panel-title-{{ post.id }}"></p>
+        <div id="frontpage-entities-{{ post.id }}"></div>
+        <div style="margin-top:12px; display:flex; gap:8px; justify-content:center;">
+            <button onclick="confirmFrontpage('{{ post.id }}')" 
+                class="button is-small is-success">Confirm</button>
+            <button onclick="closeFrontpagePanel('{{ post.id }}')" 
+                class="button is-small is-light">Cancel</button>
+        </div>
+    </div>
+</div>
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="custom-message" style="background-color: #f14668; color: white; padding: 0.5rem; font-size: 0.9rem; border-radius: 4px; margin-top: 0.5rem; display: inline-block;">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endif %}
+<script>
+function openFrontpagePanel(postId, isApproved) {
+    fetch(`/approve/${postId}/`)
+        .then(r => r.json())
+        .then(data => {
+            const panel = document.getElementById(`frontpage-panel-${postId}`);
+            const title = document.getElementById(`frontpage-panel-title-${postId}`);
+            const container = document.getElementById(`frontpage-entities-${postId}`);
+            
+            panel.dataset.isApproved = isApproved;
+            
+            if (isApproved) {
+                title.textContent = 'Select entities to REMOVE from Frontpage approval:';
+                // Show only approved entities for this writer
+                container.innerHTML = data.approved_entities.map(entity => `
+                    <label style="display:block; margin-bottom:8px; cursor:pointer;">
+                        <input type="checkbox" value="${entity}" checked
+                            style="margin-right:8px;">
+                        ${entity}
+                    </label>
+                `).join('');
+            } else {
+                title.textContent = 'Select entities to APPROVE for Frontpage:';
+                container.innerHTML = data.post_entities.map(e => `
+                    <label style="display:block; margin-bottom:8px; cursor:pointer;">
+                        <input type="checkbox" value="${e.entity}"
+                            style="margin-right:8px;">
+                        ${e.entity} <span style="color:#888; font-size:12px;">(${e.category})</span>
+                    </label>
+                `).join('');
+            }
+            
+            panel.style.display = 'block';
+        });
+}
 
-  </div>
+function closeFrontpagePanel(postId) {
+    document.getElementById(`frontpage-panel-${postId}`).style.display = 'none';
+}
+
+function confirmFrontpage(postId) {
+    const panel = document.getElementById(`frontpage-panel-${postId}`);
+    const isApproved = panel.dataset.isApproved === 'true';
+    const checkboxes = panel.querySelectorAll('input[type="checkbox"]:checked');
+    const entities = Array.from(checkboxes).map(cb => cb.value);
+    
+    if (entities.length === 0) {
+        alert('Please select at least one entity.');
+        return;
+    }
+    
+    const url = isApproved ? `/remove-approval/${postId}/` : `/approve/${postId}/`;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ entities: entities })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            closeFrontpagePanel(postId);
+            // Refresh modal to update button state
+            loadPostContent(postId);
+        }
+    });
+}
+</script>
 {% endif %}
+
+
+
+
 
 
 
@@ -521,7 +596,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
                   </div>
                 </div>
 
-                <div style="margin-top: 6px; margin-bottom:-1px; font-size: 14.0px; color: rgb(7, 7, 7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
+                <div style="margin-top: 6px; margin-bottom:-2px; font-weight: 500; font-size: 14.0px; color: rgb(7, 7, 7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
                   <a href="#" onclick="event.preventDefault(); openPostModal('{{ post.id }}', event);"
  style="color: inherit; text-decoration: none;">
                     {{ post.caption }}
@@ -583,7 +658,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
                   </div>
                 </div>
 
-                <div style="margin-top:6px; margin-bottom:-1px; font-size: 14.0px; color: rgb(7, 7, 7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
+                <div style="margin-top:6px; margin-bottom:-2px; font-weight: 500; font-size: 14.0px; color: rgb(7, 7, 7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
                   <a href="#" onclick="openPostModal('{{ post.id }}', event)"
  style="color: inherit; text-decoration: none;">
                     {{ post.caption }}

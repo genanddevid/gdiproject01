@@ -156,6 +156,19 @@ class UserInterest(models.Model):
         return f"{self.user.username} → {self.entity} ({self.click_count} clicks)"
 
 
+class ApprovedWriterEntity(models.Model):
+    """Entities approved by migaja for a specific writer to appear on Frontpage"""
+    writer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='approved_entities')
+    entity = models.CharField(max_length=100)
+    approved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('writer', 'entity')
+
+    def __str__(self):
+        return f"{self.writer.username} → {self.entity}"
+
+
 
 
 

@@ -179,13 +179,26 @@ def get_recommendations(post, user):
 # ─── Views ───────────────────────────────────────────────────────────────────
 
 def index(request):
-    approved_combos = ApprovedTagAuthor.objects.all()
-
-    if approved_combos.exists():
-        query = Q()
-        for combo in approved_combos:
-            query |= Q(user=combo.author, tag=combo.tag)
-        posts = Post.objects.filter(query).order_by('-posted')
+    from post.models import ApprovedWriterEntity, SemanticTag
+    
+    approved = ApprovedWriterEntity.objects.all()
+    
+    if approved.exists():
+        # Get all approved writer+entity combinations
+        approved_post_ids = set()
+        for post in Post.objects.all():
+            post_entities = set(
+                SemanticTag.objects.filter(post=post)
+                .values_list('entity', flat=True)
+            )
+            writer_approved_entities = set(
+                ApprovedWriterEntity.objects.filter(writer=post.user)
+                .values_list('entity', flat=True)
+            )
+            if post_entities & writer_approved_entities:
+                approved_post_ids.add(post.id)
+        
+        posts = Post.objects.filter(id__in=approved_post_ids).order_by('-posted')
     else:
         posts = Post.objects.none()
 
@@ -402,9 +415,16 @@ def post_modal(request, post_id):
     left_recommendations, right_recommendations = get_recommendations(post, user)
     content1, content2, content3 = split_content_for_post(post)
 
-    is_approved = ApprovedTagAuthor.objects.filter(
-        author=post.user, tag=post.tag
-    ).exists()
+    from post.models import SemanticTag, ApprovedWriterEntity
+    post_entities = set(
+        SemanticTag.objects.filter(post=post)
+        .values_list('entity', flat=True)
+    )
+    writer_approved_entities = set(
+        ApprovedWriterEntity.objects.filter(writer=post.user)
+        .values_list('entity', flat=True)
+    )
+    is_approved = bool(post_entities & writer_approved_entities)
 
     return render(request, 'post_detail_modal.html', {
         'post': post,
@@ -654,28 +674,68 @@ def view_post(request, post_id):
 
 
 @login_required
-def approve_tag_author(request, post_id):
+def approve_writer_entity(request, post_id):
     if request.user.username != 'migaja':
-        return redirect('frontpage')
-
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+    
     post = get_object_or_404(Post, id=post_id)
-    if not post.tag:
-        messages.error(request, "This post has no tag and cannot be sent to the front page.")
-        return redirect('postdetails', post_id=post.id)
-
-    ApprovedTagAuthor.objects.get_or_create(author=post.user, tag=post.tag)
-    return redirect('postdetails', post_id=post.id)
+    
+    if request.method == 'POST':
+        import json
+        from post.models import ApprovedWriterEntity
+        data = json.loads(request.body)
+        entities = data.get('entities', [])
+        
+        for entity in entities:
+            ApprovedWriterEntity.objects.get_or_create(
+                writer=post.user,
+                entity=entity
+            )
+        
+        return JsonResponse({'success': True, 'approved': entities})
+    
+    # GET — return current entities for this post
+    from post.models import SemanticTag, ApprovedWriterEntity
+    post_entities = list(
+        SemanticTag.objects.filter(post=post)
+        .values('entity', 'category')
+    )
+    approved_entities = set(
+        ApprovedWriterEntity.objects.filter(writer=post.user)
+        .values_list('entity', flat=True)
+    )
+    
+    return JsonResponse({
+        'post_entities': post_entities,
+        'approved_entities': list(approved_entities)
+    })
 
 
 @login_required
-def remove_tag_author_approval(request, post_id):
+def remove_writer_entity(request, post_id):
     if request.user.username != 'migaja':
-        return redirect('frontpage')
-
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+    
     post = get_object_or_404(Post, id=post_id)
-    ApprovedTagAuthor.objects.filter(author=post.user, tag=post.tag).delete()
-    messages.success(request, "Excluded")
-    return redirect('postdetails', post_id=post.id)
+    
+    if request.method == 'POST':
+        import json
+        from post.models import ApprovedWriterEntity
+        data = json.loads(request.body)
+        entities = data.get('entities', [])
+        
+        ApprovedWriterEntity.objects.filter(
+            writer=post.user,
+            entity__in=entities
+        ).delete()
+        
+        return JsonResponse({'success': True, 'removed': entities})
+    
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+
+
 
 
 

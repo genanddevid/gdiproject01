@@ -1,5 +1,5 @@
 from django.contrib import admin
-from post.models import Post, Tag, Follow, Stream, SemanticTag, UserInterest
+from post.models import Post, Tag, Follow, Stream, SemanticTag, UserInterest, ApprovedWriterEntity
 
 admin.site.register(Post)
 admin.site.register(Tag)
@@ -17,6 +17,15 @@ class UserInterestAdmin(admin.ModelAdmin):
     list_display = ('user', 'entity', 'category', 'parent_category', 'click_count', 'last_clicked')
     list_filter = ('category', 'parent_category')
     search_fields = ('user__username', 'entity')
+
+@admin.register(ApprovedWriterEntity)
+class ApprovedWriterEntityAdmin(admin.ModelAdmin):
+    list_display = ('writer', 'entity', 'approved_at')
+    search_fields = ('writer__username', 'entity')
+
+
+
+
 
 
 

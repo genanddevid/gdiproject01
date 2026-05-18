@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from post.views import index, NarrativeBuilder, PostDetails, like, favorite, preview_narrative
-from .views import remove_tag_author_approval
+from .views import remove_writer_entity
 
 
 urlpatterns = [
@@ -26,9 +26,9 @@ urlpatterns = [
       # ✅ New route to track post views
     path('<uuid:post_id>/view/', views.view_post, name='view_post'),
 
-    path('approve/<uuid:post_id>/', views.approve_tag_author, name='approve_tag_author'),
+    path('approve/<uuid:post_id>/', views.approve_writer_entity, name='approve_writer_entity'),
 
-    path('remove-approval/<uuid:post_id>/', views.remove_tag_author_approval, name='remove_tag_author_approval'),
+    path('remove-approval/<uuid:post_id>/', views.remove_writer_entity, name='remove_writer_entity'),
 
     path('modal/<uuid:post_id>/', views.post_modal, name='post_modal'),
 

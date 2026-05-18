@@ -769,6 +769,82 @@ document.getElementById('emailLoginPanel').addEventListener('click', function(e)
 </script>
 
 
+
+
+
+{% if request.user.is_authenticated and request.user.username == 'migaja' %}
+<script>
+function openFrontpagePanel(postId, isApproved) {
+    fetch(`/approve/${postId}/`)
+        .then(r => r.json())
+        .then(data => {
+            const panel = document.getElementById(`frontpage-panel-${postId}`);
+            const title = document.getElementById(`frontpage-panel-title-${postId}`);
+            const container = document.getElementById(`frontpage-entities-${postId}`);
+            
+            panel.dataset.isApproved = isApproved;
+            
+            if (isApproved) {
+                title.textContent = 'Select entities to REMOVE from Frontpage approval:';
+                container.innerHTML = data.approved_entities.map(entity => `
+                    <label style="display:block; margin-bottom:8px; cursor:pointer;">
+                        <input type="checkbox" value="${entity}" checked style="margin-right:8px;">
+                        ${entity}
+                    </label>
+                `).join('');
+            } else {
+                title.textContent = 'Select entities to APPROVE for Frontpage:';
+                container.innerHTML = data.post_entities.map(e => `
+                    <label style="display:block; margin-bottom:8px; cursor:pointer;">
+                        <input type="checkbox" value="${e.entity}" style="margin-right:8px;">
+                        ${e.entity} <span style="color:#888; font-size:12px;">(${e.category})</span>
+                    </label>
+                `).join('');
+            }
+            
+            panel.style.display = 'block';
+        })
+        .catch(err => console.error('Frontpage panel error:', err));
+}
+
+function closeFrontpagePanel(postId) {
+    const panel = document.getElementById(`frontpage-panel-${postId}`);
+    if (panel) panel.style.display = 'none';
+}
+
+function confirmFrontpage(postId) {
+    const panel = document.getElementById(`frontpage-panel-${postId}`);
+    const isApproved = panel.dataset.isApproved === 'true';
+    const checkboxes = panel.querySelectorAll('input[type="checkbox"]:checked');
+    const entities = Array.from(checkboxes).map(cb => cb.value);
+    
+    if (entities.length === 0) {
+        alert('Please select at least one entity.');
+        return;
+    }
+    
+    const url = isApproved ? `/remove-approval/${postId}/` : `/approve/${postId}/`;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ entities: entities })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            closeFrontpagePanel(postId);
+            loadPostContent(postId);
+        }
+    })
+    .catch(err => console.error('Frontpage confirm error:', err));
+}
+</script>
+{% endif %}
+
 </body>
 
 <!--11:11 7Jun25-->

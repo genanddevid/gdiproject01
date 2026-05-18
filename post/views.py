@@ -191,10 +191,11 @@ def index(request):
                 .values_list('entity', flat=True)
             )
             # Only include post if it was published AFTER the entity was approved
+            from datetime import timedelta
             matching_approvals = ApprovedWriterEntity.objects.filter(
                 writer=post.user,
                 entity__in=post_entities,
-                approved_at__lte=post.posted
+                approved_at__lte=post.posted + timedelta(minutes=5)
             )
             if matching_approvals.exists():
                 approved_post_ids.add(post.id)

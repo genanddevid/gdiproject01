@@ -184,21 +184,23 @@ def index(request):
     approved = ApprovedWriterEntity.objects.all()
     
     if approved.exists():
-        # Get all approved writer+entity combinations
-        approved_post_ids = set()
-        for post in Post.objects.all():
-            post_entities = set(
-                SemanticTag.objects.filter(post=post)
-                .values_list('entity', flat=True)
-            )
-            writer_approved_entities = set(
-                ApprovedWriterEntity.objects.filter(writer=post.user)
-                .values_list('entity', flat=True)
-            )
-            if post_entities & writer_approved_entities:
-                approved_post_ids.add(post.id)
-        
-        posts = Post.objects.filter(id__in=approved_post_ids).order_by('-posted')
+    approved_post_ids = set()
+    for post in Post.objects.all():
+        post_entities = set(
+            SemanticTag.objects.filter(post=post)
+            .values_list('entity', flat=True)
+        )
+        # Only include post if it was published AFTER the entity was approved
+        matching_approvals = ApprovedWriterEntity.objects.filter(
+            writer=post.user,
+            entity__in=post_entities,
+            approved_at__lte=post.posted
+        )
+        if matching_approvals.exists():
+            approved_post_ids.add(post.id)
+    
+    posts = Post.objects.filter(id__in=approved_post_ids).order_by('-posted')
+
     else:
         posts = Post.objects.none()
 

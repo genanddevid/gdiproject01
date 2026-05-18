@@ -89,7 +89,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
             <div class="media-content" style="margin-left: -10px; overflow: hidden;">
               <a href="{% url 'profile' post.user.username %}" onclick="event.stopPropagation();">
                 {% if post.user.profile.first_name %}
-                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; font-size: 13px; margin: 0; font-family: 'Inter', sans-serif;">
+                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:500; font-size: 13px; margin: 0; font-family: 'Inter', sans-serif;">
                   {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
                 </p>
                 {% else %}
@@ -102,7 +102,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
           <div class="leadcaption" style="margin-top: 7px; font-size: 15.15px; display: -webkit-box; -webkit-box-orient: vertical; 
           -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; text-overflow: ellipsis; line-height: 1.4em; 
           height: 2.9em;">
-            <a href="{{ post.get_absolute_url }}" style="font-weight: 500; color: rgb(7, 7, 7); letter-spacing: 0px; 
+            <a href="{{ post.get_absolute_url }}" style="font-weight: 500; color: rgb(0, 0, 0); letter-spacing: 0px; 
             font-family: 'Inter', sans-serif;">
               {{ post.caption }}
             </a>
@@ -110,7 +110,7 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
         </div>
         <!-- Time -->
         <time datetime="{{ post.posted|date:'c' }}" 
-              style="font-size: 10.9px; color: rgb(59, 59, 59); font-family: 'Inter', sans-serif; margin-top: 0px; 
+              style="font-size: 10.9px; color: rgb(59, 59, 59); font-weight:500; font-family: 'Inter', sans-serif; margin-top: 0px; 
               ">
           {{ post.posted }}
         </time>

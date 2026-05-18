@@ -78,7 +78,7 @@
                 </div>
                 <div class="media-content" style="margin-left: -10px;">
                   <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
-                    <p class="title is-4" style="font-size: 11.0px; font-weight: 500; 
+                    <p class="title is-4" style="font-size: 11.3px; font-weight: 500; 
                     margin: 0px; color: rgb(59, 59, 59); font-family: 'Inter', sans-serif;">
                       {% if post_item.user.profile.first_name %}
                         {{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}
@@ -91,7 +91,7 @@
               </div>
               <div class="content" style="
                 margin-top: -12px;
-                color: rgb(7, 7, 7);
+                color: rgb(0, 0, 0);
                 font-weight: 500;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
@@ -107,7 +107,7 @@
                 </a>
               </div>
               <div style="margin-top: -20px;">
-                <time style="color: rgb(59, 59, 59); font-family: 'Inter', sans-serif; font-size: 10.9px;">
+                <time style="color: rgb(59, 59, 59); font-weight: 500; font-family: 'Inter', sans-serif; font-size: 10.9px;">
                   {{ post_item.posted }}
                 </time>
               </div>

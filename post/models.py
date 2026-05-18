@@ -160,7 +160,6 @@ class ApprovedWriterEntity(models.Model):
     """Entities approved by migaja for a specific writer to appear on Frontpage"""
     writer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='approved_entities')
     entity = models.CharField(max_length=100)
-    source_post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True, blank=True, related_name='approval_source')
     approved_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

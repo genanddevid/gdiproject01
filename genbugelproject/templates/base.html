@@ -575,8 +575,9 @@ document.addEventListener("DOMContentLoaded", function () {
 {% else %}
 <a href="#" onclick="showLoginModal(); return false;">
 {% endif %}
-<!--<a href="{% url 'narrativebuilder' %}" class="{% if active_page == 'narrativebuilder' %}is-active{% endif %}">-->
-    <span class="material-symbols-outlined" style="font-size: 30px; font-weight: 300;">stylus_fountain_pen</span>
+    <img src="{% static 'img/logo.png' %}" 
+         style="width: 28px; height: 28px; object-fit: contain;" 
+         alt="Narrative Builder">
     <p class="subtitle"></p>
   </a>
 <!--This is for mobile-->

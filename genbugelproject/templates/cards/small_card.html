@@ -56,11 +56,11 @@
         <div class="carousel-item">
           <!-- Your card template starts -->
     
-          <div class="card" style="padding: 1.0rem 1rem 0.251rem 1.0rem; box-shadow: none; border-radius: 5px;">
+          <div class="card" style="padding: 1.0rem 1rem 0.251rem 1.0rem; box-shadow: none;">
             <div class="card-image">
               <figure class="image is-4by3" style="margin: 0;">
                 <a href="{% url 'postdetails' post_item.id %}" onclick="openPostModal('{{ post_item.id }}')">
-                  <img src="{{ post_item.picture.url }}" alt="post image" style="width: 100%; object-fit: cover; border-radius: 0.7676%;" />
+                  <img src="{{ post_item.picture.url }}" alt="post image" style="width: 100%; object-fit: cover; border-radius: 5px;" />
                 </a>
               </figure>
             </div>
@@ -78,7 +78,7 @@
                 </div>
                 <div class="media-content" style="margin-left: -10px;">
                   <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
-                    <p class="title is-4" style="font-size: 10.8px; font-weight: 500; 
+                    <p class="title is-4" style="font-size: 11.0px; font-weight: 500; 
                     margin: 0px; color: rgb(59, 59, 59); font-family: 'Inter', sans-serif;">
                       {% if post_item.user.profile.first_name %}
                         {{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}
@@ -92,6 +92,7 @@
               <div class="content" style="
                 margin-top: -12px;
                 color: rgb(7, 7, 7);
+                font-weight: 500;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 3;

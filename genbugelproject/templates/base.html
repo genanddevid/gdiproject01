@@ -6,7 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#ffffff">
+    <meta name="background-color" content="#ffffff">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+    
+
     {% block og_tags %}
 
 <meta property="og:site_name" content="Baytruyen" />
@@ -45,8 +49,11 @@
   padding: 0;
   position: relative;
   background-color: rgb(255, 255, 255);
-  
+  background: #ffffff;
+   min-height: 100dvh;
 }
+
+
 
 .main-content {
   padding-bottom: 0px; /* space for bottom nav */
@@ -107,13 +114,17 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50px;
-  background-color: rgb(255, 255, 255);
+  height: calc(50px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+
+  background-color: #ffffff;
+
   border-top: 1px solid rgba(230, 230, 221, 0.61);
+
   justify-content: space-around;
   align-items: center;
+
   z-index: 1000;
-  
 }
 
 .mobile-bottom-nav a {

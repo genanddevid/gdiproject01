@@ -61,95 +61,75 @@
    {% for post in posts %}
    <div class="post-card" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
     <!-- First Article Card -->   
-    <div class="box" style="max-width: 525px; margin: auto; box-shadow: none; border-radius: 0;">
-        <article class="media">
-            <!-- Photo heading of Article-->
-            <div class="media-left" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <figure class="image is-100x100" style="margin:0;">
-                    <a href="{{ post.get_absolute_url }}"><img src="{{ post.picture.url }}" alt="Image" style="width: 100px; height: 100px; object-fit: cover;"/></a>
-                </figure>
+    <div class="box" style="max-width: 525px; padding-left: 0 !important; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+        <article class="media" style="margin-left: 0; background-color: rgb(255, 255, 255);">
+          <div style="display: flex;">
+            <!-- Left: Article image -->
+            <div style="width: 100px; height: 100px;">
+              <a href="#" onclick="openPostModal('{{ post.id }}', event)">
+
+                <img src="{{ post.picture.url }}" alt="Article Image" 
+                     style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 6px;" />
+              </a>
             </div>
 
-            <div class="media-content" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <div class="content" style="margin-top: -13px;">
-        
-                    <!-- Aligns to top -->
-                    <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
-                        <!-- Profile Picture of article writer -->
-                        <div class="media-left">
-                            <a href="{% url 'profile' post.user.username %}">
-                            <figure class="image is-24x24" style="margin: 0;">
-                                
-                                    <img class="is-rounded"
+            
+            <!-- Right: Text and metadata -->
+            <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
+              <div class="content" style="margin-top: -13px;">
+                <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                  <div class="media-left">
+                    <figure class="image is-24x24" style="margin: 0;">
+                      <img class="is-rounded"
                         src="{% if post.user.profile.picture %}{{ post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
                         style="width: 24px; height: 24px; object-fit: cover;">
-                                
-                            </figure>
-                            </a>
-                        </div>
-                        <!-- Name -->
-                        <div class="media-content" style="margin-left: -10px;">
-                            <a href="{% url 'profile' post.user.username %}">
-                            <p class="title is-4" style="
-                                font-weight:bolder;
-                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                                font-size: 12px;
-                                margin: 0;
-                                ">{{ post.user.username }}
-                            </p>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Article Title -->
-                    <div style="
-            margin-top: 7px;
-                    font-size: 16.0px;
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2;
-                    line-clamp: 2;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    line-height: 1.2em;
-                    max-height: 2.4em;
-          ">
-          <a href="{{ post.get_absolute_url }}" style="color: inherit; text-decoration: none;">
-            {{ post.caption }}
-            </a>
-          </div>
-                    
+                    </figure>
+                  </div>
+                  <div class="media-content" style="margin-left: -10px;">
+                    <p class="title is-4" style="
+                        font-weight:500;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        font-size: 12px;
+                        color: rgb(59, 59, 59);
+                        margin: 0;
+                        ">{% if post.user.profile.first_name %}{{ post.user.profile.first_name }} {{ post.user.profile.last_name }}{% else %}{{ post.user.username }}{% endif %}
+                    </p>
+                  </div>
+                </div>
 
+                <div style="margin-top: 6px; margin-bottom:-2px; font-weight: 500; font-size: 14.0px; color: rgb(7, 7, 7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
+                  <a href="#" onclick="event.preventDefault(); openPostModal('{{ post.id }}', event);"
+ style="color: inherit; text-decoration: none;">
+                    {{ post.caption }}
+                  </a>
                 </div>
-                <!-- Date and time written -->
-                <div style="margin-top: 2px;">
-                  <time datetime="2016-1-1" style="color: #676767; font-family: 'Inter', sans-serif; font-size: 10.5px;">
-                    {{ post.posted }}
-                  </time>
-                </div>
+              </div>
+
+              <time datetime="{{ post.posted|date:'c' }}" 
+                    style="font-size: 10.5px; color: rgb(59, 59, 59); font-family: 'Inter', sans-serif;">
+                {{ post.posted }}
+              </time>
             </div>
-            
-
+          </div>
         </article>
-    </div>
+      </div>
     </div>
     </div>
 
     {% endfor %}
     
 
-    <!-- Modal container -->
+  <!-- Modal container -->
 <div id="postModal" class="my-modal" style="display: none;">
-  <button id="modalPrevBtn" class="modal-nav-btn modal-nav-btn-left" onclick="showPreviousPost()">&#10094;</button>
-  <button class="my-close-button" onclick="closePostModal()">&times;</button>
   <div class="my-modal-content" id="modalContent">
-    
+    <button class="my-close-button" onclick="closePostModal()">&times;</button>
     <div id="modalBody"></div>
   </div>
+  <button id="modalPrevBtn" class="modal-nav-btn modal-nav-btn-left" onclick="showPreviousPost()">&#10094;</button>
   <button id="modalNextBtn" class="modal-nav-btn modal-nav-btn-right" onclick="showNextPost()">&#10095;</button>
 </div>
 
 <style>
-
  /* Add these styles for the navigation buttons */
 .modal-nav-btn {
   position: absolute;
@@ -158,12 +138,10 @@
   background-color: rgb(0, 0, 0); /* Semi-transparent background */
   color: white;
   border: none;
-  
   padding-left: 15px;
   padding-top: 19px;
   padding-bottom: 21px;
   padding-right: 15px;
-
   cursor: pointer;
   font-size: 2em; /* Make arrows larger */
   z-index: 10000; /* Ensure they are above the modal background */
@@ -172,7 +150,6 @@
   user-select: none; /* Prevent text selection */
  /* opacity: 0.8; Slight transparency */
 }
-
 
 .modal-nav-btn:hover {
   background-color: rgba(0, 0, 0, 0.5);
@@ -194,10 +171,8 @@
 
 /* Your existing modal and close button styles here */
  
-
 /* Modal background */
 .my-modal {
-  
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -217,17 +192,18 @@
   overflow-y: auto;
   border-radius: 0px;
   padding-left: 75px;
-            padding-right: 75px;
-            padding-top: 25px;
+  padding-right: 75px;
+  padding-top: 25px;
   position: relative;
 }
 
 /* Freely movable close button */
 .my-close-button {
-  position: absolute;
+  position: fixed;
   top: 10px; /* Adjust the distance above the modal */
-  right: 20px; /* Adjust the distance to the right of the modal */
-
+  right: 10px; /* Adjust the distance to the right of the modal */
+  
+  z-index: 10001;
   font-size: 25px;
   cursor: pointer;
   background-color: white; /* Optional: Add a background for visibility */
@@ -240,14 +216,36 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 5px rgba(99, 98, 98, 0.2); /* Optional: Add a subtle shadow */
-  
   /* --- FIX FOR CENTERING THE 'X' --- */
-  padding-bottom: 5px; /* Adjust this value (e.g., 1px, 2px) to visually center the 'X' */
+  padding-bottom: 4px;
+  padding-left: 1px; /* Adjust this value (e.g., 1px, 2px) to visually center the 'X' */
   /* You might also try transform: translateY(1px); instead of padding-bottom for more precise nudging if needed */
 }
 /* Optional: Style on hover */
 .close-button:hover {
   background: #eee;
+}
+@media (max-width: 768px) {
+  .my-close-button {
+    top: 10px;
+    right: 10px;
+    width: 28px !important;
+    height: 28px !important;
+    padding-bottom: 1px !important;
+  } 
+  .modal-nav-btn {
+    display: none;
+  }
+  .my-modal-content {
+    width: 100%;
+    padding-left: 0px;  /* Changed from 75px */
+    padding-right: 0px; /* Changed from 75px */
+    padding-top: 25px;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    box-sizing: border-box; /* Ensures padding doesn't shrink the element */
+  }
 }
 
 /* Add this new class */
@@ -258,10 +256,43 @@
 }
 </style>
 
-
-
 <script>
 
+   
+  let touchStartX = 0;
+let touchStartY = 0;
+
+const modal = document.getElementById('postModal');
+
+// Capture start position
+modal.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+});
+
+// Capture end position and handle swipe
+modal.addEventListener('touchend', (e) => {
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchEndY = e.changedTouches[0].clientY;
+
+  handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
+});
+
+// Swipe detection with vertical scroll check
+function handleSwipeGesture(startX, startY, endX, endY) {
+  const swipeThreshold = 50; // Minimum horizontal distance to trigger
+  const diffX = endX - startX;
+  const diffY = endY - startY;
+
+  // Only trigger if horizontal movement is greater than vertical
+  if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+    if (diffX > 0) {
+      showPreviousPost(); // Swipe right
+    } else {
+      showNextPost(); // Swipe left
+    }
+  }
+}
   
 let allPostIds = []; // Global array to store all post IDs in order
 let currentPostIndex = -1; // Global variable to store the index of the currently viewed post
@@ -270,12 +301,27 @@ let currentPostIndex = -1; // Global variable to store the index of the currentl
 document.addEventListener('DOMContentLoaded', () => {
     const postCards = document.querySelectorAll('.post-card');
     postCards.forEach(card => {
-        const postId = card.dataset.postId; 
+        const postId = card.dataset.postId;
         if (postId) {
             allPostIds.push(postId);
         }
     });
+
+    // Preload first 3 posts silently after page loads
+    setTimeout(() => {
+        allPostIds.slice(0, 3).forEach(postId => {
+            if (!postCache[postId]) {
+                fetch(`/modal/${postId}/`)
+                    .then(res => res.text())
+                    .then(html => {
+                        postCache[postId] = html;
+                    })
+                    .catch(() => {});
+            }
+        });
+    }, 500); // Wait 0.5s after page load so it doesn't compete with page rendering
 });
+
 
 // Helper function to update the navigation button states
 function updateNavButtons() {
@@ -289,45 +335,128 @@ function updateNavButtons() {
 }
 
 // Function to load and display post content in modal
-function loadPostContent(postId) {
-    fetch(`/modal/${postId}/`)
+// Cache for preloaded posts
+const postCache = {};
+
+function loadPostContent(postId, callback) {
+    // Check cache first — instant if already loaded
+  
+    if (postCache[postId]) {
+        document.getElementById("modalBody").innerHTML = postCache[postId];
+        initEmbeds();
+        document.getElementById('modalContent').scrollTop = 0;
+        if (callback) callback();
+        preloadAdjacentPosts();
+        return;
+    }
+
+    // Show loading indicator
+    document.getElementById("modalBody").innerHTML = `
+        <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
+            <div style="text-align:center;">
+                <div style="width:40px; height:40px; border:3px solid #f3f3f3; 
+                     border-top:3px solid #3273dc; border-radius:50%; 
+                     animation:spin 0.8s linear infinite; margin:0 auto;"></div>
+                <p style="margin-top:15px; color:#888; font-size:14px;">Loading...</p>
+            </div>
+        </div>
+        <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+    `;
+
+    fetch(`/modal/${postId}/?track=1`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.text();
         })
         .then(html => {
+            postCache[postId] = html; // Store in cache
             document.getElementById("modalBody").innerHTML = html;
+initEmbeds();
+document.getElementById('modalContent').scrollTop = 0;
 
-            // Instagram
-            if (window.instgrm && instgrm.Embeds) {
-                instgrm.Embeds.process();
-            }
+// Wire up share button
+const shareBtn = document.getElementById('share-btn');
+if (shareBtn) {
+    shareBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const title = this.dataset.caption;
+        const postId = this.dataset.postId || '';
+        const url = postId ? 'https://www.baytruyen.com/' + postId : window.location.href;
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                url: url,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                const label = document.getElementById('share-label');
+                if (label) {
+                    label.textContent = '✓ Copied!';
+                    label.style.color = '#3273dc';
+                    setTimeout(() => {
+                        label.textContent = 'Share';
+                        label.style.color = '';
+                    }, 2000);
+                }
+            }).catch(() => { prompt('Copy this link:', url); });
+        }
+    });
+}
 
-            // Twitter/X
-            const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
-            if (existingTwitterScript) existingTwitterScript.remove();
-            const twitterScript = document.createElement('script');
-            twitterScript.src = "https://platform.twitter.com/widgets.js";
-            twitterScript.async = true;
-            twitterScript.charset = "utf-8";
-            document.body.appendChild(twitterScript);
-
-            // TikTok
-            const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
-            if (oldTikTokScript) oldTikTokScript.remove();
-            const tiktokScript = document.createElement('script');
-            tiktokScript.src = "https://www.tiktok.com/embed.js";
-            tiktokScript.async = true;
-            document.body.appendChild(tiktokScript);
-
-            // Scroll modal content to top
-            document.getElementById('modalContent').scrollTop = 0;
+if (callback) callback();
+preloadAdjacentPosts();
         })
         .catch(error => {
             console.error('Error loading post content:', error);
             document.getElementById("modalBody").innerHTML = "<p>Error loading post. Please try again.</p>";
         });
 }
+
+function initEmbeds() {
+    // Instagram
+    if (window.instgrm && instgrm.Embeds) {
+        instgrm.Embeds.process();
+    }
+
+    // Twitter/X
+    const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+    if (existingTwitterScript) existingTwitterScript.remove();
+    const twitterScript = document.createElement('script');
+    twitterScript.src = "https://platform.twitter.com/widgets.js";
+    twitterScript.async = true;
+    twitterScript.charset = "utf-8";
+    document.body.appendChild(twitterScript);
+
+    // TikTok
+    const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (oldTikTokScript) oldTikTokScript.remove();
+    const tiktokScript = document.createElement('script');
+    tiktokScript.src = "https://www.tiktok.com/embed.js";
+    tiktokScript.async = true;
+    document.body.appendChild(tiktokScript);
+}
+
+function preloadAdjacentPosts() {
+    // Silently fetch next and previous posts in background
+    const toPreload = [];
+    if (currentPostIndex + 1 < allPostIds.length) {
+        toPreload.push(allPostIds[currentPostIndex + 1]);
+    }
+    if (currentPostIndex - 1 >= 0) {
+        toPreload.push(allPostIds[currentPostIndex - 1]);
+    }
+
+    toPreload.forEach(postId => {
+        if (!postCache[postId]) {
+            fetch(`/modal/${postId}/`)
+                .then(res => res.text())
+                .then(html => {
+                    postCache[postId] = html;
+                })
+                .catch(() => {}); // Silent fail — don't disrupt UX
+        }
+    });
+  }
 
 function openPostModal(postId, event) {
     if (event) event.preventDefault();
@@ -635,5 +764,6 @@ function getCookie(name) {
 
 
 </script>
+
 
     {% endblock %}

@@ -72,27 +72,27 @@
 
 <div class="collections-container">
 
-  <!-- Posts -->
-  <div class="section-header">Posts</div>
-  <a href="{% url 'collections_commented_posts' %}" class="collection-row">
-    <span class="row-label">You commented on</span>
+  <!-- LIKED -->
+  <div class="section-header">Liked</div>
+  <a href="{% url 'collections_liked_posts' %}" class="collection-row">
+    <span class="row-label">Posts</span>
     <span class="material-icons chevron">chevron_right</span>
   </a>
-  <a href="{% url 'collections_liked_posts' %}" class="collection-row">
-    <span class="row-label">You liked</span>
+  <a href="{% url 'collections_liked_comments' %}" class="collection-row">
+    <span class="row-label">Comments</span>
     <span class="material-icons chevron">chevron_right</span>
   </a>
 
   <div class="section-divider"></div>
 
-  <!-- Comments -->
-  <div class="section-header">Comments</div>
-  <a href="{% url 'collections_commented_comments' %}" class="collection-row">
-    <span class="row-label">You replied to</span>
+  <!-- POSTED -->
+  <div class="section-header">Posted</div>
+  <a href="{% url 'collections_posted_comments' %}" class="collection-row">
+    <span class="row-label">Comments</span>
     <span class="material-icons chevron">chevron_right</span>
   </a>
-  <a href="{% url 'collections_liked_comments' %}" class="collection-row">
-    <span class="row-label">You liked</span>
+  <a href="{% url 'collections_posted_replies' %}" class="collection-row">
+    <span class="row-label">Replies</span>
     <span class="material-icons chevron">chevron_right</span>
   </a>
 
@@ -113,6 +113,7 @@
   </a>
 
 </div>
+
 
     
     {% endblock %}

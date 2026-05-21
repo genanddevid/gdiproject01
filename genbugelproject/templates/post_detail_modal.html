@@ -668,7 +668,8 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% for comment in comments %}
       {% if not comment.parent %}
        <article class="media comment-wrapper {% if forloop.counter0 >= 3 %}is-hidden{% endif %}" data-index="{{ forloop.counter0 }}"
-id="{% if comment.user == request.user %}my-comment-{{ comment.id }}{% endif %}">
+id="comment-{{ comment.id }}"
+data-comment-id="{{ comment.id }}">
           <figure class="media-left">
             <p class="image is-24x24">
               <img class="is-rounded"

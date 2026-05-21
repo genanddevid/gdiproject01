@@ -21,6 +21,7 @@ from django.contrib.auth import update_session_auth_hash, login
 
 from authy.models import Profile
 from post.models import Post, Follow, Likes, Stream
+from comment.models import Comment
 from django.db import transaction
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
@@ -122,9 +123,35 @@ def collections_history_view(request):
     return render(request, 'collections_history.html')
 
 
+@login_required
 def collections_liked_comments_view(request):
-    # You can pass context with history data if needed
-    return render(request, 'collections_liked_comments.html')
+    liked_comments = Comment.objects.filter(likes__user=request.user).select_related('user', 'user__profile', 'post').order_by('-date')
+    context = {
+        'comments': liked_comments
+    }
+    return render(request, 'collections_liked_comments.html', context)
+
+
+@login_required
+def collections_posted_comments_view(request):
+    posted_comments = Comment.objects.filter(user=request.user, parent__isnull=True).select_related('user', 'user__profile', 'post').order_by('-date')
+    context = {
+        'comments': posted_comments
+    }
+    return render(request, 'collections_posted_comments.html', context)
+
+
+@login_required
+def collections_posted_replies_view(request):
+    posted_replies = Comment.objects.filter(user=request.user, parent__isnull=False).select_related('user', 'user__profile', 'post').order_by('-date')
+    context = {
+        'comments': posted_replies
+    }
+    return render(request, 'collections_posted_replies.html', context)
+
+
+
+
 
 @login_required
 def collections_liked_posts_view(request):

@@ -161,20 +161,6 @@ def collections_liked_posts_view(request):
     }
     return render(request, 'collections_liked_posts.html', context)
 
-def collections_commented_comments_view(request):
-    # You can pass context with history data if needed
-    return render(request, 'collections_commented_comments.html')
-
-
-
-def collections_commented_posts_view(request):
-    commented_posts = Post.objects.filter(comments__user=request.user).distinct().order_by('-posted')
-    context = {
-        'posts': commented_posts
-    }
-    return render(request, 'collections_commented_posts.html', context)
-
-
 def collections_notifications_view(request):
     # You can pass context with history data if needed
     return render(request, 'collections_notifications.html')

@@ -46,8 +46,6 @@ urlpatterns = [
     path('collections/liked_posts/', authy_views.collections_liked_posts_view, name='collections_liked_posts'),
     path('collections/posted_comments/', authy_views.collections_posted_comments_view, name='collections_posted_comments'),
     path('collections/posted_replies/', authy_views.collections_posted_replies_view, name='collections_posted_replies'),
-    path('collections/commented_comments/', authy_views.collections_commented_comments_view, name='collections_commented_comments'),
-    path('collections/commented_posts/', authy_views.collections_commented_posts_view, name='collections_commented_posts'),
     path('collections/notifications/', authy_views.collections_notifications_view, name='collections_notifications'),
     
     path('', include('post.urls')),  # e.g. /post/

@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block content %}
 
-<style>
 
-  .container {
+<style>
+.container {
      width: 543px; 
      margin-left: 50px;
      position: relative; 
      gap: 0rem;
   }
+  
   @media (max-width: 768px) {
     .container {
       padding-left: 6px !important;
@@ -21,159 +24,122 @@
       width: 100% !important;
     }
 
-    
-
     .post-card {
       margin: 0 !important;
       margin-top: 0 !important;
       padding: 0 !important;
       width: 100% !important;
     }
-
-    
   }
 </style>
-<div style="max-width: 525px; margin: auto;">
-<div class="tabs is-centered">
-    <ul>
-        <li class="is-active">
-         <a><i class="material-icons">history</i>History</a>
 
 
-        </li>
-    </ul>
-</div>
-</div>
-
-<!--<h1 class="title is-5" style="text-align: center; margin-top: 10px;">Your Viewed Posts</h1>-->
-  <div class="container">
-{% if viewed_posts %}
+<div class="container">
+  {% if viewed_posts %}
     {% for postview in viewed_posts %}
-    <div class="post-card" data-post-id="{{ postview.post.id }}" onclick="openPostModal('{{ postview.post.id }}', event)">
+      <div class="post-card" data-post-id="{{ postview.post.id }}" onclick="openPostModal('{{ postview.post.id }}', event)">
+        <div class="box" style="max-width: 525px; padding-left: 0 !important; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
+          <article class="media" style="margin-left: 0; background-color: rgb(255, 255, 255);">
+            <div style="display: flex;">
+              <!-- Left: Article image -->
+              <div style="width: 100px; height: 100px;">
+                <a href="#" onclick="openPostModal('{{ postview.post.id }}', event)">
+                  <img src="{{ postview.post.picture.url }}" alt="Article Image" 
+                       style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 6px;" />
+                </a>
+              </div>
 
-    <div class="box" style="max-width: 525px; padding-left: 0 !important; box-shadow: none; border-radius: 0;">
-        <article class="media">
-            <!-- Photo heading of Article-->
-            <div class="media-left" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <figure class="image is-100x100" style="margin:0;">
-                    <a href="{% url 'view_post' postview.post.id %}">
-                        <img src="{{ postview.post.picture.url }}" alt="Image" style="width: 100px; height: 100px; object-fit: cover; object-position: top; border-radius: 6px;"/>
-                    </a>
-                </figure>
-            
-
-            <div class="media-content" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <!-- Right: Text and metadata -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
                 <div class="content" style="margin-top: -13px;">
-                    <!-- Aligns to top -->
-                    <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
-                        <!-- Profile Picture of article writer -->
-                        <div class="media-left">
-                            <a href="{% url 'profile' postview.post.user.username %}">
-                                <figure class="image is-24x24" style="margin: 0;">
-                                    <img class="is-rounded"
-                                         src="{% if postview.post.user.profile.picture %}{{ postview.post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
-                                         style="width: 24px; height: 24px; object-fit: cover;">
-                                </figure>
-                            </a>
-                        </div>
-                        <!-- Name -->
-                        <div class="media-content" style="margin-left: -10px;">
-                            <a href="{% url 'profile' postview.post.user.username %}">
-                                <p class="title is-4" style="font-weight:500; color: rgb(59, 59, 59); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 12px; margin: 0;">
-                                    {{ postview.post.user.username }}
-                                </p>
-                            </a>
-                        </div>
+                  <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+                    <div class="media-left">
+                      <figure class="image is-24x24" style="margin: 0;">
+                        <img class="is-rounded"
+                          src="{% if postview.post.user.profile.picture %}{{ postview.post.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/24x24.png{% endif %}"
+                          style="width: 24px; height: 24px; object-fit: cover;">
+                      </figure>
                     </div>
-                    
-                      
-                    <!-- Article Title -->
-                    <div style="margin-top: 7px; font-weight: 500; font-size: 14px; color: rgb(7, 7, 7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
-                        <a href="{% url 'view_post' postview.post.id %}" style="color: inherit; text-decoration: none;">
-                            {{ postview.post.caption }}
-                        </a>
+                    <div class="media-content" style="margin-left: -10px;">
+                      <p class="title is-4" style="
+                          font-weight:500;
+                          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                          font-size: 12px;
+                          color: rgb(59, 59, 59);
+                          margin: 0;
+                          ">{% if postview.post.user.profile.first_name %}{{ postview.post.user.profile.first_name }} {{ postview.post.user.profile.last_name }}{% else %}{{ postview.post.user.username }}{% endif %}
+                      </p>
                     </div>
+                  </div>
+
+                  <div style="margin-top: 6px; margin-bottom:-2px; font-weight: 500; font-size: 14.0px; color: rgb(7, 7, 7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: 3.6em; width: 100%;">
+                    <a href="#" onclick="event.preventDefault(); openPostModal('{{ postview.post.id }}', event);"
+                       style="color: inherit; text-decoration: none;">
+                      {{ postview.post.caption }}
+                    </a>
+                  </div>
                 </div>
 
-                 
-                <!-- Viewed Timestamp -->
-                <div style="margin-top: 2px;">
-                    <time datetime="{{ postview.timestamp }}" style="color: rgb(59, 59, 59); font-family: 'Inter', sans-serif; font-size: 10.5px;">
-                        Viewed on: {{ postview.timestamp|date:"M d, Y H:i" }}
-                    </time>
-                </div>
+                <time datetime="{{ postview.timestamp|date:'c' }}" 
+                      style="font-size: 10.5px; color: rgb(59, 59, 59); font-family: 'Inter', sans-serif;">
+                  Viewed on: {{ postview.timestamp|date:"M d, Y, P" }}
+                </time>
+              </div>
             </div>
-        </article>
-    </div>
-    </div>
-    </div>
+          </article>
+        </div>
+      </div>
     {% endfor %}
-{% else %}
-    <p style="text-align: center;">You haven't viewed any posts yet.</p>
-{% endif %}
+  {% else %}
+    <p style="text-align: center; padding: 40px 20px; color: #8e8e8e;">You haven't viewed any posts yet.</p>
+  {% endif %}
+</div>
 
 
- <!-- Modal container -->
+<!-- Modal container -->
 <div id="postModal" class="my-modal" style="display: none;">
-  <button id="modalPrevBtn" class="modal-nav-btn modal-nav-btn-left" onclick="showPreviousPost()">&#10094;</button>
-  <button class="my-close-button" onclick="closePostModal()">&times;</button>
   <div class="my-modal-content" id="modalContent">
-    
+    <button class="my-close-button" onclick="closePostModal()">&times;</button>
     <div id="modalBody"></div>
   </div>
+  <button id="modalPrevBtn" class="modal-nav-btn modal-nav-btn-left" onclick="showPreviousPost()">&#10094;</button>
   <button id="modalNextBtn" class="modal-nav-btn modal-nav-btn-right" onclick="showNextPost()">&#10095;</button>
 </div>
 
 <style>
-
- /* Add these styles for the navigation buttons */
 .modal-nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgb(0, 0, 0); /* Semi-transparent background */
+  background-color: rgb(0, 0, 0);
   color: white;
   border: none;
-  
   padding-left: 15px;
   padding-top: 19px;
   padding-bottom: 21px;
   padding-right: 15px;
-
   cursor: pointer;
-  font-size: 2em; /* Make arrows larger */
-  z-index: 10000; /* Ensure they are above the modal background */
-  border-radius: 5px; /* Slightly rounded corners */
-  transition: background-color 0.3s ease; /* Smooth hover effect */
-  user-select: none; /* Prevent text selection */
- /* opacity: 0.8; Slight transparency */
+  font-size: 2em;
+  z-index: 10000;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  user-select: none;
 }
-
 
 .modal-nav-btn:hover {
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 1;
 }
 
-.modal-nav-btn-left {
-  left: 20px; /* Distance from left edge */
-}
-
-.modal-nav-btn-right {
-  right: 20px; /* Distance from right edge */
-}
+.modal-nav-btn-left { left: 20px; }
+.modal-nav-btn-right { right: 20px; }
 
 .modal-nav-btn:disabled {
-  opacity: 0.3; /* Visually indicate disabled state */
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-/* Your existing modal and close button styles here */
- 
-
-/* Modal background */
 .my-modal {
-  
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -184,7 +150,6 @@
   align-items: center;
 }
 
-/* Modal content box */
 .my-modal-content {
   background: white;
   width: 100%;
@@ -193,40 +158,55 @@
   overflow-y: auto;
   border-radius: 0px;
   padding-left: 75px;
-            padding-right: 75px;
-            padding-top: 25px;
+  padding-right: 75px;
+  padding-top: 25px;
   position: relative;
 }
 
-/* Freely movable close button */
 .my-close-button {
-  position: absolute;
-  top: 10px; /* Adjust the distance above the modal */
-  right: 20px; /* Adjust the distance to the right of the modal */
-
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10001;
   font-size: 25px;
   cursor: pointer;
-  background-color: white; /* Optional: Add a background for visibility */
+  background-color: white;
   border: none;
-  border-radius: 50%; /* Makes the close button circular */
+  border-radius: 50%;
   width: 30px;
-  height: 30px; /* Keep height explicitly set */
-  line-height: 30px; /* Add this: Make line-height equal to height for better vertical alignment */
+  height: 30px;
+  line-height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(99, 98, 98, 0.2); /* Optional: Add a subtle shadow */
-  
-  /* --- FIX FOR CENTERING THE 'X' --- */
-  padding-bottom: 5px; /* Adjust this value (e.g., 1px, 2px) to visually center the 'X' */
-  /* You might also try transform: translateY(1px); instead of padding-bottom for more precise nudging if needed */
-}
-/* Optional: Style on hover */
-.close-button:hover {
-  background: #eee;
+  box-shadow: 0 2px 5px rgba(99, 98, 98, 0.2);
+  padding-bottom: 4px;
+  padding-left: 1px;
 }
 
-/* Add this new class */
+.close-button:hover { background: #eee; }
+
+@media (max-width: 768px) {
+  .my-close-button {
+    top: 10px;
+    right: 10px;
+    width: 28px !important;
+    height: 28px !important;
+    padding-bottom: 1px !important;
+  } 
+  .modal-nav-btn { display: none; }
+  .my-modal-content {
+    width: 100%;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+}
+
 .no-scroll {
   overflow: hidden !important;
   position: fixed;
@@ -234,70 +214,130 @@
 }
 </style>
 
-
-
 <script>
+let touchStartX = 0;
+let touchStartY = 0;
 
-  
-let allPostIds = []; // Global array to store all post IDs in order
-let currentPostIndex = -1; // Global variable to store the index of the currently viewed post
+const modal = document.getElementById('postModal');
 
-// Function to initialize allPostIds array when the page loads
+modal.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+});
+
+modal.addEventListener('touchend', (e) => {
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchEndY = e.changedTouches[0].clientY;
+  handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
+});
+
+function handleSwipeGesture(startX, startY, endX, endY) {
+  const swipeThreshold = 50;
+  const diffX = endX - startX;
+  const diffY = endY - startY;
+
+  if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+    if (diffX > 0) {
+      showPreviousPost();
+    } else {
+      showNextPost();
+    }
+  }
+}
+
+let allPostIds = [];
+let currentPostIndex = -1;
+
 document.addEventListener('DOMContentLoaded', () => {
     const postCards = document.querySelectorAll('.post-card');
     postCards.forEach(card => {
-        const postId = card.dataset.postId; 
-        if (postId) {
-            allPostIds.push(postId);
-        }
+        const postId = card.dataset.postId;
+        if (postId) allPostIds.push(postId);
     });
+
+    setTimeout(() => {
+        allPostIds.slice(0, 3).forEach(postId => {
+            if (!postCache[postId]) {
+                fetch(`/modal/${postId}/`)
+                    .then(res => res.text())
+                    .then(html => { postCache[postId] = html; })
+                    .catch(() => {});
+            }
+        });
+    }, 500);
 });
 
-// Helper function to update the navigation button states
 function updateNavButtons() {
     const prevBtn = document.getElementById('modalPrevBtn');
     const nextBtn = document.getElementById('modalNextBtn');
-
     if (prevBtn && nextBtn) {
         prevBtn.disabled = (currentPostIndex <= 0);
         nextBtn.disabled = (currentPostIndex >= allPostIds.length - 1);
     }
 }
 
-// Function to load and display post content in modal
-function loadPostContent(postId) {
-    fetch(`/modal/${postId}/`)
+const postCache = {};
+
+function loadPostContent(postId, callback) {
+    if (postCache[postId]) {
+        document.getElementById("modalBody").innerHTML = postCache[postId];
+        initEmbeds();
+        document.getElementById('modalContent').scrollTop = 0;
+        if (callback) callback();
+        preloadAdjacentPosts();
+        return;
+    }
+
+    document.getElementById("modalBody").innerHTML = `
+        <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
+            <div style="text-align:center;">
+                <div style="width:40px; height:40px; border:3px solid #f3f3f3; 
+                     border-top:3px solid #3273dc; border-radius:50%; 
+                     animation:spin 0.8s linear infinite; margin:0 auto;"></div>
+                <p style="margin-top:15px; color:#888; font-size:14px;">Loading...</p>
+            </div>
+        </div>
+        <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+    `;
+
+    fetch(`/modal/${postId}/?track=1`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.text();
         })
         .then(html => {
+            postCache[postId] = html;
             document.getElementById("modalBody").innerHTML = html;
+            initEmbeds();
+            document.getElementById('modalContent').scrollTop = 0;
 
-            // Instagram
-            if (window.instgrm && instgrm.Embeds) {
-                instgrm.Embeds.process();
+            const shareBtn = document.getElementById('share-btn');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const title = this.dataset.caption;
+                    const postId = this.dataset.postId || '';
+                    const url = postId ? 'https://www.baytruyen.com/' + postId : window.location.href;
+                    if (navigator.share) {
+                        navigator.share({ title: title, url: url }).catch(() => {});
+                    } else {
+                        navigator.clipboard.writeText(url).then(() => {
+                            const label = document.getElementById('share-label');
+                            if (label) {
+                                label.textContent = '✓ Copied!';
+                                label.style.color = '#3273dc';
+                                setTimeout(() => {
+                                    label.textContent = 'Share';
+                                    label.style.color = '';
+                                }, 2000);
+                            }
+                        }).catch(() => { prompt('Copy this link:', url); });
+                    }
+                });
             }
 
-            // Twitter/X
-            const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
-            if (existingTwitterScript) existingTwitterScript.remove();
-            const twitterScript = document.createElement('script');
-            twitterScript.src = "https://platform.twitter.com/widgets.js";
-            twitterScript.async = true;
-            twitterScript.charset = "utf-8";
-            document.body.appendChild(twitterScript);
-
-            // TikTok
-            const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
-            if (oldTikTokScript) oldTikTokScript.remove();
-            const tiktokScript = document.createElement('script');
-            tiktokScript.src = "https://www.tiktok.com/embed.js";
-            tiktokScript.async = true;
-            document.body.appendChild(tiktokScript);
-
-            // Scroll modal content to top
-            document.getElementById('modalContent').scrollTop = 0;
+            if (callback) callback();
+            preloadAdjacentPosts();
         })
         .catch(error => {
             console.error('Error loading post content:', error);
@@ -305,13 +345,45 @@ function loadPostContent(postId) {
         });
 }
 
+function initEmbeds() {
+    if (window.instgrm && instgrm.Embeds) instgrm.Embeds.process();
+    
+    const oldTwitter = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+    if (oldTwitter) oldTwitter.remove();
+    const twitterScript = document.createElement('script');
+    twitterScript.src = "https://platform.twitter.com/widgets.js";
+    twitterScript.async = true;
+    twitterScript.charset = "utf-8";
+    document.body.appendChild(twitterScript);
+
+    const oldTikTok = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (oldTikTok) oldTikTok.remove();
+    const tiktokScript = document.createElement('script');
+    tiktokScript.src = "https://www.tiktok.com/embed.js";
+    tiktokScript.async = true;
+    document.body.appendChild(tiktokScript);
+}
+
+function preloadAdjacentPosts() {
+    const toPreload = [];
+    if (currentPostIndex + 1 < allPostIds.length) toPreload.push(allPostIds[currentPostIndex + 1]);
+    if (currentPostIndex - 1 >= 0) toPreload.push(allPostIds[currentPostIndex - 1]);
+
+    toPreload.forEach(postId => {
+        if (!postCache[postId]) {
+            fetch(`/modal/${postId}/`)
+                .then(res => res.text())
+                .then(html => { postCache[postId] = html; })
+                .catch(() => {});
+        }
+    });
+}
+
 function openPostModal(postId, event) {
     if (event) event.preventDefault();
-
     currentPostIndex = allPostIds.indexOf(postId);
 
     if (currentPostIndex === -1) {
-        console.error("Post ID not found in allPostIds array:", postId);
         loadPostContent(postId);
         document.getElementById("postModal").style.display = "flex";
         document.body.classList.add("no-scroll");
@@ -338,8 +410,7 @@ function closePostModal() {
 function showNextPost() {
     if (currentPostIndex < allPostIds.length - 1) {
         currentPostIndex++;
-        const nextPostId = allPostIds[currentPostIndex];
-        loadPostContent(nextPostId);
+        loadPostContent(allPostIds[currentPostIndex]);
         updateNavButtons();
     }
 }
@@ -347,22 +418,16 @@ function showNextPost() {
 function showPreviousPost() {
     if (currentPostIndex > 0) {
         currentPostIndex--;
-        const prevPostId = allPostIds[currentPostIndex];
-        loadPostContent(prevPostId);
+        loadPostContent(allPostIds[currentPostIndex]);
         updateNavButtons();
     }
 }
 
-// Optional: Keyboard navigation
 document.addEventListener('keydown', (event) => {
     if (document.getElementById("postModal").style.display === "flex") {
-        if (event.key === 'ArrowRight') {
-            showNextPost();
-        } else if (event.key === 'ArrowLeft') {
-            showPreviousPost();
-        } else if (event.key === 'Escape') {
-            closePostModal();
-        }
+        if (event.key === 'ArrowRight') showNextPost();
+        else if (event.key === 'ArrowLeft') showPreviousPost();
+        else if (event.key === 'Escape') closePostModal();
     }
 });
 
@@ -370,12 +435,9 @@ document.getElementById('modalBody').addEventListener('click', function (event) 
   const postLikeBtn = event.target.closest('.like-post-btn');
   const commentLikeBtn = event.target.closest('.like-btn');
 
-  // 🔵 Handle post like (only if .like-post-btn was clicked)
   if (postLikeBtn) {
     event.preventDefault();
-
     const postId = postLikeBtn.dataset.postId;
-
     fetch(`/${postId}/like`, {
       method: 'POST',
       headers: {
@@ -387,24 +449,14 @@ document.getElementById('modalBody').addEventListener('click', function (event) 
     .then(data => {
       const icon = postLikeBtn.querySelector('i');
       const countElem = document.getElementById(`like-count-${postId}`);
-
-      if (icon) {
-        icon.style.color = data.liked ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
-      }
-
-      if (countElem) {
-        countElem.textContent = data.likes;
-      }
-    })
-    .catch(err => console.error('Post like failed:', err));
+      if (icon) icon.style.color = data.liked ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
+      if (countElem) countElem.textContent = data.likes;
+    });
   }
 
-  // 🟢 Handle comment like (only if .like-btn was clicked and not inside a post like)
   if (commentLikeBtn && !postLikeBtn) {
     event.preventDefault();
-
     const commentId = commentLikeBtn.dataset.commentId;
-
     fetch(`/comment/${commentId}/like/`, {
       method: 'POST',
       headers: {
@@ -417,91 +469,61 @@ document.getElementById('modalBody').addEventListener('click', function (event) 
     .then(data => {
       const likeCountId = `like-count-${commentId}`;
       let likeSpan = document.getElementById(likeCountId);
-
       if (data.likes > 0) {
-        const likeText = `${data.likes}`;
-
-        if (likeSpan) {
-          likeSpan.innerText = likeText;
-        } else {
+        if (likeSpan) likeSpan.innerText = `${data.likes}`;
+        else {
           likeSpan = document.createElement('span');
           likeSpan.className = 'like-count';
           likeSpan.id = likeCountId;
-          likeSpan.innerText = likeText;
+          likeSpan.innerText = `${data.likes}`;
           commentLikeBtn.insertAdjacentElement('afterend', likeSpan);
         }
-      } else {
-        if (likeSpan) {
-          likeSpan.remove();
-        }
-      }
-    })
-    .catch(err => console.error('Comment like failed:', err));
+      } else if (likeSpan) likeSpan.remove();
+    });
   }
 });
-
-
 
 document.getElementById('modalBody').addEventListener('click', function (event) {
   const target = event.target;
 
   if (target.closest('.save-post-btn')) {
-  event.preventDefault();
-
-  const saveBtn = target.closest('.save-post-btn');
-  const postId = saveBtn.dataset.postId;
-
-  fetch(`/${postId}/favorite`, {
-    method: 'POST',
-    headers: {
-      'X-CSRFToken': getCookie('csrftoken'),
-    },
-  })
-  .then(response => {
-    if (response.ok) {
-      saveBtn.classList.toggle('saved');
-
-      // Optionally change icon color or text to reflect save state
-      const icon = saveBtn.querySelector('i');
-      if (icon) {
-        icon.style.color = saveBtn.classList.contains('saved') ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
+    event.preventDefault();
+    const saveBtn = target.closest('.save-post-btn');
+    const postId = saveBtn.dataset.postId;
+    fetch(`/${postId}/favorite`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    })
+    .then(response => {
+      if (response.ok) {
+        saveBtn.classList.toggle('saved');
+        const icon = saveBtn.querySelector('i');
+        if (icon) icon.style.color = saveBtn.classList.contains('saved') ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
+        const textElem = saveBtn.nextElementSibling;
+        if (textElem && textElem.tagName === 'P') {
+          textElem.textContent = saveBtn.classList.contains('saved') ? 'Saved' : 'Save';
+        }
       }
-
-      const textElem = saveBtn.nextElementSibling;
-      if (textElem && textElem.tagName === 'P') {
-        textElem.textContent = saveBtn.classList.contains('saved') ? 'Saved' : 'Save';
-      }
-    }
-  });
-}
-
-
-
-  // ✅ Add this block for SHOW MORE COMMENTS bar
-  if (target.id === 'viewcomments-bar') {
-    document.querySelectorAll(".comment-wrapper.is-hidden").forEach(el => {
-      el.classList.remove("is-hidden");
     });
+  }
+
+  if (target.id === 'viewcomments-bar') {
+    document.querySelectorAll(".comment-wrapper.is-hidden").forEach(el => el.classList.remove("is-hidden"));
     target.style.display = "none";
   }
 
-  // Handle reply toggle
   if (target.classList.contains('reply-btn')) {
     event.preventDefault();
     const commentId = target.dataset.commentId;
     const replyForm = document.getElementById(`reply-form-${commentId}`);
-    if (replyForm) {
-      replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
-    }
+    if (replyForm) replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
   }
 
-  // Handle "View replies"
   if (target.classList.contains('view-replies-btn')) {
     event.preventDefault();
     const commentId = target.dataset.commentId;
     const replyCount = target.dataset.replyCount;
     const repliesSection = document.getElementById(`replies-${commentId}`);
-
     if (repliesSection) {
       const isVisible = repliesSection.style.display === 'block';
       repliesSection.style.display = isVisible ? 'none' : 'block';
@@ -509,12 +531,10 @@ document.getElementById('modalBody').addEventListener('click', function (event) 
     }
   }
 
-  // Handle "Show more replies"
   if (target.classList.contains('show-more-replies-btn')) {
     event.preventDefault();
     const commentId = target.dataset.commentId;
     const extraReplies = document.getElementById('extra-replies-' + commentId);
-
     if (extraReplies) {
       extraReplies.style.display = 'block';
       target.style.display = 'none';
@@ -522,78 +542,43 @@ document.getElementById('modalBody').addEventListener('click', function (event) 
   }
 });
 
-// ✅ Handle comment form submission inside the modal via AJAX
 document.getElementById('modalBody').addEventListener('submit', function (event) {
   const form = event.target;
   
-
   if (form.id === 'modal-comment-form') {
-    event.preventDefault(); // Stop full page reload
-
+    event.preventDefault();
     const postId = form.dataset.postId;
     const formData = new FormData(form);
-
     fetch(`/modal/${postId}/`, {
       method: 'POST',
-      headers: {
-        'X-CSRFToken': getCookie('csrftoken'),
-      },
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
       body: formData,
     })
     .then(response => response.text())
-    .then(html => {
-      // Reload the modal with updated content
-      document.getElementById('modalBody').innerHTML = html;
-    })
-    .catch(error => console.error('Comment submit failed:', error));
+    .then(html => { document.getElementById('modalBody').innerHTML = html; });
   }
 
-
-  // ✅ Reply form (identified by class or action URL pattern)
   if (form.action.includes('/comment/') && form.action.includes('/reply/')) {
     event.preventDefault();
-
-    const commentId = form.getAttribute('data-comment-id') || form.action.split('/comment/')[1].split('/reply')[0];
     const formData = new FormData(form);
-
     fetch(form.action, {
       method: 'POST',
-      headers: {
-        'X-CSRFToken': getCookie('csrftoken'),
-      },
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
       body: formData,
     })
-
-
-
-.then(response => {
-  if (response.status === 204) {
-    const postId = document.getElementById('modal-comment-form')?.dataset.postId;
-    if (postId) {
-      fetch(`/modal/${postId}/`)
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById('modalBody').innerHTML = html;
-        });
-    }
-  }
-})
-
-
-
-
-    .catch(error => console.error('Reply submit failed:', error));
+    .then(response => {
+      if (response.status === 204) {
+        const postId = document.getElementById('modal-comment-form')?.dataset.postId;
+        if (postId) {
+          fetch(`/modal/${postId}/`)
+            .then(res => res.text())
+            .then(html => { document.getElementById('modalBody').innerHTML = html; });
+        }
+      }
+    });
   }
 });
 
-
-
-
-
-
-
-
-// CSRF helper
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -608,8 +593,6 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
-
 </script>
-{% endblock %}
 
+{% endblock %}

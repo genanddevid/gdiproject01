@@ -265,23 +265,40 @@ function loadPostContentAndScroll(postId, commentId) {
 }
 
 function scrollToComment(commentId) {
-    // Wait briefly for DOM to render, then scroll
-    setTimeout(() => {
-        const commentEl = document.getElementById('my-comment-' + commentId) 
+    const modalContent = document.getElementById('modalContent');
+    
+    // Helper to do the actual scroll
+    const performScroll = () => {
+        const commentEl = document.getElementById('comment-' + commentId)
+                       || document.getElementById('my-comment-' + commentId)
                        || document.querySelector(`[data-comment-id="${commentId}"]`);
-        const modalContent = document.getElementById('modalContent');
         
         if (commentEl && modalContent) {
             const offsetTop = commentEl.getBoundingClientRect().top - modalContent.getBoundingClientRect().top + modalContent.scrollTop - 20;
             modalContent.scrollTo({ top: offsetTop, behavior: 'smooth' });
-            // Brief highlight to draw the eye
             commentEl.style.transition = 'background-color 0.8s ease';
             commentEl.style.backgroundColor = '#fff8b8';
             setTimeout(() => { commentEl.style.backgroundColor = ''; }, 2000);
-        } else {
-            modalContent.scrollTop = 0;
         }
-    }, 200);
+    };
+    
+    // Wait for the lead image to load before measuring positions
+    // This is the main cause of layout shift in the modal
+    const leadImg = modalContent.querySelector('img');
+    
+    if (leadImg && !leadImg.complete) {
+        leadImg.addEventListener('load', () => {
+            // Image loaded, wait one more frame for layout to settle, then scroll
+            requestAnimationFrame(() => {
+                setTimeout(performScroll, 100);
+            });
+        });
+        // Fallback: scroll anyway after 2 seconds in case image is slow
+        setTimeout(performScroll, 2000);
+    } else {
+        // No image, or already loaded — scroll after small delay
+        setTimeout(performScroll, 300);
+    }
 }
 
 function initEmbeds() {

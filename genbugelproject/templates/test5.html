@@ -1,3 +1,5 @@
+edit_profile.html
+
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
@@ -80,15 +82,15 @@
 
               <div class="field mt-5">
                 <p class="control has-text-centered">
-                  <button type="submit" class="button is-fullwidth ig-submit-btn">
+                  <button type="submit" class="button is-success is-fullwidth">
                     Update
                   </button>
                 </p>
               </div>
             </form>
 
-          </div>
-        </div>
+          </div> <!-- end card-content -->
+        </div> <!-- end card -->
 
       </div>
     </div>
@@ -98,113 +100,37 @@
 
 
 <style>
-/* ===== Instagram-style polish (cosmetic only) ===== */
-
-.section { background: #fafafa; }
-.mycard {
-  background: #ffffff;
-  border: 1px solid #dbdbdb !important;
-  border-radius: 12px !important;
-}
-.card-content {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-               "Helvetica Neue", Arial, sans-serif;
-  color: #262626;
-  padding: 32px 28px;
-}
-
-.card-content .title {
-  font-weight: 600;
-  letter-spacing: -0.2px;
-  color: #262626;
-}
-
-.card-content .label {
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  color: #8e8e8e !important;
-  margin-bottom: 6px !important;
-  letter-spacing: 0.1px;
-}
-
-.card-content input[type="text"],
-.card-content input[type="url"],
-.card-content input[type="email"],
-.card-content textarea,
-.card-content .input,
-.card-content .textarea {
-  background: #fafafa !important;
-  border: 1px solid #dbdbdb !important;
-  border-radius: 8px !important;
-  padding: 11px 13px !important;
-  font-size: 15px !important;
-  color: #262626 !important;
-  box-shadow: none !important;
-  transition: border-color 0.15s ease, background 0.15s ease;
-}
-.card-content input:focus,
-.card-content textarea:focus,
-.card-content .input:focus,
-.card-content .textarea:focus {
-  border-color: #a8a8a8 !important;
-  background: #ffffff !important;
-  outline: none !important;
-}
-
-.card-content .field { margin-bottom: 20px; }
-
-.card-content input[type="file"] {
-  font-size: 13px;
-  color: #8e8e8e;
-}
-
-.ig-submit-btn {
-  background: #0095f6 !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 15px !important;
-  padding: 12px !important;
-  height: auto !important;
-  transition: background 0.15s ease;
-}
-.ig-submit-btn:hover { background: #1877f2 !important; }
-.ig-submit-btn:active { background: #00376b !important; }
-
-.notification.is-danger.is-light {
-  background: #fff5f5 !important;
-  border: 1px solid #ffd6d6 !important;
-  color: #c62828 !important;
-  border-radius: 8px !important;
-}
-
 @media (max-width: 768px) {
   .section {
     padding: 0 !important;
     margin: 0 !important;
-    background: #ffffff;
   }
+
   .container {
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
   }
-  .columns { margin: 0 !important; }
+
+  .columns {
+    margin: 0 !important;
+  }
+
   .column {
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
   }
+
   .mycard {
     width: 100% !important;
     margin: 0 !important;
     border-radius: 0 !important;
-    border-left: none !important;
-    border-right: none !important;
+    border-left: none;
+    border-right: none;
   }
-  .card-content { padding: 20px 18px 32px; }
 }
 </style>
+
 
 {% endblock %}

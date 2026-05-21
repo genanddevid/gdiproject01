@@ -102,6 +102,45 @@
   }
 </style>
 
+<div style="max-width: 525px; margin: auto; background: #fff;">
+
+  <div class="tabs is-centered"
+       style="margin-bottom: 0; border-bottom: 1px solid #dbdbdb;">
+
+    <ul style="border-bottom: none;">
+
+      <li class="is-active">
+
+        <a style="
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 14px 18px;
+          color: #111;
+          font-weight: 600;
+          border-bottom: 2px solid #111;
+        ">
+
+          <span class="material-icons"
+                style="font-size: 20px;">
+            comment
+          </span>
+          
+          <span style="font-size: 14px;">
+            Liked Comments
+          </span>
+
+        </a>
+
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
+
+
 <div class="comments-container">
   {% for comment in comments %}
     <a href="#" class="comment-item" 

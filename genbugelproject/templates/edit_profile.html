@@ -25,7 +25,7 @@
 
               <div class="field">
                 <label class="label is-medium">Profile Picture</label>
-                <div class="control">
+                <div class="control ig-picture-field">
                   {{ form.picture }}
                 </div>
               </div>
@@ -141,6 +141,7 @@
   color: #262626 !important;
   box-shadow: none !important;
   transition: border-color 0.15s ease, background 0.15s ease;
+  overflow-y: hidden !important; 
 }
 .card-content input:focus,
 .card-content textarea:focus,
@@ -177,6 +178,28 @@
   border: 1px solid #ffd6d6 !important;
   color: #c62828 !important;
   border-radius: 8px !important;
+}
+
+
+/* ===== Profile picture: relabel "Clear" area to "Edit photo" ===== */
+
+/* Hide the "Currently: .../xxxx.jpg" link */
+.ig-picture-field a {
+  display: none !important;
+}
+
+/* Hide Django's default "Clear" text label that wraps the checkbox.
+   We hide the label's text but keep the checkbox visible. */
+.ig-picture-field label[for$="-clear_id"] {
+  font-size: 0 !important;   /* hides the word "Clear" */
+}
+
+/* Re-add our own text after the checkbox */
+.ig-picture-field label[for$="-clear_id"]::after {
+  content: "Edit photo";
+  font-size: 14px;
+  color: #262626;
+  margin-left: 6px;
 }
 
 @media (max-width: 768px) {

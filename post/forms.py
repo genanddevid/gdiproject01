@@ -1,7 +1,7 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
-from post.models import Post, Tag
+from post.models import Post, Tag, BannerAd
 
 class NarrativeBuilderForm(forms.ModelForm):
     

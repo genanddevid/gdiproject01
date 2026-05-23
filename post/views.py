@@ -10,6 +10,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.files import File
 from django.db.models import Q
+from django.db import models
 
 import re
 import math
@@ -364,6 +365,46 @@ def PostDetails(request, post_id):
     
 
 
+def get_matching_ad(post):
+    """Find an approved ad whose entities match the post's semantic tags"""
+    try:
+        from post.models import SemanticTag, BannerAd
+        
+        post_entities = set(
+            SemanticTag.objects.filter(post=post)
+            .values_list('entity', flat=True)
+        )
+        post_categories = set(
+            SemanticTag.objects.filter(post=post)
+            .values_list('category', flat=True)
+        )
+        
+        approved_ads = BannerAd.objects.filter(status='approved')
+        
+        matched_ads = []
+        for ad in approved_ads:
+            ad_entities = set(e.strip().lower() for e in ad.entities.split(',') if e.strip())
+            post_entities_lower = set(e.lower() for e in post_entities)
+            post_categories_lower = set(c.lower() for c in post_categories)
+            
+            if ad_entities & (post_entities_lower | post_categories_lower):
+                matched_ads.append(ad)
+        
+        if matched_ads:
+            # Return up to 2 matched ads
+            return matched_ads[:2]
+        return []
+    except Exception as e:
+        print(f"Ad matching failed: {e}")
+        return []
+
+
+
+
+
+
+
+
 def post_modal(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
@@ -414,6 +455,14 @@ def post_modal(request, post_id):
     total_comment_count = Comment.objects.filter(post=post).count()
     left_recommendations, right_recommendations = get_recommendations(post, user)
     content1, content2, content3 = split_content_for_post(post)
+    matched_ads = get_matching_ad(post)
+    ad1 = matched_ads[0] if len(matched_ads) >= 1 else None
+    ad2 = matched_ads[1] if len(matched_ads) >= 2 else None
+
+    # Increment impressions
+    from post.models import BannerAd
+    for ad in matched_ads:
+        BannerAd.objects.filter(id=ad.id).update(impressions=models.F('impressions') + 1)
 
     from post.models import SemanticTag, ApprovedWriterEntity
     post_entities = set(
@@ -439,6 +488,8 @@ def post_modal(request, post_id):
         'content2': content2,
         'content3': content3,
         'is_approved': is_approved,
+        'ad1': ad1,
+        'ad2': ad2,
     })
 
 

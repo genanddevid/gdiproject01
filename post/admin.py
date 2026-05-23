@@ -1,5 +1,5 @@
 from django.contrib import admin
-from post.models import Post, Tag, Follow, Stream, SemanticTag, UserInterest, ApprovedWriterEntity
+from post.models import Post, Tag, Follow, Stream, SemanticTag, UserInterest, ApprovedWriterEntity, BannerAd
 
 admin.site.register(Post)
 admin.site.register(Tag)
@@ -22,6 +22,12 @@ class UserInterestAdmin(admin.ModelAdmin):
 class ApprovedWriterEntityAdmin(admin.ModelAdmin):
     list_display = ('writer', 'entity', 'approved_at')
     search_fields = ('writer__username', 'entity')
+
+@admin.register(BannerAd)
+class BannerAdAdmin(admin.ModelAdmin):
+    list_display = ('advertiser', 'description', 'status', 'impressions', 'created_at')
+    list_filter = ('status',)
+    search_fields = ('advertiser__username', 'description', 'entities')
 
 
 

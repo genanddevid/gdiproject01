@@ -170,6 +170,27 @@ class ApprovedWriterEntity(models.Model):
 
 
 
+class BannerAd(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+    
+    advertiser = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ads')
+    image = models.ImageField(upload_to='ads/')
+    description = models.TextField(max_length=300)
+    entities = models.TextField(blank=True, default='')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    impressions = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.advertiser.username} — {self.description[:50]} ({self.status})"
+
+
+
+
 
 
 

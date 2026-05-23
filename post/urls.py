@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from post.views import index, NarrativeBuilder, PostDetails, like, favorite, preview_narrative
+from post.views import index, NarrativeBuilder, PostDetails, like, favorite, preview_narrative, ad_dashboard, approve_ad, reject_ad, delete_ad
 from .views import remove_writer_entity
 
 
@@ -31,6 +31,11 @@ urlpatterns = [
     path('remove-approval/<uuid:post_id>/', views.remove_writer_entity, name='remove_writer_entity'),
 
     path('modal/<uuid:post_id>/', views.post_modal, name='post_modal'),
+
+    path('ads/', ad_dashboard, name='ad_dashboard'),
+    path('ads/approve/<int:ad_id>/', approve_ad, name='approve_ad'),
+    path('ads/reject/<int:ad_id>/', reject_ad, name='reject_ad'),
+    path('ads/delete/<int:ad_id>/', delete_ad, name='delete_ad'),
 
     
 

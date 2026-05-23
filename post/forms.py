@@ -80,3 +80,25 @@ class NarrativeBuilderForm(forms.ModelForm):
             instance.save()
 
         return instance
+
+
+    from post.models import Post, Tag, BannerAd
+
+class BannerAdForm(forms.ModelForm):
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'input',
+            'placeholder': 'Describe your product or service in one sentence...',
+            'rows': 3,
+        }),
+        required=True
+    )
+    image = forms.ImageField(required=True)
+
+    class Meta:
+        model = BannerAd
+        fields = ('image', 'description')
+
+
+
+

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .ads-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  @media (max-width: 768px) {
+    .ads-container {
+      padding: 12px;
+    }
+  }
+  .ad-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: white;
+  }
+  .ad-status-pending { color: #f5a623; font-weight: 600; }
+  .ad-status-approved { color: #27ae60; font-weight: 600; }
+  .ad-status-rejected { color: #e74c3c; font-weight: 600; }
+</style>
+
+<div class="ads-container">
+  <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 24px;">Ad Dashboard</h2>
+
+  <!-- Upload form -->
+  <div class="ad-card">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Upload New Ad</h3>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">Ad Image</label>
+        {{ form.image }}
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">Describe your product</label>
+        {{ form.description }}
+      </div>
+      <button type="submit" style="background: #000; color: white; border: none; 
+          border-radius: 50px; padding: 10px 24px; font-size: 14px; 
+          font-weight: 600; cursor: pointer;">
+        Submit Ad
+      </button>
+    </form>
+  </div>
+
+  <!-- Migaja approval panel -->
+  {% if pending_ads %}
+  <div class="ad-card" style="border-color: #f5a623;">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #f5a623;">
+      Pending Approval ({{ pending_ads.count }})
+    </h3>
+    {% for ad in pending_ads %}
+    <div style="display: flex; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #eee;">
+      <img src="{{ ad.image.url }}" style="width: 80px; height: 67px; object-fit: cover; border-radius: 4px;">
+      <div style="flex: 1;">
+        <p style="font-size: 13px; margin-bottom: 4px;">{{ ad.description }}</p>
+        <p style="font-size: 11px; color: #888; margin-bottom: 8px;">By {{ ad.advertiser.username }}</p>
+        <p style="font-size: 11px; color: #888; margin-bottom: 8px;">Entities: {{ ad.entities }}</p>
+        <div style="display: flex; gap: 8px;">
+          <a href="{% url 'approve_ad' ad.id %}" 
+             style="background: #27ae60; color: white; border-radius: 50px; 
+             padding: 6px 14px; font-size: 12px; text-decoration: none;">Approve</a>
+          <a href="{% url 'reject_ad' ad.id %}"
+             style="background: #e74c3c; color: white; border-radius: 50px;
+             padding: 6px 14px; font-size: 12px; text-decoration: none;">Reject</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- User's own ads -->
+  <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Your Ads</h3>
+  {% if user_ads %}
+    {% for ad in user_ads %}
+    <div class="ad-card">
+      <div style="display: flex; gap: 12px;">
+        <img src="{{ ad.image.url }}" style="width: 100px; height: 83px; object-fit: cover; border-radius: 4px;">
+        <div style="flex: 1;">
+          <p style="font-size: 13px; margin-bottom: 4px;">{{ ad.description }}</p>
+          <p style="font-size: 12px; margin-bottom: 4px;">
+            Status: <span class="ad-status-{{ ad.status }}">{{ ad.status|capfirst }}</span>
+          </p>
+          <p style="font-size: 12px; color: #888; margin-bottom: 8px;">
+            Impressions: {{ ad.impressions }}
+          </p>
+          <a href="{% url 'delete_ad' ad.id %}"
+             style="color: #e74c3c; font-size: 12px; text-decoration: none;">Remove ad</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p style="color: #888; font-size: 14px;">You have no ads yet.</p>
+  {% endif %}
+
+</div>
+{% endblock %}

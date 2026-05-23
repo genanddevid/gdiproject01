@@ -907,6 +907,111 @@ def run_tagging_now(request):
     except Exception as e:
         return HttpResponse(f'Error: {str(e)}')
 
+@login_required
+def ad_dashboard(request):
+    from post.models import BannerAd
+    from post.forms import BannerAdForm
+    
+    if request.method == 'POST':
+        form = BannerAdForm(request.POST, request.FILES)
+        if form.is_valid():
+            ad = form.save(commit=False)
+            ad.advertiser = request.user
+            
+            # Resize image to 300x250
+            from PIL import Image as PILImage
+            from io import BytesIO
+            from django.core.files.base import ContentFile
+            
+            img = PILImage.open(ad.image)
+            img = img.convert('RGB')
+            img = img.resize((300, 250), PILImage.LANCZOS)
+            buffer = BytesIO()
+            img.save(buffer, format='JPEG', quality=85)
+            buffer.seek(0)
+            ad.image.save(
+                f"ad_{request.user.id}_{uuid.uuid4()}.jpg",
+                ContentFile(buffer.read()),
+                save=False
+            )
+            
+            # Extract entities using Groq
+            try:
+                from groq import Groq
+                client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
+                completion = client.chat.completions.create(
+                    model="llama-3.3-70b-versatile",
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": """Extract relevant entities and topics from this ad description.
+Return ONLY a comma-separated list of entities/topics. No other text.
+Example: 'boxing gloves, fitness, sports equipment, training'
+Maximum 6 entities."""
+                        },
+                        {
+                            "role": "user",
+                            "content": f"Ad description: {ad.description}"
+                        }
+                    ],
+                    temperature=0.3,
+                    max_tokens=100,
+                )
+                ad.entities = completion.choices[0].message.content.strip()
+            except Exception as e:
+                print(f"Ad entity extraction failed: {e}")
+                ad.entities = ''
+            
+            ad.save()
+            return redirect('ad_dashboard')
+    else:
+        form = BannerAdForm()
+    
+    user_ads = BannerAd.objects.filter(advertiser=request.user).order_by('-created_at')
+    
+    # Migaja sees all pending ads
+    pending_ads = None
+    if request.user.username == 'migaja':
+        pending_ads = BannerAd.objects.filter(status='pending').order_by('-created_at')
+    
+    return render(request, 'ads_dashboard.html', {
+        'form': form,
+        'user_ads': user_ads,
+        'pending_ads': pending_ads,
+    })
+
+
+@login_required
+def approve_ad(request, ad_id):
+    if request.user.username != 'migaja':
+        return HttpResponse('Unauthorized', status=403)
+    from post.models import BannerAd
+    ad = get_object_or_404(BannerAd, id=ad_id)
+    ad.status = 'approved'
+    ad.save()
+    return redirect('ad_dashboard')
+
+
+@login_required
+def reject_ad(request, ad_id):
+    if request.user.username != 'migaja':
+        return HttpResponse('Unauthorized', status=403)
+    from post.models import BannerAd
+    ad = get_object_or_404(BannerAd, id=ad_id)
+    ad.status = 'rejected'
+    ad.save()
+    return redirect('ad_dashboard')
+
+
+@login_required
+def delete_ad(request, ad_id):
+    from post.models import BannerAd
+    ad = get_object_or_404(BannerAd, id=ad_id, advertiser=request.user)
+    ad.image.delete()
+    ad.delete()
+    return redirect('ad_dashboard')
+
+
 
 
 

@@ -17,11 +17,8 @@ class NarrativeBuilderForm(forms.ModelForm):
         'placeholder': 'Write your narrative...'
         }), required=True)
 
-    tag = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'font-size: 13px; font-family: consolas; width: 100%; word-spacing: -1px;',
-        'class': 'input is-medium',
-        'placeholder': '#(From the headline write the subject of your narrative)'
-        }), required=True)
+    tag = forms.CharField(required=False, widget=forms.HiddenInput())
+        
     
     link1 = forms.URLField(widget=forms.TextInput(attrs={
         'style': 'font-size: 15px; font-family: consolas;',
@@ -66,6 +63,15 @@ class NarrativeBuilderForm(forms.ModelForm):
 
     def clean_tag(self):
         tag_title = self.cleaned_data['tag'].strip()
+        if tag_title.startswith('#'):
+            tag_title = tag_title[1:]
+        tag_obj, created = Tag.objects.get_or_create(title=tag_title)
+        return tag_obj
+
+    def clean_tag(self):
+        tag_title = self.cleaned_data.get('tag', '').strip()
+        if not tag_title:
+            return None
         if tag_title.startswith('#'):
             tag_title = tag_title[1:]
         tag_obj, created = Tag.objects.get_or_create(title=tag_title)

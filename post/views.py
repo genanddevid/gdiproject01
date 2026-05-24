@@ -976,7 +976,7 @@ def ad_dashboard(request):
             
             img = PILImage.open(ad.image)
             img = img.convert('RGB')
-            img = img.resize((300, 250), PILImage.LANCZOS)
+            img = img.resize((360, 360), PILImage.LANCZOS)
             buffer = BytesIO()
             img.save(buffer, format='JPEG', quality=85)
             buffer.seek(0)

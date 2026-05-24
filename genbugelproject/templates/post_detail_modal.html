@@ -704,7 +704,7 @@ data-comment-id="{{ comment.id }}">
                     {% if comment.user.profile.first_name %}                     
                     {{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }}                   
                     {% else %}
-                    Unknown                      
+                    {{ comment.user.username }}                     
                     {% endif %}
                   </span>
                       
@@ -797,8 +797,7 @@ data-comment-id="{{ comment.id }}">
                     <div class="media-content">
                       <div class="content">
                         <p>
-                          <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
-                          <span style="margin: 0; color: #636363;">•</span>
+                          <strong>{% if reply.user.profile.first_name %}{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}{% else %}{{ reply.user.username }}{% endif %}</strong><span style="margin: 0; color: #636363;">•</span>
                           <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
                     {{ reply.date|timesince }} 
                     ago

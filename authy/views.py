@@ -21,7 +21,8 @@ from django.contrib.auth import update_session_auth_hash, login
 
 from authy.models import Profile
 from post.models import Post, Follow, Likes, Stream
-from comment.models import Comment
+from comment.models import Comment, CommentLike
+from django.utils import timezone
 from django.db import transaction
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
@@ -161,9 +162,84 @@ def collections_liked_posts_view(request):
     }
     return render(request, 'collections_liked_posts.html', context)
 
+@login_required
 def collections_notifications_view(request):
-    # You can pass context with history data if needed
-    return render(request, 'collections_notifications.html')
+    me = request.user
+    last_seen = me.profile.notifications_last_seen
+
+    notifications = []
+
+    # 1. Likes on MY posts (someone liked a post I wrote)
+    post_likes = Likes.objects.filter(post__user=me).exclude(user=me).select_related('user', 'user__profile', 'post')
+    for like in post_likes:
+        notifications.append({
+            'type': 'post_like',
+            'actor': like.user,
+            'post': like.post,
+            'comment': None,
+            'timestamp': like.liked_at,
+            'text': 'liked your post',
+        })
+
+    # 2. Comments on MY posts (someone commented on a post I wrote) - top-level only
+    post_comments = Comment.objects.filter(post__user=me, parent__isnull=True).exclude(user=me).select_related('user', 'user__profile', 'post')
+    for comment in post_comments:
+        notifications.append({
+            'type': 'post_comment',
+            'actor': comment.user,
+            'post': comment.post,
+            'comment': comment,
+            'timestamp': comment.date,
+            'text': 'commented on your post',
+        })
+
+    # 3. Replies to MY comments (someone replied to a comment I wrote)
+    my_comment_ids = Comment.objects.filter(user=me).values_list('id', flat=True)
+    replies = Comment.objects.filter(parent__in=my_comment_ids).exclude(user=me).select_related('user', 'user__profile', 'post')
+    for reply in replies:
+        notifications.append({
+            'type': 'reply',
+            'actor': reply.user,
+            'post': reply.post,
+            'comment': reply,
+            'timestamp': reply.date,
+            'text': 'replied to your comment',
+        })
+
+    # 4. Likes on MY comments (someone liked a comment I wrote)
+    comment_likes = CommentLike.objects.filter(comment__user=me).exclude(user=me).select_related('user', 'user__profile', 'comment', 'comment__post')
+    for clike in comment_likes:
+        notifications.append({
+            'type': 'comment_like',
+            'actor': clike.user,
+            'post': clike.comment.post,
+            'comment': clike.comment,
+            'timestamp': clike.liked_at,
+            'text': 'liked your comment',
+        })
+
+    # Filter out any with no timestamp (old post-likes from before the migration)
+    notifications = [n for n in notifications if n['timestamp'] is not None]
+
+    # Sort newest first
+    notifications.sort(key=lambda n: n['timestamp'], reverse=True)
+
+    # Mark each as read/unread
+    for n in notifications:
+        if last_seen is None:
+            n['unread'] = True
+        else:
+            n['unread'] = n['timestamp'] > last_seen
+
+    # Update last_seen to now (so next visit, these are "read")
+    me.profile.notifications_last_seen = timezone.now()
+    me.profile.save()
+
+    context = {
+        'notifications': notifications,
+    }
+    return render(request, 'collections_notifications.html', context)
+
 
 
 

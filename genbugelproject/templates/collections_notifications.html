@@ -1,6 +1,325 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-  <h2>Collections History</h2>
-  <p>This is where the user’s collection of notifications will appear.</p>
+
+<style>
+  .notif-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+    font-family: -apple-system, 'Segoe UI', Roboto, Inter, sans-serif;
+  }
+
+  .notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #efefef;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.15s ease;
+  }
+
+  .notif-item:hover {
+    background-color: #fafafa;
+  }
+
+  .notif-item.unread {
+    background-color: #f0f7ff;
+  }
+
+  .notif-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: #6d6d6d;
+  }
+
+  .notif-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .notif-text {
+    font-size: 14px;
+    color: #262626;
+    line-height: 1.4;
+  }
+
+  .notif-text .actor-name {
+    font-weight: 600;
+  }
+
+  .notif-snippet {
+    font-size: 13px;
+    color: #8e8e8e;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .notif-time {
+    font-size: 11px;
+    color: #b0b0b0;
+    margin-top: 4px;
+  }
+
+  .notif-icon {
+    flex-shrink: 0;
+    font-size: 18px;
+    align-self: center;
+  }
+
+  .notif-icon.like { color: #e0245e; }
+  .notif-icon.comment { color: #3273dc; }
+  .notif-icon.reply { color: #00a35c; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8e8e8e;
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    .notif-container {
+      max-width: 100%;
+      padding-bottom: 80px;
+    }
+  }
+</style>
+
+<div class="notif-container">
+  {% for n in notifications %}
+    <a href="#" class="notif-item {% if n.unread %}unread{% endif %}"
+       data-post-id="{{ n.post.id }}"
+       {% if n.comment %}data-comment-id="{{ n.comment.id }}"{% endif %}
+       onclick="openNotification('{{ n.post.id }}', '{% if n.comment %}{{ n.comment.id }}{% endif %}', event)">
+
+      {% if n.actor.profile.picture %}
+        <img class="notif-avatar" src="{{ n.actor.profile.picture.url }}" alt="">
+      {% else %}
+        <span class="material-icons notif-avatar"
+              style="display: flex; align-items: center; justify-content: center; font-size: 42px; color: #d9d9d9;">
+          account_circle
+        </span>
+      {% endif %}
+
+      <div class="notif-body">
+        <div class="notif-text">
+          <span class="actor-name">{% if n.actor.profile.first_name %}{{ n.actor.profile.first_name }} {{ n.actor.profile.last_name }}{% else %}{{ n.actor.username }}{% endif %}</span>
+          {{ n.text }}
+        </div>
+        {% if n.comment %}
+          <div class="notif-snippet">{{ n.comment.body }}</div>
+        {% else %}
+          <div class="notif-snippet">{{ n.post.caption }}</div>
+        {% endif %}
+        <div class="notif-time">{{ n.timestamp|timesince }} ago</div>
+      </div>
+
+      {% if n.type == 'post_like' or n.type == 'comment_like' %}
+        <span class="material-icons notif-icon like">favorite</span>
+      {% elif n.type == 'reply' %}
+        <span class="material-icons notif-icon reply">reply</span>
+      {% else %}
+        <span class="material-icons notif-icon comment">chat_bubble</span>
+      {% endif %}
+    </a>
+  {% empty %}
+    <div class="empty-state">
+      No notifications yet.
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Modal container -->
+<div id="postModal" class="my-modal" style="display: none;">
+  <div class="my-modal-content" id="modalContent">
+    <button class="my-close-button" onclick="closePostModal()">&times;</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<style>
+.my-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-modal-content {
+  background: white;
+  width: 100%;
+  max-width: 905px;
+  height: 96vh;
+  overflow-y: auto;
+  border-radius: 0px;
+  padding-left: 75px;
+  padding-right: 75px;
+  padding-top: 25px;
+  position: relative;
+}
+
+.my-close-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10001;
+  font-size: 25px;
+  cursor: pointer;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(99, 98, 98, 0.2);
+  padding-bottom: 4px;
+  padding-left: 1px;
+}
+
+@media (max-width: 768px) {
+  .my-close-button {
+    top: 10px;
+    right: 10px;
+    width: 28px !important;
+    height: 28px !important;
+    padding-bottom: 1px !important;
+  } 
+  .my-modal-content {
+    width: 100%;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+}
+
+.no-scroll {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+}
+</style>
+
+<script>
+const postCache = {};
+
+function openNotification(postId, commentId, event) {
+    if (event) event.preventDefault();
+    loadPostContentAndScroll(postId, commentId);
+    document.getElementById("postModal").style.display = "flex";
+    document.body.classList.add("no-scroll");
+    document.documentElement.classList.add("no-scroll");
+}
+
+function loadPostContentAndScroll(postId, commentId) {
+    if (postCache[postId]) {
+        document.getElementById("modalBody").innerHTML = postCache[postId];
+        initEmbeds();
+        if (commentId) scrollToComment(commentId);
+        else document.getElementById('modalContent').scrollTop = 0;
+        return;
+    }
+
+    document.getElementById("modalBody").innerHTML = `
+        <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
+            <div style="text-align:center;">
+                <div style="width:40px; height:40px; border:3px solid #f3f3f3; 
+                     border-top:3px solid #3273dc; border-radius:50%; 
+                     animation:spin 0.8s linear infinite; margin:0 auto;"></div>
+                <p style="margin-top:15px; color:#888; font-size:14px;">Loading...</p>
+            </div>
+        </div>
+        <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+    `;
+
+    fetch(`/modal/${postId}/?track=1`)
+        .then(response => response.text())
+        .then(html => {
+            postCache[postId] = html;
+            document.getElementById("modalBody").innerHTML = html;
+            initEmbeds();
+            if (commentId) scrollToComment(commentId);
+            else document.getElementById('modalContent').scrollTop = 0;
+        })
+        .catch(error => {
+            console.error('Error loading post:', error);
+            document.getElementById("modalBody").innerHTML = "<p>Error loading post.</p>";
+        });
+}
+
+function scrollToComment(commentId) {
+    const modalContent = document.getElementById('modalContent');
+    
+    const performScroll = () => {
+        const commentEl = document.getElementById('comment-' + commentId)
+                       || document.getElementById('my-comment-' + commentId)
+                       || document.querySelector(`[data-comment-id="${commentId}"]`);
+        
+        if (commentEl && modalContent) {
+            const offsetTop = commentEl.getBoundingClientRect().top - modalContent.getBoundingClientRect().top + modalContent.scrollTop - 20;
+            modalContent.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            commentEl.style.transition = 'background-color 0.8s ease';
+            commentEl.style.backgroundColor = '#fff8b8';
+            setTimeout(() => { commentEl.style.backgroundColor = ''; }, 2000);
+        }
+    };
+    
+    const leadImg = modalContent.querySelector('img');
+    
+    if (leadImg && !leadImg.complete) {
+        leadImg.addEventListener('load', () => {
+            requestAnimationFrame(() => { setTimeout(performScroll, 100); });
+        });
+        setTimeout(performScroll, 2000);
+    } else {
+        setTimeout(performScroll, 300);
+    }
+}
+
+function initEmbeds() {
+    if (window.instgrm && instgrm.Embeds) instgrm.Embeds.process();
+    
+    const oldTwitter = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+    if (oldTwitter) oldTwitter.remove();
+    const twitterScript = document.createElement('script');
+    twitterScript.src = "https://platform.twitter.com/widgets.js";
+    twitterScript.async = true;
+    document.body.appendChild(twitterScript);
+
+    const oldTikTok = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (oldTikTok) oldTikTok.remove();
+    const tiktokScript = document.createElement('script');
+    tiktokScript.src = "https://www.tiktok.com/embed.js";
+    tiktokScript.async = true;
+    document.body.appendChild(tiktokScript);
+}
+
+function closePostModal() {
+    document.getElementById("postModal").style.display = "none";
+    document.getElementById("modalBody").innerHTML = "";
+    document.body.classList.remove("no-scroll");
+    document.documentElement.classList.remove("no-scroll"); 
+}
+</script>
+
 {% endblock %}

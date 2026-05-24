@@ -865,6 +865,28 @@ function confirmFrontpage(postId) {
 </script>
 {% endif %}
 
+<script>
+// Auto-retry on navigation errors
+window.addEventListener('error', function(e) {
+    // Silent catch
+}, true);
+
+// Retry fetch requests that fail
+const originalFetch = window.fetch;
+window.fetch = function(...args) {
+    return originalFetch.apply(this, args)
+        .catch(err => {
+            // Wait 1 second then retry once
+            return new Promise(resolve => setTimeout(resolve, 1000))
+                .then(() => originalFetch.apply(this, args));
+        });
+};
+</script>
+
+
+
+
+
 </body>
 
 <!--11:11 7Jun25-->

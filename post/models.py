@@ -81,9 +81,11 @@ def add_post(sender, instance, *args, **kwargs):
         )
         stream.save()
 
+
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_like')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
+    liked_at = models.DateTimeField(auto_now_add=True, null=True)
 
 # Connect the post_save signal to the add_post function
 post_save.connect(add_post, sender=Post)

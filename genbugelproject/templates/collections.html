@@ -108,7 +108,7 @@
     <span class="material-icons chevron">chevron_right</span>
   </a>
   <a href="{% url 'collections_notifications' %}" class="collection-row top-level-row">
-    <span class="row-label">Notifications</span>
+    <span class="row-label">Notifications{% if unread_notif_count > 0 %}<span style="display:inline-flex; align-items:center; justify-content:center; background:#e0245e; color:white; border-radius:50%; min-width:18px; height:18px; font-size:11px; font-weight:600; padding:0 5px; margin-left:8px; font-family:sans-serif; vertical-align:middle;">{{ unread_notif_count }}</span>{% endif %}</span>
     <span class="material-icons chevron">chevron_right</span>
   </a>
 

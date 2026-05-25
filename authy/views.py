@@ -128,7 +128,8 @@ def collections_history_view(request):
 def collections_liked_comments_view(request):
     liked_comments = Comment.objects.filter(likes__user=request.user).select_related('user', 'user__profile', 'post').order_by('-date')
     context = {
-        'comments': liked_comments
+        'comments': liked_comments,
+        'active_page': 'all_collections',
     }
     return render(request, 'collections_liked_comments.html', context)
 
@@ -137,7 +138,8 @@ def collections_liked_comments_view(request):
 def collections_posted_comments_view(request):
     posted_comments = Comment.objects.filter(user=request.user, parent__isnull=True).select_related('user', 'user__profile', 'post').order_by('-date')
     context = {
-        'comments': posted_comments
+        'comments': posted_comments,
+        'active_page': 'all_collections',
     }
     return render(request, 'collections_posted_comments.html', context)
 
@@ -146,7 +148,8 @@ def collections_posted_comments_view(request):
 def collections_posted_replies_view(request):
     posted_replies = Comment.objects.filter(user=request.user, parent__isnull=False).select_related('user', 'user__profile', 'post').order_by('-date')
     context = {
-        'comments': posted_replies
+        'comments': posted_replies,
+        'active_page': 'all_collections',
     }
     return render(request, 'collections_posted_replies.html', context)
 
@@ -158,7 +161,8 @@ def collections_posted_replies_view(request):
 def collections_liked_posts_view(request):
     liked_posts = Post.objects.filter(post_likes__user=request.user).distinct().order_by('-posted')
     context = {
-        'posts': liked_posts
+        'posts': liked_posts,
+        'active_page': 'all_collections',
     }
     return render(request, 'collections_liked_posts.html', context)
 
@@ -237,6 +241,7 @@ def collections_notifications_view(request):
 
     context = {
         'notifications': notifications,
+        'active_page': 'all_collections',
     }
     return render(request, 'collections_notifications.html', context)
 
@@ -280,6 +285,7 @@ def collections_view(request):
 		#'posts_count':posts_count,
 		#'follow_status':follow_status,
 		'url_name':url_name,
+        'active_page': 'all_collections',
 	}
 
 	return render(request, 'collections_saved.html', context)
@@ -587,4 +593,4 @@ from post.models import PostView
 def collections_history_view(request):
     user = request.user
     viewed_posts = PostView.objects.filter(user=user).order_by('-timestamp')
-    return render(request, 'collections_history.html', {'viewed_posts': viewed_posts})
+    return render(request, 'collections_history.html', {'viewed_posts': viewed_posts, 'active_page': 'all_collections'})

@@ -309,27 +309,62 @@ function updateNavButtons() {
 
 // Function to load and display post content in modal
 const postCache = {};
+function fixCommentScroll() {
+    const commentTextarea = document.querySelector('#modal-comment-form textarea');
+    if (commentTextarea) {
+        commentTextarea.addEventListener('focus', function() {
+            const modalContent = document.getElementById('modalContent');
+            const currentScroll = modalContent.scrollTop;
+            setTimeout(() => {
+                modalContent.scrollTop = currentScroll;
+            }, 150);
+        });
+    }
+}
 
 function loadPostContent(postId) {
     if (postCache[postId]) {
         document.getElementById("modalBody").innerHTML = postCache[postId];
-        initEmbeds();
+        initEmbedsIndex();
         document.getElementById('modalContent').scrollTop = 0;
-        // Fix comment textarea scroll jump
-        const commentTextarea = document.querySelector('#modal-comment-form textarea');
-        if (commentTextarea) {
-        commentTextarea.addEventListener('focus', function() {
-        const modalContent = document.getElementById('modalContent');
-        const currentScroll = modalContent.scrollTop;
-        setTimeout(() => {
-            modalContent.scrollTop = currentScroll;
-        }, 150);
-    });
-}
-        if (callback) callback();
-        preloadAdjacentPosts();
+        fixCommentScroll();
+        wirShareBtn();
+        preloadAdjacentPostsIndex();
         return;
     }
+
+    document.getElementById("modalBody").innerHTML = `
+        <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
+            <div style="text-align:center;">
+                <div style="width:40px; height:40px; border:3px solid #f3f3f3;
+                     border-top:3px solid #3273dc; border-radius:50%;
+                     animation:spin 0.8s linear infinite; margin:0 auto;"></div>
+                <p style="margin-top:15px; color:#888; font-size:14px;">Loading...</p>
+            </div>
+        </div>
+        <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+    `;
+
+    fetch(`/modal/${postId}/?track=1`)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return response.text();
+        })
+        .then(html => {
+            postCache[postId] = html;
+            document.getElementById("modalBody").innerHTML = html;
+            initEmbedsIndex();
+            wirShareBtn();
+            fixCommentScroll();
+            document.getElementById('modalContent').scrollTop = 0;
+            preloadAdjacentPostsIndex();
+        })
+        .catch(error => {
+            console.error('Error loading post content:', error);
+            document.getElementById("modalBody").innerHTML = "<p>Error loading post. Please try again.</p>";
+        });
+}
+
 
     document.getElementById("modalBody").innerHTML = `
         <div style="display:flex; justify-content:center; align-items:center; height:50vh;">

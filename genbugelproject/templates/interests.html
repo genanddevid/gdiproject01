@@ -281,17 +281,6 @@ function loadPostContent(postId, callback) {
         document.getElementById("modalBody").innerHTML = postCache[postId];
         initEmbeds();
         document.getElementById('modalContent').scrollTop = 0;
-        // Fix comment textarea scroll jump
-        const commentTextarea = document.querySelector('#modal-comment-form textarea');
-        if (commentTextarea) {
-        commentTextarea.addEventListener('focus', function() {
-        const modalContent = document.getElementById('modalContent');
-        const currentScroll = modalContent.scrollTop;
-        setTimeout(() => {
-            modalContent.scrollTop = currentScroll;
-        }, 150);
-    });
-}
         if (callback) callback();
         preloadAdjacentPosts();
         return;

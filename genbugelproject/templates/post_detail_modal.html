@@ -1109,25 +1109,28 @@ if (shareBtn) {
 
 
 
-// Prevent page scroll to top when clicking comment form
-document.addEventListener('click', function(e) {
-    const commentForm = e.target.closest('#modal-comment-form');
-    if (commentForm) {
-        e.stopPropagation();
-    }
+// Prevent comment textarea focus from scrolling modal to top
+// Uses event delegation so it works for dynamically-loaded articles
+document.addEventListener('focusin', function(e) {
+    const ta = e.target.closest('#modal-comment-form textarea, #modal-comment-form input');
+    if (!ta) return;
+
+    const modalContent = document.getElementById('modalContent');
+    if (!modalContent) return;
+
+    const savedScroll = modalContent.scrollTop;
+    let restores = 0;
+    const restore = () => {
+        modalContent.scrollTop = savedScroll;
+        restores++;
+        if (restores < 10) requestAnimationFrame(restore);
+    };
+    requestAnimationFrame(restore);
 });
 
-// Fix textarea focus scroll
-const commentTextarea = document.querySelector('#modal-comment-form textarea');
-if (commentTextarea) {
-    commentTextarea.addEventListener('focus', function(e) {
-        e.preventDefault();
-        const currentScroll = document.getElementById('modalContent').scrollTop;
-        setTimeout(() => {
-            document.getElementById('modalContent').scrollTop = currentScroll;
-        }, 100);
-    });
-}
+
+
+
 
 
 

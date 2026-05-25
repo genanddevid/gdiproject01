@@ -288,7 +288,7 @@ def interests_view(request):
                 'active_page': 'interests',
             })
 
-        all_posts = Post.objects.filter(id__in=all_relevant_ids)
+        all_posts = Post.objects.filter(id__in=all_relevant_ids).exclude(user=user)
 
         scored_posts = []
         for i, post in enumerate(all_posts):

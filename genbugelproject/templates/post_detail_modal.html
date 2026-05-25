@@ -1107,7 +1107,27 @@ if (shareBtn) {
 
 
 
+// Prevent comment textarea focus from scrolling modal to top
+const commentTextarea = document.querySelector('#modal-comment-form textarea, #modal-comment-form input');
+if (commentTextarea) {
+    commentTextarea.addEventListener('focus', function() {
+        const modalContent = document.getElementById('modalContent');
+        const savedScroll = modalContent.scrollTop;
+        // Restore the scroll position across the next few frames,
+        // overriding the browser's jump-to-top
+        let restores = 0;
+        const restore = () => {
+            modalContent.scrollTop = savedScroll;
+            restores++;
+            if (restores < 5) requestAnimationFrame(restore);
+        };
+        requestAnimationFrame(restore);
+    });
+}
+
+
 </script>
+
 
 
  {% endblock %} 

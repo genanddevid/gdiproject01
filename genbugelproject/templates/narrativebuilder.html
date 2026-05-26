@@ -730,6 +730,52 @@ function getCookie(name) {
 
 <script async defer src="//www.instagram.com/embed.js"></script>
 
+<script>
+(function () {
+  // Mode-specific key: edit uses post id, new uses 'new'
+  {% if edit_mode %}
+  const DRAFT_KEY = 'narrative_draft_edit_{{ post.id }}';
+  {% else %}
+  const DRAFT_KEY = 'narrative_draft_new';
+  {% endif %}
+
+  const fields = ['caption', 'content', 'link1', 'link2'];
+  const getField = (n) => document.querySelector(`[name="${n}"]`);
+
+  // RESTORE on load — only into empty fields
+  try {
+    const saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}');
+    fields.forEach(n => {
+      const el = getField(n);
+      if (el && !el.value.trim() && saved[n]) {
+        el.value = saved[n];
+        el.dispatchEvent(new Event('input'));
+      }
+    });
+  } catch (e) {}
+
+  // SAVE on every keystroke
+  function save() {
+    const data = {};
+    fields.forEach(n => { const el = getField(n); if (el) data[n] = el.value; });
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+  fields.forEach(n => { const el = getField(n); if (el) el.addEventListener('input', save); });
+
+  // CLEAR on Publish/Update click
+  const publishBtn = document.querySelector('button[name="action"]');
+  if (publishBtn) {
+    publishBtn.addEventListener('click', () => {
+      try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+    });
+  }
+})();
+</script>
+
+
+
+
+
 
 {% endblock %}
 

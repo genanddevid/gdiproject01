@@ -15,14 +15,14 @@
 <meta property="og:site_name" content="Baytruyen" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="{{ post.caption }}" />
-<meta property="og:description" content="{{ post.content|striptags|truncatewords:30 }}" />
+<meta property="og:description" content="{{ post.content|striptags|truncatewords:25 }}" />
 <meta property="og:image" content="{{ post.picture.url }}" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:url" content="https://www.baytruyen.com/{{ post.id }}" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="{{ post.caption }}" />
-<meta name="twitter:description" content="{{ post.content|striptags|truncatewords:30 }}" />
+<meta name="twitter:description" content="{{ post.content|striptags|truncatewords:25 }}" />
 <meta name="twitter:image" content="{{ post.picture.url }}" />
 {% endblock %}
 

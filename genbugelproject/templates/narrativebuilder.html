@@ -774,6 +774,47 @@ function getCookie(name) {
 
 
 
+<script>
+(function () {
+  function validate(e) {
+    const caption = document.querySelector('[name="caption"]');
+    const content = document.querySelector('[name="content"]');
+    const link1 = document.querySelector('[name="link1"]');
+    const picture = document.getElementById('{{ form.picture.id_for_label }}');
+
+    const problems = [];
+
+    if (!caption || !caption.value.trim())
+      problems.push('Add a headline');
+
+    const words = content && content.value.trim()
+      ? content.value.trim().split(/\s+/).length : 0;
+    if (words < 250)
+      problems.push(`Content must be at least 250 words (currently ${words})`);
+
+    if (!link1 || !link1.value.trim())
+      problems.push('Add at least one embed link');
+
+    // Picture: required for new posts. In edit mode it may already exist on the server.
+    {% if not edit_mode %}
+    if (!picture || !picture.files || picture.files.length === 0)
+      problems.push('Add a lead photo');
+    {% endif %}
+
+    if (problems.length > 0) {
+      e.preventDefault();
+      alert('Before continuing:\n\n• ' + problems.join('\n• '));
+      return false;
+    }
+  }
+
+  // Attach to BOTH buttons (Preview and Publish/Update)
+  const previewBtn = document.querySelector('button[formaction]');
+  const publishBtn = document.querySelector('button[name="action"]');
+  if (previewBtn) previewBtn.addEventListener('click', validate);
+  if (publishBtn) publishBtn.addEventListener('click', validate);
+})();
+</script>
 
 
 

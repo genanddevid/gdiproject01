@@ -220,29 +220,9 @@
   </div>
 {% endif %}
 
-<script>
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        // Load Instagram
-        var igScript = document.createElement('script');
-        igScript.src = '//www.instagram.com/embed.js';
-        igScript.async = true;
-        document.body.appendChild(igScript);
-
-        // Load TikTok
-        var ttScript = document.createElement('script');
-        ttScript.src = 'https://www.tiktok.com/embed.js';
-        ttScript.async = true;
-        document.body.appendChild(ttScript);
-
-        // Load Twitter
-        var twScript = document.createElement('script');
-        twScript.src = 'https://platform.twitter.com/widgets.js';
-        twScript.async = true;
-        document.body.appendChild(twScript);
-    }, 100);
-});
-</script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async src="https://www.tiktok.com/embed.js"></script>
+  <script async src="https://www.instagram.com/embed.js"></script>
 
     <br>
     

@@ -68,7 +68,7 @@
 <div style="display: flex; align-items: center; margin-top: 15px; gap: 10px;">
     {% if request.user.profile.picture %}
     <img src="{{ request.user.profile.picture.url }}" 
-         style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+         style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: top;">
     {% else %}
     <div style="width: 38px; height: 38px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">
         {{ request.user.first_name }}
@@ -231,7 +231,8 @@
 
   </div>
 </div>
-
+  </div>
+</div>
 
 
 {% endblock %}

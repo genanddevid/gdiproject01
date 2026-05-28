@@ -16,18 +16,11 @@
       margin-bottom: 0 !important;
       margin-right: 0 !important;
       width: 100% !important;
-      display: flex !important;
-      flex-direction: column;
-      flex-grow: 1;
     }
 
     .box {
       width: 100% !important;
       margin-bottom: 0 !important;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      border-radius: 0 !important;
       border-bottom: none !important;
     }
 
@@ -92,10 +85,10 @@
         </div>
     </div>
 </div>
-</div>
 
 
-    <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px; flex-grow: 1; display: flex; flex-direction: column;">
+
+    <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px;">
     {{ content1|linebreaksbr }}
 </div>
 
@@ -219,7 +212,7 @@
 
     <br>
     
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: auto; padding-top: 30px; padding-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px; clear: both;">
     <a href="{% if edit_mode %}{% url 'edit_post' post_id %}{% else %}{% url 'narrativebuilder' %}{% endif %}"
        class="button is-light">
         Back to Edit

@@ -337,7 +337,7 @@ body {
         class="has-text-black">
 {% if request.user.profile.picture %}
       <img src="{{ request.user.profile.picture.url }}" 
-      style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;"
+      style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; object-position: top;"
            alt="Profile Picture">
            {% else %}
       <span class="material-icons">account_circle</span>

@@ -543,15 +543,10 @@ def preview_narrative(request, post_id=None):
             temp_image_url = None
             if 'picture' in request.FILES:
                 picture_file = request.FILES['picture']
-                import base64
-                picture_file.seek(0)
-                image_data = base64.b64encode(picture_file.read()).decode('utf-8')
-                mime_type = picture_file.content_type or 'image/jpeg'
-                temp_image_url = f"data:{mime_type};base64,{image_data}"
-                # Store base64 in session for publishing
-                request.session['preview_data']['picture_base64'] = image_data
-                request.session['preview_data']['picture_mime'] = mime_type
-                request.session['preview_data']['picture'] = None
+                unique_filename = f"temp/{uuid.uuid4()}_{picture_file.name}"
+                saved_path = default_storage.save(unique_filename, ContentFile(picture_file.read()))
+                temp_image_url = default_storage.url(saved_path)
+                request.session['preview_data']['picture'] = saved_path
             elif instance and instance.picture:
                 temp_image_url = instance.picture.url    
 
@@ -685,17 +680,10 @@ def finalize_edit(request, post_id):
     preview_data = request.session.get('preview_data')
     post = get_object_or_404(Post, id=post_id, user=request.user)
 
-    picture_base64 = preview_data.pop('picture_base64', None)
-    picture_mime = preview_data.pop('picture_mime', 'image/jpeg')
-    if picture_path:
-        with default_storage.open(picture_path, 'rb') as f:
-            updated_post.picture.save(picture_path.split('/')[-1], File(f))
-    elif picture_base64:
-        import base64
-        from django.core.files.base import ContentFile
-        image_data = base64.b64decode(picture_base64)
-        ext = 'jpg' if 'jpeg' in picture_mime else picture_mime.split('/')[-1]
-        updated_post.picture.save(f"post_{request.user.id}_{uuid.uuid4()}.{ext}", ContentFile(image_data))
+    if request.method == 'POST' and preview_data:
+        picture_path = preview_data.pop('picture', None)
+        form = NarrativeBuilderForm(data=preview_data, instance=post, allow_missing_picture=True)
+
         if form.is_valid():
             updated_post = form.save(commit=False)
             if picture_path:
@@ -719,17 +707,9 @@ def finalize_new_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user
-            picture_base64 = preview_data.pop('picture_base64', None)
-            picture_mime = preview_data.pop('picture_mime', 'image/jpeg')
             if picture_path:
                 with default_storage.open(picture_path, 'rb') as f:
                     post.picture.save(picture_path.split('/')[-1], File(f))
-            elif picture_base64:
-                import base64
-                from django.core.files.base import ContentFile
-                image_data = base64.b64decode(picture_base64)
-                ext = 'jpg' if 'jpeg' in picture_mime else picture_mime.split('/')[-1]
-                post.picture.save(f"post_{request.user.id}_{uuid.uuid4()}.{ext}", ContentFile(image_data))
             post.save()
             request.session.pop('preview_data', None)
             return redirect('profile', username=request.user.username)

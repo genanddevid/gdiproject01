@@ -543,14 +543,12 @@ def preview_narrative(request, post_id=None):
             temp_image_url = None
             if 'picture' in request.FILES:
                 picture_file = request.FILES['picture']
-                import base64
-                picture_file.seek(0)
-                image_data = base64.b64encode(picture_file.read()).decode('utf-8')
-                mime_type = picture_file.content_type or 'image/jpeg'
-                temp_image_url = f"data:{mime_type};base64,{image_data}"
-                request.session['preview_data']['picture'] = None
+                unique_filename = f"temp/{uuid.uuid4()}_{picture_file.name}"
+                saved_path = default_storage.save(unique_filename, ContentFile(picture_file.read()))
+                temp_image_url = default_storage.url(saved_path)
+                request.session['preview_data']['picture'] = saved_path
             elif instance and instance.picture:
-                temp_image_url = instance.picture.url 
+                temp_image_url = instance.picture.url    
 
             post = form.save(commit=False)
             post.user = request.user

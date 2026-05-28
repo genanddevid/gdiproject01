@@ -543,10 +543,8 @@ def preview_narrative(request, post_id=None):
             temp_image_url = None
             if 'picture' in request.FILES:
                 picture_file = request.FILES['picture']
-                unique_filename = f"temp/{uuid.uuid4()}_{picture_file.name}"
-                saved_path = default_storage.save(unique_filename, ContentFile(picture_file.read()))
-                temp_image_url = default_storage.url(saved_path)
-                request.session['preview_data']['picture'] = saved_path
+                request.session['preview_data']['picture'] = None
+                temp_image_url = '/static/img/narrative-icon.png'
             elif instance and instance.picture:
                 temp_image_url = instance.picture.url    
 

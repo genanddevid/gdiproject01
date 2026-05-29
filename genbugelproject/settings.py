@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from botocore.config import Config
 import dj_database_url
 import pillow_avif # noqa: F401
 
@@ -127,6 +128,13 @@ AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'auto'
+AWS_S3_ADDRESSING_STYLE = "virtual"
+AWS_S3_CLIENT_CONFIG = Config(
+    connect_timeout=5,
+    read_timeout=15,
+    retries={"max_attempts": 2, "mode": "standard"},
+)
+
 
 STORAGES = {
     "default": {

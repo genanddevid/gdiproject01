@@ -733,6 +733,7 @@ function getCookie(name) {
 
 
 
+
 <script>
 (function () {
   function validate(e) {
@@ -767,7 +768,11 @@ function getCookie(name) {
     }
   }
 
-  
+  // Attach to BOTH buttons (Preview and Publish/Update)
+  const previewBtn = document.querySelector('button[formaction]');
+  const publishBtn = document.querySelector('button[name="action"]');
+  if (previewBtn) previewBtn.addEventListener('click', validate);
+  if (publishBtn) publishBtn.addEventListener('click', validate);
 })();
 </script>
 

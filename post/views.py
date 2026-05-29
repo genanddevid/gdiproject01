@@ -544,8 +544,18 @@ def preview_narrative(request, post_id=None):
 
             temp_image_url = None
             if 'picture' in request.FILES:
-                print(">>> PREVIEW: SKIPPING upload for test", flush=True)
-                temp_image_url = None   # deliberately skip R2 to test
+                print(">>> PREVIEW: starting R2 upload...", flush=True)
+                try:
+                    picture_file = request.FILES['picture']
+                    unique_filename = f"temp/{uuid.uuid4()}_{picture_file.name}"
+                    # stream the file (same method Publish uses) instead of reading into memory
+                    saved_path = default_storage.save(unique_filename, picture_file)
+                    temp_image_url = default_storage.url(saved_path)
+                    request.session['preview_data']['picture'] = saved_path
+                    print(">>> PREVIEW: R2 upload done", flush=True)
+                except Exception as e:
+                    print(f">>> PREVIEW: R2 upload FAILED: {e}", flush=True)
+                    temp_image_url = None
             elif instance and instance.picture:
                 temp_image_url = instance.picture.url
 

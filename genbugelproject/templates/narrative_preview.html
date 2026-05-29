@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load youtube_extras %}
-{% load filters %} 
+{% load filters %}
 
 {% block content %}
 
 <style>
-  
   @media (max-width: 768px) {
     .container {
       padding-left: 0px !important;
@@ -17,23 +16,19 @@
       margin-right: 0 !important;
       width: 100% !important;
     }
-
     .box {
       width: 100% !important;
       margin-bottom: 0 !important;
       border-bottom: none !important;
     }
-
     .forleadphoto img {
       max-width: 100% !important;
       padding: 0 !important;
     }
-
     .forcaption {
       max-width: 100% !important;
       padding: 12px !important;
     }
-
     .instagram-wrapper,
     .x-wrapper,
     .tiktok-embed,
@@ -42,197 +37,166 @@
       margin-right: auto !important;
       text-align: center !important;
     }
-}
-
-
-  
+  }
 </style>
+
 <div class="container" style="margin-top: 10px; margin-bottom: 0px;">
   <div class="box" style="width: 100%; border-radius: 0; padding: 0;">
     <div class="forleadphoto" style="display: flex; flex-direction: column; align-items:center; margin-left: 0px; margin-right: 0px;">
-    
+
     {% if image_url %}
-  
     <img src="{{ image_url }}" alt="Preview Image" style="max-width:100%; display: block; object-fit: cover; object-position: top;">
-
-{% else %}
-  <div style="width: 85%; height: 200px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; border: 2px dashed #ddd; border-radius: 4px;">
-    <p style="color: #aaa; font-size: 14px;">📷 Add a lead image in the builder</p>
-</div>
-{% endif %}
-
-<div class="forcaption" style="max-width: 85%; width: 95%; margin: 5px auto 0; text-align: left;">
-    <h1 class="title is-3" style="margin: 0;">{{ post.caption }}</h1>
-
-<!-- Problem 2 fix: Author info + date -->
-<div style="display: flex; align-items: center; margin-top: 15px; gap: 10px;">
-    {% if request.user.profile.picture %}
-    <img src="{{ request.user.profile.picture.url }}" 
-         style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: top;">
     {% else %}
-    <div style="width: 38px; height: 38px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">
-        {{ request.user.first_name }}
-        {{ request.user.last_name }}
-    </div>
+      <div style="width: 85%; height: 200px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; border: 2px dashed #ddd; border-radius: 4px;">
+        <p style="color: #aaa; font-size: 14px;">📷 Add a lead image in the builder</p>
+      </div>
     {% endif %}
-    <div>
-        <div style="font-weight: 600; font-size: 14px;">{{ request.user.profile.first_name }}
-          {{ request.user.profile.last_name }}</div>
-        <div style="font-size: 12px; color: #888;">{% now "F j, Y, g:i a" %}
-    
 
-          <!-- {% if post.tag %}· <span style="color: #3273dc;">{{ post.tag }}</span>{% endif %}-->
+    <div class="forcaption" style="max-width: 85%; width: 95%; margin: 5px auto 0; text-align: left;">
+      <h1 class="title is-3" style="margin: 0;">{{ post.caption }}</h1>
+
+      <!-- Author info + date -->
+      <div style="display: flex; align-items: center; margin-top: 15px; gap: 10px;">
+        {% if request.user.profile.picture %}
+        <img src="{{ request.user.profile.picture.url }}"
+             style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: top;">
+        {% else %}
+        <div style="width: 38px; height: 38px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">
+          {{ request.user.first_name }}
+          {{ request.user.last_name }}
         </div>
+        {% endif %}
+        <div>
+          <div style="font-weight: 600; font-size: 14px;">{{ request.user.profile.first_name }}
+            {{ request.user.profile.last_name }}</div>
+          <div style="font-size: 12px; color: #888;">{% now "F j, Y, g:i a" %}</div>
+        </div>
+      </div>
+
+      <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px;">
+        {{ content1|linebreaksbr }}
+      </div>
+
+      {% if post.link1 %}
+        {% if "twitter.com" in post.link1 or "x.com" in post.link1 %}
+          {% with post.link1|fix_twitter_url as twitter_link %}
+            <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
+              <div style="display: inline-block;">
+                <blockquote class="twitter-tweet" data-theme="light">
+                  <a href="{{ twitter_link }}"></a>
+                </blockquote>
+              </div>
+            </div>
+          {% endwith %}
+        {% elif "tiktok.com" in post.link1 %}
+          {% with post.link1|tiktok_id as tid %}
+            <blockquote class="tiktok-embed"
+                        cite="{{ post.link1 }}"
+                        data-video-id="{{ tid }}"
+                        style="max-width: 380px; min-width: 225px; margin: 20px auto; transform:scale(1);">
+              <section> </section>
+            </blockquote>
+          {% endwith %}
+        {% elif "youtu" in post.link1 %}
+          {% with post.link1|youtube_id as vid %}
+            <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+              <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+                <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:3em; color:white; text-shadow: 0 0 10px rgba(0,0,0,0.7);">▶</div>
+              </a>
+            </div>
+          {% endwith %}
+        {% else %}
+          <div class="instagram-wrapper" style="text-align: center; margin: 20px 0;">
+            <div style="display: inline-block; max-width: 400px; width: 100%;">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="{{ post.link1 }}"
+                data-instgrm-version="14"
+                style="background: #FFF; border: none; margin: 0 auto;">
+              </blockquote>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% if content2 %}
+        <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px;">
+          {{ content2|linebreaksbr }}
+        </div>
+      {% endif %}
+
+      {% if post.link2 %}
+        {% if "twitter.com" in post.link2 or "x.com" in post.link2 %}
+          {% with post.link2|fix_twitter_url as twitter_link %}
+            <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
+              <div style="display: inline-block;">
+                <blockquote class="twitter-tweet" data-theme="light">
+                  <a href="{{ twitter_link }}"></a>
+                </blockquote>
+              </div>
+            </div>
+          {% endwith %}
+        {% elif "tiktok.com" in post.link2 %}
+          {% with post.link2|tiktok_id as tid %}
+            <blockquote class="tiktok-embed"
+                        cite="{{ post.link2 }}"
+                        data-video-id="{{ tid }}"
+                        style="max-width: 380px; min-width: 225px; margin: 20px auto; transform:scale(1);">
+              <section> </section>
+            </blockquote>
+          {% endwith %}
+        {% elif "youtu" in post.link2 %}
+          {% with post.link2|youtube_id as vid %}
+            <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+              <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
+                <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:3em; color:white; text-shadow: 0 0 10px rgba(0,0,0,0.7);">▶</div>
+              </a>
+            </div>
+          {% endwith %}
+        {% else %}
+          <div class="instagram-wrapper" style="text-align: center; margin: 20px 0;">
+            <div style="display: inline-block; max-width: 400px; width: 100%;">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="{{ post.link2 }}"
+                data-instgrm-version="14"
+                style="background: #FFF; border: none; margin: 0 auto;">
+              </blockquote>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% if content3 %}
+        <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px;">
+          {{ content3|linebreaksbr }}
+        </div>
+      {% endif %}
+
+      <br>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px; clear: both;">
+        <a href="{% if edit_mode %}{% url 'edit_post' post_id %}{% else %}{% url 'narrativebuilder' %}{% endif %}" class="button is-light">
+          Back to Edit
+        </a>
+        {% if edit_mode %}
+          <form method="post" action="{% url 'finalize_edit' post_id %}">
+        {% else %}
+          <form method="post" action="{% url 'finalize_new_post' %}">
+        {% endif %}
+          {% csrf_token %}
+          <button type="submit" class="button is-success">Publish</button>
+        </form>
+      </div>
+
     </div>
-</div>
-
-
-
-    <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px;">
-    {{ content1|linebreaksbr }}
-</div>
-
-    
-     {% if post.link1 %}
-<!--<br>-->
-    {% if "twitter.com" in post.link1 or "x.com" in post.link1 %}
-      {% with post.link1|fix_twitter_url as twitter_link %}
-        <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
-          <!--<div style="display: inline-block;">-->
-            <div style="text-align: center; margin: 20px 0; padding: 16px; 
-    background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-    <p style="color: #888; font-size: 14px; margin: 0;">
-        Embed will appear here when published
-    </p>
-    <a href="{{ twitter_link }}" target="_blank" 
-        style="font-size: 12px; color: #3273dc;">{{ twitter_link }}</a>
-</div>
-          </div>
-     
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" onload="twttr.widgets.load();"></script>
-      {% endwith %}
-
-    {% elif "tiktok.com" in post.link1 %}
-      {% with post.link1|tiktok_id as tid %}
-        <div style="text-align: center; margin: 20px 0; padding: 16px; 
-    background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-    <p style="color: #888; font-size: 14px; margin: 0;">
-        Embed will appear here when published
-    </p>
-</div>
-      {% endwith %}
-
-    {% elif "youtu" in post.link1 %}
-      <div style="text-align: center; margin: 20px 0; padding: 16px; 
-          background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-          <p style="color: #888; font-size: 14px; margin: 0;">
-              Embed will appear here when published
-          </p>
-          <a href="{{ post.link1 }}" target="_blank" 
-              style="font-size: 12px; color: #3273dc;">{{ post.link1 }}</a>
-      </div>
-
-    {% else %}
-      <div style="text-align: center; margin: 20px 0; padding: 16px; 
-          background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-          <p style="color: #888; font-size: 14px; margin: 0;">
-              Embed will appear here when published
-          </p>
-          <a href="{{ post.link1 }}" target="_blank" 
-              style="font-size: 12px; color: #3273dc;">{{ post.link1 }}</a>
-      </div>
-    {% endif %}
-
-  {% endif %}
-  <!--<br>-->
-
-{% if content2 %}
-  <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px;">
-    {{ content2|linebreaksbr }}
   </div>
-{% endif %}
- 
-{% if post.link2 %}
-
-    {% if "twitter.com" in post.link2 or "x.com" in post.link2 %}
-      {% with post.link2|fix_twitter_url as twitter_link %}
-        <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
-         <!-- <div style="display: inline-block;">-->
-            <div style="text-align: center; margin: 20px 0; padding: 16px; 
-    background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-    <p style="color: #888; font-size: 14px; margin: 0;">
-        Embed will appear here when published
-    </p>
-    <a href="{{ twitter_link }}" target="_blank" 
-        style="font-size: 12px; color: #3273dc;">{{ twitter_link }}</a>
-</div>
-          </div>
-        
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" onload="twttr.widgets.load();"></script>
-      {% endwith %}
-
-    {% elif "tiktok.com" in post.link2 %}
-      {% with post.link2|tiktok_id as tid %}
-        <div style="text-align: center; margin: 20px 0; padding: 16px; 
-    background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-    <p style="color: #888; font-size: 14px; margin: 0;">
-        Embed will appear here when published
-    </p>
-</div>
-      {% endwith %}
-
-    {% elif "youtu" in post.link2 %}
-      <div style="text-align: center; margin: 20px 0; padding: 16px; 
-          background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-          <p style="color: #888; font-size: 14px; margin: 0;">
-              Embed will appear here when published
-          </p>
-          <a href="{{ post.link2 }}" target="_blank" 
-              style="font-size: 12px; color: #3273dc;">{{ post.link2 }}</a>
-      </div>
-
-    {% else %}
-      <div style="text-align: center; margin: 20px 0; padding: 16px; 
-          background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-          <p style="color: #888; font-size: 14px; margin: 0;">
-              Embed will appear here when published
-          </p>
-          <a href="{{ post.link2 }}" target="_blank" 
-              style="font-size: 12px; color: #3273dc;">{{ post.link2 }}</a>
-      </div>
-    {% endif %}
-  {% endif %}
-<!--<br> <br>-->
-{% if content3 %}
-  <div class="content" style="font-size: 17px; width: 100%; color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; margin-top: 20px;">
-    {{ content3|linebreaksbr }}
-  </div>
-{% endif %}
-
-
-    <br>
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px; clear: both;">
-    <a href="{% if edit_mode %}{% url 'edit_post' post_id %}{% else %}{% url 'narrativebuilder' %}{% endif %}"
-       class="button is-light">
-        Back to Edit
-    </a>
-
-    {% if edit_mode %}
-        <form method="post" action="{% url 'finalize_edit' post_id %}">
-    {% else %}
-        <form method="post" action="{% url 'finalize_new_post' %}">
-    {% endif %}
-        {% csrf_token %}
-        <button type="submit" class="button is-success">Publish</button>
-    </form>
-</div>
-
-
-  </div>
-</div>
   </div>
 </div>
 
+<!-- Embed scripts: load once, render the X / TikTok / Instagram blockquotes above -->
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async src="https://www.tiktok.com/embed.js"></script>
+<script async src="https://www.instagram.com/embed.js"></script>
 
 {% endblock %}

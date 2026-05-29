@@ -67,7 +67,7 @@ font-size: 30px;
           font-family: 'Times New Roman', Times, serif;
           color: rgb(19, 19, 19);">
     <h1 class="title is-3" style="margin: 0;">{{ post.caption }}</h1>
-
+</div>
 <!-- Problem 2 fix: Author info + date -->
 <div style="display: flex; align-items: center; margin-top: 15px; gap: 10px;">
     {% if request.user.profile.picture %}
@@ -237,7 +237,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 <script async src="https://www.tiktok.com/embed.js"></script>
   <script async src="https://www.instagram.com/embed.js"></script>
 
-    <br>
+   
     
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px; clear: both;">
     <a href="{% if edit_mode %}{% url 'edit_post' post_id %}{% else %}{% url 'narrativebuilder' %}{% endif %}"

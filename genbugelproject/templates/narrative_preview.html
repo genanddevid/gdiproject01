@@ -60,7 +60,12 @@
 </div>
 {% endif %}
 
-<div class="forcaption" style="max-width: 85%; width: 95%; margin: 5px auto 0; text-align: left;">
+<div class="forcaption" style="max-width: 85%; width: 95%; margin: 5px auto 0; text-align: left;
+ letter-spacing: -0.8px;
+font-size: 30px;
+          font-weight:600;
+          font-family: 'Times New Roman', Times, serif;
+          color: rgb(19, 19, 19);">
     <h1 class="title is-3" style="margin: 0;">{{ post.caption }}</h1>
 
 <!-- Problem 2 fix: Author info + date -->
@@ -75,8 +80,13 @@
     </div>
     {% endif %}
     <div>
-        <div style="font-weight: 600; font-size: 14px;">{{ request.user.profile.first_name }}
-          {{ request.user.profile.last_name }}</div>
+        <div style="font-weight: 600; font-size: 14px;">
+    {% if request.user.profile.first_name %}
+        {{ request.user.profile.first_name }} {{ request.user.profile.last_name }}
+    {% else %}
+        {{ request.user.username }}
+    {% endif %}
+</div>
         <div style="font-size: 12px; color: #888;">{% now "F j, Y, g:i a" %}
     
 
@@ -87,7 +97,8 @@
 
 
 
-    <div class="content" style="font-family: Arial, Helvetica, sans-serif; font-size: 17px; margin-top: 20px;">
+    <div class="content" style="font-size: 17px; margin-top: 20px;
+color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content1|linebreaksbr }}
 </div>
 
@@ -152,7 +163,8 @@
   <!--<br>-->
 
 {% if content2 %}
-  <div class="content" style="font-size: 17px; font-family:Arial, Helvetica, sans-serif; margin-top: 20px;">
+  <div class="content" style="font-size: 17px; margin-top: 20px;
+  color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content2|linebreaksbr }}
   </div>
 {% endif %}
@@ -215,7 +227,8 @@
 {% endif %}
 <!--<br> <br>-->
 {% if content3 %}
-  <div class="content" style="font-size: 17px; font-family:Arial, Helvetica, sans-serif; margin-top: 20px;">
+  <div class="content" style="font-size: 17px; margin-top: 20px;
+  color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content3|linebreaksbr }}
   </div>
 {% endif %}

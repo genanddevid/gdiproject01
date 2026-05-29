@@ -529,8 +529,10 @@ def preview_narrative(request, post_id=None):
         instance = get_object_or_404(Post, id=post_id, user=request.user)
 
     if request.method == "POST":
+        print(">>> PREVIEW: form received", flush=True)
         form = NarrativeBuilderForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
+            print(">>> PREVIEW: form valid", flush=True)
             request.session['preview_data'] = {
                 'caption': form.cleaned_data.get('caption'),
                 'content': form.cleaned_data.get('content'),
@@ -542,14 +544,22 @@ def preview_narrative(request, post_id=None):
 
             temp_image_url = None
             if 'picture' in request.FILES:
-                picture_file = request.FILES['picture']
-                unique_filename = f"temp/{uuid.uuid4()}_{picture_file.name}"
-                saved_path = default_storage.save(unique_filename, ContentFile(picture_file.read()))
-                temp_image_url = default_storage.url(saved_path)
-                request.session['preview_data']['picture'] = saved_path
+                print(">>> PREVIEW: starting R2 upload...", flush=True)
+                try:
+                    picture_file = request.FILES['picture']
+                    unique_filename = f"temp/{uuid.uuid4()}_{picture_file.name}"
+                    # stream the file (same method Publish uses) instead of reading into memory
+                    saved_path = default_storage.save(unique_filename, picture_file)
+                    temp_image_url = default_storage.url(saved_path)
+                    request.session['preview_data']['picture'] = saved_path
+                    print(">>> PREVIEW: R2 upload done", flush=True)
+                except Exception as e:
+                    print(f">>> PREVIEW: R2 upload FAILED: {e}", flush=True)
+                    temp_image_url = None
             elif instance and instance.picture:
-                temp_image_url = instance.picture.url    
+                temp_image_url = instance.picture.url
 
+            print(">>> PREVIEW: splitting content", flush=True)
             post = form.save(commit=False)
             post.user = request.user
 
@@ -565,6 +575,7 @@ def preview_narrative(request, post_id=None):
 
             split_parts = ['\n\n'.join(part) if isinstance(part, list) else part for part in split_parts if part]
 
+            print(">>> PREVIEW: rendering page", flush=True)
             return render(request, 'narrative_preview.html', {
                 'post': post,
                 'image_url': temp_image_url,
@@ -574,10 +585,13 @@ def preview_narrative(request, post_id=None):
                 'content2': split_parts[1] if len(split_parts) >= 2 else '',
                 'content3': split_parts[2] if len(split_parts) >= 3 else '',
             })
+        else:
+            print(f">>> PREVIEW: form INVALID: {form.errors}", flush=True)
 
     if post_id:
         return redirect('edit_post', post_id=post_id)
     return redirect('narrativebuilder')
+
 
 
 @login_required

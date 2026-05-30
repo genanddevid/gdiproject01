@@ -30,19 +30,23 @@
 
     .forcaption {
       max-width: 100% !important;
-      padding: 6px !important;
+      padding: 5px !important;
     }
 
     .writer {
       max-width: 100% !important;
-      padding: 6px !important;
+      padding: 5px !important;
     }
 
     .content {
       max-width: 100% !important;
-      padding: 6px !important;
+      padding: 5px !important;
     }
 
+    .editorpublish {
+      max-width: 100% !important;
+      padding: 5px !important;
+    }
     .instagram-wrapper,
     .x-wrapper,
     .tiktok-embed,
@@ -80,7 +84,7 @@ font-size: 30px;
 </div>
 
 <!-- Problem 2 fix: Author info + date -->
-<div class="writer" style="display: flex; align-items: center; margin-top: 10px; gap: 10px; max-width: 85%; width: 95%;">
+<div class="writer" style="display: flex; align-items: center; margin-top: 8px; gap: 10px; max-width: 85%; width: 95%;">
     {% if request.user.profile.picture %}
     <img src="{{ request.user.profile.picture.url }}" 
          style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
@@ -108,7 +112,7 @@ font-size: 30px;
 
 
 
-    <div class="content" style="font-size: 17px; margin-top: 20px; max-width: 85%; width: 95%;
+    <div class="content" style="font-size: 17px; margin-top: 15px; max-width: 85%; width: 95%;
 color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content1|linebreaksbr }}
 </div>
@@ -174,7 +178,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
   <!--<br>-->
 
 {% if content2 %}
-  <div class="content" style="font-size: 17px; margin-top: 20px; max-width: 85%; width: 95%;
+  <div class="content" style="font-size: 17px; margin-top: 15px; max-width: 85%; width: 95%;
   color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content2|linebreaksbr }}
   </div>
@@ -238,7 +242,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 {% endif %}
 <!--<br> <br>-->
 {% if content3 %}
-  <div class="content" style="font-size: 17px; margin-top: 20px; max-width: 85%; width: 95%;
+  <div class="content" style="font-size: 17px; margin-top: 15px; max-width: 85%; width: 95%;
   color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
     {{ content3|linebreaksbr }}
   </div>
@@ -250,7 +254,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
    
     
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px; clear: both; max-width: 85%; width: 95%;">
+    <div class="editorpublish" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px; clear: both; max-width: 85%; width: 95%;">
     <a href="{% if edit_mode %}{% url 'edit_post' post_id %}{% else %}{% url 'narrativebuilder' %}{% endif %}"
        class="button is-light">
         Back to Edit

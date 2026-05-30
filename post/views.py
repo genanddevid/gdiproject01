@@ -596,6 +596,16 @@ def preview_narrative(request, post_id=None):
 
             split_parts = ['\n\n'.join(part) if isinstance(part, list) else part for part in split_parts if part]
 
+            # TikTok thumbnail fetching for preview
+            tiktok1 = None
+            tiktok2 = None
+            link1 = form.cleaned_data.get('link1', '')
+            link2 = form.cleaned_data.get('link2', '')
+            if link1 and 'tiktok.com' in link1:
+                tiktok1 = get_tiktok_thumbnail(link1)
+            if link2 and 'tiktok.com' in link2:
+                tiktok2 = get_tiktok_thumbnail(link2)
+
             return render(request, 'narrative_preview.html', {
                 'post': post,
                 'image_url': temp_image_url,
@@ -604,7 +614,10 @@ def preview_narrative(request, post_id=None):
                 'content1': split_parts[0] if len(split_parts) >= 1 else '',
                 'content2': split_parts[1] if len(split_parts) >= 2 else '',
                 'content3': split_parts[2] if len(split_parts) >= 3 else '',
+                'tiktok1': tiktok1,
+                'tiktok2': tiktok2,
             })
+
 
     if post_id:
         return redirect('edit_post', post_id=post_id)

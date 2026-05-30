@@ -128,7 +128,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
               <a href="{{ twitter_link }}"></a>
             </blockquote>
           </div>
-        </div>
+        
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" onload="twttr.widgets.load();"></script>
       {% endwith %}
 
@@ -170,7 +170,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
     {% elif "youtu" in post.link1 %}
       {% with post.link1|youtube_id as vid %}
-        <div class="youtube-fallback" style="text-align:center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
+        <div class="youtube-fallback" style="text-align:center; margin: 5px auto; width: 100%; display: flex; justify-content: center;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
             <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width: 340px !important; border-radius:0px;">
             <div style="
@@ -212,7 +212,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 {% endif %}
 <br> 
 {% if post.link2 %}
-<br>
+
     {% if "twitter.com" in post.link2 or "x.com" in post.link2 %}
       {% with post.link2|fix_twitter_url as twitter_link %}
         <div class="x-wrapper" style="text-align: center; margin: 20px 0;">
@@ -221,14 +221,14 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
               <a href="{{ twitter_link }}"></a>
             </blockquote>
           </div>
-        </div>
+        
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" onload="twttr.widgets.load();"></script>
       {% endwith %}
 
     {% elif "tiktok.com" in post.link2 %}
       {% if tiktok2 and tiktok2.thumbnail %}
       <a href="{{ tiktok2.url }}" target="_blank" 
-         style="display: block; max-width: 253px; margin: 15px auto; text-decoration: none;">
+         style="display: block; max-width: 253px; margin: 20px auto; text-decoration: none;">
         <div style="position: relative;">
           <img src="{{ tiktok2.thumbnail }}" 
                style="width: 100%; border-radius: 12px; display: block;">
@@ -263,7 +263,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
     {% elif "youtu" in post.link2 %}
 
       {% with post.link2|youtube_id as vid %}
-        <div class="youtube-fallback" style="text-align:center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
+        <div class="youtube-fallback" style="text-align:center; margin: 5px auto; width: 100%; display: flex; justify-content: center;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
             <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:340px !important; border-radius: 0px;">
             <div style="

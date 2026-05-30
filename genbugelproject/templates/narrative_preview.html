@@ -133,20 +133,46 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% elif "tiktok.com" in post.link1 %}
-      {% with post.link1|tiktok_id as tid %}
-        <blockquote class="tiktok-embed"
-                    cite="{{ post.link1 }}"
-                    data-video-id="{{ tid }}"
-                    style="max-width: 380px;min-width: 225px; margin: 20px auto; transform:scale(1);">
-          <section> </section>
-        </blockquote>
-      {% endwith %}
+      {% if tiktok1 and tiktok1.thumbnail %}
+      <a href="{{ tiktok1.url }}" target="_blank" 
+         style="display: block; max-width: 253px; margin: 20px auto; text-decoration: none;">
+        <div style="position: relative;">
+          <img src="{{ tiktok1.thumbnail }}" 
+               style="width: 100%; border-radius: 12px; display: block;">
+          <div style="position: absolute; top: 50%; left: 50%; 
+               transform: translate(-50%, -50%);
+               background: rgba(0,0,0,0.6); border-radius: 50%;
+               width: 60px; height: 60px; display: flex; 
+               align-items: center; justify-content: center;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" 
+                 style="width: 30px; height: 30px;">
+          </div>
+        </div>
+        {% if tiktok1.title %}
+        <p style="font-size: 13px; color: #444; margin-top: 8px; text-align: center;">
+            {{ tiktok1.title|truncatechars:80 }}
+        </p>
+        {% endif %}
+      </a>
+      {% else %}
+      <div style="text-align: center; margin: 20px auto; max-width: 380px;">
+        <a href="{{ post.link1 }}" target="_blank"
+           style="display: flex; align-items: center; justify-content: center; gap: 12px;
+           background: #000; color: white; border-radius: 12px; padding: 16px 24px;
+           text-decoration: none; font-size: 15px; font-weight: 600;">
+          <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" 
+               style="width: 24px; height: 24px;">
+          Watch on TikTok
+        </a>
+      </div>
+      {% endif %}
+
 
     {% elif "youtu" in post.link1 %}
       {% with post.link1|youtube_id as vid %}
         <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
-            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:250px; border-radius: 0px;">
             <div style="
               position:absolute;
               top:50%;
@@ -199,20 +225,45 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% elif "tiktok.com" in post.link2 %}
-      {% with post.link2|tiktok_id as tid %}
-        <blockquote class="tiktok-embed"
-                    cite="{{ post.link2 }}"
-                    data-video-id="{{ tid }}"
-                    style="max-width: 380px; min-width: 225px; margin: 20px auto; transform:scale(1);">
-          <section> </section>
-        </blockquote>
-      {% endwith %}
+      {% if tiktok2 and tiktok2.thumbnail %}
+      <a href="{{ tiktok2.url }}" target="_blank" 
+         style="display: block; max-width: 253px; margin: 20px auto; text-decoration: none;">
+        <div style="position: relative;">
+          <img src="{{ tiktok2.thumbnail }}" 
+               style="width: 100%; border-radius: 12px; display: block;">
+          <div style="position: absolute; top: 50%; left: 50%; 
+               transform: translate(-50%, -50%);
+               background: rgba(0,0,0,0.6); border-radius: 50%;
+               width: 60px; height: 60px; display: flex; 
+               align-items: center; justify-content: center;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" 
+                 style="width: 30px; height: 30px;">
+          </div>
+        </div>
+        {% if tiktok2.title %}
+        <p style="font-size: 13px; color: #444; margin-top: 8px; text-align: center;">
+            {{ tiktok2.title|truncatechars:80 }}
+        </p>
+        {% endif %}
+      </a>
+      {% else %}
+      <div style="text-align: center; margin: 20px auto; max-width: 380px;">
+        <a href="{{ post.link2 }}" target="_blank"
+           style="display: flex; align-items: center; justify-content: center; gap: 12px;
+           background: #000; color: white; border-radius: 12px; padding: 16px 24px;
+           text-decoration: none; font-size: 15px; font-weight: 600;">
+          <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" 
+               style="width: 24px; height: 24px;">
+          Watch on TikTok
+        </a>
+      </div>
+      {% endif %}
 
     {% elif "youtu" in post.link2 %}
       {% with post.link2|youtube_id as vid %}
         <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
-            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:250px; border-radius: 0px;">
             <div style="
               position:absolute;
               top:50%;

@@ -147,7 +147,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
     {% elif "tiktok.com" in post.link1 %}
       {% if tiktok1 and tiktok1.thumbnail %}
       <a href="{{ tiktok1.url }}" target="_blank" 
-         style="display: block; max-width: 380px; margin: 20px auto; text-decoration: none;">
+         style="display: block; max-width: 253px; margin: 20px auto; text-decoration: none;">
         <div style="position: relative;">
           <img src="{{ tiktok1.thumbnail }}" 
                style="width: 100%; border-radius: 12px; display: block;">
@@ -184,7 +184,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% with post.link1|youtube_id as vid %}
         <div class="youtube-fallback" style="text-align:center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
-            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width: 250px; border-radius:0px;">
             <div style="
               position:absolute;
               top:50%;
@@ -282,7 +282,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% with post.link2|youtube_id as vid %}
         <div class="youtube-fallback" style="text-align:center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
-            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:100%; border-radius:10px;">
+            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:250px; border-radius: 0px;">
             <div style="
               position:absolute;
               top:50%;

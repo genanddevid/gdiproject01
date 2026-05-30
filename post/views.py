@@ -399,7 +399,29 @@ def get_matching_ad(post):
         return []
 
 
-
+def get_tiktok_thumbnail(url):
+    """Resolve TikTok short URL and fetch thumbnail via oEmbed"""
+    try:
+        import requests as req
+        
+        # Resolve short URLs like vt.tiktok.com
+        if 'vt.tiktok.com' in url or 'vm.tiktok.com' in url:
+            response = req.get(url, allow_redirects=True, timeout=5)
+            url = response.url
+        
+        # Call TikTok oEmbed API
+        oembed_url = f"https://www.tiktok.com/oembed?url={url}"
+        response = req.get(oembed_url, timeout=5)
+        data = response.json()
+        
+        return {
+            'thumbnail': data.get('thumbnail_url', ''),
+            'title': data.get('title', ''),
+            'url': url,
+        }
+    except Exception as e:
+        print(f"TikTok oEmbed failed: {e}")
+        return None
 
 
 
@@ -455,6 +477,13 @@ def post_modal(request, post_id):
     total_comment_count = Comment.objects.filter(post=post).count()
     left_recommendations, right_recommendations = get_recommendations(post, user)
     content1, content2, content3 = split_content_for_post(post)
+    # TikTok thumbnail fetching
+    tiktok1 = None
+    tiktok2 = None
+    if post.link1 and 'tiktok.com' in post.link1:
+        tiktok1 = get_tiktok_thumbnail(post.link1)
+    if post.link2 and 'tiktok.com' in post.link2:
+        tiktok2 = get_tiktok_thumbnail(post.link2)
     matched_ads = get_matching_ad(post)
     ad1 = matched_ads[0] if len(matched_ads) >= 1 else None
     ad2 = matched_ads[1] if len(matched_ads) >= 2 else None
@@ -478,6 +507,8 @@ def post_modal(request, post_id):
     return render(request, 'post_detail_modal.html', {
         'post': post,
         'liked': liked,
+        'tiktok1': tiktok1,
+        'tiktok2': tiktok2,
         'favorited': favorited,
         'form': form,
         'comments': comments,

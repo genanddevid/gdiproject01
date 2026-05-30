@@ -170,9 +170,9 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
     {% elif "youtu" in post.link1 %}
       {% with post.link1|youtube_id as vid %}
-        <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <div class="youtube-fallback" style="text-align:center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
-            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:250px; border-radius: 0px;">
+            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width: 340px; border-radius:0px;">
             <div style="
               position:absolute;
               top:50%;
@@ -185,6 +185,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
           </a>
         </div>
       {% endwith %}
+
 
     {% else %}
       <div class="instagram-wrapper" style="text-align: center; margin: 20px 0;">
@@ -260,10 +261,11 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endif %}
 
     {% elif "youtu" in post.link2 %}
+
       {% with post.link2|youtube_id as vid %}
-        <div class="youtube-fallback" style="text-align:center; margin-bottom:20px;">
+        <div class="youtube-fallback" style="text-align:center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
           <a href="https://www.youtube.com/watch?v={{ vid }}" target="_blank" style="position:relative; display:inline-block;">
-            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:250px; border-radius: 0px;">
+            <img src="https://img.youtube.com/vi/{{ vid }}/hqdefault.jpg" style="max-width:340px; border-radius: 0px;">
             <div style="
               position:absolute;
               top:50%;

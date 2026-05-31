@@ -378,6 +378,10 @@ border-radius: 0; padding-right: 20px !important;">
 
 
 <style>
+.has-tooltip-left[data-tooltip]:focus::after,
+.has-tooltip-left[data-tooltip]:active::after {
+  display: none !important;
+}
 .has-tooltip-left[data-tooltip] {
   position: relative;
 }

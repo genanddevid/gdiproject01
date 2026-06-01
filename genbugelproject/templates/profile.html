@@ -606,31 +606,37 @@ border-radius: 0; padding-right: 7px !important;">
 
 <script>
 let touchStartX = 0;
+  let touchStartY = 0;
   let touchEndX = 0;
+  let touchEndY = 0;
 
   const modal = document.getElementById('postModal');
 
   modal.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
   });
 
   modal.addEventListener('touchend', (e) => {
     touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
     handleSwipeGesture();
   });
 
   function handleSwipeGesture() {
-    const swipeThreshold = 50; // Minimum distance to be considered a swipe
-    const distance = touchEndX - touchStartX;
+    const horizontalThreshold = 80;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
 
-    if (Math.abs(distance) > swipeThreshold) {
-      if (distance > 0) {
-        showPreviousPost(); // Swipe right
+    if (Math.abs(diffX) > horizontalThreshold && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+      if (diffX > 0) {
+        showPreviousPost();
       } else {
-        showNextPost(); // Swipe left
+        showNextPost();
       }
     }
   }
+
   
 let allPostIds = []; // Global array to store all post IDs in order
 let currentPostIndex = -1; // Global variable to store the index of the currently viewed post

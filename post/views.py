@@ -734,6 +734,10 @@ def finalize_edit(request, post_id):
                 with default_storage.open(picture_path, 'rb') as f:
                     updated_post.picture.save(picture_path.split('/')[-1], File(f))
             updated_post.save()
+            try:
+                auto_tag_post(updated_post)
+            except Exception as e:
+                print(f"Auto-tagging failed silently: {e}")
             request.session.pop('preview_data', None)
             return redirect('profile', username=request.user.username)
 
@@ -755,6 +759,11 @@ def finalize_new_post(request):
                 with default_storage.open(picture_path, 'rb') as f:
                     post.picture.save(picture_path.split('/')[-1], File(f))
             post.save()
+            # Auto-tag in background — silent fail so publishing is never blocked
+            try:
+                auto_tag_post(post)
+            except Exception as e:
+                print(f"Auto-tagging failed silently: {e}")
             request.session.pop('preview_data', None)
             return redirect('profile', username=request.user.username)
 

@@ -185,23 +185,37 @@ def index(request):
     approved = ApprovedWriterEntity.objects.all()
     
     if approved.exists():
-        # Get all approved writer+entity combinations
+        # ONE query — all semantic tags
+        all_tags = SemanticTag.objects.values('post_id', 'entity')
+        post_entity_map = {}
+        for tag in all_tags:
+            pid = tag['post_id']
+            if pid not in post_entity_map:
+                post_entity_map[pid] = set()
+            post_entity_map[pid].add(tag['entity'])
+        
+        # ONE query — all approved writer entities
+        writer_entity_map = {}
+        for combo in approved:
+            wid = combo.writer_id
+            if wid not in writer_entity_map:
+                writer_entity_map[wid] = set()
+            writer_entity_map[wid].add(combo.entity)
+        
+        # Matching in Python — zero extra queries
         approved_post_ids = set()
-        for post in Post.objects.all():
-            post_entities = set(
-                SemanticTag.objects.filter(post=post)
-                .values_list('entity', flat=True)
-            )
-            writer_approved_entities = set(
-                ApprovedWriterEntity.objects.filter(writer=post.user)
-                .values_list('entity', flat=True)
-            )
-            if post_entities & writer_approved_entities:
+        for post in Post.objects.only('id', 'user_id'):
+            post_entities = post_entity_map.get(post.id, set())
+            writer_approved = writer_entity_map.get(post.user_id, set())
+            if post_entities & writer_approved:
                 approved_post_ids.add(post.id)
         
-        posts = Post.objects.filter(id__in=approved_post_ids).order_by('-posted')
+        posts = Post.objects.filter(
+            id__in=approved_post_ids
+        ).select_related('user__profile').order_by('-posted')
     else:
         posts = Post.objects.none()
+
 
     posts = list(posts)
     layout_blocks = []
@@ -288,7 +302,24 @@ def interests_view(request):
                 'active_page': 'interests',
             })
 
-        all_posts = Post.objects.filter(id__in=all_relevant_ids).exclude(user=user)
+        # ONE query — pre-fetch all semantic tags for relevant posts
+        all_relevant_tags = SemanticTag.objects.filter(
+            post_id__in=all_relevant_ids
+        ).values('post_id', 'entity', 'category')
+        
+        post_entity_map = {}
+        post_category_map = {}
+        for tag in all_relevant_tags:
+            pid = tag['post_id']
+            if pid not in post_entity_map:
+                post_entity_map[pid] = set()
+                post_category_map[pid] = set()
+            post_entity_map[pid].add(tag['entity'])
+            post_category_map[pid].add(tag['category'])
+
+        all_posts = Post.objects.filter(
+            id__in=all_relevant_ids
+        ).exclude(user=user).select_related('user__profile')
 
         scored_posts = []
         for i, post in enumerate(all_posts):
@@ -309,22 +340,13 @@ def interests_view(request):
                 if post.id in followed_post_ids:
                     score += 2
 
-                try:
-                    post_entities = set(
-                        SemanticTag.objects.filter(post=post)
-                        .values_list('entity', flat=True)
-                    )
-                    if post_entities & interest_entities:
-                        score += 3
+                post_entities = post_entity_map.get(post.id, set())
+                if post_entities & interest_entities:
+                    score += 3
 
-                    post_categories = set(
-                        SemanticTag.objects.filter(post=post)
-                        .values_list('category', flat=True)
-                    )
-                    if post_categories & interest_categories:
-                        score += 2
-                except Exception:
-                    pass
+                post_categories = post_category_map.get(post.id, set())
+                if post_categories & interest_categories:
+                    score += 2
 
                 if i % 4 == 3:
                     score += random.randint(1, 3)
@@ -457,8 +479,9 @@ def post_modal(request, post_id):
     liked = Likes.objects.filter(user=user, post=post).exists() if user.is_authenticated else False
     form = CommentForm()
     favorited = False
-    comments = Comment.objects.filter(post=post).order_by('date')
-
+    comments = Comment.objects.filter(post=post).select_related(
+        'user__profile'
+    ).prefetch_related('replies__user__profile', 'likes').order_by('date')
     if request.method == 'POST' and user.is_authenticated:
         form = CommentForm(request.POST)
         if form.is_valid():

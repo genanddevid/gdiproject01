@@ -267,6 +267,115 @@ def index(request):
     })
 
 
+def interests_view(request):
+    if not request.user.is_authenticated:
+        return render(request, 'interests.html', {
+            'post_items': [],
+            'active_page': 'interests',
+        })
+
+    from post.models import UserInterest, SemanticTag
+    import random
+    from django.utils import timezone
+
+    user = request.user
+    now = timezone.now()
+
+    try:
+        user_interests = UserInterest.objects.filter(user=user)
+        interest_entities = set(ui.entity for ui in user_interests)
+        interest_categories = set(ui.category for ui in user_interests)
+
+        followed_posts = Stream.objects.filter(user=user)
+        followed_post_ids = set(s.post_id for s in followed_posts)
+
+        entity_matched_ids = set(
+            SemanticTag.objects.filter(entity__in=interest_entities)
+            .values_list('post_id', flat=True)
+        ) if interest_entities else set()
+
+        category_matched_ids = set(
+            SemanticTag.objects.filter(category__in=interest_categories)
+            .values_list('post_id', flat=True)
+        ) if interest_categories else set()
+
+        all_relevant_ids = followed_post_ids | entity_matched_ids | category_matched_ids
+
+        if not all_relevant_ids:
+            return render(request, 'interests.html', {
+                'post_items': [],
+                'active_page': 'interests',
+            })
+
+        # ONE query — pre-fetch all semantic tags for relevant posts
+        all_relevant_tags = SemanticTag.objects.filter(
+            post_id__in=all_relevant_ids
+        ).values('post_id', 'entity', 'category')
+        
+        post_entity_map = {}
+        post_category_map = {}
+        for tag in all_relevant_tags:
+            pid = tag['post_id']
+            if pid not in post_entity_map:
+                post_entity_map[pid] = set()
+                post_category_map[pid] = set()
+            post_entity_map[pid].add(tag['entity'])
+            post_category_map[pid].add(tag['category'])
+
+        all_posts = Post.objects.filter(
+            id__in=all_relevant_ids
+        ).exclude(user=user).select_related('user__profile')
+
+        scored_posts = []
+        for i, post in enumerate(all_posts):
+            try:
+                score = 0
+
+                try:
+                    age = (now - post.posted).days
+                    if age <= 7:
+                        score += 5
+                    elif age <= 30:
+                        score += 2
+                except Exception:
+                    pass
+
+                score += post.likes
+
+                if post.id in followed_post_ids:
+                    score += 2
+
+                post_entities = post_entity_map.get(post.id, set())
+                if post_entities & interest_entities:
+                    score += 3
+
+                post_categories = post_category_map.get(post.id, set())
+                if post_categories & interest_categories:
+                    score += 2
+
+                if i % 4 == 3:
+                    score += random.randint(1, 3)
+
+                scored_posts.append((score, post))
+
+            except Exception:
+                continue
+
+        scored_posts.sort(key=lambda x: x[0], reverse=True)
+        post_items = [post for score, post in scored_posts]
+
+    except Exception as e:
+        print(f"Interests feed error: {e}")
+        post_items = []
+
+    return render(request, 'interests.html', {
+        'post_items': post_items,
+        'active_page': 'interests',
+    })
+
+
+
+
 def PostDetails(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     

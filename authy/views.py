@@ -449,8 +449,9 @@ def discover_view(request):
     from post.models import SemanticTag, UserInterest
     
     if not request.user.is_authenticated:
-        # Guest users see all posts ordered by likes
-        posts = Post.objects.all().order_by('-likes', '-posted')
+        posts = Post.objects.all().select_related(
+            'user__profile'
+        ).order_by('-likes', '-posted')
         return render(request, 'discover.html', {
             'posts': posts,
             'active_page': 'discover',
@@ -458,73 +459,82 @@ def discover_view(request):
     
     user = request.user
     
-    # Get user's interests
+    # ONE query — get user interests
     user_interests = UserInterest.objects.filter(user=user)
     interest_entities = set(ui.entity for ui in user_interests)
     interest_categories = set(ui.category for ui in user_interests)
     interest_parent_categories = set(ui.parent_category for ui in user_interests if ui.parent_category)
     interest_grandparent_categories = set(ui.grandparent_category for ui in user_interests if ui.grandparent_category)
     
-    # Get followed writers
+    # ONE query — followed writers
     followed_user_ids = set(
         Follow.objects.filter(follower=user).values_list('following_id', flat=True)
     )
     
-    # Build exclusion sets from semantic tags
-    # Exclude entity matches
+    # THREE queries — build exclusion sets
     entity_excluded_post_ids = set(
         SemanticTag.objects.filter(entity__in=interest_entities)
         .values_list('post_id', flat=True)
-    )
+    ) if interest_entities else set()
     
-    # Exclude category matches
     category_excluded_post_ids = set(
         SemanticTag.objects.filter(category__in=interest_categories)
         .values_list('post_id', flat=True)
-    )
+    ) if interest_categories else set()
     
-    # Exclude parent category matches
     parent_excluded_post_ids = set(
         SemanticTag.objects.filter(parent_category__in=interest_parent_categories)
         .values_list('post_id', flat=True)
-    )
+    ) if interest_parent_categories else set()
     
-    # All excluded post IDs
-    all_excluded_ids = entity_excluded_post_ids | category_excluded_post_ids | parent_excluded_post_ids
-    
-    # Also exclude posts from followed writers
+    # ONE query — followed posts
     followed_post_ids = set(
         Post.objects.filter(user_id__in=followed_user_ids)
         .values_list('id', flat=True)
+    ) if followed_user_ids else set()
+    
+    all_excluded_ids = (
+        entity_excluded_post_ids | 
+        category_excluded_post_ids | 
+        parent_excluded_post_ids | 
+        followed_post_ids
     )
-    all_excluded_ids = all_excluded_ids | followed_post_ids
     
-    # Get all remaining posts for Discover (exclude own posts)
-    discover_posts = Post.objects.exclude(id__in=all_excluded_ids).exclude(user=user)
+    # ONE query — get discover posts with select_related
+    discover_posts = Post.objects.exclude(
+        id__in=all_excluded_ids
+    ).exclude(user=user).select_related('user__profile')
     
-    # Score each post
+    # ONE query — pre-fetch all semantic tags for discover posts
+    discover_post_ids = [p.id for p in discover_posts]
+    all_tags = SemanticTag.objects.filter(
+        post_id__in=discover_post_ids
+    ).values('post_id', 'grandparent_category')
+    
+    post_grandparent_map = {}
+    for tag in all_tags:
+        pid = tag['post_id']
+        if pid not in post_grandparent_map:
+            post_grandparent_map[pid] = set()
+        if tag['grandparent_category']:
+            post_grandparent_map[pid].add(tag['grandparent_category'])
+    
+    # Score in Python — zero extra queries
     scored_posts = []
     for post in discover_posts:
-        score = post.likes  # Base score is likes
+        score = post.likes
         
-        # Check if post is a true opposite
-        # (grandparent categories have zero overlap with user interests)
-        post_grandparent_cats = set(
-            SemanticTag.objects.filter(post=post)
-            .values_list('grandparent_category', flat=True)
-        )
-        
+        post_grandparent_cats = post_grandparent_map.get(post.id, set())
         is_opposite = (
             post_grandparent_cats and
             not post_grandparent_cats & interest_grandparent_categories
         )
         
         if is_opposite:
-            score += 3  # Boost opposites slightly
+            score += 3
         
         scored_posts.append((score, post))
     
-    # Sort by score descending
     scored_posts.sort(key=lambda x: x[0], reverse=True)
     posts = [post for score, post in scored_posts]
     
@@ -532,7 +542,6 @@ def discover_view(request):
         'posts': posts,
         'active_page': 'discover',
     })
-
 
 
 

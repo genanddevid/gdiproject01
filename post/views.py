@@ -11,6 +11,7 @@ from django.core.files.base import ContentFile
 from django.core.files import File
 from django.db.models import Q
 from django.db import models
+from django.core.cache import cache
 
 import re
 import math
@@ -181,43 +182,48 @@ def get_recommendations(post, user):
 
 def index(request):
     from post.models import ApprovedWriterEntity, SemanticTag
-    
-    approved = ApprovedWriterEntity.objects.all()
-    
-    if approved.exists():
-        # ONE query — all semantic tags
-        all_tags = SemanticTag.objects.values('post_id', 'entity')
-        post_entity_map = {}
-        for tag in all_tags:
-            pid = tag['post_id']
-            if pid not in post_entity_map:
-                post_entity_map[pid] = set()
-            post_entity_map[pid].add(tag['entity'])
-        
-        # ONE query — all approved writer entities
-        writer_entity_map = {}
-        for combo in approved:
-            wid = combo.writer_id
-            if wid not in writer_entity_map:
-                writer_entity_map[wid] = set()
-            writer_entity_map[wid].add(combo.entity)
-        
-        # Matching in Python — zero extra queries
-        approved_post_ids = set()
-        for post in Post.objects.only('id', 'user_id'):
-            post_entities = post_entity_map.get(post.id, set())
-            writer_approved = writer_entity_map.get(post.user_id, set())
-            if post_entities & writer_approved:
-                approved_post_ids.add(post.id)
-        
-        posts = Post.objects.filter(
-            id__in=approved_post_ids
-        ).select_related('user__profile').order_by('-posted')
-    else:
-        posts = Post.objects.none()
 
-
-    posts = list(posts)
+    # Try cache first — avoid rebuilding on every request
+    cached_posts = cache.get('frontpage_posts')
+    
+    if cached_posts is None:
+        approved = ApprovedWriterEntity.objects.all()
+        
+        if approved.exists():
+            all_tags = SemanticTag.objects.values('post_id', 'entity')
+            post_entity_map = {}
+            for tag in all_tags:
+                pid = tag['post_id']
+                if pid not in post_entity_map:
+                    post_entity_map[pid] = set()
+                post_entity_map[pid].add(tag['entity'])
+            
+            writer_entity_map = {}
+            for combo in approved:
+                wid = combo.writer_id
+                if wid not in writer_entity_map:
+                    writer_entity_map[wid] = set()
+                writer_entity_map[wid].add(combo.entity)
+            
+            approved_post_ids = set()
+            for post in Post.objects.only('id', 'user_id'):
+                post_entities = post_entity_map.get(post.id, set())
+                writer_approved = writer_entity_map.get(post.user_id, set())
+                if post_entities & writer_approved:
+                    approved_post_ids.add(post.id)
+            
+            cached_posts = list(
+                Post.objects.filter(
+                    id__in=approved_post_ids
+                ).select_related('user__profile').order_by('-posted')
+            )
+        else:
+            cached_posts = []
+        
+        # Cache for 5 minutes
+        cache.set('frontpage_posts', cached_posts, 300)
+    
+    posts = cached_posts
     layout_blocks = []
     idx = 0
     total = len(posts)
@@ -258,114 +264,6 @@ def index(request):
     return render(request, 'index.html', {
         'layout_blocks': layout_blocks,
         'active_page': 'frontpage',
-    })
-
-
-
-def interests_view(request):
-    if not request.user.is_authenticated:
-        return render(request, 'interests.html', {
-            'post_items': [],
-            'active_page': 'interests',
-        })
-
-    from post.models import UserInterest, SemanticTag
-    import random
-    from django.utils import timezone
-
-    user = request.user
-    now = timezone.now()
-
-    try:
-        user_interests = UserInterest.objects.filter(user=user)
-        interest_entities = set(ui.entity for ui in user_interests)
-        interest_categories = set(ui.category for ui in user_interests)
-
-        followed_posts = Stream.objects.filter(user=user)
-        followed_post_ids = set(s.post_id for s in followed_posts)
-
-        entity_matched_ids = set(
-            SemanticTag.objects.filter(entity__in=interest_entities)
-            .values_list('post_id', flat=True)
-        ) if interest_entities else set()
-
-        category_matched_ids = set(
-            SemanticTag.objects.filter(category__in=interest_categories)
-            .values_list('post_id', flat=True)
-        ) if interest_categories else set()
-
-        all_relevant_ids = followed_post_ids | entity_matched_ids | category_matched_ids
-
-        if not all_relevant_ids:
-            return render(request, 'interests.html', {
-                'post_items': [],
-                'active_page': 'interests',
-            })
-
-        # ONE query — pre-fetch all semantic tags for relevant posts
-        all_relevant_tags = SemanticTag.objects.filter(
-            post_id__in=all_relevant_ids
-        ).values('post_id', 'entity', 'category')
-        
-        post_entity_map = {}
-        post_category_map = {}
-        for tag in all_relevant_tags:
-            pid = tag['post_id']
-            if pid not in post_entity_map:
-                post_entity_map[pid] = set()
-                post_category_map[pid] = set()
-            post_entity_map[pid].add(tag['entity'])
-            post_category_map[pid].add(tag['category'])
-
-        all_posts = Post.objects.filter(
-            id__in=all_relevant_ids
-        ).exclude(user=user).select_related('user__profile')
-
-        scored_posts = []
-        for i, post in enumerate(all_posts):
-            try:
-                score = 0
-
-                try:
-                    age = (now - post.posted).days
-                    if age <= 7:
-                        score += 5
-                    elif age <= 30:
-                        score += 2
-                except Exception:
-                    pass
-
-                score += post.likes
-
-                if post.id in followed_post_ids:
-                    score += 2
-
-                post_entities = post_entity_map.get(post.id, set())
-                if post_entities & interest_entities:
-                    score += 3
-
-                post_categories = post_category_map.get(post.id, set())
-                if post_categories & interest_categories:
-                    score += 2
-
-                if i % 4 == 3:
-                    score += random.randint(1, 3)
-
-                scored_posts.append((score, post))
-
-            except Exception:
-                continue
-
-        scored_posts.sort(key=lambda x: x[0], reverse=True)
-        post_items = [post for score, post in scored_posts]
-
-    except Exception as e:
-        print(f"Interests feed error: {e}")
-        post_items = []
-
-    return render(request, 'interests.html', {
-        'post_items': post_items,
-        'active_page': 'interests',
     })
 
 
@@ -819,6 +717,7 @@ def approve_writer_entity(request, post_id):
                 entity=entity
             )
         
+        cache.delete('frontpage_posts')
         return JsonResponse({'success': True, 'approved': entities})
     
     # GET — return current entities for this post
@@ -856,6 +755,7 @@ def remove_writer_entity(request, post_id):
             entity__in=entities
         ).delete()
         
+        cache.delete('frontpage_posts')
         return JsonResponse({'success': True, 'removed': entities})
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)

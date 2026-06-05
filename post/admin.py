@@ -1,5 +1,5 @@
 from django.contrib import admin
-from post.models import Post, Tag, Follow, Stream, SemanticTag, UserInterest, ApprovedWriterEntity, BannerAd
+from post.models import Post, Tag, Follow, Stream, SemanticTag, UserInterest, ApprovedWriterEntity, BannerAd, PostView
 
 admin.site.register(Post)
 admin.site.register(Tag)
@@ -28,6 +28,13 @@ class BannerAdAdmin(admin.ModelAdmin):
     list_display = ('advertiser', 'description', 'status', 'impressions', 'created_at')
     list_filter = ('status',)
     search_fields = ('advertiser__username', 'description', 'entities')
+
+@admin.register(PostView)
+class PostViewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'post', 'timestamp')
+    list_filter = ('user',)
+    search_fields = ('user__username', 'post__caption')
+    ordering = ('-timestamp',)
 
 
 

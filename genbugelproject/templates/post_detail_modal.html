@@ -134,7 +134,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
     {% if "twitter.com" in post.link1 or "x.com" in post.link1 %}
       {% with post.link1|fix_twitter_url as twitter_link %}
-        <div class="x-wrapper" style="text-align: center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
+        <div class="x-wrapper" style="text-align: center; margin: 10px auto; width: 100%; display: flex; justify-content: center; min-height: 250px;">
           <div style="display: inline-block;">
             <blockquote class="twitter-tweet" data-theme="light">
               <a href="{{ twitter_link }}"></a>
@@ -199,7 +199,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% else %}
-      <div class="instagram-wrapper" style="text-align: center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
+      <div class="instagram-wrapper" style="text-align: center; margin: 10px auto; width: 100%; display: flex; justify-content: center; min-height: 400px;">
         <div style="display: inline-block; max-width: 400px; width: 100%;">
           <blockquote 
             class="instagram-media" 
@@ -232,7 +232,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 
     {% if "twitter.com" in post.link2 or "x.com" in post.link2 %}
       {% with post.link2|fix_twitter_url as twitter_link %}
-        <div class="x-wrapper" style="text-align: center; margin: 10px auto; width: 100%; display: flex; justify-content: center;">
+        <div class="x-wrapper" style="text-align: center; margin: 10px auto; width: 100%; display: flex; justify-content: center; min-height: 250px;">
           <div style="display: inline-block;">
             <blockquote class="twitter-tweet" data-theme="light">
               <a href="{{ twitter_link }}"></a>
@@ -297,7 +297,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       {% endwith %}
 
     {% else %}
-      <div class="instagram-wrapper" style="text-align: center;  margin: 10px auto; width: 100%; display: flex; justify-content: center;">
+      <div class="instagram-wrapper" style="text-align: center; margin: 10px auto; width: 100%; display: flex; justify-content: center; min-height: 400px;">
         <div style="display: inline-block; max-width: 400px; width: 100%;">
           <blockquote 
             class="instagram-media" 

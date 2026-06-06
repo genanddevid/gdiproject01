@@ -365,28 +365,40 @@ preloadAdjacentPosts();
 }
 
 function initEmbeds() {
-    // Instagram
-    if (window.instgrm && instgrm.Embeds) {
-        instgrm.Embeds.process();
+    // Instagram — only if article has Instagram embed
+    if (document.querySelector('blockquote.instagram-media')) {
+        if (window.instgrm && instgrm.Embeds) {
+            instgrm.Embeds.process();
+        } else {
+            const igScript = document.createElement('script');
+            igScript.src = 'https://www.instagram.com/embed.js';
+            igScript.async = true;
+            document.body.appendChild(igScript);
+        }
     }
 
-    // Twitter/X
-    const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
-    if (existingTwitterScript) existingTwitterScript.remove();
-    const twitterScript = document.createElement('script');
-    twitterScript.src = "https://platform.twitter.com/widgets.js";
-    twitterScript.async = true;
-    twitterScript.charset = "utf-8";
-    document.body.appendChild(twitterScript);
+    // Twitter — only if article has Twitter embed
+    if (document.querySelector('blockquote.twitter-tweet')) {
+        const existingTwitterScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+        if (existingTwitterScript) existingTwitterScript.remove();
+        const twitterScript = document.createElement('script');
+        twitterScript.src = "https://platform.twitter.com/widgets.js";
+        twitterScript.async = true;
+        twitterScript.charset = "utf-8";
+        document.body.appendChild(twitterScript);
+    }
 
-    // TikTok
-    const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
-    if (oldTikTokScript) oldTikTokScript.remove();
-    const tiktokScript = document.createElement('script');
-    tiktokScript.src = "https://www.tiktok.com/embed.js";
-    tiktokScript.async = true;
-    document.body.appendChild(tiktokScript);
+    // TikTok — only if article has TikTok embed
+    if (document.querySelector('blockquote.tiktok-embed')) {
+        const oldTikTokScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+        if (oldTikTokScript) oldTikTokScript.remove();
+        const tiktokScript = document.createElement('script');
+        tiktokScript.src = "https://www.tiktok.com/embed.js";
+        tiktokScript.async = true;
+        document.body.appendChild(tiktokScript);
+    }
 }
+
 
 function preloadAdjacentPosts() {
     // Silently fetch next and previous posts in background

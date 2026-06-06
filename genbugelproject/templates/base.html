@@ -899,13 +899,25 @@ document.addEventListener('focusin', function(e) {
         const modalContent = document.getElementById('modalContent');
         if (modalContent && modalContent.contains(e.target)) {
             const target = e.target;
+            const savedScroll = modalContent.scrollTop;
+
+            // Immediately counter browser's upward scroll
+            requestAnimationFrame(() => {
+                modalContent.scrollTop = savedScroll;
+                requestAnimationFrame(() => {
+                    modalContent.scrollTop = savedScroll;
+                });
+            });
+
+            // Then scroll textarea into view after keyboard finishes opening
             setTimeout(() => {
-                target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }, 400);
         }
     }
 });
 </script>
+
 
 
 

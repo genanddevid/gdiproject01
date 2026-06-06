@@ -231,15 +231,15 @@ def index(request):
     if total >= 1:
         layout_blocks.append({'type': 'large', 'posts': posts[idx:idx+1]})
         idx += 1
-    if total >= idx + 4:
+    if total >= idx + 5:
         layout_blocks.append({'type': 'scroll', 'posts': posts[idx:idx+4]})
-        idx += 4
+        idx += 5
     if total >= idx + 2:
         layout_blocks.append({'type': 'large', 'posts': posts[idx:idx+2]})
         idx += 2
-    if total >= idx + 23:
+    if total >= idx + 43:
         layout_blocks.append({'type': 'medium', 'posts': posts[idx:idx+23]})
-        idx += 23
+        idx += 43
     else:
         layout_blocks.append({'type': 'medium', 'posts': posts[idx:]})
         idx = total

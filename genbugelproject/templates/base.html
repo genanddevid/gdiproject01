@@ -891,7 +891,21 @@ window.fetch = function(...args) {
 };
 </script>
 
-
+<script>
+// Fix comment textarea scroll-to-top on mobile
+document.addEventListener('focusin', function(e) {
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
+        const modalContent = document.getElementById('modalContent');
+        if (modalContent && modalContent.contains(e.target)) {
+            const savedScroll = modalContent.scrollTop;
+            setTimeout(() => { modalContent.scrollTop = savedScroll; }, 100);
+            setTimeout(() => { modalContent.scrollTop = savedScroll; }, 250);
+            setTimeout(() => { modalContent.scrollTop = savedScroll; }, 400);
+            setTimeout(() => { modalContent.scrollTop = savedScroll; }, 600);
+        }
+    }
+});
+</script>
 
 
 

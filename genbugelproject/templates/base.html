@@ -899,27 +899,21 @@ document.addEventListener('focusin', function(e) {
         if (modalContent && modalContent.contains(e.target)) {
             const target = e.target;
             const savedScroll = modalContent.scrollTop;
-            let blocking = true;
 
-            // Block scroll while keyboard opens
-            const scrollBlocker = function() {
-                if (blocking) {
-                    modalContent.scrollTop = savedScroll;
-                }
-            };
+            // Freeze scroll immediately
+            modalContent.style.overflowY = 'hidden';
+            modalContent.scrollTop = savedScroll;
 
-            modalContent.addEventListener('scroll', scrollBlocker);
-
-            // After keyboard is fully open, remove block and bring textarea into view
+            // After keyboard fully open, restore and scroll to textarea
             setTimeout(() => {
-                blocking = false;
-                modalContent.removeEventListener('scroll', scrollBlocker);
+                modalContent.style.overflowY = 'auto';
                 target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }, 350);
         }
     }
 });
 </script>
+
 
 
 

@@ -122,7 +122,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
 /* Modal content box */
@@ -137,6 +136,7 @@
   padding-right: 75px;
   padding-top: 25px;
   position: relative;
+  overflow-x: hidden;
   
 }
 
@@ -181,13 +181,14 @@
   }
   .my-modal-content {
     width: 100%;
-    padding-left: 16px !important;  /* Changed from 75px */
-    padding-right: 6px; /* Changed from 75px */
+    padding-left: 26px;  /* Changed from 75px */
+    padding-right: 26px; /* Changed from 75px */
     padding-top: 0;
     box-sizing: border-box; /* Ensures padding doesn't shrink the element */
     height: 100vh;
     height: 100dvh;
     overflow-y: auto;
+    overflow-x: hidden !important;
   }
   #modalContent {
   transition: transform 0.3s ease, opacity 0.3s ease;

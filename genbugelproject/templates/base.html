@@ -893,30 +893,37 @@ window.fetch = function(...args) {
 
 
 <script>
-// Fix comment textarea scroll on mobile keyboard open
 document.addEventListener('focusin', function(e) {
     if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
         const modalContent = document.getElementById('modalContent');
         if (modalContent && modalContent.contains(e.target)) {
             const target = e.target;
             const savedScroll = modalContent.scrollTop;
+            let blocking = true;
 
-            // Immediately counter browser's upward scroll
-            requestAnimationFrame(() => {
-                modalContent.scrollTop = savedScroll;
-                requestAnimationFrame(() => {
+            // Block scroll while keyboard opens
+            const scrollBlocker = function() {
+                if (blocking) {
                     modalContent.scrollTop = savedScroll;
-                });
-            });
+                }
+            };
 
-            // Then scroll textarea into view after keyboard finishes opening
+            modalContent.addEventListener('scroll', scrollBlocker);
+
+            // After keyboard is fully open, remove block and bring textarea into view
             setTimeout(() => {
+                blocking = false;
+                modalContent.removeEventListener('scroll', scrollBlocker);
                 target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-            }, 400);
+            }, 350);
         }
     }
 });
 </script>
+
+
+
+
 
 
 

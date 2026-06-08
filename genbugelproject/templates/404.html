@@ -14,13 +14,6 @@
     background: #fff;
   }
 
-  .error-icon {
-    width: 72px;
-    height: 72px;
-    margin-bottom: 32px;
-    opacity: 0.15;
-  }
-
   .error-code {
     font-family: 'Playfair Display', serif;
     font-size: 11px;
@@ -62,14 +55,13 @@
     letter-spacing: 0.5px;
     padding: 14px 32px;
     border-radius: 50px;
-    border: none;
-    cursor: pointer;
     text-decoration: none;
     transition: background 0.2s;
   }
 
   .error-retry:hover {
     background: #B83C2E;
+    color: #fff;
   }
 
   .error-divider {
@@ -93,37 +85,20 @@
 </style>
 
 <div class="error-page">
-  <svg class="error-icon" viewBox="0 0 72 72" fill="none">
-    <circle cx="36" cy="36" r="34" stroke="#1a1a1a" stroke-width="2"/>
-    <path d="M36 22v20M36 48v4" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
-  </svg>
+  <p class="error-code">Page not found</p>
 
-  <p class="error-code">Something went wrong</p>
+  <h1 class="error-title">This story has moved on.</h1>
 
-  <h1 class="error-title">
-    <span id="error-message">We'll be right back.</span>
-  </h1>
-
-  <p class="error-body" id="error-detail">
-    Please check your connection and try again.
+  <p class="error-body">
+    The page you're looking for doesn't exist or has been removed.
   </p>
 
-  <button class="error-retry" onclick="window.location.reload()">
-    ↺ &nbsp; Try again
-  </button>
+  <a href="/" class="error-retry">
+    ← &nbsp; Back to Baytruyen
+  </a>
 
   <div class="error-divider"></div>
 
   <a href="/" class="error-home">Return to Baytruyen</a>
 </div>
-
-<script>
-  if (!navigator.onLine) {
-    document.getElementById('error-message').textContent = "No internet connection.";
-    document.getElementById('error-detail').textContent = "You need an internet connection to use Baytruyen.";
-  } else {
-    document.getElementById('error-message').textContent = "We'll be right back.";
-    document.getElementById('error-detail').textContent = "Baytruyen ran into an issue. Please try again.";
-  }
-</script>
 {% endblock %}

@@ -922,118 +922,242 @@ document.addEventListener('focusin', function(e) {
 
 
 
-<!-- ===== WRITEWORD ===== -->
+<!-- ─── Writeword Feature ─────────────────────────────── -->
+<style>
+  /* Floating toolbar */
+  #writeword-toolbar {
+    position: fixed;
+    z-index: 99999;
+    display: none;
+    transform: translateX(-50%);
+  }
+
+  #writeword-toolbar button {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  #writeword-toolbar button:hover {
+    background: #B83C2E;
+  }
+
+  /* Toolbar arrow */
+  #writeword-toolbar::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1a1a1a;
+  }
+
+  /* Modal overlay */
+  #writeword-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  #writeword-overlay.active {
+    display: flex;
+  }
+
+  /* Modal card */
+  #writeword-card {
+    background: #111;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 360px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+    animation: wwSlideUp 0.25s ease;
+  }
+
+  @keyframes wwSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Modal header */
+  .ww-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .ww-title {
+    font-family: 'Playfair Display', 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #B83C2E;
+    letter-spacing: 0.3px;
+  }
+
+  .ww-close {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ww-close:hover { color: #fff; }
+
+  /* Modal body */
+  .ww-body {
+    padding: 20px;
+  }
+
+  /* The word */
+  .ww-word {
+    font-family: 'Times New Roman', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+
+  /* Sections */
+  .ww-section {
+    margin-bottom: 18px;
+  }
+
+  .ww-section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 6px;
+  }
+
+  .ww-section-content {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.6;
+  }
+
+  /* Vietnamese translation */
+  .ww-translation {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* Pronunciation row */
+  .ww-pronunciation-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ww-phonetic {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #aaa;
+    font-style: italic;
+  }
+
+  .ww-audio-btn {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    font-size: 13px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .ww-audio-btn:hover { background: #B83C2E; border-color: #B83C2E; }
+
+  /* Loading state */
+  .ww-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0;
+    color: #555;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+
+  .ww-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #333;
+    border-top-color: #B83C2E;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Divider */
+  .ww-divider {
+    height: 1px;
+    background: #222;
+    margin: 4px 0 18px;
+  }
+</style>
 
 <!-- Floating toolbar -->
-<div id="writeword-toolbar" style="
-  display: none;
-  position: absolute;
-  z-index: 99999;
-  background: #111;
-  color: white;
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-  user-select: none;
-  white-space: nowrap;
-" onclick="openWriteWord()">
-  ✍️ WriteWord
+<div id="writeword-toolbar">
+  <button onclick="openWriteword()">✦ Writeword</button>
 </div>
 
-<!-- WriteWord modal -->
-<div id="writeword-modal" style="
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 100000;
-  justify-content: center;
-  align-items: center;
-">
-  <div style="
-    background: white;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 420px;
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 0;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  ">
-    <!-- Header -->
-    <div style="
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 18px 20px 14px;
-      position: relative;
-    ">
-      <span style="font-size: 17px; font-weight: 700; letter-spacing: 0.5px;">WriteWord</span>
-      <button onclick="closeWriteWord()" style="
-        position: absolute; right: 16px; top: 14px;
-        background: none; border: none; font-size: 20px;
-        cursor: pointer; color: #888; line-height: 1;
-      ">×</button>
+<!-- Writeword modal -->
+<div id="writeword-overlay" onclick="closeWriteword(event)">
+  <div id="writeword-card">
+    <div class="ww-header">
+      <span class="ww-title">Writeword</span>
+      <button class="ww-close" onclick="closeWriteword()">&times;</button>
     </div>
-    <hr style="margin: 0; border: none; border-top: 1px solid #efefef;">
-
-    <!-- Content -->
-    <div style="padding: 20px;">
-
-      <!-- Selected word -->
-      <div id="ww-word" style="
-        font-size: 20px;
-        font-weight: 700;
-        color: #111;
-        margin-bottom: 18px;
-      "></div>
-
-      <!-- Translation -->
-      <div style="margin-bottom: 18px;">
-        <div style="font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">
-          Vietnamese · MyMemory
-        </div>
-        <div id="ww-translation" style="font-size: 16px; color: #333;">
-          <span style="color:#bbb;">Loading...</span>
-        </div>
+    <div class="ww-body" id="writeword-body">
+      <div class="ww-loading">
+        <div class="ww-spinner"></div>
+        Looking up word...
       </div>
-
-      <!-- Pronunciation -->
-      <div style="margin-bottom: 18px;">
-        <div style="font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">
-          Pronunciation · dictionaryapi.dev
-        </div>
-        <div id="ww-pronunciation" style="display: flex; align-items: center; gap: 10px;">
-          <span id="ww-phonetic" style="font-size: 15px; color: #555; font-style: italic;">
-            <span style="color:#bbb;">Loading...</span>
-          </span>
-          <button id="ww-audio-btn" onclick="playAudio()" style="
-            display: none;
-            background: #f5f5f5;
-            border: none;
-            border-radius: 50%;
-            width: 32px; height: 32px;
-            cursor: pointer;
-            font-size: 16px;
-          ">🔊</button>
-          <audio id="ww-audio" style="display:none;"></audio>
-        </div>
-      </div>
-
-      <!-- Definition -->
-      <div>
-        <div style="font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">
-          Definition · dictionaryapi.dev
-        </div>
-        <div id="ww-definition" style="font-size: 15px; color: #333; line-height: 1.5;">
-          <span style="color:#bbb;">Loading...</span>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
@@ -1041,151 +1165,174 @@ document.addEventListener('focusin', function(e) {
 <script>
 (function() {
   let selectedWord = '';
-  const toolbar = document.getElementById('writeword-toolbar');
+  let audioUrl = '';
 
-  // Detect text selection inside the modal
-  document.addEventListener('mouseup', handleSelection);
-  document.addEventListener('touchend', handleSelection);
+  // Detect single word selection inside modal
+  function onSelectionChange() {
+    const selection = window.getSelection();
+    const toolbar = document.getElementById('writeword-toolbar');
 
-  function handleSelection(e) {
-    // Small delay so selection is settled
-    setTimeout(() => {
-      const selection = window.getSelection();
-      if (!selection || selection.isCollapsed) {
-        toolbar.style.display = 'none';
-        return;
-      }
+    if (!selection || selection.isCollapsed || !selection.toString().trim()) {
+      toolbar.style.display = 'none';
+      return;
+    }
 
-      const text = selection.toString().trim();
-      // Single word only — no spaces
-      if (!text || text.includes(' ') || text.length < 2) {
-        toolbar.style.display = 'none';
-        return;
-      }
+    const text = selection.toString().trim();
 
-      // Only show inside the article modal
-      const modalBody = document.getElementById('modalBody');
-      if (!modalBody || !modalBody.contains(selection.anchorNode)) {
-        toolbar.style.display = 'none';
-        return;
-      }
+    // Only single words — no spaces
+    if (text.includes(' ') || text.length < 2) {
+      toolbar.style.display = 'none';
+      return;
+    }
 
-      selectedWord = text;
+    // Only inside #modalBody
+    const modalBody = document.getElementById('modalBody');
+    if (!modalBody) { toolbar.style.display = 'none'; return; }
 
-      // Position toolbar above the selection
-      const range = selection.getRangeAt(0);
-      const rect = range.getBoundingClientRect();
-      toolbar.style.display = 'block';
-      toolbar.style.top = (rect.top + window.scrollY - 44) + 'px';
-      toolbar.style.left = (rect.left + window.scrollX + rect.width / 2 - 60) + 'px';
-    }, 50);
+    const anchorNode = selection.anchorNode;
+    if (!anchorNode || !modalBody.contains(anchorNode)) {
+      toolbar.style.display = 'none';
+      return;
+    }
+
+    selectedWord = text;
+
+    // Position toolbar above selection
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    toolbar.style.display = 'block';
+    toolbar.style.left = (rect.left + rect.width / 2) + 'px';
+    toolbar.style.top = (rect.top - 48 + window.scrollY) + 'px';
   }
+
+  document.addEventListener('mouseup', onSelectionChange);
+  document.addEventListener('touchend', onSelectionChange);
 
   // Hide toolbar when clicking elsewhere
   document.addEventListener('mousedown', function(e) {
-    if (e.target !== toolbar && !toolbar.contains(e.target)) {
+    const toolbar = document.getElementById('writeword-toolbar');
+    if (!toolbar.contains(e.target)) {
       toolbar.style.display = 'none';
     }
   });
 
-  window.openWriteWord = function() {
+  // Open Writeword modal
+  window.openWriteword = function() {
+    if (!selectedWord) return;
+
+    const toolbar = document.getElementById('writeword-toolbar');
     toolbar.style.display = 'none';
-    const modal = document.getElementById('writeword-modal');
-    modal.style.display = 'flex';
 
-    // Set word
-    document.getElementById('ww-word').textContent = selectedWord;
+    const overlay = document.getElementById('writeword-overlay');
+    const body = document.getElementById('writeword-body');
 
-    // Reset
-    document.getElementById('ww-translation').innerHTML = '<span style="color:#bbb;">Loading...</span>';
-    document.getElementById('ww-phonetic').innerHTML = '<span style="color:#bbb;">Loading...</span>';
-    document.getElementById('ww-audio-btn').style.display = 'none';
-    document.getElementById('ww-definition').innerHTML = '<span style="color:#bbb;">Loading...</span>';
+    // Show loading
+    body.innerHTML = `
+      <div class="ww-loading">
+        <div class="ww-spinner"></div>
+        Looking up "${selectedWord}"...
+      </div>
+    `;
 
-    fetchTranslation(selectedWord);
-    fetchDictionary(selectedWord);
-  };
+    overlay.classList.add('active');
 
-  window.closeWriteWord = function() {
-    document.getElementById('writeword-modal').style.display = 'none';
-  };
+    // Fetch both APIs in parallel
+    const word = selectedWord.toLowerCase();
 
-  // Close on backdrop click
-  document.getElementById('writeword-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeWriteWord();
-  });
+    Promise.all([
+      // MyMemory translation EN → VI
+      fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|vi`)
+        .then(r => r.json()).catch(() => null),
 
-  function fetchTranslation(word) {
-    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|vi`)
-      .then(r => r.json())
-      .then(data => {
-        const translation = data.responseData && data.responseData.translatedText
-          ? data.responseData.translatedText
-          : 'Translation unavailable';
-        document.getElementById('ww-translation').textContent = translation;
-      })
-      .catch(() => {
-        document.getElementById('ww-translation').textContent = 'Translation unavailable';
-      });
-  }
+      // DictionaryAPI for phonetics and definition
+      fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
+        .then(r => r.json()).catch(() => null)
 
-  function fetchDictionary(word) {
-    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
-      .then(r => r.json())
-      .then(data => {
-        if (!Array.isArray(data) || data.length === 0) {
-          document.getElementById('ww-phonetic').textContent = 'Not found';
-          document.getElementById('ww-definition').textContent = 'Definition not found';
-          return;
-        }
+    ]).then(([translationData, dictData]) => {
+      // Extract translation
+      let translation = '—';
+      if (translationData && translationData.responseStatus === 200) {
+        translation = translationData.responseData.translatedText || '—';
+      }
 
-        const entry = data[0];
+      // Extract phonetic and audio
+      let phonetic = '';
+      audioUrl = '';
+      let definition = '—';
 
-        // Phonetic text
-        let phoneticText = '';
-        let audioUrl = '';
+      if (Array.isArray(dictData) && dictData.length > 0) {
+        const entry = dictData[0];
 
+        // Phonetics
         if (entry.phonetics && entry.phonetics.length > 0) {
           for (const p of entry.phonetics) {
-            if (p.text && !phoneticText) phoneticText = p.text;
-            if (p.audio && !audioUrl) audioUrl = p.audio;
+            if (p.text) phonetic = phonetic || p.text;
+            if (p.audio) audioUrl = audioUrl || p.audio;
           }
         }
-        if (!phoneticText && entry.phonetic) phoneticText = entry.phonetic;
+        if (!phonetic && entry.phonetic) phonetic = entry.phonetic;
 
-        document.getElementById('ww-phonetic').textContent = phoneticText || 'Phonetic unavailable';
-
-        // Audio
-        if (audioUrl) {
-          const audio = document.getElementById('ww-audio');
-          audio.src = audioUrl;
-          document.getElementById('ww-audio-btn').style.display = 'flex';
-        }
-
-        // Definition — first definition from first meaning
-        let definition = 'Definition not found';
+        // Definition
         if (entry.meanings && entry.meanings.length > 0) {
           const meaning = entry.meanings[0];
-          if (meaning.definitions && meaning.definitions.length > 0) {
-            const partOfSpeech = meaning.partOfSpeech || '';
-            definition = (partOfSpeech ? `(${partOfSpeech}) ` : '') + meaning.definitions[0].definition;
-          }
+          const partOfSpeech = meaning.partOfSpeech || '';
+          const def = meaning.definitions && meaning.definitions[0]
+            ? meaning.definitions[0].definition
+            : '—';
+          definition = partOfSpeech ? `<em style="color:#555; font-size:12px;">${partOfSpeech}</em><br>${def}` : def;
         }
-        document.getElementById('ww-definition').textContent = definition;
-      })
-      .catch(() => {
-        document.getElementById('ww-phonetic').textContent = 'Not found';
-        document.getElementById('ww-definition').textContent = 'Definition not found';
-      });
-  }
+      }
 
-  window.playAudio = function() {
-    const audio = document.getElementById('ww-audio');
-    if (audio && audio.src) audio.play();
+      // Render modal
+      body.innerHTML = `
+        <div class="ww-word">${selectedWord}</div>
+
+        <div class="ww-section">
+          <div class="ww-section-label">Vietnamese</div>
+          <div class="ww-divider"></div>
+          <div class="ww-section-content ww-translation">${translation}</div>
+        </div>
+
+        <div class="ww-section">
+          <div class="ww-section-label">Pronunciation</div>
+          <div class="ww-divider"></div>
+          <div class="ww-pronunciation-row">
+            <span class="ww-phonetic">${phonetic || 'Not available'}</span>
+            ${audioUrl ? `
+            <button class="ww-audio-btn" onclick="playAudio()" title="Listen">
+              ▶
+            </button>` : ''}
+          </div>
+        </div>
+
+        <div class="ww-section">
+          <div class="ww-section-label">Definition</div>
+          <div class="ww-divider"></div>
+          <div class="ww-section-content">${definition}</div>
+        </div>
+      `;
+    });
   };
+
+  // Play audio
+  window.playAudio = function() {
+    if (!audioUrl) return;
+    const audio = new Audio(audioUrl);
+    audio.play().catch(() => {});
+  };
+
+  // Close modal
+  window.closeWriteword = function(e) {
+    if (e && e.target !== document.getElementById('writeword-overlay')) return;
+    document.getElementById('writeword-overlay').classList.remove('active');
+    audioUrl = '';
+  };
+
 })();
 </script>
-<!-- ===== END WRITEWORD ===== -->
+<!-- ─── End Writeword ─────────────────────────────────── -->
+
 
 
 

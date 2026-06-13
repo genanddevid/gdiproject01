@@ -926,12 +926,18 @@ document.addEventListener('focusin', function(e) {
 <!-- ─── Writeword Feature ─────────────────────────────── -->
 <style>
   /* Floating toolbar */
+  
+
   #writeword-toolbar {
     position: fixed;
-    z-index: 99999;
-    display: none;
+    bottom: 80px;
+    left: 50%;
     transform: translateX(-50%);
+    z-index: 999998;
+    display: none;
   }
+
+
 
   #writeword-toolbar button {
     background: #1a1a1a;
@@ -1216,18 +1222,9 @@ document.addEventListener('focusin', function(e) {
     console.log('WRITEWORD SELECTED:', selectedWord);
 
     // Position toolbar above selection
-    const range = selection.getRangeAt(0);
-
-requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-
-        const rect = range.getBoundingClientRect();
-
-toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-toolbar.style.top = (rect.bottom + 12) + 'px';
+    
 toolbar.style.display = 'block';
-    });
-});
+   
 
     
   }

@@ -930,11 +930,9 @@ document.addEventListener('focusin', function(e) {
 
   #writeword-toolbar {
     position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
     z-index: 999998;
     display: none;
+    transform: translateX(-50%);
   }
 
 
@@ -1223,6 +1221,10 @@ document.addEventListener('focusin', function(e) {
 
     // Position toolbar above selection
     
+const range = selection.getRangeAt(0);
+const rect = range.getBoundingClientRect();
+toolbar.style.left = (rect.left + rect.width / 2) + 'px';
+toolbar.style.top = (rect.bottom + 8) + 'px';
 toolbar.style.display = 'block';
    
 

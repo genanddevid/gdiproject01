@@ -1364,10 +1364,22 @@ document.getElementById('writeword-btn').addEventListener('touchstart', function
     e.preventDefault();
     e.stopPropagation();
 
+    // Remove browser text selection
+    const selection = window.getSelection();
+    if (selection) {
+        selection.removeAllRanges();
+    }
+
+    // Hide toolbar
+    document.getElementById('writeword-toolbar').style.display = 'none';
+
     setTimeout(() => {
         openWriteword();
     }, 10);
 });
+
+
+
 
 
 

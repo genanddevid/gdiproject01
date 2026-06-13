@@ -1230,7 +1230,10 @@ toolbar.style.display = 'block';
   }
 
   document.addEventListener('mouseup', onSelectionChange);
-  document.addEventListener('touchend', onSelectionChange);
+document.addEventListener('selectionchange', function() {
+    clearTimeout(window._wwTimer);
+    window._wwTimer = setTimeout(onSelectionChange, 300);
+});
 
   // Hide toolbar when clicking elsewhere
  

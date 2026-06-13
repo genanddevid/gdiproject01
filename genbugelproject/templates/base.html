@@ -1000,21 +1000,26 @@ document.addEventListener('focusin', function(e) {
   }
 
   /* Modal header */
-  .ww-header {
+  
+
+.ww-header {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 16px 20px;
     border-bottom: 1px solid #2a2a2a;
-  }
+}
 
-  .ww-title {
+.ww-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: 'Inter', Arial, sans-serif;
     font-size: 15px;
     font-weight: 700;
     color: #B83C2E;
     letter-spacing: 0.3px;
-    text-align: center;
 }
 
   .ww-close {
@@ -1059,7 +1064,7 @@ document.addEventListener('focusin', function(e) {
     font-size: 9px;
     font-weight: 600;
     letter-spacing: 2px;
-    text-transform: uppercase;
+    text-transform: none;
     color: #555;
     margin-bottom: 6px;
   }
@@ -1081,9 +1086,16 @@ document.addEventListener('focusin', function(e) {
   /* Pronunciation row */
   .ww-pronunciation-row {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.ww-pronunciation-main {
+    display: flex;
     align-items: center;
     gap: 10px;
-  }
+}
 
   .ww-phonetic {
     font-family: 'Inter', sans-serif;
@@ -1303,16 +1315,22 @@ document.addEventListener('focusin', function(e) {
 
         <div class="ww-section">
           
-          <div class="ww-divider"></div>
-          <div class="ww-pronunciation-row">
-            <span class="ww-phonetic">${phonetic || 'Not available'}</span>
-            ${audioUrl ? `
-            <button class="ww-audio-btn" onclick="playAudio()" title="Listen">
-              ▶
-            </button>` : ''}
+        <div class="ww-divider"></div>
+            <div class="ww-pronunciation-row">
+            <div class="ww-pronunciation-main">
+                <span class="ww-phonetic">${phonetic || 'Not available'}</span>
+                ${audioUrl ? `
+                <button class="ww-audio-btn" onclick="playAudio()" title="Listen">
+                    ▶
+                </button>` : ''}
+            </div>
             <div class="ww-section-label">Pronunciation by Dictionary.com</div>
-          </div>
         </div>
+        </div>
+
+
+
+
 
         <div class="ww-section">
         

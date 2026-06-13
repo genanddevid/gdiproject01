@@ -1223,14 +1223,9 @@ requestAnimationFrame(() => {
 
         const rect = range.getBoundingClientRect();
 
-        toolbar.style.left =
-            (rect.left + rect.width / 2) + 'px';
-
-        toolbar.style.top =
-            (rect.bottom + window.scrollY + 45) + 'px';
-
-        toolbar.style.display = 'block';
-
+toolbar.style.left = (rect.left + rect.width / 2) + 'px';
+toolbar.style.top = (rect.bottom + 12) + 'px';
+toolbar.style.display = 'block';
     });
 });
 

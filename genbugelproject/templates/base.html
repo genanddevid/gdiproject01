@@ -927,7 +927,7 @@ document.addEventListener('focusin', function(e) {
   /* Floating toolbar */
   #writeword-toolbar {
     position: fixed;
-    z-index: 99998;
+    z-index: 99999;
     display: none;
     transform: translateX(-50%);
   }
@@ -969,16 +969,18 @@ document.addEventListener('focusin', function(e) {
   #writeword-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 999999;
+    background: rgba(0,0,0,0.75);
+    z-index: 100000;
     display: none;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    pointer-events: all;
+    backdrop-filter: blur(4px);
   }
 
-  
+  #writeword-overlay.active {
+    display: flex;
+  }
 
   /* Modal card */
   #writeword-card {
@@ -1141,9 +1143,7 @@ document.addEventListener('focusin', function(e) {
 
 <!-- Floating toolbar -->
 <div id="writeword-toolbar">
-  <button 
-    onpointerdown="event.preventDefault()" 
-    onclick="openWriteword()">✦ Writeword</button>
+  <button onclick="openWriteword()">✦ Writeword</button>
 </div>
 
 <!-- Writeword modal -->
@@ -1173,7 +1173,7 @@ document.addEventListener('focusin', function(e) {
     const toolbar = document.getElementById('writeword-toolbar');
 
     if (!selection || selection.isCollapsed || !selection.toString().trim()) {
-      toolbar.style.display = 'none';
+      
       return;
     }
 
@@ -1197,6 +1197,9 @@ document.addEventListener('focusin', function(e) {
 
     selectedWord = text;
 
+    // debugging
+    console.log('WRITEWORD SELECTED:', selectedWord);
+
     // Position toolbar above selection
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
@@ -1210,16 +1213,17 @@ document.addEventListener('focusin', function(e) {
   document.addEventListener('touchend', onSelectionChange);
 
   // Hide toolbar when clicking elsewhere
-  document.addEventListener('pointerdown', function(e) {
-    const toolbar = document.getElementById('writeword-toolbar');
-    if (toolbar && !toolbar.contains(e.target)) {
-      toolbar.style.display = 'none';
-    }
-  });
+ 
 
   // Open Writeword modal
   window.openWriteword = function() {
-    if (!selectedWord) return;
+
+  console.log('OPENING:', selectedWord);
+
+  if (!selectedWord) {
+    alert('No word selected');
+    return;
+  }
 
     const toolbar = document.getElementById('writeword-toolbar');
     toolbar.style.display = 'none';
@@ -1235,7 +1239,7 @@ document.addEventListener('focusin', function(e) {
       </div>
     `;
 
-    overlay.style.display = 'flex';
+    overlay.classList.add('active');
 
     // Fetch both APIs in parallel
     const word = selectedWord.toLowerCase();
@@ -1325,7 +1329,7 @@ document.addEventListener('focusin', function(e) {
   // Close modal
   window.closeWriteword = function(e) {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
-    document.getElementById('writeword-overlay').style.display = 'none';
+    document.getElementById('writeword-overlay').classList.remove('active');
     audioUrl = '';
   };
 

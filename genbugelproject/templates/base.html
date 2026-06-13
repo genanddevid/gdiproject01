@@ -1183,7 +1183,7 @@ document.addEventListener('focusin', function(e) {
     const toolbar = document.getElementById('writeword-toolbar');
 
     if (!selection || selection.isCollapsed || !selection.toString().trim()) {
-      
+      document.getElementById('writeword-toolbar').style.display = 'none'
       return;
     }
 
@@ -1215,7 +1215,7 @@ document.addEventListener('focusin', function(e) {
 const range = selection.getRangeAt(0);
 const rect = range.getBoundingClientRect();
 toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-toolbar.style.top = (rect.bottom + 10) + 'px';
+toolbar.style.top = (rect.bottom + 12) + 'px';
 toolbar.style.display = 'block';
    
 

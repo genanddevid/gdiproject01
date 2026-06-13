@@ -1156,7 +1156,10 @@ document.addEventListener('focusin', function(e) {
   }
 </style>
 
-
+<!-- Floating toolbar -->
+<div id="writeword-toolbar">
+  <button onclick="openWriteword()">✦ Writeword</button>
+</div>
 
 <!-- Writeword modal -->
 <div id="writeword-overlay" onclick="closeWriteword(event)">
@@ -1209,20 +1212,22 @@ document.addEventListener('focusin', function(e) {
 
     selectedWord = text;
 
-    console.log('WRITEWORD SELECTED:', selectedWord);
+  console.log('WRITEWORD SELECTED:', selectedWord);
 
-    // Auto-open after user selects a word
-    setTimeout(() => {
-      if (selectedWord === text) {
-        openWriteword();
-      }
-    }, 300);
+  // Auto-open after user selects a word
+  setTimeout(() => {
+    if (selectedWord === text) {
+      openWriteword();
+    }
+  }, 300);
 
     // Position toolbar above selection
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
-   
+    toolbar.style.display = 'block';
+    toolbar.style.left = (rect.left + rect.width / 2) + 'px';
+    toolbar.style.top = (rect.top - 48 + window.scrollY) + 'px';
   }
 
   document.addEventListener('mouseup', onSelectionChange);

@@ -1221,7 +1221,7 @@ document.addEventListener('focusin', function(e) {
 
     toolbar.style.display = 'block';
     toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-    toolbar.style.top = (rect.top  + window.scrollY + 10) + 'px';
+    toolbar.style.top = (rect.bottom  + window.scrollY + 10) + 'px';
   }
 
   document.addEventListener('mouseup', onSelectionChange);

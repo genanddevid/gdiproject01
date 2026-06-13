@@ -975,12 +975,10 @@ document.addEventListener('focusin', function(e) {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    
+    pointer-events: all;
   }
 
-  #writeword-overlay.active {
-    display: flex;
-  }
+  
 
   /* Modal card */
   #writeword-card {
@@ -1235,7 +1233,7 @@ document.addEventListener('focusin', function(e) {
       </div>
     `;
 
-    overlay.classList.add('active');
+    overlay.style.display = 'flex';
 
     // Fetch both APIs in parallel
     const word = selectedWord.toLowerCase();
@@ -1325,7 +1323,7 @@ document.addEventListener('focusin', function(e) {
   // Close modal
   window.closeWriteword = function(e) {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
-    document.getElementById('writeword-overlay').classList.remove('active');
+    document.getElementById('writeword-overlay').style.display = 'none';
     audioUrl = '';
   };
 

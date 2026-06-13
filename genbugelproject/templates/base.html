@@ -1158,7 +1158,7 @@ document.addEventListener('focusin', function(e) {
 
 <!-- Floating toolbar -->
 <div id="writeword-toolbar">
-  <button onclick="openWriteword()">✦ Writeword</button>
+  <button id="writeword-btn">✦ Writeword</button>
 </div>
 
 <!-- Writeword modal -->
@@ -1358,6 +1358,20 @@ document.addEventListener('focusin', function(e) {
   };
 
 })();
+
+
+document.getElementById('writeword-btn').addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setTimeout(() => {
+        openWriteword();
+    }, 10);
+});
+
+
+
+
 </script>
 <!-- ─── End Writeword ─────────────────────────────────── -->
 

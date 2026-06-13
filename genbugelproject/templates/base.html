@@ -1217,12 +1217,18 @@ document.addEventListener('focusin', function(e) {
 
     // Position toolbar above selection
     const range = selection.getRangeAt(0);
+
+setTimeout(() => {
     const rect = range.getBoundingClientRect();
 
-    toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-    toolbar.style.top = (rect.bottom  + window.scrollY + 10) + 'px';
+    toolbar.style.left =
+        (rect.left + rect.width / 2) + 'px';
+
+    toolbar.style.top =
+        (rect.bottom + window.scrollY + 10) + 'px';
 
     toolbar.style.display = 'block';
+}, 150);
     
   }
 

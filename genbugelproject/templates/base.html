@@ -1141,7 +1141,9 @@ document.addEventListener('focusin', function(e) {
 
 <!-- Floating toolbar -->
 <div id="writeword-toolbar">
-  <button onclick="openWriteword()">✦ Writeword</button>
+  <button 
+    onpointerdown="event.preventDefault()" 
+    onclick="openWriteword()">✦ Writeword</button>
 </div>
 
 <!-- Writeword modal -->
@@ -1208,9 +1210,9 @@ document.addEventListener('focusin', function(e) {
   document.addEventListener('touchend', onSelectionChange);
 
   // Hide toolbar when clicking elsewhere
-  document.addEventListener('mousedown', function(e) {
+  document.addEventListener('pointerdown', function(e) {
     const toolbar = document.getElementById('writeword-toolbar');
-    if (!toolbar.contains(e.target)) {
+    if (toolbar && !toolbar.contains(e.target)) {
       toolbar.style.display = 'none';
     }
   });

@@ -927,7 +927,7 @@ document.addEventListener('focusin', function(e) {
   /* Floating toolbar */
   #writeword-toolbar {
     position: fixed;
-    z-index: 99999;
+    z-index: 99998;
     display: none;
     transform: translateX(-50%);
   }
@@ -969,13 +969,13 @@ document.addEventListener('focusin', function(e) {
   #writeword-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.75);
-    z-index: 100000;
+    background: rgba(0,0,0,0.85);
+    z-index: 999999;
     display: none;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    backdrop-filter: blur(4px);
+    
   }
 
   #writeword-overlay.active {

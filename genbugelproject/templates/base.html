@@ -1045,7 +1045,7 @@ document.addEventListener('focusin', function(e) {
     font-size: 26px;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 25px;
+    margin-bottom: 23px;
     letter-spacing: -0.5px;
   }
 
@@ -1074,7 +1074,7 @@ document.addEventListener('focusin', function(e) {
 
   /* Vietnamese translation */
   .ww-translation {
-    font-size: 18px;
+    font-size: 17px;
     color: #fff;
     font-weight: 500;
   }
@@ -1215,7 +1215,7 @@ document.addEventListener('focusin', function(e) {
 const range = selection.getRangeAt(0);
 const rect = range.getBoundingClientRect();
 toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-toolbar.style.top = (rect.bottom + 12) + 'px';
+toolbar.style.top = (rect.bottom + 18) + 'px';
 toolbar.style.display = 'block';
    
 
@@ -1311,8 +1311,14 @@ document.addEventListener('selectionchange', function() {
         <div class="ww-section">
           
         
-          <div class="ww-section-content ww-translation">${translation}</div>
-          <div class="ww-section-label">Vietnamese translation • DeepL</div>
+          <div class="ww-pronunciation-main" style="margin-bottom:6px;">
+              <span class="ww-section-content ww-translation">${translation}</span>
+              ${translation !== '—' ? `
+              <button class="ww-audio-btn" onclick="playVietnamese('${translation.replace(/'/g, "\\'")}')" title="Nghe phát âm">
+                  ▶
+              </button>` : ''}
+          </div>
+          <div class="ww-section-label">Vietnamese • MyMemory</div>
         </div>
 
         <div class="ww-section">
@@ -1350,6 +1356,16 @@ document.addEventListener('selectionchange', function() {
     const audio = new Audio(audioUrl);
     audio.play().catch(() => {});
   };
+
+  window.playVietnamese = function(text) {
+    if (!text || text === '—') return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'vi-VN';
+    utterance.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  };
+
 
   // Close modal
   window.closeWriteword = function(e) {

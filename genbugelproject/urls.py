@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from post.views import NarrativeBuilder, interests_view, improve_writing, run_tagging_now
+from post.views import NarrativeBuilder, interests_view, improve_writing, run_tagging_now, writeword_explain
 
 #from .views import frontpage
 from authy import views as authy_views 
@@ -51,6 +51,7 @@ urlpatterns = [
     path('', include('post.urls')),  # e.g. /post/
     path('improve-writing/', improve_writing, name='improve_writing'),
     path('run-tagging/', run_tagging_now, name='run_tagging'),
+    path('writeword-explain/', writeword_explain, name='writeword_explain'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
     
     path('<username>/', UserProfile, name='profile'),

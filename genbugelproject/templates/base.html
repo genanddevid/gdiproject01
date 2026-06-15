@@ -1215,7 +1215,7 @@ document.addEventListener('focusin', function(e) {
 const range = selection.getRangeAt(0);
 const rect = range.getBoundingClientRect();
 toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-toolbar.style.top = (rect.bottom + 18) + 'px';
+toolbar.style.top = (rect.bottom + 24) + 'px';
 toolbar.style.display = 'block';
    
 
@@ -1280,6 +1280,7 @@ document.addEventListener('selectionchange', function() {
       let phonetic = '';
       audioUrl = '';
       let definition = '—';
+      let isEntity = false;
 
       if (Array.isArray(dictData) && dictData.length > 0) {
         const entry = dictData[0];
@@ -1302,6 +1303,9 @@ document.addEventListener('selectionchange', function() {
             : '—';
           definition = partOfSpeech ? `<em style="color:#555; font-size:12px;">${partOfSpeech}</em><br>${def}` : def;
         }
+      } else {
+        // Dictionary returned nothing — likely an entity
+        isEntity = true;
       }
 
       // Render modal
@@ -1309,45 +1313,80 @@ document.addEventListener('selectionchange', function() {
         <div class="ww-word">${selectedWord}</div>
 
         <div class="ww-section">
-          
-        
           <div class="ww-pronunciation-main" style="margin-bottom:6px;">
-              <span class="ww-section-content ww-translation">${translation}</span>
-              ${translation !== '—' ? `
-              <button class="ww-audio-btn" onclick="playVietnamese('${translation.replace(/'/g, "\\'")}')" title="Nghe phát âm">
-                  ▶
-              </button>` : ''}
+            <span class="ww-section-content ww-translation">${translation}</span>
+            ${translation !== '—' ? `
+            <button class="ww-audio-btn" onclick="playVietnamese('${translation.replace(/'/g, "\\'")}')" title="Nghe phát âm">
+                ▶
+            </button>` : ''}
           </div>
           <div class="ww-section-label">Vietnamese • MyMemory</div>
         </div>
 
+        ${!isEntity ? `
         <div class="ww-section">
-          
-        <div class="ww-divider"></div>
-            <div class="ww-pronunciation-row">
+          <div class="ww-divider"></div>
+          <div class="ww-pronunciation-row">
             <div class="ww-pronunciation-main">
-                <span class="ww-phonetic">${phonetic || 'Not available'}</span>
-                ${audioUrl ? `
-                <button class="ww-audio-btn" onclick="playAudio()" title="Listen">
-                    ▶
-                </button>` : ''}
+              <span class="ww-phonetic">${phonetic || 'Not available'}</span>
+              ${audioUrl ? `
+              <button class="ww-audio-btn" onclick="playAudio()" title="Listen">
+                  ▶
+              </button>` : ''}
             </div>
-            <div class="ww-section-label">Pronunciation • Dictionary.com</div>
+            <div class="ww-section-label">Pronunciation • dictionaryapi.dev</div>
+          </div>
         </div>
-        </div>
-
-
-
-
 
         <div class="ww-section">
-        
           <div class="ww-divider"></div>
           <div class="ww-section-content">${definition}</div>
-            <div class="ww-section-label">Definition • Dictionary.com</div>
+          <div class="ww-section-label">Definition • dictionaryapi.dev</div>
         </div>
+        ` : `
+        <div class="ww-section" id="ww-ai-section">
+          <div class="ww-divider"></div>
+          <div class="ww-loading" id="ww-ai-loading">
+            <div class="ww-spinner"></div>
+            Looking up "${selectedWord}"...
+          </div>
+        </div>
+        `}
       `;
+
+      // If entity — fetch AI explanation
+      if (isEntity) {
+        fetch('/writeword-explain/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+          },
+          body: JSON.stringify({ word: selectedWord })
+        })
+        .then(r => r.json())
+        .then(data => {
+          const aiSection = document.getElementById('ww-ai-section');
+          if (aiSection) {
+            aiSection.innerHTML = `
+              <div class="ww-divider"></div>
+              <div class="ww-section-content">${data.explanation || '—'}</div>
+              <div class="ww-section-label">About • Groq AI</div>
+            `;
+          }
+        })
+        .catch(() => {
+          const aiSection = document.getElementById('ww-ai-section');
+          if (aiSection) {
+            aiSection.innerHTML = `
+              <div class="ww-divider"></div>
+              <div class="ww-section-content" style="color:#555;">Could not load explanation.</div>
+            `;
+          }
+        });
+      }
     });
+
   };
 
   // Play audio
@@ -1370,6 +1409,22 @@ document.addEventListener('selectionchange', function() {
   // Close modal
   window.closeWriteword = function(e) {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
+    
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
     document.getElementById('writeword-overlay').classList.remove('active');
     audioUrl = '';
   };

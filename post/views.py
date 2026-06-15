@@ -1149,6 +1149,40 @@ def delete_ad(request, ad_id):
 
 
 
+def writeword_explain(request):
+    if request.method == 'POST':
+        try:
+            from groq import Groq
+            data = json.loads(request.body)
+            word = data.get('word', '').strip()
+            
+            if not word:
+                return JsonResponse({'error': 'No word provided'}, status=400)
+            
+            client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
+            completion = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """You are a concise encyclopedia. When given a name or entity, 
+provide exactly 1-2 sentences that are factual, neutral and informative.
+Cover who or what it is, why it is notable, and one key fact.
+Return only the explanation — no preamble, no labels."""
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Explain: {word}"
+                    }
+                ],
+                temperature=0.3,
+                max_tokens=120,
+            )
+            explanation = completion.choices[0].message.content.strip()
+            return JsonResponse({'explanation': explanation})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
 

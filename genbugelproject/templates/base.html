@@ -1013,7 +1013,7 @@ document.addEventListener('focusin', function(e) {
     font-family: 'Inter', Arial, sans-serif;
     font-size: 15px;
     font-weight: 700;
-    color: #B83C2E;
+    color: #1a73e8;
     letter-spacing: 0.3px;
 }
 
@@ -1336,7 +1336,7 @@ document.addEventListener('selectionchange', function() {
                 ▶
             </button>` : ''}
           </div>
-          <div class="ww-section-label">Vietnamese • MyMemory</div>
+          <div class="ww-section-label">Vietnamese • <a href="https://laratranslate.com/translate?source=en&target=vi&text=${encodeURIComponent(selectedWord)}&style=Faithful" target="_blank" style="color:#1a73e8; text-decoration:underline;">MyMemory</a></div>
         </div>
 
         ${!isEntity ? `
@@ -1350,14 +1350,14 @@ document.addEventListener('selectionchange', function() {
                   ▶
               </button>` : ''}
             </div>
-            <div class="ww-section-label">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#555; text-decoration:underline;">dictionary.com</a></div>
+            <div class="ww-section-label">Pronunciation • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#1a73e8; text-decoration:underline;">dictionary.com</a></div>
           </div>
         </div>
 
         <div class="ww-section">
           <div class="ww-divider"></div>
           <div class="ww-section-content">${definition}</div>
-          <div class="ww-section-label">Definition • dictionaryapi.dev</div>
+          <div class="ww-section-label">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#1a73e8; text-decoration:underline;">dictionary.com</a></div>
         </div>
         ` : `
         <div class="ww-section" id="ww-ai-section">

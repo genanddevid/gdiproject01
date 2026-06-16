@@ -1353,7 +1353,7 @@ document.addEventListener('selectionchange', function() {
                 ▶
             </button>` : ''}
           </div>
-          <div class="ww-section-label">Vietnamese • <a href="https://laratranslate.com/translate?source=en&target=vi&text=${encodeURIComponent(selectedWord)}&style=Faithful" target="_blank" style="color:#1a0dab; text-decoration:underline;">MyMemory</a></div>
+          <div class="ww-section-label">Vietnamese • <a href="https://laratranslate.com/translate?source=en&target=vi&text=${encodeURIComponent(selectedWord)}&style=Faithful" target="_blank" style="color:#0d32ab; text-decoration:underline;">MyMemory</a></div>
         </div>
 
         ${!isEntity ? `
@@ -1367,7 +1367,7 @@ document.addEventListener('selectionchange', function() {
                   ▶
               </button>` : ''}
             </div>
-            <div class="ww-section-label">Pronunciation • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#1a0dab; text-decoration:underline;">dictionary.com</a></div>
+            <div class="ww-section-label">Pronunciation • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#0d32ab; text-decoration:underline;">dictionary.com</a></div>
           </div>
         </div>
 
@@ -1376,19 +1376,19 @@ document.addEventListener('selectionchange', function() {
           
           <!-- Swipeable definition carousel -->
           <div style="position:relative; overflow:hidden;">
-            <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:pan-y;">
+            <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:none;">
               
               <!-- Slide 1: dictionary.com -->
               <div style="min-width:100%; box-sizing:border-box;">
                 <div class="ww-section-content">${definition}</div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#555; text-decoration:underline;">dictionary.com</a></div>
+                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#0d32ab; text-decoration:underline;">dictionary.com</a></div>
               </div>
 
               <!-- Slide 2: Merriam-Webster -->
               <div style="min-width:100%; box-sizing:border-box;">
                 ${mwPartOfSpeech ? `<em style="color:#555; font-size:12px;">${mwPartOfSpeech}</em><br>` : ''}
                 <div class="ww-section-content">${mwDefinition}</div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#555; text-decoration:underline;">merriam-webster.com</a></div>
+                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d32ab; text-decoration:underline;">merriam-webster.com</a></div>
               </div>
 
             </div>

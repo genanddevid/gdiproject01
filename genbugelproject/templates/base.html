@@ -1013,7 +1013,7 @@ document.addEventListener('focusin', function(e) {
     font-family: 'Inter', Arial, sans-serif;
     font-size: 15px;
     font-weight: 700;
-    color: #1a73e8;
+    color: #B83C2E;
     letter-spacing: 0.3px;
 }
 
@@ -1231,7 +1231,7 @@ document.addEventListener('focusin', function(e) {
 const range = selection.getRangeAt(0);
 const rect = range.getBoundingClientRect();
 toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-toolbar.style.top = (rect.bottom + 24) + 'px';
+toolbar.style.top = (rect.bottom + 27) + 'px';
 toolbar.style.display = 'block';
    
 
@@ -1283,9 +1283,13 @@ document.addEventListener('selectionchange', function() {
 
       // DictionaryAPI for phonetics and definition
       fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
+        .then(r => r.json()).catch(() => null),
+
+      // Merriam-Webster
+      fetch(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${encodeURIComponent(word)}?key=35a925b3-314a-4dd8-b123-0ee55bce39bc`)
         .then(r => r.json()).catch(() => null)
 
-    ]).then(([translationData, dictData]) => {
+    ]).then(([translationData, dictData, mwData]) => {
       // Extract translation
       let translation = '—';
       if (translationData && translationData.responseStatus === 200) {
@@ -1324,6 +1328,19 @@ document.addEventListener('selectionchange', function() {
         isEntity = true;
       }
 
+      // Extract Merriam-Webster definition
+      let mwDefinition = '—';
+      let mwPartOfSpeech = '';
+      if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
+        const mwEntry = mwData[0];
+        mwPartOfSpeech = mwEntry.fl || '';
+        if (mwEntry.shortdef && mwEntry.shortdef.length > 0) {
+          mwDefinition = mwEntry.shortdef[0];
+          isEntity = false;
+        }
+      }
+
+
       // Render modal
       body.innerHTML = `
         <div class="ww-word">${selectedWord}</div>
@@ -1336,7 +1353,7 @@ document.addEventListener('selectionchange', function() {
                 ▶
             </button>` : ''}
           </div>
-          <div class="ww-section-label">Vietnamese • <a href="https://laratranslate.com/translate?source=en&target=vi&text=${encodeURIComponent(selectedWord)}&style=Faithful" target="_blank" style="color:#1a73e8; text-decoration:underline;">MyMemory</a></div>
+          <div class="ww-section-label">Vietnamese • <a href="https://laratranslate.com/translate?source=en&target=vi&text=${encodeURIComponent(selectedWord)}&style=Faithful" target="_blank" style="color:#1a0dab; text-decoration:underline;">MyMemory</a></div>
         </div>
 
         ${!isEntity ? `
@@ -1350,15 +1367,40 @@ document.addEventListener('selectionchange', function() {
                   ▶
               </button>` : ''}
             </div>
-            <div class="ww-section-label">Pronunciation • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#1a73e8; text-decoration:underline;">dictionary.com</a></div>
+            <div class="ww-section-label">Pronunciation • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#1a0dab; text-decoration:underline;">dictionary.com</a></div>
           </div>
         </div>
 
         <div class="ww-section">
           <div class="ww-divider"></div>
-          <div class="ww-section-content">${definition}</div>
-          <div class="ww-section-label">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#1a73e8; text-decoration:underline;">dictionary.com</a></div>
+          
+          <!-- Swipeable definition carousel -->
+          <div style="position:relative; overflow:hidden;">
+            <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:pan-y;">
+              
+              <!-- Slide 1: dictionary.com -->
+              <div style="min-width:100%; box-sizing:border-box;">
+                <div class="ww-section-content">${definition}</div>
+                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#555; text-decoration:underline;">dictionary.com</a></div>
+              </div>
+
+              <!-- Slide 2: Merriam-Webster -->
+              <div style="min-width:100%; box-sizing:border-box;">
+                ${mwPartOfSpeech ? `<em style="color:#555; font-size:12px;">${mwPartOfSpeech}</em><br>` : ''}
+                <div class="ww-section-content">${mwDefinition}</div>
+                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#555; text-decoration:underline;">merriam-webster.com</a></div>
+              </div>
+
+            </div>
+
+            <!-- Dots indicator -->
+            <div style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
+              <div id="ww-dot-0" style="width:6px; height:6px; border-radius:50%; background:#B83C2E;"></div>
+              <div id="ww-dot-1" style="width:6px; height:6px; border-radius:50%; background:#333;"></div>
+            </div>
+          </div>
         </div>
+
         ` : `
         <div class="ww-section" id="ww-ai-section">
           <div class="ww-divider"></div>
@@ -1402,6 +1444,32 @@ document.addEventListener('selectionchange', function() {
         });
       }
     });
+
+    // Definition carousel swipe
+      let defStartX = 0;
+      let defCurrentSlide = 0;
+      const carousel = document.getElementById('ww-def-carousel');
+      
+      if (carousel) {
+        carousel.addEventListener('touchstart', e => {
+          defStartX = e.changedTouches[0].clientX;
+        }, { passive: true });
+
+        carousel.addEventListener('touchend', e => {
+          const diff = defStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 40) {
+            if (diff > 0 && defCurrentSlide === 0) {
+              defCurrentSlide = 1;
+            } else if (diff < 0 && defCurrentSlide === 1) {
+              defCurrentSlide = 0;
+            }
+            carousel.style.transform = `translateX(-${defCurrentSlide * 100}%)`;
+            document.getElementById('ww-dot-0').style.background = defCurrentSlide === 0 ? '#B83C2E' : '#333';
+            document.getElementById('ww-dot-1').style.background = defCurrentSlide === 1 ? '#B83C2E' : '#333';
+          }
+        }, { passive: true });
+      }
+
 
   };
 

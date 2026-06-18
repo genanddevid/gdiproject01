@@ -1214,7 +1214,7 @@ def vocabulary_lookup(request):
 
         definition = None
 
-       short_def = soup.select_one('.short')
+        short_def = soup.select_one('.short')
         pos_tag = soup.select_one('.pos-icon')
 
         definition = None

@@ -1277,19 +1277,19 @@ document.addEventListener('selectionchange', function() {
     const word = selectedWord.toLowerCase();
 
     Promise.all([
-      // MyMemory translation EN → VI
-      fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|vi`)
-        .then(r => r.json()).catch(() => null),
+  fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|vi`)
+    .then(r => r.json()).catch(() => null),
 
-      // DictionaryAPI for phonetics and definition
-      fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
-        .then(r => r.json()).catch(() => null),
+  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null),
 
-      // Merriam-Webster
-      fetch(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${encodeURIComponent(word)}?key=35a925b3-314a-4dd8-b123-0ee55bce39bc`)
-        .then(r => r.json()).catch(() => null)
+  fetch(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${encodeURIComponent(word)}?key=35a925b3-314a-4dd8-b123-0ee55bce39bc`)
+    .then(r => r.json()).catch(() => null),
 
-    ]).then(([translationData, dictData, mwData]) => {
+  fetch(`/vocabulary-lookup/?word=${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null)
+
+]).then(([translationData, dictData, mwData, vocabData]) => {
       // Extract translation
       let translation = '—';
       if (translationData && translationData.responseStatus === 200) {
@@ -1331,6 +1331,11 @@ document.addEventListener('selectionchange', function() {
       // Extract Merriam-Webster definition
       let mwDefinition = '—';
       let mwPartOfSpeech = '';
+      let vocabDefinition = 'Definition unavailable';
+
+      if (vocabData && vocabData.definition) {
+          vocabDefinition = vocabData.definition;
+      }
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
         const mwEntry = mwData[0];
         mwPartOfSpeech = mwEntry.fl || '';
@@ -1394,9 +1399,19 @@ document.addEventListener('selectionchange', function() {
               <!-- Slide 3: Vocabulary.com -->
               <div style="min-width:100%; box-sizing:border-box;">
                 <div class="ww-section-content">
-                  ${definition !== '—' ? definition.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).slice(0, 10).join(' ') + '...' : '...'}
+                  ${vocabDefinition
+                    ? vocabDefinition.substring(0, 40) + '...'
+                    : 'Definition unavailable'}
                 </div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.vocabulary.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">vocabulary.com</a></div>
+
+                <div class="ww-section-label" style="margin-top:8px;">
+                  Definition •
+                  <a href="https://www.vocabulary.com/dictionary/${word}"
+                    target="_blank"
+                    style="color:#0d32ab; text-decoration:underline;">
+                    vocabulary.com
+                  </a>
+                </div>
               </div>
 
             </div>

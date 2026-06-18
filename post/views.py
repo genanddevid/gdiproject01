@@ -18,6 +18,8 @@ import math
 import uuid
 import os
 import json
+import requests
+from bs4 import BeautifulSoup
 
 # Models
 from post.models import Post, Stream, Tag, Likes, PostView, SavedItem, ApprovedTagAuthor
@@ -1183,6 +1185,49 @@ Return only the explanation — no preamble, no labels."""
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+
+def vocabulary_lookup(request):
+    word = request.GET.get('word', '').strip()
+
+    if not word:
+        return JsonResponse({'definition': None})
+
+    try:
+        url = f"https://www.vocabulary.com/dictionary/{word}"
+
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=10
+        )
+
+        if response.status_code != 200:
+            return JsonResponse({'definition': None})
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        definition = None
+
+        short_def = soup.select_one('.short')
+
+        if short_def:
+            definition = short_def.get_text(strip=True)
+
+        return JsonResponse({
+            'definition': definition
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            'definition': None,
+            'error': str(e)
+        })
 
 
 

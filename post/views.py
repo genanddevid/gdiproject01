@@ -1215,9 +1215,21 @@ def vocabulary_lookup(request):
         definition = None
 
         short_def = soup.select_one('.short')
+        pos = soup.select_one('.wordtype')
+
+        definition = None
+        part_of_speech = None
 
         if short_def:
-            definition = short_def.get_text(" ", strip=True)
+            definition = short_def.get_text(strip=True)
+
+        if pos:
+            part_of_speech = pos.get_text(strip=True)
+
+        return JsonResponse({
+            'definition': definition,
+            'partOfSpeech': part_of_speech
+        })
 
         return JsonResponse({
             'definition': definition

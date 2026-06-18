@@ -1220,9 +1220,51 @@ def vocabulary_lookup(request):
             definition = short_def.get_text(" ", strip=True)
 
         return JsonResponse({
-    'definition': definition,
-    'html': response.text[:15000]
-})
+            'definition': definition
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            'definition': None,
+            'error': str(e)
+        })
+
+
+def wordreference_lookup(request):
+    word = request.GET.get('word', '').strip()
+
+    if not word:
+        return JsonResponse({'definition': None})
+
+    try:
+        url = f"https://www.wordreference.com/definition/{word}"
+
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=10
+        )
+
+        if response.status_code != 200:
+            return JsonResponse({'definition': None})
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        definition = None
+
+        definition_tag = soup.select_one('span.rh_def')
+
+        if definition_tag:
+            definition = definition_tag.get_text(" ", strip=True)
+
+        return JsonResponse({
+            'definition': definition
+        })
+
     except Exception as e:
         return JsonResponse({
             'definition': None,

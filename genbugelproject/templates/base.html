@@ -1407,14 +1407,9 @@ document.addEventListener('selectionchange', function() {
 
               <!-- Slide 3: Vocabulary.com -->
               <div style="min-width:100%; box-sizing:border-box;">
-
-                ${vocabPartOfSpeech
-                  ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>`
-                  : ''}
-
                 <div class="ww-section-content">
                   ${vocabDefinition
-                    ? vocabDefinition.substring(0, 40) + '...'
+                    ? vocabDefinition.substring(0, 100) + '...'
                     : 'Definition unavailable'}
                 </div>
 
@@ -1422,11 +1417,10 @@ document.addEventListener('selectionchange', function() {
                   Definition •
                   <a href="https://www.vocabulary.com/dictionary/${word}"
                     target="_blank"
-                    style="color:#0d32ab; text-decoration:underline;">
+                    style="color:#0d5cab; text-decoration:underline;">
                     vocabulary.com
                   </a>
                 </div>
-
               </div>
 
             </div>

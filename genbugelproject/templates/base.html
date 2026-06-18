@@ -1287,9 +1287,13 @@ document.addEventListener('selectionchange', function() {
     .then(r => r.json()).catch(() => null),
 
   fetch(`/vocabulary-lookup/?word=${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null),
+
+  fetch(`/wordreference-lookup/?word=${encodeURIComponent(word)}`)
     .then(r => r.json()).catch(() => null)
 
-]).then(([translationData, dictData, mwData, vocabData]) => {
+
+]).then(([translationData, dictData, mwData, vocabData, wrData]) => {
       // Extract translation
       let translation = '—';
       if (translationData && translationData.responseStatus === 200) {
@@ -1332,6 +1336,11 @@ document.addEventListener('selectionchange', function() {
       let mwDefinition = '—';
       let mwPartOfSpeech = '';
       let vocabDefinition = 'Definition unavailable';
+      let wrDefinition = 'Definition unavailable';
+
+      if (wrData && wrData.definition) {
+          wrDefinition = wrData.definition;
+      }
       let vocabPartOfSpeech = '';
 
       if (vocabData) {
@@ -1419,6 +1428,24 @@ document.addEventListener('selectionchange', function() {
                     target="_blank"
                     style="color:#0d5cab; text-decoration:underline;">
                     vocabulary.com
+                  </a>
+                </div>
+              </div>
+
+              <!-- Slide 4: WordReference -->
+              <div style="min-width:100%; box-sizing:border-box;">
+                <div class="ww-section-content">
+                  ${wrDefinition
+                      ? wrDefinition.substring(0, 120) + '...'
+                      : 'Definition unavailable'}
+                </div>
+
+                <div class="ww-section-label" style="margin-top:8px;">
+                  Definition •
+                  <a href="https://www.wordreference.com/definition/${word}"
+                    target="_blank"
+                    style="color:#0d32ab; text-decoration:underline;">
+                    wordreference.com
                   </a>
                 </div>
               </div>

@@ -1220,9 +1220,9 @@ def vocabulary_lookup(request):
             definition = short_def.get_text(" ", strip=True)
 
         return JsonResponse({
-            'definition': definition
-        })
-
+    'definition': definition,
+    'html': str(short_def.parent)[:2000]
+})
     except Exception as e:
         return JsonResponse({
             'definition': None,

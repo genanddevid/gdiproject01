@@ -1268,12 +1268,6 @@ def wordreference_lookup(request):
             part_of_speech = pos_tag.get_text(" ", strip=True)
 
         return JsonResponse({
-            "debug_pos_found": pos_tag is not None,
-            "debug_pos_html": str(pos_tag) if pos_tag else None,
-            "definition": definition,
-            "partOfSpeech": part_of_speech
-        })
-        return JsonResponse({
             'definition': definition,
             'partOfSpeech': part_of_speech
         })

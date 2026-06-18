@@ -1419,7 +1419,7 @@ document.addEventListener('selectionchange', function() {
                 <div class="ww-section-content">
                     ${vocabDefinition
                       ? (vocabDefinition.length > 120
-                          ? vocabDefinition.substring(0, 120) + '...<a href="https://www.vocabulary.com/dictionary/' + encodeURIComponent(word) + '" target="_blank" style="text-decoration: underline; color:#ffffff; font-size:10px;"> Read more</a>' 
+                          ? vocabDefinition.substring(0, 120) + '... <a href="https://www.vocabulary.com/dictionary/' + encodeURIComponent(word) + '" target="_blank" style="text-decoration: underline; color:#ffffff; font-size:10px;"> Read more</a>' 
                           : vocabDefinition)
                       : 'Definition unavailable'}
 
@@ -1527,7 +1527,7 @@ document.addEventListener('selectionchange', function() {
         carousel.addEventListener('touchend', e => {
           const diff = defStartX - e.changedTouches[0].clientX;
           if (Math.abs(diff) > 40) {
-            if (diff > 0 && defCurrentSlide < 2) {
+            if (diff > 0 && defCurrentSlide < 3) {
               defCurrentSlide++;
             } else if (diff < 0 && defCurrentSlide > 0) {
               defCurrentSlide--;
@@ -1536,6 +1536,7 @@ document.addEventListener('selectionchange', function() {
             document.getElementById('ww-dot-0').style.background = defCurrentSlide === 0 ? '#B83C2E' : '#333';
             document.getElementById('ww-dot-1').style.background = defCurrentSlide === 1 ? '#B83C2E' : '#333';
             document.getElementById('ww-dot-2').style.background = defCurrentSlide === 2 ? '#B83C2E' : '#333';
+            document.getElementById('ww-dot-3').style.background = defCurrentSlide === 3 ? '#B83C2E' : '#333';
           }
         }, { passive: true });
       }

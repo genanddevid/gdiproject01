@@ -1337,9 +1337,14 @@ document.addEventListener('selectionchange', function() {
       let mwPartOfSpeech = '';
       let vocabDefinition = 'Definition unavailable';
       let wrDefinition = 'Definition unavailable';
+      let wrPartOfSpeech = '';
 
       if (wrData && wrData.definition) {
           wrDefinition = wrData.definition;
+      }
+
+      if (wrData && wrData.partOfSpeech) {
+          wrPartOfSpeech = wrData.partOfSpeech;
       }
       let vocabPartOfSpeech = '';
 
@@ -1419,7 +1424,7 @@ document.addEventListener('selectionchange', function() {
                 <div class="ww-section-content">
                     ${vocabDefinition
                       ? (vocabDefinition.length > 120
-                          ? vocabDefinition.substring(0, 120) + '... <a href="https://www.vocabulary.com/dictionary/' + encodeURIComponent(word) + '" target="_blank" style="text-decoration: underline; color:#ffffff; font-size:10px;"> Read more</a>' 
+                          ? vocabDefinition.substring(0, 120) + '...<a href="https://www.vocabulary.com/dictionary/' + encodeURIComponent(word) + '" target="_blank" style="text-decoration: underline; color:#ffffff; font-size:10px;"> Read more</a>' 
                           : vocabDefinition)
                       : 'Definition unavailable'}
 
@@ -1438,6 +1443,10 @@ document.addEventListener('selectionchange', function() {
 
               <!-- Slide 4: WordReference -->
               <div style="min-width:100%; box-sizing:border-box;">
+                ${wrPartOfSpeech
+                  ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
+                  : ''}
+
                 <div class="ww-section-content">
                       ${wrDefinition
                         ? (wrDefinition.length > 120
@@ -1452,7 +1461,7 @@ document.addEventListener('selectionchange', function() {
                   Definition •
                   <a href="https://www.wordreference.com/definition/${word}"
                     target="_blank"
-                    style="color:#0d32ab; text-decoration:underline;">
+                    style="color:#0d5cab; text-decoration:underline;">
                     wordreference.com
                   </a>
                 </div>

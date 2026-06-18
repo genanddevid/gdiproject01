@@ -1255,14 +1255,21 @@ def wordreference_lookup(request):
         soup = BeautifulSoup(response.text, 'html.parser')
 
         definition = None
-
         definition_tag = soup.select_one('span.rh_def')
+        pos_tag = soup.select_one('span.rh_empos')
+
+        definition = None
+        part_of_speech = None
 
         if definition_tag:
             definition = definition_tag.get_text(" ", strip=True)
 
+        if pos_tag:
+            part_of_speech = pos_tag.get_text(" ", strip=True)
+
         return JsonResponse({
-            'definition': definition
+            'definition': definition,
+            'partOfSpeech': part_of_speech
         })
 
     except Exception as e:

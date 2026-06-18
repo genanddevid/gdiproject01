@@ -1394,9 +1394,9 @@ document.addEventListener('selectionchange', function() {
               <!-- Slide 3: Vocabulary.com -->
               <div style="min-width:100%; box-sizing:border-box;">
                 <div class="ww-section-content">
-                  ${definition !== '—' ? definition.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).slice(0, 3).join(' ') + '...' : '...'}
+                  ${definition !== '—' ? definition.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).slice(0, 10).join(' ') + '...' : '...'}
                 </div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.vocabulary.com/dictionary/${word}" target="_blank" style="color:#0d32ab; text-decoration:underline;">vocabulary.com</a></div>
+                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.vocabulary.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">vocabulary.com</a></div>
               </div>
 
             </div>

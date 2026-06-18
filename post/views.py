@@ -1214,13 +1214,21 @@ def vocabulary_lookup(request):
 
         definition = None
 
-        short_def = soup.select_one('.short')
+       short_def = soup.select_one('.short')
+        pos_tag = soup.select_one('.pos-icon')
+
+        definition = None
+        part_of_speech = None
 
         if short_def:
             definition = short_def.get_text(" ", strip=True)
 
+        if pos_tag:
+            part_of_speech = pos_tag.get_text(" ", strip=True)
+
         return JsonResponse({
-            'definition': definition
+            'definition': definition,
+            'partOfSpeech': part_of_speech
         })
 
     except Exception as e:

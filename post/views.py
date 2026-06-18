@@ -1217,7 +1217,7 @@ def vocabulary_lookup(request):
         short_def = soup.select_one('.short')
 
         if short_def:
-            definition = short_def.get_text(strip=True)
+            definition = short_def.get_text(" ", strip=True)
 
         return JsonResponse({
             'definition': definition

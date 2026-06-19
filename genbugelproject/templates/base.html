@@ -1587,32 +1587,22 @@ document.addEventListener('selectionchange', function() {
 
   };
 
-  // Expand definition to full modal view
+ // Expand definition to full listing view
   window.expandDefinition = function() {
-    const wrapper = document.getElementById('ww-def-wrapper');
     const card = document.getElementById('writeword-card');
     const slides = document.querySelectorAll('#ww-def-carousel > div');
-    
-    // Find currently visible slide
-    const carousel = document.getElementById('ww-def-carousel');
-    const transform = carousel.style.transform || 'translateX(0%)';
-    const match = transform.match(/-?\d+/);
-    const activeIndex = match ? Math.round(Math.abs(parseInt(match[0])) / 100) : 0;
-    const activeSlide = slides[activeIndex];
 
-    if (!activeSlide) return;
-
-    const source = activeSlide.dataset.source;
-    const link = activeSlide.dataset.link;
-    const full = activeSlide.dataset.full;
-
-    if (source === 'vocabulary.com') {
-      // No full text available — just open the link
-      window.open(link, '_blank');
-      return;
-    }
+    const sources = [];
+    slides.forEach(slide => {
+      sources.push({
+        source: slide.dataset.source,
+        link: slide.dataset.link,
+        full: slide.dataset.full
+      });
+    });
 
     card.dataset.expanded = 'true';
+
     document.getElementById('writeword-body').innerHTML = `
       <button onclick="collapseDefinition()" 
         style="background:#222; border:1px solid #333; border-radius:50px; 
@@ -1620,15 +1610,26 @@ document.addEventListener('selectionchange', function() {
         display:flex; align-items:center; gap:6px; margin-bottom:18px;">
         ⤡ Back
       </button>
-      <div class="ww-word" style="margin-bottom:10px;">${selectedWord}</div>
-      <div class="ww-section-content" style="font-size:15px; line-height:1.8;">${full}</div>
-      <div class="ww-section-label" style="margin-top:16px;">Definition • <a href="${link}" target="_blank" style="color:#0d32ab; text-decoration:underline;">${source}</a></div>
+
+      <div class="ww-word" style="margin-bottom:18px;">${selectedWord}</div>
+
+      ${sources.map((s, i) => `
+        <div class="ww-section" style="${i < sources.length - 1 ? 'border-bottom:1px solid #222; padding-bottom:16px;' : ''}">
+          <div class="ww-section-content" style="font-size:15px; line-height:1.7;">
+            ${s.source === 'vocabulary.com' 
+              ? 'Read the full definition on Vocabulary.com.' 
+              : s.full}
+          </div>
+          <div class="ww-section-label" style="margin-top:10px;">Definition • <a href="${s.link}" target="_blank" style="color:#0d32ab; text-decoration:underline;">${s.source}</a></div>
+        </div>
+      `).join('')}
     `;
   };
 
   window.collapseDefinition = function() {
     openWriteword();
   };
+
 
   // Play audio
   window.playAudio = function() {

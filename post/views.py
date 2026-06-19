@@ -1270,11 +1270,15 @@ def wordreference_lookup(request):
         part_of_speech = None
 
         if definition_tag:
+
+            # Remove example sentences
+            for ex in definition_tag.select('.rh_ex'):
+                ex.decompose()
+
             definition = definition_tag.get_text(" ", strip=True)
 
         if pos_tag:
             part_of_speech = pos_tag.get_text(" ", strip=True)
-
         return JsonResponse({
             'definition': definition,
             'partOfSpeech': part_of_speech

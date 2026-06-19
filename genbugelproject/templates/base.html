@@ -1448,19 +1448,14 @@ document.addEventListener('selectionchange', function() {
                 : ''}
 
             <div class="ww-section-content">
-
   ${vocabDefinition
       ? (vocabDefinition.length > 120
-          ? vocabDefinition.substring(0, 120).replace(/\s+\S*$/, '') + '...'
-          : vocabDefinition + '...')
+          ? vocabDefinition.substring(0, 120).replace(/\s+\S*$/, '') +
+            '...<a href="https://www.vocabulary.com/dictionary/' +
+            encodeURIComponent(word) +
+            '" target="_blank" style="text-decoration: underline; color:#ffffff; font-size:10px;">Read more</a>'
+          : vocabDefinition)
       : 'Definition unavailable'}
-
-  <a href="https://www.vocabulary.com/dictionary/${encodeURIComponent(word)}"
-     target="_blank"
-     style="text-decoration: underline; color:#ffffff; font-size:10px;">
-     Read more
-  </a>
-
 </div>
 
                 <div class="ww-section-label" style="margin-top:8px;">
@@ -1480,22 +1475,20 @@ document.addEventListener('selectionchange', function() {
                   : ''}
 
                 <div class="ww-section-content">
-
-${wrDefinition && wrDefinition !== 'Definition unavailable'
+                      ${wrDefinition
   ? (wrDefinition.length > 120
-      ? wrDefinition.substring(0, 120).replace(/\s+\S*$/, '') + '...'
+      ? wrDefinition.substring(0, 120) + '...'
       : wrDefinition + '...')
   : 'Definition unavailable'}
 
-${wrDefinition && wrDefinition !== 'Definition unavailable'
-  ? `<a href="https://www.wordreference.com/definition/${encodeURIComponent(word)}"
-       target="_blank"
-       style="text-decoration: underline; color:#ffffff; font-size:10px;">
-       Read more
-     </a>`
-  : ''}
+<a href="https://www.wordreference.com/definition/${encodeURIComponent(word)}"
+   target="_blank"
+   style="text-decoration: underline; color:#ffffff; font-size:10px;">
+   Read more
+</a>
 
-</div>
+
+                </div>
 
                 <div class="ww-section-label" style="margin-top:8px;">
                   Definition •

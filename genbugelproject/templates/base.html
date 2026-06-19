@@ -1410,20 +1410,35 @@ document.addEventListener('selectionchange', function() {
           <div class="ww-divider"></div>
           
           <!-- Swipeable definition carousel -->
-          <div style="position:relative; overflow:hidden;">
+          <div id="ww-def-wrapper" style="position:relative; overflow:hidden;">
+            <button id="ww-expand-btn" onclick="expandDefinition()" 
+              style="position:absolute; top:0; right:0; z-index:10; background:#222; 
+              border:1px solid #333; border-radius:6px; width:26px; height:26px; 
+              display:flex; align-items:center; justify-content:center; 
+              cursor:pointer; color:#aaa; font-size:13px; padding:0;">
+              ⤢
+            </button>
             <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:none;">
               
+
               <!-- Slide 1: dictionary.com -->
-              <div style="min-width:100%; box-sizing:border-box;">
+              <div style="min-width:100%; box-sizing:border-box;" 
+                   data-source="dictionary.com" 
+                   data-link="https://www.dictionary.com/browse/${word}" 
+                   data-full="${definition.replace(/"/g, '&quot;')}">
                 <div class="ww-section-content">${definition}</div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">dictionary.com</a></div>
+                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#0d32ab; text-decoration:underline;">dictionary.com</a></div>
               </div>
 
+              
               <!-- Slide 2: Merriam-Webster -->
-              <div style="min-width:100%; box-sizing:border-box;">
+              <div style="min-width:100%; box-sizing:border-box;" 
+                   data-source="merriam-webster.com" 
+                   data-link="https://www.merriam-webster.com/dictionary/${word}" 
+                   data-full="${(mwPartOfSpeech ? mwPartOfSpeech + ' — ' : '') + mwDefinition.replace(/"/g, '&quot;')}">
                 ${mwPartOfSpeech ? `<em style="color:#555; font-size:12px;">${mwPartOfSpeech}</em><br>` : ''}
                 <div class="ww-section-content">${mwDefinition}</div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">merriam-webster.com</a></div>
+                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d32ab; text-decoration:underline;">merriam-webster.com</a></div>
               </div>
 
               <!-- Slide 3: Vocabulary.com -->
@@ -1438,7 +1453,7 @@ document.addEventListener('selectionchange', function() {
           ? vocabDefinition.substring(0, 120).replace(/\s+\S*$/, '') +
             '...<a href="https://www.vocabulary.com/dictionary/' +
             encodeURIComponent(word) +
-            '" target="_blank" style="text-decoration: underline; color:#ffffff; font-size:10px;"> Read more</a>'
+            '" target="_blank" style="text-decoration: underline; color:#ffffff; font-size:10px;">Read more</a>'
           : vocabDefinition)
       : 'Definition unavailable'}
 </div>
@@ -1570,6 +1585,49 @@ document.addEventListener('selectionchange', function() {
   
 });
 
+  };
+
+  // Expand definition to full modal view
+  window.expandDefinition = function() {
+    const wrapper = document.getElementById('ww-def-wrapper');
+    const card = document.getElementById('writeword-card');
+    const slides = document.querySelectorAll('#ww-def-carousel > div');
+    
+    // Find currently visible slide
+    const carousel = document.getElementById('ww-def-carousel');
+    const transform = carousel.style.transform || 'translateX(0%)';
+    const match = transform.match(/-?\d+/);
+    const activeIndex = match ? Math.round(Math.abs(parseInt(match[0])) / 100) : 0;
+    const activeSlide = slides[activeIndex];
+
+    if (!activeSlide) return;
+
+    const source = activeSlide.dataset.source;
+    const link = activeSlide.dataset.link;
+    const full = activeSlide.dataset.full;
+
+    if (source === 'vocabulary.com') {
+      // No full text available — just open the link
+      window.open(link, '_blank');
+      return;
+    }
+
+    card.dataset.expanded = 'true';
+    document.getElementById('writeword-body').innerHTML = `
+      <button onclick="collapseDefinition()" 
+        style="background:#222; border:1px solid #333; border-radius:50px; 
+        padding:6px 14px; color:#aaa; font-size:12px; cursor:pointer; 
+        display:flex; align-items:center; gap:6px; margin-bottom:18px;">
+        ⤡ Back
+      </button>
+      <div class="ww-word" style="margin-bottom:10px;">${selectedWord}</div>
+      <div class="ww-section-content" style="font-size:15px; line-height:1.8;">${full}</div>
+      <div class="ww-section-label" style="margin-top:16px;">Definition • <a href="${link}" target="_blank" style="color:#0d32ab; text-decoration:underline;">${source}</a></div>
+    `;
+  };
+
+  window.collapseDefinition = function() {
+    openWriteword();
   };
 
   // Play audio

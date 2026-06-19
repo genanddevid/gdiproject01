@@ -1350,12 +1350,21 @@ document.addEventListener('selectionchange', function() {
 
       }
 
-      let wrDefinition = JSON.stringify(wrData);
-let wrPartOfSpeech = '';
+      let wrDefinition = 'Definition unavailable';
+      let wrPartOfSpeech = '';
 
-if (wrData && wrData.partOfSpeech) {
-    wrPartOfSpeech = wrData.partOfSpeech;
-}
+      if (wrData) {
+
+          if (wrData.definition) {
+              wrDefinition = wrData.definition;
+          }
+
+          if (wrData.partOfSpeech) {
+              wrPartOfSpeech = wrData.partOfSpeech;
+          }
+
+      }
+
       
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
         const mwEntry = mwData[0];

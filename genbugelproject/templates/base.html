@@ -1364,6 +1364,10 @@ document.addEventListener('selectionchange', function() {
           }
 
       }
+
+      console.log("WR DATA:", wrData);
+console.log("WR DEFINITION:", wrDefinition);
+console.log("WR POS:", wrPartOfSpeech);
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
         const mwEntry = mwData[0];
         mwPartOfSpeech = mwEntry.fl || '';

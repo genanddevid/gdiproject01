@@ -1277,7 +1277,9 @@ def wordreference_lookup(request):
 
         return JsonResponse({
             'definition': definition,
-            'partOfSpeech': part_of_speech
+            'url': url,
+            'found_rh_def': soup.select_one('span.rh_def') is not None,
+            'html_sample': response.text[:2000]
         })
 
     except Exception as e:

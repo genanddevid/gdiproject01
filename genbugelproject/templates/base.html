@@ -1611,18 +1611,9 @@ document.addEventListener('selectionchange', function() {
         ⤡ Back
       </button>
 
-      <div class="ww-word" style="margin-bottom:18px;">${selectedWord}</div>
-
-      ${sources.map((s, i) => `
-        <div class="ww-section" style="${i < sources.length - 1 ? 'border-bottom:1px solid #222; padding-bottom:16px;' : ''}">
-          <div class="ww-section-content" style="font-size:15px; line-height:1.7;">
-            ${s.source === 'vocabulary.com' 
-              ? 'Read the full definition on Vocabulary.com.' 
-              : s.full}
-          </div>
-          <div class="ww-section-label" style="margin-top:10px;">Definition • <a href="${s.link}" target="_blank" style="color:#0d32ab; text-decoration:underline;">${s.source}</a></div>
-        </div>
-      `).join('')}
+      <div class="ww-word" style="margin-bottom:10px;">${selectedWord}</div>
+      <div class="ww-section-content" style="font-size:15px; line-height:1.8;">${full}</div>
+      <div class="ww-section-label" style="margin-top:16px;">Definition • <a href="${link}" target="_blank" style="color:#0d32ab; text-decoration:underline;">${source}</a></div>
     `;
   };
 

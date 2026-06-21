@@ -1441,8 +1441,13 @@ document.addEventListener('selectionchange', function() {
                 <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">merriam-webster.com</a></div>
               </div>
 
+              
               <!-- Slide 3: Vocabulary.com -->
-              <div style="min-width:100%; box-sizing:border-box;">
+              <div style="min-width:100%; box-sizing:border-box;"
+                   data-source="vocabulary.com"
+                   data-link="https://www.vocabulary.com/dictionary/${word}"
+                   data-full="${(vocabDefinition || 'Definition unavailable').replace(/"/g, '&quot;')}">
+
                 ${vocabPartOfSpeech
                 ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>`
                 : ''}
@@ -1594,13 +1599,13 @@ document.addEventListener('selectionchange', function() {
 
     const sources = [];
     slides.forEach(slide => {
-      if (slide.dataset.source !== 'vocabulary.com') {
+      
         sources.push({
           source: slide.dataset.source,
           link: slide.dataset.link,
           full: slide.dataset.full
         });
-      }
+      
     });
 
     card.dataset.expanded = 'true';

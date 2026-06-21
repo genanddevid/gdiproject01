@@ -1491,12 +1491,25 @@ document.addEventListener('selectionchange', function() {
               </div>
 
               <!-- Slide 4: WordReference -->
-              <div style="min-width:100%; box-sizing:border-box;"
-                   data-source="wordreference.com"
-                   data-link="https://www.wordreference.com/definition/${word}"
-                  data-full="${(wrPartOfSpeech ? `<em style='color:#555;font-size:12px;'>${wrPartOfSpeech}</em><br>` : '') + (wrDefinition || '').replace(/"/g, '&quot;')}">
+          <div style="min-width:100%; box-sizing:border-box;"
+     data-source="wordreference.com"
+     data-link="https://www.wordreference.com/definition/${word}"
+     data-full="${(
+        (wrPartOfSpeech
+            ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
+              wrPartOfSpeech +
+              '</em><br>'
+            : ''
+        ) +
+        (wrDefinition || 'Definition unavailable')
+     ).replace(/"/g, '&quot;')}">
 
-                ${wrPartOfSpeech ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>` : ''}
+
+
+
+                ${wrPartOfSpeech
+                  ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
+                  : ''}
 
                 <div class="ww-section-content">
                       ${wrDefinition

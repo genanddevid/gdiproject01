@@ -1149,6 +1149,17 @@ document.addEventListener('focusin', function(e) {
     background: #222;
     margin: 4px 0 18px;
   }
+
+  /* Expanded definition view */
+#writeword-card[data-expanded="true"] {
+    height: 100dvh;
+    max-height: 100dvh;
+}
+
+#writeword-card[data-expanded="true"] #writeword-body {
+    overflow-y: auto;
+    height: 100%;
+}
 </style>
 
 <!-- Floating toolbar -->
@@ -1364,6 +1375,16 @@ document.addEventListener('selectionchange', function() {
           }
 
       }
+      const posMap = {
+    'n.': 'noun',
+    'v.': 'verb',
+    'v.t.': 'transitive verb',
+    'v.i.': 'intransitive verb',
+    'adj.': 'adjective',
+    'adv.': 'adverb'
+};
+
+wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 
       
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {

@@ -1613,34 +1613,57 @@ ${wrAvailable ? `
 
     // Definition carousel swipe
       let defStartX = 0;
-      let defCurrentSlide = 0;
-      const slides = carousel ? carousel.children : [];
-const totalSlides = slides.length;
-      
-      if (carousel) {
-        carousel.addEventListener('touchstart', e => {
-          defStartX = e.changedTouches[0].clientX;
-        }, { passive: true });
+let defCurrentSlide = 0;
 
-        carousel.addEventListener('touchend', e => {
-          const diff = defStartX - e.changedTouches[0].clientX;
-          if (Math.abs(diff) > 40) {
-            iif (diff > 0 && defCurrentSlide < totalSlides - 1)
-              defCurrentSlide++;
-            } else if (diff < 0 && defCurrentSlide > 0) {
-              defCurrentSlide--;
+const carousel = document.getElementById('ww-def-carousel');
+
+if (carousel) {
+
+    const slides = carousel.children;
+    const totalSlides = slides.length;
+
+    carousel.addEventListener('touchstart', e => {
+        defStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', e => {
+
+        const diff =
+            defStartX - e.changedTouches[0].clientX;
+
+        if (Math.abs(diff) > 40) {
+
+            if (
+                diff > 0 &&
+                defCurrentSlide < totalSlides - 1
+            ) {
+                defCurrentSlide++;
             }
-            carousel.style.transform = `translateX(-${defCurrentSlide * 100}%)`;
+            else if (
+                diff < 0 &&
+                defCurrentSlide > 0
+            ) {
+                defCurrentSlide--;
+            }
+
+            carousel.style.transform =
+                `translateX(-${defCurrentSlide * 100}%)`;
+
             for (let i = 0; i < totalSlides; i++) {
-    const dot = document.getElementById(`ww-dot-${i}`);
-    if (dot) {
-        dot.style.background =
-            i === defCurrentSlide ? '#B83C2E' : '#333';
-    }
+                const dot =
+                    document.getElementById(`ww-dot-${i}`);
+
+                if (dot) {
+                    dot.style.background =
+                        i === defCurrentSlide
+                            ? '#B83C2E'
+                            : '#333';
+                }
+            }
+        }
+
+    }, { passive: true });
 }
-          }
-        }, { passive: true });
-      }
   
 });
 

@@ -1385,6 +1385,12 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
         }
       }
 
+      const dictAvailable = definition !== '—';
+      const mwAvailable = mwDefinition !== '—';
+      const vocabAvailable = !!vocabDefinition && vocabDefinition !== 'Definition unavailable';
+      const wrAvailable = !!wrDefinition && wrDefinition !== 'Definition unavailable';
+
+
 
       // Render modal
       body.innerHTML = `
@@ -1430,7 +1436,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
             </button>
             <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:none;">
               
-
+${dictAvailable ? `
               <!-- Slide 1: dictionary.com -->
               <div style="min-width:100%; box-sizing:border-box;" 
                    data-source="dictionary.com" 
@@ -1439,8 +1445,8 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
                 <div class="ww-section-content">${definition}</div>
                 <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">dictionary.com</a></div>
               </div>
-
-              
+              ` : ''}
+    ${mwAvailable ? `          
               <!-- Slide 2: Merriam-Webster -->
 <div style="min-width:100%; box-sizing:border-box;" 
      data-source="merriam-webster.com" 
@@ -1460,8 +1466,8 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
                 <div class="ww-section-content">${mwDefinition}</div>
                 <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">merriam-webster.com</a></div>
               </div>
-
-              
+` : ''}
+           ${vocabAvailable ? `   
               <!-- Slide 3: Vocabulary.com -->
               <div style="min-width:100%; box-sizing:border-box;"
                    data-source="vocabulary.com"
@@ -1499,7 +1505,9 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
                   </a>
                 </div>
               </div>
+               ` : ''}
 
+${wrAvailable ? `
               <!-- Slide 4: WordReference -->
           <div style="min-width:100%; box-sizing:border-box;"
      data-source="wordreference.com"
@@ -1546,15 +1554,15 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
                   </a>
                 </div>
               </div>
+ ` : ''}
 
             </div>
 
             <!-- Dots indicator -->
             <div style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
-              <div id="ww-dot-0" style="width:6px; height:6px; border-radius:50%; background:#B83C2E;"></div>
-              <div id="ww-dot-1" style="width:6px; height:6px; border-radius:50%; background:#333;"></div>
-              <div id="ww-dot-2" style="width:6px; height:6px; border-radius:50%; background:#333;"></div>
-              <div id="ww-dot-3" style="width:6px; height:6px; border-radius:50%; background:#333;"></div>
+              ${[dictAvailable, mwAvailable, vocabAvailable, wrAvailable].filter(Boolean).map((_, i) =>
+                `<div id="ww-dot-${i}" style="width:6px; height:6px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`
+              ).join('')}
             </div>
           </div>
         </div>

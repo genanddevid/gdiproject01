@@ -1271,15 +1271,15 @@ def wordreference_lookup(request):
 
         if definition_tag:
 
-    definition_copy = BeautifulSoup(
-        str(definition_tag),
-        'html.parser'
-    )
+            definition_copy = BeautifulSoup(
+                str(definition_tag),
+                'html.parser'
+            )
 
-    for tag in definition_copy.select('.rh_ex, .rh_lab'):
-        tag.decompose()
+            for tag in definition_copy.select('.rh_ex, .rh_lab'):
+                tag.decompose()
 
-    definition = definition_copy.get_text(" ", strip=True)
+            definition = definition_copy.get_text(" ", strip=True)
 
         if pos_tag:
             part_of_speech = pos_tag.get_text(" ", strip=True)

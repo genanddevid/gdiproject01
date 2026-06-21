@@ -1325,9 +1325,7 @@ document.addEventListener('selectionchange', function() {
           const def = meaning.definitions && meaning.definitions[0]
             ? meaning.definitions[0].definition
             : '—';
-          definition = partOfSpeech
-    ? `<em style="color:#555; font-size:12px;">${partOfSpeech}</em> — ${def}`
-    : def;
+          definition = partOfSpeech ? `<em style="color:#555; font-size:12px;">${partOfSpeech}</em><br>${def}` : def;
         }
       } else {
         // Dictionary returned nothing — likely an entity
@@ -1453,21 +1451,19 @@ ${dictAvailable ? `
 <div style="min-width:100%; box-sizing:border-box;" 
      data-source="merriam-webster.com" 
      data-link="https://www.merriam-webster.com/dictionary/${word}" 
-    data-full="${(
-    (mwPartOfSpeech
-        ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
-          mwPartOfSpeech +
-          '</em> — '
-        : ''
-    ) +
-    (mwDefinition || '')
-).replace(/"/g, '&quot;')}">
-                   <div class="ww-section-content">
-    ${mwPartOfSpeech
-        ? `<em style="color:#555;font-size:12px;">${mwPartOfSpeech}</em> — `
-        : ''}
-    ${mwDefinition}
-</div>
+     data-full="${(
+        (mwPartOfSpeech
+            ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
+              mwPartOfSpeech +
+              '</em><br>'
+            : ''
+        ) +
+        (mwDefinition || '')
+     ).replace(/"/g, '&quot;')}">
+                   ${mwPartOfSpeech
+    ? `<em style="color:#555;font-size:12px;">${mwPartOfSpeech}</em><br>`
+    : ''}
+                <div class="ww-section-content">${mwDefinition}</div>
                 <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">merriam-webster.com</a></div>
               </div>
 ` : ''}
@@ -1480,15 +1476,14 @@ ${dictAvailable ? `
     (vocabPartOfSpeech
         ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
           vocabPartOfSpeech +
-          '</em> — '
+          '</em><br>'
         : ''
     ) +
     (vocabDefinition || '')
 ).replace(/"/g, '&quot;')}">
-                <div class="ww-section-content">
-    ${vocabPartOfSpeech
-        ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em> — `
-        : ''}
+                ${vocabPartOfSpeech
+                ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>`
+                : ''}
 
             <div class="ww-section-content">
   ${vocabDefinition
@@ -1518,22 +1513,21 @@ ${wrAvailable ? `
      data-source="wordreference.com"
      data-link="https://www.wordreference.com/definition/${word}"
      data-full="${(
-    (wrPartOfSpeech
-        ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
-          wrPartOfSpeech +
-          '</em> — '
-        : ''
-    ) +
-    (wrDefinition || 'Definition unavailable')
-).replace(/"/g, '&quot;')}">
+        (wrPartOfSpeech
+            ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
+              wrPartOfSpeech +
+              '</em><br>'
+            : ''
+        ) +
+        (wrDefinition || 'Definition unavailable')
+     ).replace(/"/g, '&quot;')}">
 
 
 
 
-                <div class="ww-section-content">
-    ${wrPartOfSpeech
-        ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em> — `
-        : ''}
+                ${wrPartOfSpeech
+                  ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
+                  : ''}
 
                 <div class="ww-section-content">
                       ${wrDefinition

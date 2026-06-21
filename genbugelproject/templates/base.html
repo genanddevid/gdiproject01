@@ -1435,8 +1435,7 @@ document.addEventListener('selectionchange', function() {
               <div style="min-width:100%; box-sizing:border-box;" 
                    data-source="merriam-webster.com" 
                    data-link="https://www.merriam-webster.com/dictionary/${word}" 
-                   data-full="${(mwPartOfSpeech ? mwPartOfSpeech + ' — ' : '') + mwDefinition.replace(/"/g, '&quot;')}">
-                ${mwPartOfSpeech ? `<em style="color:#555; font-size:12px;">${mwPartOfSpeech}</em><br>` : ''}
+                   data-full="${definition.replace(/"/g, '&quot;')}">
                 <div class="ww-section-content">${mwDefinition}</div>
                 <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">merriam-webster.com</a></div>
               </div>
@@ -1477,6 +1476,7 @@ document.addEventListener('selectionchange', function() {
               <div style="min-width:100%; box-sizing:border-box;"
                    data-source="wordreference.com"
                    data-link="https://www.wordreference.com/definition/${word}"
+                   data-full="${((wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') + (wrDefinition || '')).replace(/"/g, '&quot;')}"
                    >
                 ${wrPartOfSpeech
                   ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`

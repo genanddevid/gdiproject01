@@ -1325,7 +1325,9 @@ document.addEventListener('selectionchange', function() {
           const def = meaning.definitions && meaning.definitions[0]
             ? meaning.definitions[0].definition
             : '—';
-          definition = partOfSpeech ? `<em style="color:#555; font-size:12px;">${partOfSpeech}</em><br>${def}` : def;
+          definition = partOfSpeech
+    ? `<em style="color:#aaa; font-size:12px;">${partOfSpeech}</em> — ${def}`
+    : def;
         }
       } else {
         // Dictionary returned nothing — likely an entity
@@ -1431,7 +1433,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
               style="position:absolute; top:0; right:0; z-index:10; background:#222; 
               border:1px solid #333; border-radius:6px; width:26px; height:26px; 
               display:flex; align-items:center; justify-content:center; 
-              cursor:pointer; color:#aaa; font-size:13px; padding:0;">
+              cursor:pointer; color:#aaa; font-size:16px; padding:0;">
               ⤢
             </button>
             <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:none;">

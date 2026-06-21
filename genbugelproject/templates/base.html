@@ -1474,10 +1474,7 @@ document.addEventListener('selectionchange', function() {
               </div>
 
               <!-- Slide 4: WordReference -->
-              <div style="min-width:100%; box-sizing:border-box;"
-                   data-source="wordreference.com"
-                   data-link="https://www.wordreference.com/definition/${word}"
-                   data-full="${(wrDefinition || 'Definition unavailable').replace(/"/g, '&quot;')}">
+              <div style="min-width:100%; box-sizing:border-box;">
                 ${wrPartOfSpeech
                   ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
                   : ''}

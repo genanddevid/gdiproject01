@@ -1149,17 +1149,6 @@ document.addEventListener('focusin', function(e) {
     background: #222;
     margin: 4px 0 18px;
   }
-
-  /* Expanded definition view */
-#writeword-card[data-expanded="true"] {
-    height: 100dvh;
-    max-height: 100dvh;
-}
-
-#writeword-card[data-expanded="true"] #writeword-body {
-    overflow-y: auto;
-    height: 100%;
-}
 </style>
 
 <!-- Floating toolbar -->
@@ -1662,8 +1651,6 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
     });
 
     card.dataset.expanded = 'true';
-
-    document.getElementById('writeword-overlay').style.alignItems = 'stretch';
 
     document.getElementById('writeword-body').innerHTML = `
       <button onclick="collapseDefinition()" 

@@ -1641,13 +1641,11 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 
     const sources = [];
     slides.forEach(slide => {
-      
-        sources.push({
-          source: slide.dataset.source,
-          link: slide.dataset.link,
-          full: slide.dataset.full
-        });
-      
+      sources.push({
+        source: slide.dataset.source,
+        link: slide.dataset.link,
+        full: slide.dataset.full
+      });
     });
 
     card.dataset.expanded = 'true';
@@ -1660,16 +1658,18 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
         ⤡ Back
       </button>
 
-      <div class="ww-word" style="margin-bottom:18px;">${selectedWord}</div>
+      <div style="max-height: 65vh; overflow-y: auto; padding-right: 4px;">
+        <div class="ww-word" style="margin-bottom:18px;">${selectedWord}</div>
 
-      ${sources.map((s, i) => `
-        <div class="ww-section" style="${i < sources.length - 1 ? 'border-bottom:1px solid #222; padding-bottom:16px;' : ''}">
-          <div class="ww-section-content" style="font-size:15px; line-height:1.7;">
-            ${s.full}
+        ${sources.map((s, i) => `
+          <div class="ww-section" style="${i < sources.length - 1 ? 'border-bottom:1px solid #222; padding-bottom:16px;' : ''}">
+            <div class="ww-section-content" style="font-size:15px; line-height:1.7;">
+              ${s.full}
+            </div>
+            <div class="ww-section-label" style="margin-top:10px;">Definition • <a href="${s.link}" target="_blank" style="color:#0d5cab; text-decoration:underline;">${s.source}</a></div>
           </div>
-          <div class="ww-section-label" style="margin-top:10px;">Definition • <a href="${s.link}" target="_blank" style="color:#0d5cab; text-decoration:underline;">${s.source}</a></div>
-        </div>
-      `).join('')}
+        `).join('')}
+      </div>
     `;
   };
 

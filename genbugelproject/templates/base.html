@@ -1614,7 +1614,8 @@ ${wrAvailable ? `
     // Definition carousel swipe
       let defStartX = 0;
       let defCurrentSlide = 0;
-      const carousel = document.getElementById('ww-def-carousel');
+      const slides = carousel ? carousel.children : [];
+const totalSlides = slides.length;
       
       if (carousel) {
         carousel.addEventListener('touchstart', e => {
@@ -1624,16 +1625,19 @@ ${wrAvailable ? `
         carousel.addEventListener('touchend', e => {
           const diff = defStartX - e.changedTouches[0].clientX;
           if (Math.abs(diff) > 40) {
-            if (diff > 0 && defCurrentSlide < 3) {
+            iif (diff > 0 && defCurrentSlide < totalSlides - 1)
               defCurrentSlide++;
             } else if (diff < 0 && defCurrentSlide > 0) {
               defCurrentSlide--;
             }
             carousel.style.transform = `translateX(-${defCurrentSlide * 100}%)`;
-            document.getElementById('ww-dot-0').style.background = defCurrentSlide === 0 ? '#B83C2E' : '#333';
-            document.getElementById('ww-dot-1').style.background = defCurrentSlide === 1 ? '#B83C2E' : '#333';
-            document.getElementById('ww-dot-2').style.background = defCurrentSlide === 2 ? '#B83C2E' : '#333';
-            document.getElementById('ww-dot-3').style.background = defCurrentSlide === 3 ? '#B83C2E' : '#333';
+            for (let i = 0; i < totalSlides; i++) {
+    const dot = document.getElementById(`ww-dot-${i}`);
+    if (dot) {
+        dot.style.background =
+            i === defCurrentSlide ? '#B83C2E' : '#333';
+    }
+}
           }
         }, { passive: true });
       }

@@ -1446,8 +1446,15 @@ document.addEventListener('selectionchange', function() {
               <div style="min-width:100%; box-sizing:border-box;"
                    data-source="vocabulary.com"
                    data-link="https://www.vocabulary.com/dictionary/${word}"
-                   data-full="${((vocabPartOfSpeech ? vocabPartOfSpeech + ' — ' : '') + (vocabDefinition || '')).replace(/"/g, '&quot;')}">
-
+                   data-full="${(
+    (vocabPartOfSpeech
+        ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
+          vocabPartOfSpeech +
+          '</em><br>'
+        : ''
+    ) +
+    (vocabDefinition || '')
+).replace(/"/g, '&quot;')}">
                 ${vocabPartOfSpeech
                 ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>`
                 : ''}
@@ -1479,6 +1486,18 @@ document.addEventListener('selectionchange', function() {
                    data-link="https://www.wordreference.com/definition/${word}"
                    data-full="${((wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') + (wrDefinition || '')).replace(/"/g, '&quot;')}"
                    >
+
+                   data-full="${(
+    (wrPartOfSpeech
+        ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
+          wrPartOfSpeech +
+          '</em><br>'
+        : ''
+    ) +
+    (wrPartOfSpeech || '')
+).replace(/"/g, '&quot;')}">
+
+
                 ${wrPartOfSpeech
                   ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
                   : ''}

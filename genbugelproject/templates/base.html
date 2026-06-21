@@ -1069,7 +1069,7 @@ document.addEventListener('focusin', function(e) {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: #ccc;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   /* Vietnamese translation */
@@ -1085,6 +1085,7 @@ document.addEventListener('focusin', function(e) {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
+  
 }
 
 .ww-pronunciation-main {
@@ -1326,7 +1327,7 @@ document.addEventListener('selectionchange', function() {
             ? meaning.definitions[0].definition
             : '—';
           definition = partOfSpeech
-    ? `<em style="color:#aaa; font-size:12px;">${partOfSpeech}</em> — ${def}`
+    ? `<em style="color:#ccc; font-size:14px;">${partOfSpeech}</em> — ${def}`
     : def;
         }
       } else {
@@ -1433,7 +1434,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
               style="position:absolute; top:0; right:0; z-index:10; background:#222; 
               border:1px solid #333; border-radius:6px; width:26px; height:26px; 
               display:flex; align-items:center; justify-content:center; 
-              cursor:pointer; color:#aaa; font-size:16px; padding:0;">
+              cursor:pointer; color:#aaa; font-size:16px; padding-bottom:5px;">
               ⤢
             </button>
             <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:none;">

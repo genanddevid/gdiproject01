@@ -1663,6 +1663,8 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 
     card.dataset.expanded = 'true';
 
+    document.getElementById('writeword-overlay').style.alignItems = 'stretch';
+
     document.getElementById('writeword-body').innerHTML = `
       <button onclick="collapseDefinition()" 
         style="background:#222; border:1px solid #333; border-radius:50px; 

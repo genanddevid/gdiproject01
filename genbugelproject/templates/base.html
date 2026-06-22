@@ -1518,7 +1518,11 @@ ${wrAvailable ? `
           <div style="min-width:100%; box-sizing:border-box;"
      data-source="wordreference.com"
      data-link="https://www.wordreference.com/definition/${word}"
-     data-full="test">
+     data-full="${(
+    (wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') +
+    (wrDefinition || 'Definition unavailable')
+).replace(/"/g, '&quot;')}"
+)}">
 
 
 

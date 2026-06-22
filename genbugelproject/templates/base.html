@@ -1459,7 +1459,17 @@ ${dictAvailable ? `
                    data-link="https://www.dictionary.com/browse/${word}" 
                    data-full="${definition.replace(/"/g, '&quot;')}">
                 <div class="ww-section-content">${definition}</div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.dictionary.com/browse/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">dictionary.com</a></div>
+                <div class="ww-section-label" style="margin-top:8px;">
+    <a href="https://www.dictionary.com/browse/${word}"
+       target="_blank"
+       style="color:#0d5cab; text-decoration:none; display:block;">
+       Dictionary.com
+    </a>
+
+    <span style="font-size:8px; color:#555;">
+        https://www.dictionary.com
+    </span>
+</div>
               </div>
               ` : ''}
     ${mwAvailable ? `          

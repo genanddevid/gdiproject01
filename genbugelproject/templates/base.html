@@ -1430,6 +1430,19 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
           
           <!-- Swipeable definition carousel -->
           <div id="ww-def-wrapper" style="position:relative; overflow:hidden;">
+            <div id="ww-def-title"
+     style="
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:10;
+        color:#777;
+        font-size:11px;
+        font-weight:600;
+        letter-spacing:0.3px;
+     ">
+    Definition
+</div>
             <button id="ww-expand-btn" onclick="expandDefinition()" 
               style="position:absolute; top:0; right:0; z-index:10; background:#222; 
               border:1px solid #333; border-radius:6px; width:26px; height:26px; 

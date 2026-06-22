@@ -1465,7 +1465,7 @@ ${dictAvailable ? `
      ).replace(/"/g, '&quot;')}">
                    <div class="ww-section-content">
     ${mwPartOfSpeech
-        ? `<em style="color:#555;font-size:12px;">${mwPartOfSpeech}</em> — `
+        ? `<em style="color:#ccc;font-size:12px;">${mwPartOfSpeech}</em> — `
         : ''}
     ${mwDefinition}
 </div>
@@ -1481,16 +1481,17 @@ ${dictAvailable ? `
     (vocabPartOfSpeech
         ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
           vocabPartOfSpeech +
-          '</em><br>'
+          '</em> — '
         : ''
     ) +
     (vocabDefinition || '')
 ).replace(/"/g, '&quot;')}">
-                ${vocabPartOfSpeech
-                ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>`
-                : ''}
+                <div class="ww-section-content">
+    ${vocabPartOfSpeech
+        ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — `
+        : ''}
 
-            <div class="ww-section-content">
+            
   ${vocabDefinition
       ? (vocabDefinition.length > 120
           ? vocabDefinition.substring(0, 120).replace(/\s+\S*$/, '') +

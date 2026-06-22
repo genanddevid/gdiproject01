@@ -1327,7 +1327,7 @@ document.addEventListener('selectionchange', function() {
             ? meaning.definitions[0].definition
             : '—';
           definition = partOfSpeech
-    ? `<em style="color:#ccc; font-size:12px;">${partOfSpeech}</em> — ${def}`
+    ? `<em style="color:#ccc; font-size:14px;">${partOfSpeech}</em> — ${def}`
     : def;
         }
       } else {
@@ -1519,24 +1519,23 @@ ${wrAvailable ? `
      data-source="wordreference.com"
      data-link="https://www.wordreference.com/definition/${word}"
      data-full="${(
-    (wrPartOfSpeech
-        ? '<em style=&quot;color:#ccc;font-size:12px;&quot;>' +
-          wrPartOfSpeech +
-          '</em> — '
-        : ''
-    ) +
-    (wrDefinition || 'Definition unavailable')
-).replace(/"/g, '&quot;')}">
+        (wrPartOfSpeech
+            ? '<em style=&quot;color:#555;font-size:12px;&quot;>' +
+              wrPartOfSpeech +
+              '</em><br>'
+            : ''
+        ) +
+        (wrDefinition || 'Definition unavailable')
+     ).replace(/"/g, '&quot;')}">
 
 
 
+
+                ${wrPartOfSpeech
+                  ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
+                  : ''}
 
                 <div class="ww-section-content">
-  ${wrPartOfSpeech
-    ? `<em style="color:#ccc;font-size:12px;">${wrPartOfSpeech}</em> — `
-    : ''}
-
-                
                       ${wrDefinition
   ? (wrDefinition.length > 120
       ? wrDefinition.substring(0, 120) + '...'

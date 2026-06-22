@@ -1442,11 +1442,100 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
               cursor:pointer;
               color:#aaa;
               font-size:16px;
-              padding:0;
+              padding-bottom:5px;
           ">
           ⤢
       </button>
   </div>
+
+
+  <!-- Pronunciation carousel -->
+  <div id="ww-pron-wrapper" style="overflow:hidden;">
+    <div id="ww-pron-carousel"
+         style="display:flex; transition:transform .3s ease;">
+
+      <!-- Slide 1 -->
+      <div style="min-width:100%; box-sizing:border-box;"
+           data-source="Dictionary.com"
+           data-link="https://www.dictionary.com">
+
+        <div class="ww-section-content">
+          /ɪnˈvɛstər/
+        </div>
+
+        <div class="ww-section-label" style="margin-top:10px;">
+          <div style="font-size:12px;color:#ccc;">
+            Dictionary.com
+          </div>
+
+          <div style="font-size:10px;color:#666;">
+            https://www.dictionary.com
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Slide 2 -->
+      <div style="min-width:100%; box-sizing:border-box;"
+           data-source="Merriam-Webster"
+           data-link="https://www.merriam-webster.com">
+
+        <div class="ww-section-content">
+          /in-ves-ter/
+        </div>
+
+        <div class="ww-section-label" style="margin-top:10px;">
+          <div style="font-size:12px;color:#ccc;">
+            Merriam-Webster
+          </div>
+
+          <div style="font-size:10px;color:#666;">
+            https://www.merriam-webster.com
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Slide 3 -->
+      <div style="min-width:100%; box-sizing:border-box;"
+           data-source="Vocabulary.com"
+           data-link="https://www.vocabulary.com">
+
+        <div class="ww-section-content">
+          Pronunciation unavailable
+        </div>
+
+        <div class="ww-section-label" style="margin-top:10px;">
+          <div style="font-size:12px;color:#ccc;">
+            Vocabulary.com
+          </div>
+
+          <div style="font-size:10px;color:#666;">
+            https://www.vocabulary.com
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Dots -->
+    <div style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
+      <div id="ww-pron-dot-0"
+           style="width:6px;height:6px;border-radius:50%;background:#B83C2E;"></div>
+
+      <div id="ww-pron-dot-1"
+           style="width:6px;height:6px;border-radius:50%;background:#333;"></div>
+
+      <div id="ww-pron-dot-2"
+           style="width:6px;height:6px;border-radius:50%;background:#333;"></div>
+    </div>
+
+  </div>
+</div>
+
+
+
 
   <div class="ww-pronunciation-row">
             <div class="ww-pronunciation-main">

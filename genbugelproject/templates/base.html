@@ -1412,8 +1412,43 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 
         ${!isEntity ? `
         <div class="ww-section">
-          <div class="ww-divider"></div>
-          <div class="ww-pronunciation-row">
+  <div class="ww-divider"></div>
+
+  <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+  ">
+      <div style="
+          color:#fff;
+          font-size:14px;
+          font-weight:600;
+      ">
+          Pronunciation
+      </div>
+
+      <button id="ww-pron-expand-btn"
+          onclick="expandPronunciation()"
+          style="
+              background:#222;
+              border:1px solid #333;
+              border-radius:6px;
+              width:26px;
+              height:26px;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              cursor:pointer;
+              color:#aaa;
+              font-size:13px;
+              padding:0;
+          ">
+          ⤢
+      </button>
+  </div>
+
+  <div class="ww-pronunciation-row">
             <div class="ww-pronunciation-main">
               <span class="ww-phonetic">${phonetic || 'Not available'}</span>
               ${audioUrl ? `
@@ -1717,6 +1752,48 @@ if (carousel) {
 
  // Expand definition to full listing view (dictionary.com and Merriam-Webster only)
   window.expandDefinition = function() {
+    window.expandPronunciation = function() {
+
+    const body =
+        document.getElementById('writeword-body');
+
+    body.innerHTML = `
+        <button onclick="collapsePronunciation()"
+            style="
+                background:#222;
+                border:1px solid #333;
+                border-radius:50px;
+                padding:6px 14px;
+                color:#aaa;
+                font-size:12px;
+                cursor:pointer;
+                display:flex;
+                align-items:center;
+                gap:6px;
+                margin-bottom:18px;
+            ">
+            ⤡ Back
+        </button>
+
+        <div class="ww-word">
+            ${selectedWord}
+        </div>
+
+        <div class="ww-section">
+            <div class="ww-section-content">
+                Pronunciation sources coming soon.
+            </div>
+
+            <div class="ww-section-label">
+                Pronunciation
+            </div>
+        </div>
+    `;
+};
+
+window.collapsePronunciation = function() {
+    openWriteword();
+};
     const card = document.getElementById('writeword-card');
     const slides = document.querySelectorAll('#ww-def-carousel > div');
 

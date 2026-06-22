@@ -1327,7 +1327,7 @@ document.addEventListener('selectionchange', function() {
             ? meaning.definitions[0].definition
             : '—';
           definition = partOfSpeech
-    ? `<em style="color:#ccc; font-size:14px;">${partOfSpeech}</em> — ${def}`
+    ? `<em style="color:#ccc; font-size:12px;">${partOfSpeech}</em> — ${def}`
     : def;
         }
       } else {
@@ -1492,8 +1492,19 @@ ${dictAvailable ? `
         : ''}
     ${mwDefinition}
 </div>
-                <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">merriam-webster.com</a></div>
-              </div>
+                
+              <div class="ww-section-label" style="margin-top:8px;">
+    <a href="https://www.merriam-webster.com/dictionary/${word}"
+       target="_blank"
+       style="color:#0d5cab; text-decoration:none; display:block;">
+       Merriam-Webster.com
+    </a>
+
+    <span style="font-size:8px; color:#555;">
+        https://www.merriam-webster.com
+    </span>
+</div>
+                </div>
 ` : ''}
            ${vocabAvailable ? `   
               <!-- Slide 3: Vocabulary.com -->
@@ -1525,14 +1536,17 @@ ${dictAvailable ? `
       : 'Definition unavailable'}
 </div>
 
-                <div class="ww-section-label" style="margin-top:8px;">
-                  Definition •
-                  <a href="https://www.vocabulary.com/dictionary/${word}"
-                    target="_blank"
-                    style="color:#0d5cab; text-decoration:underline;">
-                    vocabulary.com
-                  </a>
-                </div>
+                  <div class="ww-section-label" style="margin-top:8px;">
+    <a href="https://www.vocabulary.com/dictionary/${word}"
+       target="_blank"
+       style="color:#0d5cab; text-decoration:none; display:block;">
+       Vocabulary.com
+    </a>
+
+    <span style="font-size:8px; color:#555;">
+        https://www.vocabulary.com
+    </span>
+</div>
               </div>
                ` : ''}
 
@@ -1570,14 +1584,21 @@ ${wrAvailable ? `
 
                 </div>
 
+
                 <div class="ww-section-label" style="margin-top:8px;">
-                  Definition •
-                  <a href="https://www.wordreference.com/definition/${word}"
-                    target="_blank"
-                    style="color:#0d5cab; text-decoration:underline;">
-                    wordreference.com
-                  </a>
-                </div>
+    <a href="https://www.wordreference.com/definition/${word}"
+       target="_blank"
+       style="color:#0d5cab; text-decoration:none; display:block;">
+       Wordreference.com
+    </a>
+
+    <span style="font-size:8px; color:#555;">
+        https://www.wordreference.com
+    </span>
+</div>
+
+
+
               </div>
  ` : ''}
 
@@ -1726,7 +1747,24 @@ if (carousel) {
             <div class="ww-section-content" style="font-size:15px; line-height:1.7;">
               ${s.full}
             </div>
-            <div class="ww-section-label" style="margin-top:10px;">Definition • <a href="${s.link}" target="_blank" style="color:#0d5cab; text-decoration:underline;">${s.source}</a></div>
+            <div class="ww-section-label" style="margin-top:10px;">
+    <a href="${s.link}"
+       target="_blank"
+       style="color:#0d5cab; text-decoration:none; display:block;">
+        ${
+{
+    'dictionary.com': 'Dictionary.com',
+    'merriam-webster.com': 'Merriam-Webster',
+    'vocabulary.com': 'Vocabulary.com',
+    'wordreference.com': 'WordReference'
+}[s.source] || s.source
+}
+    </a>
+
+    <span style="font-size:8px; color:#555;">
+        ${new URL(s.link).origin}
+    </span>
+</div>
           </div>
         `).join('')}
       </div>

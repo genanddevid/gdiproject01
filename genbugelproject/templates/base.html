@@ -1069,7 +1069,7 @@ document.addEventListener('focusin', function(e) {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: #ccc;
-    line-height: 1.5;
+    line-height: 1.4;
   }
 
   /* Vietnamese translation */
@@ -1463,10 +1463,12 @@ ${dictAvailable ? `
         ) +
         (mwDefinition || '')
      ).replace(/"/g, '&quot;')}">
-                   ${mwPartOfSpeech
-    ? `<em style="color:#555;font-size:12px;">${mwPartOfSpeech}</em><br>`
-    : ''}
-                <div class="ww-section-content">${mwDefinition}</div>
+                   <div class="ww-section-content">
+    ${mwPartOfSpeech
+        ? `<em style="color:#555;font-size:12px;">${mwPartOfSpeech}</em> — `
+        : ''}
+    ${mwDefinition}
+</div>
                 <div class="ww-section-label" style="margin-top:8px;">Definition • <a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank" style="color:#0d5cab; text-decoration:underline;">merriam-webster.com</a></div>
               </div>
 ` : ''}
@@ -1484,9 +1486,10 @@ ${dictAvailable ? `
     ) +
     (vocabDefinition || '')
 ).replace(/"/g, '&quot;')}">
-                ${vocabPartOfSpeech
-                ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>`
-                : ''}
+               <div class="ww-section-content">
+    ${vocabPartOfSpeech
+        ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em> — `
+        : ''}
 
             <div class="ww-section-content">
   ${vocabDefinition
@@ -1528,9 +1531,10 @@ ${wrAvailable ? `
 
 
 
-                ${wrPartOfSpeech
-                  ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
-                  : ''}
+                <div class="ww-section-content">
+    ${wrPartOfSpeech
+        ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em> — `
+        : ''}
 
                 <div class="ww-section-content">
                       ${wrDefinition

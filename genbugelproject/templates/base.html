@@ -1824,6 +1824,61 @@ if (carousel) {
 
     }, { passive: true });
 }
+
+// Pronunciation carousel swipe
+let pronStartX = 0;
+let pronCurrentSlide = 0;
+
+const pronCarousel = document.getElementById('ww-pron-carousel');
+
+if (pronCarousel) {
+
+    const pronSlides =
+        pronCarousel.querySelectorAll('[data-source]').length;
+
+    pronCarousel.addEventListener('touchstart', e => {
+        pronStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    pronCarousel.addEventListener('touchend', e => {
+
+        const diff =
+            pronStartX - e.changedTouches[0].clientX;
+
+        if (Math.abs(diff) > 40) {
+
+            if (
+                diff > 0 &&
+                pronCurrentSlide < pronSlides - 1
+            ) {
+                pronCurrentSlide++;
+            }
+            else if (
+                diff < 0 &&
+                pronCurrentSlide > 0
+            ) {
+                pronCurrentSlide--;
+            }
+
+            pronCarousel.style.transform =
+                `translateX(-${pronCurrentSlide * 100}%)`;
+
+            for (let i = 0; i < pronSlides; i++) {
+
+                const dot =
+                    document.getElementById(`ww-pron-dot-${i}`);
+
+                if (dot) {
+                    dot.style.background =
+                        i === pronCurrentSlide
+                            ? '#B83C2E'
+                            : '#333';
+                }
+            }
+        }
+
+    }, { passive: true });
+}
   
 });
 

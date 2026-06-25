@@ -1884,9 +1884,7 @@ if (pronCarousel) {
 
   };
 
- // Expand definition to full listing view (dictionary.com and Merriam-Webster only)
-  window.expandDefinition = function() {
-    window.expandPronunciation = function() {
+   window.expandPronunciation = function() {
 
     const body =
         document.getElementById('writeword-body');
@@ -1928,6 +1926,10 @@ if (pronCarousel) {
 window.collapsePronunciation = function() {
     openWriteword();
 };
+
+ // Expand definition to full listing view (dictionary.com and Merriam-Webster only)
+  window.expandDefinition = function() {
+   
     const card = document.getElementById('writeword-card');
     const slides = document.querySelectorAll('#ww-def-carousel > div');
 

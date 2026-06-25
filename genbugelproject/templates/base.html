@@ -1932,10 +1932,10 @@ if (pronCarousel) {
     slides.forEach(slide => {
 
         sources.push({
-            source: slide.dataset.source,
-            link: slide.dataset.link,
-            full: slide.dataset.full
-        });
+    source: slide.dataset.source,
+    link: slide.dataset.link,
+    full: slide.querySelector('.ww-section-content')?.innerHTML || ''
+});
 
     });
 

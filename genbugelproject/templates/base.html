@@ -1422,7 +1422,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
   ">
       <div style="
           color:#555;
-          font-size:12px;
+          font-size:11px;
           font-weight:600;
       ">
           Pronunciation
@@ -1459,16 +1459,28 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
            data-source="Dictionary.com"
            data-link="https://www.dictionary.com">
 
-        <div class="ww-section-content">
-          /ɪnˈvɛstər/
-        </div>
+        <div class="ww-pronunciation-main">
+
+  <span class="ww-phonetic">
+      /ɪnˈvɛstər/
+  </span>
+
+  ${audioUrl ? `
+  <button class="ww-audio-btn"
+          onclick="playAudio()"
+          title="Listen">
+      ▶
+  </button>
+  ` : ''}
+
+</div>
 
         <div class="ww-section-label" style="margin-top:10px;">
-          <div style="font-size:12px;color:#ccc;">
+          <div style="font-size:9px;color:#0d5cab;">
             Dictionary.com
           </div>
 
-          <div style="font-size:10px;color:#666;">
+          <div style="font-size:8px;color:#555;">
             https://www.dictionary.com
           </div>
         </div>
@@ -1480,16 +1492,28 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
            data-source="Merriam-Webster"
            data-link="https://www.merriam-webster.com">
 
-        <div class="ww-section-content">
-          /in-ves-ter/
-        </div>
+        <div class="ww-pronunciation-main">
+
+  <span class="ww-phonetic">
+      /ɪnˈvɛstər/
+  </span>
+
+  ${audioUrl ? `
+  <button class="ww-audio-btn"
+          onclick="playAudio()"
+          title="Listen">
+      ▶
+  </button>
+  ` : ''}
+
+</div>
 
         <div class="ww-section-label" style="margin-top:10px;">
-          <div style="font-size:12px;color:#ccc;">
+          <div style="font-size:9px;color:#0d5cab;">
             Merriam-Webster
           </div>
 
-          <div style="font-size:10px;color:#666;">
+          <div style="font-size:8px;color:#555;">
             https://www.merriam-webster.com
           </div>
         </div>
@@ -1501,16 +1525,28 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
            data-source="Vocabulary.com"
            data-link="https://www.vocabulary.com">
 
-        <div class="ww-section-content">
-          Pronunciation unavailable
-        </div>
+        <div class="ww-pronunciation-main">
+
+  <span class="ww-phonetic">
+      /ɪnˈvɛstər/
+  </span>
+
+  ${audioUrl ? `
+  <button class="ww-audio-btn"
+          onclick="playAudio()"
+          title="Listen">
+      ▶
+  </button>
+  ` : ''}
+
+</div>
 
         <div class="ww-section-label" style="margin-top:10px;">
-          <div style="font-size:12px;color:#ccc;">
+          <div style="font-size:9px;color:#0d5cab;">
             Vocabulary.com
           </div>
 
-          <div style="font-size:10px;color:#666;">
+          <div style="font-size:8px;color:#555;">
             https://www.vocabulary.com
           </div>
         </div>

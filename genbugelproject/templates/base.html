@@ -2132,6 +2132,15 @@ window.collapsePronunciation = function() {
     audio.play().catch(() => {});
   };
 
+  window.playCambridgeAudio = function() {
+
+    if (!cambridgeAudio) return;
+
+    const audio = new Audio(cambridgeAudio);
+    audio.play().catch(() => {});
+
+};
+
   window.playVietnamese = function(text) {
     if (!text || text === '—') return;
     const utterance = new SpeechSynthesisUtterance(text);

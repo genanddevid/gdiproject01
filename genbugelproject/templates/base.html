@@ -1313,7 +1313,7 @@ let dictPronunciation = 'Pronunciation unavailable';
 let cambridgePronunciation = 'Pronunciation unavailable';
 let vocabPronunciation = 'Pronunciation unavailable';
 let wrPronunciation = 'Pronunciation unavailable';
-let cambridgeAudio = '';
+
 
       if (Array.isArray(dictData) && dictData.length > 0) {
         const entry = dictData[0];
@@ -1391,17 +1391,10 @@ let cambridgeAudio = '';
 
 
 wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
-if (cambridgeData) {
+if (cambridgeData && cambridgeData.pronunciation) {
 
-    if (cambridgeData.pronunciation) {
-        cambridgePronunciation =
-            cambridgeData.pronunciation;
-    }
-
-    if (cambridgeData.audio) {
-        cambridgeAudio =
-            cambridgeData.audio;
-    }
+    cambridgePronunciation =
+        cambridgeData.pronunciation;
 
 }
       
@@ -1537,7 +1530,7 @@ const wrAvailable =
 
   ${audioUrl ? `
   <button class="ww-audio-btn"
-          onclick="playCambridgeAudio()"
+          onclick="playAudio()"
           title="Listen">
       ▶
   </button>
@@ -2131,15 +2124,6 @@ window.collapsePronunciation = function() {
     const audio = new Audio(audioUrl);
     audio.play().catch(() => {});
   };
-
-  window.playCambridgeAudio = function() {
-
-    if (!cambridgeAudio) return;
-
-    const audio = new Audio(cambridgeAudio);
-    audio.play().catch(() => {});
-
-};
 
   window.playVietnamese = function(text) {
     if (!text || text === '—') return;

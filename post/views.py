@@ -1339,6 +1339,8 @@ def cambridge_lookup(request):
 
             if audio_url.startswith("//"):
                 audio_url = "https:" + audio_url
+            elif audio_url.startswith("/"):
+                audio_url = "https://dictionary.cambridge.org" + audio_url
 
         return JsonResponse({
             "pronunciation": pronunciation,

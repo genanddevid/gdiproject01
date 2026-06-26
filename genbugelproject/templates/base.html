@@ -1306,6 +1306,7 @@ fetch(`/cambridge-lookup/?word=${encodeURIComponent(word)}`)
       // Extract phonetic and audio
       let phonetic = '';
       audioUrl = '';
+      let cambridgeAudioUrl = '';
       let definition = '—';
       let isEntity = false;
       // Pronunciations from different sources
@@ -1394,16 +1395,16 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 if (cambridgeData) {
 
     if (cambridgeData.pronunciation) {
-        cambridgePronunciation =
-            cambridgeData.pronunciation;
+        cambridgePronunciation = cambridgeData.pronunciation;
     }
 
     if (cambridgeData.audio) {
-        cambridgeAudio =
-            cambridgeData.audio;
+        cambridgeAudioUrl = cambridgeData.audio;
     }
 
 }
+
+
       
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
         const mwEntry = mwData[0];
@@ -1535,14 +1536,13 @@ const wrAvailable =
       ${cambridgePronunciation}
   </span>
 
-  ${audioUrl ? `
+  ${cambridgeAudioUrl ? `
   <button class="ww-audio-btn"
-          onclick="playAudio()"
+          onclick="playCambridgeAudio()"
           title="Listen">
       ▶
   </button>
-  ` : ''}
-
+` : ''}
 </div>
 
         <div class="ww-section-label" style="margin-top:10px;">

@@ -1363,6 +1363,7 @@ let wrPronunciation = 'Pronunciation unavailable';
 
       let wrDefinition = 'Definition unavailable';
       let wrPartOfSpeech = '';
+      
 
       if (wrData) {
 
@@ -1375,6 +1376,8 @@ let wrPronunciation = 'Pronunciation unavailable';
           }
 
       }
+
+      
       const posMap = {
     'n.': 'noun',
     'v.': 'verb',
@@ -1383,6 +1386,8 @@ let wrPronunciation = 'Pronunciation unavailable';
     'adj.': 'adjective',
     'adv.': 'adverb'
 };
+
+
 
 wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 

@@ -1391,10 +1391,17 @@ let cambridgeAudio = '';
 
 
 wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
-if (cambridgeData && cambridgeData.pronunciation) {
+if (cambridgeData) {
 
-    cambridgePronunciation =
-        cambridgeData.pronunciation;
+    if (cambridgeData.pronunciation) {
+        cambridgePronunciation =
+            cambridgeData.pronunciation;
+    }
+
+    if (cambridgeData.audio) {
+        cambridgeAudio =
+            cambridgeData.audio;
+    }
 
 }
       

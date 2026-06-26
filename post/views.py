@@ -1295,7 +1295,51 @@ def wordreference_lookup(request):
         })
 
 
+import requests
+from bs4 import BeautifulSoup
 
+
+def cambridge_lookup(request):
+    word = request.GET.get("word", "").strip()
+
+    if not word:
+        return JsonResponse({"error": "Missing word"}, status=400)
+
+    url = f"https://dictionary.cambridge.org/dictionary/english/{word}"
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/137.0.0.0 Safari/537.36"
+        )
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+
+        if response.status_code != 200:
+            return JsonResponse({
+                "pronunciation": "",
+                "source": "Cambridge"
+            })
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        ipa = soup.select_one(".ipa")
+
+        pronunciation = ipa.get_text(" ", strip=True) if ipa else ""
+
+        return JsonResponse({
+            "pronunciation": pronunciation,
+            "source": "Cambridge"
+        })
+
+    except Exception:
+        return JsonResponse({
+            "pronunciation": "",
+            "source": "Cambridge"
+        })
 
 
     

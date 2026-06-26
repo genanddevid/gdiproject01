@@ -54,6 +54,7 @@ urlpatterns = [
     path('writeword-explain/', writeword_explain, name='writeword_explain'),
     path('vocabulary-lookup/', vocabulary_lookup, name='vocabulary_lookup'),
     path('wordreference-lookup/', wordreference_lookup, name='wordreference_lookup'),
+    path('cambridge-lookup/', views.cambridge_lookup, name='cambridge_lookup'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
     
     path('<username>/', UserProfile, name='profile'),

@@ -1291,10 +1291,12 @@ document.addEventListener('selectionchange', function() {
     .then(r => r.json()).catch(() => null),
 
   fetch(`/wordreference-lookup/?word=${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null),
+
+fetch(`/cambridge-lookup/?word=${encodeURIComponent(word)}`)
     .then(r => r.json()).catch(() => null)
 
-
-]).then(([translationData, dictData, mwData, vocabData, wrData]) => {
+]).then(([translationData, dictData, mwData, vocabData, wrData, cambridgeData]) => {
       // Extract translation
       let translation = '—';
       if (translationData && translationData.responseStatus === 200) {
@@ -1306,6 +1308,11 @@ document.addEventListener('selectionchange', function() {
       audioUrl = '';
       let definition = '—';
       let isEntity = false;
+      // Pronunciations from different sources
+let dictPronunciation = 'Pronunciation unavailable';
+let cambridgePronunciation = 'Pronunciation unavailable';
+let vocabPronunciation = 'Pronunciation unavailable';
+let wrPronunciation = 'Pronunciation unavailable';
 
       if (Array.isArray(dictData) && dictData.length > 0) {
         const entry = dictData[0];
@@ -1390,7 +1397,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
       }
 
       const dictAvailable = definition !== '—';
-      const mwAvailable = mwDefinition !== '—';
+      const cambridgeAvailable = cambridgePronunciation !== 'Pronunciation unavailable';
       const vocabAvailable = !!vocabDefinition && vocabDefinition !== 'Definition unavailable';
       const wrAvailable = !!wrDefinition && wrDefinition !== 'Definition unavailable';
 
@@ -1463,7 +1470,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
         <div class="ww-pronunciation-main">
 
   <span class="ww-phonetic">
-      /ɪnˈvɛstər/
+      ${dictPronunciation}
   </span>
 
   ${audioUrl ? `
@@ -1490,13 +1497,13 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 
       <!-- Slide 2 -->
       <div style="min-width:100%; box-sizing:border-box;"
-           data-source="Merriam-Webster"
-           data-link="https://www.merriam-webster.com">
+           data-source="Cambridge"
+           data-link="https://dictionary.cambridge.org">
 
         <div class="ww-pronunciation-main">
 
   <span class="ww-phonetic">
-      ${dictPronunciation}
+      ${cambridgePronunciation}
   </span>
 
   ${audioUrl ? `
@@ -1511,11 +1518,11 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 
         <div class="ww-section-label" style="margin-top:10px;">
           <div style="font-size:9px;color:#0d5cab;">
-            Merriam-Webster
+            Cambridge
           </div>
 
           <div style="font-size:8px;color:#555;">
-            https://www.merriam-webster.com
+            https://dictionary.cambridge.org
           </div>
         </div>
 

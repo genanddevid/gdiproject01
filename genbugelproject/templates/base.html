@@ -1306,7 +1306,11 @@ document.addEventListener('selectionchange', function() {
       audioUrl = '';
       let definition = '—';
       let isEntity = false;
-      
+      // Pronunciations from different sources
+let dictPronunciation = 'Pronunciation unavailable';
+let mwPronunciation = 'Pronunciation unavailable';
+let vocabPronunciation = 'Pronunciation unavailable';
+let wrPronunciation = 'Pronunciation unavailable';
 
       if (Array.isArray(dictData) && dictData.length > 0) {
         const entry = dictData[0];

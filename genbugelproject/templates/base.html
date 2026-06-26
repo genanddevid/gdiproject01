@@ -1291,12 +1291,10 @@ document.addEventListener('selectionchange', function() {
     .then(r => r.json()).catch(() => null),
 
   fetch(`/wordreference-lookup/?word=${encodeURIComponent(word)}`)
-    .then(r => r.json()).catch(() => null),
-
-fetch(`/cambridge-lookup/?word=${encodeURIComponent(word)}`)
     .then(r => r.json()).catch(() => null)
 
-]).then(([translationData, dictData, mwData, vocabData, wrData, cambridgeData]) => {
+
+]).then(([translationData, dictData, mwData, vocabData, wrData]) => {
       // Extract translation
       let translation = '—';
       if (translationData && translationData.responseStatus === 200) {
@@ -1310,7 +1308,7 @@ fetch(`/cambridge-lookup/?word=${encodeURIComponent(word)}`)
       let isEntity = false;
       // Pronunciations from different sources
 let dictPronunciation = 'Pronunciation unavailable';
-let cambridgePronunciation = 'Pronunciation unavailable';
+let mwPronunciation = 'Pronunciation unavailable';
 let vocabPronunciation = 'Pronunciation unavailable';
 let wrPronunciation = 'Pronunciation unavailable';
 
@@ -1363,7 +1361,6 @@ let wrPronunciation = 'Pronunciation unavailable';
 
       let wrDefinition = 'Definition unavailable';
       let wrPartOfSpeech = '';
-      
 
       if (wrData) {
 
@@ -1376,8 +1373,6 @@ let wrPronunciation = 'Pronunciation unavailable';
           }
 
       }
-
-      
       const posMap = {
     'n.': 'noun',
     'v.': 'verb',
@@ -1387,15 +1382,8 @@ let wrPronunciation = 'Pronunciation unavailable';
     'adv.': 'adverb'
 };
 
-
-
 wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
-if (cambridgeData && cambridgeData.pronunciation) {
 
-    cambridgePronunciation =
-        cambridgeData.pronunciation;
-
-}
       
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
         const mwEntry = mwData[0];
@@ -1407,7 +1395,7 @@ if (cambridgeData && cambridgeData.pronunciation) {
       }
 
       const dictAvailable = definition !== '—';
-      const cambridgeAvailable = cambridgePronunciation !== 'Pronunciation unavailable';
+      const mwAvailable = mwDefinition !== '—';
       const vocabAvailable = !!vocabDefinition && vocabDefinition !== 'Definition unavailable';
       const wrAvailable = !!wrDefinition && wrDefinition !== 'Definition unavailable';
 
@@ -1507,14 +1495,13 @@ if (cambridgeData && cambridgeData.pronunciation) {
 
       <!-- Slide 2 -->
       <div style="min-width:100%; box-sizing:border-box;"
-     data-source="Cambridge"
-     data-link="https://dictionary.cambridge.org"
-     data-full="${cambridgePronunciation}">
+           data-source="Merriam-Webster"
+           data-link="https://www.merriam-webster.com">
 
         <div class="ww-pronunciation-main">
 
   <span class="ww-phonetic">
-      ${cambridgePronunciation}
+      /ɪnˈvɛstər/
   </span>
 
   ${audioUrl ? `
@@ -1529,11 +1516,11 @@ if (cambridgeData && cambridgeData.pronunciation) {
 
         <div class="ww-section-label" style="margin-top:10px;">
           <div style="font-size:9px;color:#0d5cab;">
-            Cambridge
+            Merriam-Webster
           </div>
 
           <div style="font-size:8px;color:#555;">
-            https://dictionary.cambridge.org
+            https://www.merriam-webster.com
           </div>
         </div>
 
@@ -2012,13 +1999,7 @@ if (pronCarousel) {
                                display:block;
                            ">
 
-                           ${
-{
-    'Dictionary.com': 'Dictionary.com',
-    'Cambridge': 'Cambridge',
-    'Vocabulary.com': 'Vocabulary.com'
-}[s.source] || s.source
-}
+                            ${s.source}
 
                         </a>
 

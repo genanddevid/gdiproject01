@@ -1330,8 +1330,19 @@ def cambridge_lookup(request):
 
         pronunciation = ipa.get_text(" ", strip=True) if ipa else ""
 
+        audio_url = ""
+
+        audio = soup.select_one("source[type='audio/mpeg']")
+
+        if audio:
+            audio_url = audio.get("src", "")
+
+            if audio_url.startswith("//"):
+                audio_url = "https:" + audio_url
+
         return JsonResponse({
             "pronunciation": pronunciation,
+            "audio": audio_url,
             "source": "Cambridge"
         })
 

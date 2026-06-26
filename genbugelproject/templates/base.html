@@ -1306,11 +1306,7 @@ document.addEventListener('selectionchange', function() {
       audioUrl = '';
       let definition = '—';
       let isEntity = false;
-      // Pronunciations from different sources
-let dictPronunciation = 'Pronunciation unavailable';
-let cambridgePronunciation = 'Pronunciation unavailable';
-let vocabPronunciation = 'Pronunciation unavailable';
-let wrPronunciation = 'Pronunciation unavailable';
+      
 
       if (Array.isArray(dictData) && dictData.length > 0) {
         const entry = dictData[0];
@@ -1395,7 +1391,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
       }
 
       const dictAvailable = definition !== '—';
-      const cambridgeAvailable = cambridgePronunciation !== 'Pronunciation unavailable';
+      const mwAvailable = mwDefinition !== '—';
       const vocabAvailable = !!vocabDefinition && vocabDefinition !== 'Definition unavailable';
       const wrAvailable = !!wrDefinition && wrDefinition !== 'Definition unavailable';
 

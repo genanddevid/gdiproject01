@@ -1308,7 +1308,7 @@ document.addEventListener('selectionchange', function() {
       let isEntity = false;
       // Pronunciations from different sources
 let dictPronunciation = 'Pronunciation unavailable';
-let mwPronunciation = 'Pronunciation unavailable';
+let cambridgePronunciation = 'Pronunciation unavailable';
 let vocabPronunciation = 'Pronunciation unavailable';
 let wrPronunciation = 'Pronunciation unavailable';
 
@@ -1395,7 +1395,7 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
       }
 
       const dictAvailable = definition !== '—';
-      const mwAvailable = mwDefinition !== '—';
+      const cambridgeAvailable = cambridgePronunciation !== 'Pronunciation unavailable';
       const vocabAvailable = !!vocabDefinition && vocabDefinition !== 'Definition unavailable';
       const wrAvailable = !!wrDefinition && wrDefinition !== 'Definition unavailable';
 

@@ -1390,7 +1390,12 @@ let wrPronunciation = 'Pronunciation unavailable';
 
 
 wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
+if (cambridgeData && cambridgeData.pronunciation) {
 
+    cambridgePronunciation =
+        cambridgeData.pronunciation;
+
+}
       
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
         const mwEntry = mwData[0];
@@ -1502,8 +1507,9 @@ wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
 
       <!-- Slide 2 -->
       <div style="min-width:100%; box-sizing:border-box;"
-           data-source="Cambridge"
-           data-link="https://dictionary.cambridge.org">
+     data-source="Cambridge"
+     data-link="https://dictionary.cambridge.org"
+     data-full="${cambridgePronunciation}">
 
         <div class="ww-pronunciation-main">
 
@@ -2006,7 +2012,13 @@ if (pronCarousel) {
                                display:block;
                            ">
 
-                            ${s.source}
+                           ${
+{
+    'Dictionary.com': 'Dictionary.com',
+    'Cambridge': 'Cambridge',
+    'Vocabulary.com': 'Vocabulary.com'
+}[s.source] || s.source
+}
 
                         </a>
 

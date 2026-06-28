@@ -1326,20 +1326,11 @@ def cambridge_lookup(request):
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        ipa_blocks = soup.select(".ipa-with-audio")
+        ipa = soup.select_one(".ipa")
 
-        pronunciation = ""
+        pronunciation = ipa.get_text(" ", strip=True) if ipa else ""
+
         audio_url = ""
-
-        if len(ipa_blocks) >= 2:
-
-            # UK pronunciation
-            pronunciation = ipa_blocks[1].select_one(".span-replace-h3").get_text(strip=True)
-
-            audio = ipa_blocks[1].select_one("audio.pron-audio")
-
-            if audio:
-                audio_url = audio.get("src", "")
 
         audio = soup.select_one("source[type='audio/mpeg']")
 

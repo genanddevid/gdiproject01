@@ -2178,7 +2178,21 @@ document.getElementById('writeword-btn').addEventListener('touchstart', function
         openWriteword();
     }, 10);
 });
+document.getElementById('writeword-btn').addEventListener('click', function(e) {
 
+    e.preventDefault();
+    e.stopPropagation();
+
+    const selection = window.getSelection();
+    if (selection) {
+        selection.removeAllRanges();
+    }
+
+    document.getElementById('writeword-toolbar').style.display = 'none';
+
+    openWriteword();
+
+});
 
 
 

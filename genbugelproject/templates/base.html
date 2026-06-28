@@ -2134,10 +2134,11 @@ window.collapsePronunciation = function() {
 
   window.playCambridgeAudio = function() {
 
+    console.log(cambridgeAudio);
+
     if (!cambridgeAudio) return;
 
-    const audio = new Audio(cambridgeAudio);
-    audio.play().catch(() => {});
+    window.open(cambridgeAudio, "_blank");
 
 };
 

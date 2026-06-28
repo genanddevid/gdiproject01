@@ -1177,6 +1177,7 @@ document.addEventListener('focusin', function(e) {
 (function() {
   let selectedWord = '';
   let audioUrl = '';
+  cambridgeAudio = '';
 
   function getCookie(name) {
     let cookieValue = null;
@@ -1314,7 +1315,7 @@ let dictPronunciation = 'Pronunciation unavailable';
 let cambridgePronunciation = 'Pronunciation unavailable';
 let vocabPronunciation = 'Pronunciation unavailable';
 let wrPronunciation = 'Pronunciation unavailable';
-let cambridgeAudio = '';
+
 
       if (Array.isArray(dictData) && dictData.length > 0) {
         const entry = dictData[0];

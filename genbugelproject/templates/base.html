@@ -1403,8 +1403,7 @@ if (cambridgeData) {
     }
 
 }
-console.log("Cambridge data:", cambridgeData);
-console.log("Cambridge audio variable:", cambridgeAudio);
+console.log("Cambridge data:", JSON.stringify(cambridgeData, null, 2));
 
       
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {

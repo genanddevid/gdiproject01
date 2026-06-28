@@ -1536,12 +1536,12 @@ const wrAvailable =
       ${cambridgePronunciation}
   </span>
 
-  ${cambridgeAudioUrl ? `
-  <button class="ww-audio-btn"
-          onclick="playCambridgeAudio()"
-          title="Listen">
-      ▶
-  </button>
+ ${cambridgeAudio ? `
+<button class="ww-audio-btn"
+        onclick="playCambridgeAudio()"
+        title="Listen">
+    ▶
+</button>
 ` : ''}
 </div>
 

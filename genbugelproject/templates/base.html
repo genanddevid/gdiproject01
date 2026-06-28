@@ -1571,13 +1571,21 @@ const wrAvailable =
 <div style="min-width:100%; box-sizing:border-box;"
      data-source="Vocabulary.com"
      data-link="https://www.vocabulary.com"
-     data-full="Pronunciation unavailable">
+     data-full="${vocabPronunciation}">
 
     <div class="ww-pronunciation-main">
 
         <span class="ww-phonetic">
-            Pronunciation unavailable
+            ${vocabPronunciation}
         </span>
+
+        ${vocabAudio ? `
+        <button class="ww-audio-btn"
+                onclick="playVocabularyAudio()"
+                title="Listen">
+            ▶
+        </button>
+        ` : ''}
 
     </div>
 
@@ -1592,9 +1600,6 @@ const wrAvailable =
     </div>
 
 </div>
-
-    </div>
-
     <!-- Dots -->
     <div style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
       <div id="ww-pron-dot-0"

@@ -1178,6 +1178,7 @@ document.addEventListener('focusin', function(e) {
   let selectedWord = '';
   let audioUrl = '';
   cambridgeAudio = '';
+  let vocabAudio = '';
 
   function getCookie(name) {
     let cookieValue = null;
@@ -1354,15 +1355,23 @@ let wrPronunciation = 'Pronunciation unavailable';
 
       if (vocabData) {
 
-          if (vocabData.definition) {
-              vocabDefinition = vocabData.definition;
-          }
+    if (vocabData.definition) {
+        vocabDefinition = vocabData.definition;
+    }
 
-          if (vocabData.partOfSpeech) {
-              vocabPartOfSpeech = vocabData.partOfSpeech;
-          }
+    if (vocabData.partOfSpeech) {
+        vocabPartOfSpeech = vocabData.partOfSpeech;
+    }
 
-      }
+    if (vocabData.pronunciation) {
+        vocabPronunciation = vocabData.pronunciation;
+    }
+
+    if (vocabData.audio) {
+        vocabAudio = vocabData.audio;
+    }
+
+}
 
       let wrDefinition = 'Definition unavailable';
       let wrPartOfSpeech = '';

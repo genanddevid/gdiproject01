@@ -1624,7 +1624,7 @@ ${vocabPronunciationAvailable ? `
     <!-- Dots -->
       <div
           id="ww-pron-dots"
-          style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
+          style="display:flex; justify-content:center; gap:6px; margin-top:12px; margin-bottom:10px;">
       </div>
 
 </div> <!-- end #ww-pron-wrapper -->
@@ -1804,9 +1804,9 @@ ${wrAvailable ? `
             </div>
 
             <!-- Dots indicator -->
-            <div style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
+            <div style="display:flex; justify-content:center; gap:4px; margin-top:12px; margin-bottom:10px;">
               ${[dictAvailable, mwAvailable, vocabAvailable, wrAvailable].filter(Boolean).map((_, i) =>
-                `<div id="ww-dot-${i}" style="width:6px; height:6px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`
+                `<div id="ww-dot-${i}" style="width:4px; height:4px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`
               ).join('')}
             </div>
           </div>
@@ -1933,8 +1933,8 @@ if (dotsContainer) {
             <div
                 id="ww-pron-dot-${i}"
                 style="
-                    width:6px;
-                    height:6px;
+                    width:4px;
+                    height:4px;
                     border-radius:50%;
                     background:${i === 0 ? '#B83C2E' : '#333'};
                 ">

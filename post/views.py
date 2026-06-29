@@ -1220,31 +1220,17 @@ def vocabulary_lookup(request):
         definition = None
         part_of_speech = None
 
-        pronunciation = None
-        audio = None
-
         if short_def:
             definition = short_def.get_text(" ", strip=True)
 
         if pos_tag:
             part_of_speech = pos_tag.get_text(" ", strip=True)
 
-        ipa = soup.select_one(".ipa-with-audio span")
-
-        if ipa:
-            pronunciation = ipa.get_text(" ", strip=True)
-
-        audio_tag = soup.select_one("audio.pron-audio")
-
-        if audio_tag:
-            audio = audio_tag.get("src")
-
         return JsonResponse({
             'definition': definition,
-            'partOfSpeech': part_of_speech,
-            'pronunciation': pronunciation,
-            'audio': audio
+            'partOfSpeech': part_of_speech
         })
+
     except Exception as e:
         return JsonResponse({
             'definition': None,
@@ -1349,12 +1335,12 @@ def cambridge_lookup(request):
         audio = soup.select_one("source[type='audio/mpeg']")
 
         if audio:
-            audio_url = audio.get("src", "")
+        audio_url = audio.get("src", "")
 
-            if audio_url.startswith("//"):
-                audio_url = "https:" + audio_url
-            elif audio_url.startswith("/"):
-                audio_url = "https://dictionary.cambridge.org" + audio_url
+        if audio_url.startswith("//"):
+            audio_url = "https:" + audio_url
+        elif audio_url.startswith("/"):
+            audio_url = "https://dictionary.cambridge.org" + audio_url
 
         return JsonResponse({
             "pronunciation": pronunciation,

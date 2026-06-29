@@ -1220,17 +1220,31 @@ def vocabulary_lookup(request):
         definition = None
         part_of_speech = None
 
+        pronunciation = None
+        audio = None
+
         if short_def:
             definition = short_def.get_text(" ", strip=True)
 
         if pos_tag:
             part_of_speech = pos_tag.get_text(" ", strip=True)
 
+        ipa = soup.select_one(".ipa-with-audio span")
+
+        if ipa:
+            pronunciation = ipa.get_text(" ", strip=True)
+
+        audio_tag = soup.select_one("audio.pron-audio")
+
+        if audio_tag:
+            audio = audio_tag.get("src")
+
         return JsonResponse({
             'definition': definition,
-            'partOfSpeech': part_of_speech
+            'partOfSpeech': part_of_speech,
+            'pronunciation': pronunciation,
+            'audio': audio
         })
-
     except Exception as e:
         return JsonResponse({
             'definition': None,

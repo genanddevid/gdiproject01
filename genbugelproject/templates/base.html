@@ -1498,7 +1498,7 @@ const wrAvailable =
 
 
   <!-- Pronunciation carousel -->
-  <div id="ww-pron-wrapper" style="overflow:hidden;">
+  <div id="ww-pron-wrapper" style="overflow:hidden; padding-bottom:20px;">
     <div id="ww-pron-carousel"
          style="display:flex; transition:transform .3s ease;">
 
@@ -1509,19 +1509,19 @@ const wrAvailable =
 
         <div class="ww-pronunciation-main">
 
-  <span class="ww-phonetic">
-      ${dictPronunciation}
-  </span>
+          <span class="ww-phonetic">
+              ${dictPronunciation}
+          </span>
 
-  ${audioUrl ? `
-  <button class="ww-audio-btn"
-          onclick="playAudio()"
-          title="Listen">
-      ▶
-  </button>
-  ` : ''}
+          ${audioUrl ? `
+          <button class="ww-audio-btn"
+                  onclick="playAudio()"
+                  title="Listen">
+              ▶
+          </button>
+          ` : ''}
 
-</div>
+        </div>
 
         <div class="ww-section-label" style="margin-top:10px;">
           <div style="font-size:9px;color:#0d5cab;">
@@ -1535,26 +1535,27 @@ const wrAvailable =
 
       </div>
 
+
       <!-- Slide 2 -->
       <div style="min-width:100%; box-sizing:border-box;"
-     data-source="Cambridge"
-     data-link="https://dictionary.cambridge.org"
-     data-full="${cambridgePronunciation}">
+        data-source="Cambridge"
+        data-link="https://dictionary.cambridge.org"
+        data-full="${cambridgePronunciation}">
 
         <div class="ww-pronunciation-main">
 
-  <span class="ww-phonetic">
-      ${cambridgePronunciation}
-  </span>
+          <span class="ww-phonetic">
+              ${cambridgePronunciation}
+          </span>
 
- ${cambridgeAudio ? `
-<button class="ww-audio-btn"
-        onclick="playCambridgeAudio()"
-        title="Listen">
-    ▶
-</button>
-` : ''}
-</div>
+            ${cambridgeAudio ? `
+            <button class="ww-audio-btn"
+                    onclick="playCambridgeAudio()"
+                    title="Listen">
+                ▶
+            </button>
+            ` : ''}
+            </div>
 
         <div class="ww-section-label" style="margin-top:10px;">
           <div style="font-size:9px;color:#0d5cab;">
@@ -1569,7 +1570,7 @@ const wrAvailable =
       </div>
 
       <!-- Slide 3 -->
-<div style="min-width:100%; box-sizing:border-box;"
+    <div style="min-width:100%; box-sizing:border-box;"
      data-source="Vocabulary.com"
      data-link="https://www.vocabulary.com"
      data-full="${vocabPronunciation}">

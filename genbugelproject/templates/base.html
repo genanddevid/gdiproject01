@@ -1428,18 +1428,24 @@ if (cambridgeData) {
 
       const dictAvailable = definition !== '—';
 
-const mwAvailable = mwDefinition !== '—';
+      const mwAvailable = mwDefinition !== '—';
 
-const cambridgeAvailable =
-    cambridgePronunciation !== 'Pronunciation unavailable';
+      const cambridgeAvailable =
+          cambridgePronunciation !== 'Pronunciation unavailable';
 
-const vocabAvailable =
-    !!vocabDefinition &&
-    vocabDefinition !== 'Definition unavailable';
+      const dictPronunciationAvailable =
+          dictPronunciation !== 'Pronunciation unavailable';
 
-const wrAvailable =
-    !!wrDefinition &&
-    wrDefinition !== 'Definition unavailable';
+      const vocabPronunciationAvailable =
+          vocabPronunciation !== 'Pronunciation unavailable';
+
+      const vocabAvailable =
+          !!vocabDefinition &&
+          vocabDefinition !== 'Definition unavailable';
+
+      const wrAvailable =
+          !!wrDefinition &&
+          wrDefinition !== 'Definition unavailable';
 
 
 
@@ -1502,6 +1508,7 @@ const wrAvailable =
     <div id="ww-pron-carousel"
          style="display:flex; transition:transform .3s ease;">
 
+${dictPronunciationAvailable ? `
       <!-- Slide 1 -->
       <div
           style="min-width:100%; box-sizing:border-box;"
@@ -1537,8 +1544,8 @@ const wrAvailable =
         </div>
 
       </div>
-
-
+    ` : ''}
+${cambridgeAvailable ? `
       <!-- Slide 2 -->
       <div style="min-width:100%; box-sizing:border-box;"
         data-source="Cambridge"
@@ -1572,7 +1579,9 @@ const wrAvailable =
         </div>
 
       </div>
+` : ''}
 
+${vocabPronunciationAvailable ? `
       <!-- Slide 3 -->
     <div style="min-width:100%; box-sizing:border-box;"
       data-source="Vocabulary.com"
@@ -1607,24 +1616,16 @@ const wrAvailable =
     </div>
 
 </div>
-        </div> <!-- end #ww-pron-carousel -->
+   ` : ''}    
 
-    <div style="
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        gap:6px;
-        margin-top:12px;
-    ">
-        <div id="ww-pron-dot-0"
-             style="width:6px;height:6px;border-radius:50%;background:#B83C2E;flex:none;"></div>
 
-        <div id="ww-pron-dot-1"
-             style="width:6px;height:6px;border-radius:50%;background:#333;flex:none;"></div>
+</div> <!-- end #ww-pron-carousel -->
 
-        <div id="ww-pron-dot-2"
-             style="width:6px;height:6px;border-radius:50%;background:#333;flex:none;"></div>
-    </div>
+    <!-- Dots -->
+      <div
+          id="ww-pron-dots"
+          style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
+      </div>
 
 </div> <!-- end #ww-pron-wrapper -->
 
@@ -1919,6 +1920,29 @@ if (pronCarousel) {
 
     const pronSlides =
         pronCarousel.querySelectorAll('[data-source]').length;
+
+        const dotsContainer = document.getElementById('ww-pron-dots');
+
+if (dotsContainer) {
+
+    dotsContainer.innerHTML = '';
+
+    for (let i = 0; i < pronSlides; i++) {
+
+        dotsContainer.innerHTML += `
+            <div
+                id="ww-pron-dot-${i}"
+                style="
+                    width:6px;
+                    height:6px;
+                    border-radius:50%;
+                    background:${i === 0 ? '#B83C2E' : '#333'};
+                ">
+            </div>
+        `;
+    }
+
+}
 
     pronCarousel.addEventListener('touchstart', e => {
         pronStartX = e.changedTouches[0].clientX;

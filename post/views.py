@@ -1335,12 +1335,12 @@ def cambridge_lookup(request):
         audio = soup.select_one("source[type='audio/mpeg']")
 
         if audio:
-        audio_url = audio.get("src", "")
+            audio_url = audio.get("src", "")
 
-        if audio_url.startswith("//"):
-            audio_url = "https:" + audio_url
-        elif audio_url.startswith("/"):
-            audio_url = "https://dictionary.cambridge.org" + audio_url
+            if audio_url.startswith("//"):
+                audio_url = "https:" + audio_url
+            elif audio_url.startswith("/"):
+                audio_url = "https://dictionary.cambridge.org" + audio_url
 
         return JsonResponse({
             "pronunciation": pronunciation,

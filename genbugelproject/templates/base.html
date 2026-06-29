@@ -1503,9 +1503,12 @@ const wrAvailable =
          style="display:flex; transition:transform .3s ease;">
 
       <!-- Slide 1 -->
-      <div style="min-width:100%; box-sizing:border-box;"
-           data-source="Dictionary.com"
-           data-link="https://www.dictionary.com">
+      <div
+          style="min-width:100%; box-sizing:border-box;"
+          data-source="Dictionary.com"
+          data-link="https://www.dictionary.com"
+          data-full="${dictPronunciation}"
+          data-audio="${audioUrl}">
 
         <div class="ww-pronunciation-main">
 
@@ -1540,7 +1543,8 @@ const wrAvailable =
       <div style="min-width:100%; box-sizing:border-box;"
         data-source="Cambridge"
         data-link="https://dictionary.cambridge.org"
-        data-full="${cambridgePronunciation}">
+        data-full="${cambridgePronunciation}"
+        data-audio="${cambridgeAudio}">
 
         <div class="ww-pronunciation-main">
 
@@ -1571,9 +1575,10 @@ const wrAvailable =
 
       <!-- Slide 3 -->
     <div style="min-width:100%; box-sizing:border-box;"
-     data-source="Vocabulary.com"
-     data-link="https://www.vocabulary.com"
-     data-full="${vocabPronunciation}">
+      data-source="Vocabulary.com"
+      data-link="https://www.vocabulary.com"
+      data-full="${vocabPronunciation}"
+      data-audio="${vocabAudio}">
 
     <div class="ww-pronunciation-main">
 
@@ -1982,7 +1987,8 @@ if (pronCarousel) {
         sources.push({
             source: slide.dataset.source,
             link: slide.dataset.link,
-            full: slide.dataset.full
+            full: slide.dataset.full,
+            audio: slide.dataset.audio || ""
         });
 
     });
@@ -2026,7 +2032,26 @@ if (pronCarousel) {
                     <div class="ww-section-content"
                         style="font-size:15px; line-height:1.7;">
 
-                        ${s.full}
+                        <div class="ww-pronunciation-main">
+
+                            <span class="ww-phonetic">
+                                ${s.full}
+                            </span>
+
+                            ${
+                                s.audio
+                                    ? `
+                                    <button
+                                        class="ww-audio-btn"
+                                        onclick="new Audio('${s.audio}').play()"
+                                        title="Listen">
+                                        ▶
+                                    </button>
+                                    `
+                                    : ''
+                            }
+
+                        </div>
 
                     </div>
 

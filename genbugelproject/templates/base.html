@@ -1756,13 +1756,13 @@ ${dictAvailable ? `
 ${wrAvailable ? `
               <!-- Slide 4: WordReference -->
           <div style="min-width:100%; box-sizing:border-box;"
-     data-source="wordreference.com"
-     data-link="https://www.wordreference.com/definition/${word}"
-     data-full="${(
-    (wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') +
-    (wrDefinition || 'Definition unavailable')
-).replace(/"/g, '&quot;')}"
-)}">
+            data-source="wordreference.com"
+            data-link="https://www.wordreference.com/definition/${word}"
+            data-full="${(
+            (wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') +
+            (wrDefinition || 'Definition unavailable')
+        ).replace(/"/g, '&quot;')}"
+        )}">
 
 
 
@@ -1773,35 +1773,30 @@ ${wrAvailable ? `
 
                 <div class="ww-section-content">
                       ${wrDefinition
-  ? (wrDefinition.length > 120
-      ? wrDefinition.substring(0, 120) + '...'
-      : wrDefinition + '...')
-  : 'Definition unavailable'}
+                      ? (wrDefinition.length > 120
+                          ? wrDefinition.substring(0, 120) + '...'
+                          : wrDefinition + '...')
+                      : 'Definition unavailable'}
 
-<a href="https://www.wordreference.com/definition/${encodeURIComponent(word)}"
-   target="_blank"
-   style="text-decoration: underline; color:#ffffff; font-size:10px;">
-   Read more
-</a>
-
-
+                    <a href="https://www.wordreference.com/definition/${encodeURIComponent(word)}"
+                      target="_blank"
+                      style="text-decoration: underline; color:#ffffff; font-size:10px;">
+                      Read more
+                    </a>
                 </div>
 
 
                 <div class="ww-section-label" style="margin-top:8px;">
-    <a href="https://www.wordreference.com/definition/${word}"
-       target="_blank"
-       style="color:#0d5cab; text-decoration:none; display:block;">
-       Wordreference.com
-    </a>
+                  <a href="https://www.wordreference.com/definition/${word}"
+                    target="_blank"
+                    style="color:#0d5cab; text-decoration:none; display:block;">
+                    Wordreference.com
+                  </a>
 
-    <span style="font-size:8px; color:#555;">
-        https://www.wordreference.com
-    </span>
-</div>
-
-
-
+                  <span style="font-size:8px; color:#555;">
+                      https://www.wordreference.com
+                  </span>
+                </div>
               </div>
  ` : ''}
 
@@ -2175,7 +2170,16 @@ window.collapsePronunciation = function() {
     const audio = new Audio(cambridgeAudio);
     audio.play().catch(() => {});
 
-};
+  };
+
+  window.playVocabularyAudio = function() {
+
+    if (!vocabAudio) return;
+
+    const audio = new Audio(vocabAudio);
+    audio.play().catch(() => {});
+
+  };
 
   window.playVietnamese = function(text) {
     if (!text || text === '—') return;

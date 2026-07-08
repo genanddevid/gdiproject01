@@ -98,7 +98,7 @@ margin-top: -20px !important;
                 <a href="{% url 'profile' post_item.user.username %}" onclick="event.stopPropagation();">
                   {% if post_item.user.profile.first_name %}
                   <p class="title is-4" style="
-                    font-weight:500;
+                    font-weight:400;
                     font-family: 'Inter', sans-serif;
                     font-size: 13px;
                     letter-spacing: -0.1px;
@@ -106,7 +106,7 @@ margin-top: -20px !important;
                     color:rgb(59, 59, 59);"
                   >{{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}</p>
                   {% else %}
-                  <p class="title is-4" style="font-weight:500; font-size: 13px; margin: 0;">{{ post_item.user.username }}</p>
+                  <p class="title is-4" style="font-weight:400; font-size: 13px; margin: 0;">{{ post_item.user.username }}</p>
                   {% endif %}
                   <!--<p class="subtitle is-6">@{{ post_item.user.username }}</p>-->
                 </a>
@@ -129,7 +129,7 @@ margin-top: -20px !important;
               <a href="#">#responsive</a>-->    
               
               <div class="timeset" style="margin-top: -15px;">
-                <time datetime="2016-1-1" style="color: rgb(59, 59, 59); font-weight:500; font-family: 'Inter', sans-serif;
+                <time datetime="2016-1-1" style="color: rgb(59, 59, 59); font-weight:400; font-family: 'Inter', sans-serif;
                   font-size: 10.9px;">{{ post_item.posted }}</time>
               </div>
             </div>

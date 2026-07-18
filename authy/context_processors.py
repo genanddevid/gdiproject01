@@ -3,7 +3,7 @@ from post.models import Likes
 
 
 def unread_notifications_count(request):
-    if not request.user.is_authenticated:
+    if not hasattr(request, 'user') or not request.user.is_authenticated:
         return {'unread_notif_count': 0}
 
     me = request.user

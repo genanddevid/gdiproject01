@@ -16,10 +16,12 @@ class MobileOnlyMiddleware:
         if any(request.path.startswith(p) for p in exempt_paths):
             return self.get_response(request)
 
+        # Logged-in staff can always access desktop
+        if request.user.is_authenticated and request.user.is_staff:
+            return self.get_response(request)
+
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         is_mobile = bool(self.mobile_pattern.search(user_agent))
-
         if not is_mobile:
             return render(request, 'desktop_notice.html')
-
         return self.get_response(request)

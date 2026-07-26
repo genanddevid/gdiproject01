@@ -949,7 +949,9 @@ Maximum 8 entities."""
             )
         print(f"Tagged: {post.caption[:50]}")
     except Exception as e:
+        import traceback
         print(f"Tagging failed for {post.id}: {e}")
+        traceback.print_exc()
 
 
 

@@ -884,7 +884,7 @@ def auto_tag_post(post):
 
         client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=[
                 {
                     "role": "system",
@@ -974,7 +974,7 @@ def improve_writing(request):
             client = Groq(api_key=api_key)
             
             completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-120b",
                 messages=[
                     {
                         "role": "system",
@@ -1080,7 +1080,7 @@ def ad_dashboard(request):
                 from groq import Groq
                 client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
                 completion = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
+                    model="openai/gpt-oss-120b",
                     messages=[
                         {
                             "role": "system",
@@ -1165,7 +1165,7 @@ def writeword_explain(request):
             
             client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
             completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-120b",
                 messages=[
                     {
                         "role": "system",

@@ -1185,8 +1185,7 @@ Return only the explanation — no preamble, no labels."""
                     }
                 ],
                 temperature=0.3,
-                max_completion_tokens=300,
-                reasoning_effort="none",
+                max_tokens=120,
             )
             explanation = (completion.choices[0].message.content or '').strip()
             if not explanation:

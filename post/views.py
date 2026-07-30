@@ -1006,6 +1006,85 @@ def improve_writing(request):
 
 
 
+
+def review_writing(request):
+    if request.method == 'POST':
+        import json
+        from groq import Groq
+        try:
+            data = json.loads(request.body)
+            original_text = data.get('text', '')
+            category = data.get('category', '')
+
+            if not original_text.strip():
+                return JsonResponse({'error': 'No text provided'}, status=400)
+
+            category_prompts = {
+                'grammar': """You are a writing tutor reviewing GRAMMAR only. Ignore vocabulary, clarity, organization and style.
+Find grammar mistakes (verb tense, subject-verb agreement, punctuation, sentence structure).
+For each, quote the exact original sentence, give the corrected version, explain why in one short sentence.
+Return ONLY valid JSON, no other text:
+{"issues": [{"original": "exact quoted sentence", "suggestion": "corrected sentence", "why": "brief reason"}]}
+Maximum 6 issues. If none exist, return {"issues": []}.""",
+
+                'vocabulary': """You are a writing tutor reviewing VOCABULARY only. Ignore grammar, clarity, organization and style.
+Find weak, vague, or repeated word choices. Flag words used too often and suggest stronger alternatives.
+Return ONLY valid JSON, no other text:
+{"issues": [{"original": "exact quoted phrase", "suggestion": "alternative word(s)", "why": "brief reason"}]}
+Maximum 6 issues. If vocabulary is already strong, return {"issues": []}.""",
+
+                'clarity': """You are a writing tutor reviewing CLARITY only. Ignore grammar, vocabulary, organization and style.
+Find sentences that are confusing, ambiguous, or hard to follow.
+Return ONLY valid JSON, no other text:
+{"issues": [{"original": "exact quoted sentence", "suggestion": "clearer rewrite", "why": "brief reason"}]}
+Maximum 6 issues. If already clear, return {"issues": []}.""",
+
+                'organization': """You are a writing tutor reviewing ORGANIZATION AND FLOW only. Ignore grammar, vocabulary, clarity and style.
+Look at how ideas are ordered and connected. Flag misplaced passages or missing transitions.
+Return ONLY valid JSON, no other text:
+{"issues": [{"original": "exact quoted passage", "suggestion": "reorganization suggestion", "why": "brief reason"}]}
+Maximum 6 issues. If already well organized, return {"issues": []}.""",
+
+                'style': """You are a writing tutor reviewing STYLE only. Ignore grammar, vocabulary, clarity and organization.
+Look at tone, voice, and engagement for a news-style article.
+Return ONLY valid JSON, no other text:
+{"issues": [{"original": "exact quoted sentence", "suggestion": "stylistic rewrite", "why": "brief reason"}]}
+Maximum 6 issues. If style is already strong, return {"issues": []}."""
+            }
+
+            system_prompt = category_prompts.get(category)
+            if not system_prompt:
+                return JsonResponse({'error': 'Invalid category'}, status=400)
+
+            api_key = os.environ.get('GROQ_API_KEY')
+            if not api_key:
+                return JsonResponse({'error': 'API key not configured'}, status=500)
+
+            client = Groq(api_key=api_key)
+            completion = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": original_text}
+                ],
+                temperature=0.3,
+                max_tokens=1200,
+            )
+
+            response_text = completion.choices[0].message.content.strip()
+            if '```' in response_text:
+                response_text = response_text.split('```')[1].replace('json', '').strip()
+
+            result = json.loads(response_text)
+            return JsonResponse({'issues': result.get('issues', [])})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+
 @login_required  
 def run_tagging_now(request):
     try:

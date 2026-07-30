@@ -46,13 +46,34 @@
                   Word count: 0 / 250
             </p>
 
-            <!-- AI Writing Assistant -->
-<div style="text-align: center; margin-top: 16px;">
+            <<!-- AI Writing Assistant -->
+<div style="text-align: center; margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
     <button type="button" id="improveBtn" 
         style="background: #000; color: white; border: none; border-radius: 50px; 
         padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;">
         ✨ Improve my writing
     </button>
+    <button type="button" id="reviewBtn" 
+        style="background: #fff; color: #000; border: 2px solid #000; border-radius: 50px; 
+        padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;">
+        📝 Review my writing
+    </button>
+</div>
+
+<div id="reviewPanel" style="display: none; margin-top: 20px;">
+    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px;">
+        <button type="button" class="review-category-btn" data-category="grammar"
+            style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 50px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Grammar</button>
+        <button type="button" class="review-category-btn" data-category="vocabulary"
+            style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 50px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Vocabulary</button>
+        <button type="button" class="review-category-btn" data-category="clarity"
+            style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 50px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Clarity</button>
+        <button type="button" class="review-category-btn" data-category="organization"
+            style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 50px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Organization</button>
+        <button type="button" class="review-category-btn" data-category="style"
+            style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 50px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Style</button>
+    </div>
+    <div id="reviewResults"></div>
 </div>
 
 <!-- Side by side comparison -->
@@ -689,6 +710,62 @@ document.getElementById('improveBtn').addEventListener('click', function() {
         btn.disabled = false;
     });
 });
+
+document.getElementById('reviewBtn').addEventListener('click', function() {
+    const contentField = document.querySelector('textarea[name="content"]');
+    const text = contentField.value.trim();
+    if (!text) { alert('Please write something first.'); return; }
+    if (text.split(/\s+/).length < 50) { alert('Please write at least 50 words before requesting a review.'); return; }
+    const panel = document.getElementById('reviewPanel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+});
+
+document.querySelectorAll('.review-category-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const category = this.dataset.category;
+        const text = document.querySelector('textarea[name="content"]').value.trim();
+        const resultsDiv = document.getElementById('reviewResults');
+
+        document.querySelectorAll('.review-category-btn').forEach(function(b) {
+            b.style.background = '#f5f5f5'; b.style.color = '#000';
+        });
+        this.style.background = '#000'; this.style.color = '#fff';
+
+        resultsDiv.innerHTML = `<div style="text-align:center; padding:20px 0; color:#888; font-size:13px;">Reviewing your ${category}...</div>`;
+
+        fetch('/review-writing/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ text: text, category: category })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.error) {
+                resultsDiv.innerHTML = `<p style="color:#c00; font-size:13px; text-align:center;">Error: ${data.error}</p>`;
+                return;
+            }
+            const issues = data.issues || [];
+            if (issues.length === 0) {
+                resultsDiv.innerHTML = `<div style="text-align:center; padding:20px 0; color:#3a8f3a; font-size:14px; font-weight:600;">✓ No ${category} issues found. Nice work!</div>`;
+                return;
+            }
+            resultsDiv.innerHTML = issues.map(function(issue) {
+                return `<div style="border:1px solid #eee; border-radius:10px; padding:14px; margin-bottom:12px;">
+                    <p style="font-size:12px; color:#888; margin:0 0 4px 0; font-weight:600;">ORIGINAL</p>
+                    <p style="font-size:14px; color:#c00; margin:0 0 12px 0; font-style:italic;">"${issue.original}"</p>
+                    <p style="font-size:12px; color:#888; margin:0 0 4px 0; font-weight:600;">SUGGESTION</p>
+                    <p style="font-size:14px; color:#1a7a1a; margin:0 0 12px 0; font-weight:500;">"${issue.suggestion}"</p>
+                    <p style="font-size:12px; color:#888; margin:0 0 4px 0; font-weight:600;">WHY</p>
+                    <p style="font-size:13px; color:#444; margin:0;">${issue.why}</p>
+                </div>`;
+            }).join('');
+        })
+        .catch(function() {
+            resultsDiv.innerHTML = `<p style="color:#c00; font-size:13px; text-align:center;">Something went wrong. Please try again.</p>`;
+        });
+    });
+});
+
 
 document.getElementById('useImprovedBtn').addEventListener('click', function() {
     const improved = document.getElementById('improvedText').textContent;

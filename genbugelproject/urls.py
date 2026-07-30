@@ -50,6 +50,7 @@ urlpatterns = [
     
     path('', include('post.urls')),  # e.g. /post/
     path('improve-writing/', improve_writing, name='improve_writing'),
+    path('review-writing/', review_writing, name='review_writing'),
     path('run-tagging/', run_tagging_now, name='run_tagging'),
     path('writeword-explain/', writeword_explain, name='writeword_explain'),
     path('vocabulary-lookup/', vocabulary_lookup, name='vocabulary_lookup'),

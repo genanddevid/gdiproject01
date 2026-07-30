@@ -1193,6 +1193,9 @@ Return only the explanation — no preamble, no labels."""
                 explanation = f'No additional information found for "{word}".'
             return JsonResponse({'explanation': explanation})
         except Exception as e:
+            import traceback
+            print(f"Writeword explain failed for '{word}': {e}")
+            traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 

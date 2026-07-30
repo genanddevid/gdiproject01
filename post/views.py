@@ -1170,7 +1170,7 @@ def writeword_explain(request):
             
             client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
             completion = client.chat.completions.create(
-                model="qwen/qwen3.6-27b",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {
                         "role": "system",

@@ -884,7 +884,7 @@ def auto_tag_post(post):
 
         client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
         completion = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {
                     "role": "system",
@@ -927,14 +927,10 @@ Maximum 8 entities."""
                 }
             ],
             temperature=0.3,
-            max_tokens=800,
-            reasoning_effort="low",
+            max_tokens=600,
         )
 
-        response_text = (completion.choices[0].message.content or '').strip()
-        if not response_text:
-            print(f"Empty response from Groq for post {post.id} — likely reasoning token exhaustion")
-            return
+        response_text = completion.choices[0].message.content.strip()
         if '```' in response_text:
             response_text = response_text.split('```')[1].replace('json', '').strip()
 
@@ -978,7 +974,7 @@ def improve_writing(request):
             client = Groq(api_key=api_key)
             
             completion = client.chat.completions.create(
-                model="openai/gpt-oss-120b",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {
                         "role": "system",
@@ -1084,7 +1080,7 @@ def ad_dashboard(request):
                 from groq import Groq
                 client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
                 completion = client.chat.completions.create(
-                    model="openai/gpt-oss-120b",
+                    model="llama-3.3-70b-versatile",
                     messages=[
                         {
                             "role": "system",
@@ -1099,10 +1095,9 @@ Maximum 6 entities."""
                         }
                     ],
                     temperature=0.3,
-                    max_tokens=250,
-                    reasoning_effort="low",
+                    max_tokens=100,
                 )
-                ad.entities = (completion.choices[0].message.content or '').strip()
+                ad.entities = completion.choices[0].message.content.strip()
             except Exception as e:
                 print(f"Ad entity extraction failed: {e}")
                 ad.entities = ''
@@ -1170,7 +1165,7 @@ def writeword_explain(request):
             
             client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
             completion = client.chat.completions.create(
-                model="openai/gpt-oss-120b",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {
                         "role": "system",
@@ -1185,17 +1180,11 @@ Return only the explanation — no preamble, no labels."""
                     }
                 ],
                 temperature=0.3,
-                max_completion_tokens=400,
-                reasoning_effort="low",
+                max_tokens=120,
             )
-            explanation = (completion.choices[0].message.content or '').strip()
-            if not explanation:
-                explanation = f'No additional information found for "{word}".'
+            explanation = completion.choices[0].message.content.strip()
             return JsonResponse({'explanation': explanation})
         except Exception as e:
-            import traceback
-            print(f"Writeword explain failed for '{word}': {e}")
-            traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 

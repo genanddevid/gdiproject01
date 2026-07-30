@@ -927,10 +927,14 @@ Maximum 8 entities."""
                 }
             ],
             temperature=0.3,
-            max_tokens=600,
+            max_tokens=800,
+            reasoning_effort="low",
         )
 
-        response_text = completion.choices[0].message.content.strip()
+        response_text = (completion.choices[0].message.content or '').strip()
+        if not response_text:
+            print(f"Empty response from Groq for post {post.id} — likely reasoning token exhaustion")
+            return
         if '```' in response_text:
             response_text = response_text.split('```')[1].replace('json', '').strip()
 
@@ -1095,9 +1099,10 @@ Maximum 6 entities."""
                         }
                     ],
                     temperature=0.3,
-                    max_tokens=100,
+                    max_tokens=250,
+                    reasoning_effort="low",
                 )
-                ad.entities = completion.choices[0].message.content.strip()
+                ad.entities = (completion.choices[0].message.content or '').strip()
             except Exception as e:
                 print(f"Ad entity extraction failed: {e}")
                 ad.entities = ''
@@ -1180,9 +1185,12 @@ Return only the explanation — no preamble, no labels."""
                     }
                 ],
                 temperature=0.3,
-                max_tokens=120,
+                max_tokens=300,
+                reasoning_effort="low",
             )
-            explanation = completion.choices[0].message.content.strip()
+            explanation = (completion.choices[0].message.content or '').strip()
+            if not explanation:
+                explanation = f'No additional information found for "{word}".'
             return JsonResponse({'explanation': explanation})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)

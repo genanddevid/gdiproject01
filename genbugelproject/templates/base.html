@@ -938,7 +938,7 @@ document.addEventListener('focusin', function(e) {
 
 
   #writeword-toolbar button {
-    background: #1a1a1a;
+    background: #313131;
     color: #fff;
     border: none;
     border-radius: 50px;
@@ -1179,6 +1179,15 @@ document.addEventListener('focusin', function(e) {
   let audioUrl = '';
   cambridgeAudio = '';
   let vocabAudio = '';
+  let currentLang = localStorage.getItem('writeword_lang') || 'vi';
+
+  function getLangConfig(lang) {
+    const configs = {
+      vi: { mmCode: 'vi', voiceLocale: 'vi-VN', label: 'Vietnamese' },
+      ar: { mmCode: 'ar', voiceLocale: 'ar-SA', label: 'Arabic' }
+    };
+    return configs[lang] || configs.vi;
+  }
 
   function getCookie(name) {
     let cookieValue = null;
@@ -1280,7 +1289,7 @@ document.addEventListener('selectionchange', function() {
     const word = selectedWord.toLowerCase();
 
     Promise.all([
-  fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|vi`)
+  fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|${getLangConfig(currentLang).mmCode}`)
     .then(r => r.json()).catch(() => null),
 
   fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
@@ -1450,18 +1459,21 @@ if (cambridgeData) {
 
 
       // Render modal
+      // Render modal
       body.innerHTML = `
         <div class="ww-word">${selectedWord}</div>
 
-        <div class="ww-section">
-          <div class="ww-pronunciation-main" style="margin-bottom:6px;">
-            <span class="ww-section-content ww-translation">${translation}</span>
-            ${translation !== '—' ? `
-            <button class="ww-audio-btn" onclick="playVietnamese('${translation.replace(/'/g, "\\'")}')" title="Nghe phát âm">
-                ▶
-            </button>` : ''}
-          </div>
-          <div class="ww-section-label">Vietnamese • <a href="https://laratranslate.com/translate?source=en&target=vi&text=${encodeURIComponent(selectedWord)}&style=Faithful" target="_blank" style="color:#0d5cab; text-decoration:underline;">MyMemory</a></div>
+        <div style="display:flex; gap:6px; margin-bottom:10px;">
+          <button id="ww-lang-vi" onclick="switchWriteWordLang('vi')"
+            style="background:${currentLang === 'vi' ? '#333' : 'transparent'}; color:#fff; border:1px solid #333;
+            border-radius:50px; padding:4px 12px; font-size:11px; font-weight:600; cursor:pointer;">VI</button>
+          <button id="ww-lang-ar" onclick="switchWriteWordLang('ar')"
+            style="background:${currentLang === 'ar' ? '#333' : 'transparent'}; color:#fff; border:1px solid #333;
+            border-radius:50px; padding:4px 12px; font-size:11px; font-weight:600; cursor:pointer;">AR</button>
+        </div>
+
+        <div class="ww-section" id="ww-translation-section">
+          ${renderTranslationHtml(translation, currentLang)}
         </div>
 
         ${!isEntity ? `
@@ -2181,7 +2193,52 @@ window.collapsePronunciation = function() {
 
 
   // Play audio
+  function renderTranslationHtml(translation, lang) {
+    const cfg = getLangConfig(lang);
+    const isRtl = lang === 'ar';
+    return `
+      <div class="ww-pronunciation-main" style="margin-bottom:6px;">
+        <span class="ww-section-content ww-translation"${isRtl ? ' dir="rtl" style="text-align:right; width:100%; font-family:Arial, sans-serif;"' : ''}>${translation}</span>
+        ${translation !== '—' ? `
+        <button class="ww-audio-btn" onclick="playTranslation('${translation.replace(/'/g, "\\'")}')" title="Listen">
+            ▶
+        </button>` : ''}
+      </div>
+      <div class="ww-section-label">${cfg.label} • <a href="https://laratranslate.com/translate?source=en&target=${cfg.mmCode}&text=${encodeURIComponent(selectedWord)}&style=Faithful" target="_blank" style="color:#0d5cab; text-decoration:underline;">MyMemory</a></div>
+    `;
+  }
+
+  window.switchWriteWordLang = function(lang) {
+    if (lang === currentLang) return;
+    currentLang = lang;
+    localStorage.setItem('writeword_lang', lang);
+
+    document.getElementById('ww-lang-vi').style.background = lang === 'vi' ? '#333' : 'transparent';
+    document.getElementById('ww-lang-ar').style.background = lang === 'ar' ? '#333' : 'transparent';
+
+    const section = document.getElementById('ww-translation-section');
+    if (section) {
+      section.innerHTML = `<div class="ww-loading" style="padding:8px 0;"><div class="ww-spinner"></div>Translating...</div>`;
+    }
+
+    const cfg = getLangConfig(lang);
+    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(selectedWord.toLowerCase())}&langpair=en|${cfg.mmCode}`)
+      .then(r => r.json())
+      .then(data => {
+        let translation = '—';
+        if (data && data.responseStatus === 200) {
+          translation = data.responseData.translatedText || '—';
+        }
+        if (section) section.innerHTML = renderTranslationHtml(translation, lang);
+      })
+      .catch(() => {
+        if (section) section.innerHTML = renderTranslationHtml('—', lang);
+      });
+  };
+
+  // Play audio
   window.playAudio = function() {
+
     if (!audioUrl) return;
     const audio = new Audio(audioUrl);
     audio.play().catch(() => {});
@@ -2205,10 +2262,10 @@ window.collapsePronunciation = function() {
 
   };
 
-  window.playVietnamese = function(text) {
+  window.playTranslation = function(text) {
     if (!text || text === '—') return;
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'vi-VN';
+    utterance.lang = getLangConfig(currentLang).voiceLocale;
     utterance.rate = 0.9;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);

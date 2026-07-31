@@ -1183,8 +1183,10 @@ document.addEventListener('focusin', function(e) {
 
   function getLangConfig(lang) {
     const configs = {
-      vi: { mmCode: 'vi', voiceLocale: 'vi-VN', label: 'Vietnamese' },
-      ar: { mmCode: 'ar', voiceLocale: 'ar-SA', label: 'Arabic' }
+      vi: { mmCode: 'vi', voiceLocale: 'vi-VN', label: 'Vietnamese', rtl: false },
+      ar: { mmCode: 'ar', voiceLocale: 'ar-SA', label: 'Arabic', rtl: true },
+      ur: { mmCode: 'ur', voiceLocale: 'ur-PK', label: 'Urdu', rtl: true },
+      ml: { mmCode: 'ml', voiceLocale: 'ml-IN', label: 'Malayalam', rtl: false }
     };
     return configs[lang] || configs.vi;
   }
@@ -1463,13 +1465,12 @@ if (cambridgeData) {
       body.innerHTML = `
         <div class="ww-word">${selectedWord}</div>
 
-        <div style="display:flex; gap:6px; margin-bottom:10px;">
-          <button id="ww-lang-vi" onclick="switchWriteWordLang('vi')"
-            style="background:${currentLang === 'vi' ? '#333' : 'transparent'}; color:#fff; border:1px solid #333;
-            border-radius:50px; padding:4px 12px; font-size:11px; font-weight:600; cursor:pointer;">VI</button>
-          <button id="ww-lang-ar" onclick="switchWriteWordLang('ar')"
-            style="background:${currentLang === 'ar' ? '#333' : 'transparent'}; color:#fff; border:1px solid #333;
-            border-radius:50px; padding:4px 12px; font-size:11px; font-weight:600; cursor:pointer;">AR</button>
+        <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;">
+          ${['vi', 'ar', 'ur', 'ml'].map(function(l) {
+            return `<button id="ww-lang-${l}" onclick="switchWriteWordLang('${l}')"
+              style="background:${currentLang === l ? '#333' : 'transparent'}; color:#fff; border:1px solid #333;
+              border-radius:50px; padding:4px 12px; font-size:11px; font-weight:600; cursor:pointer;">${l.toUpperCase()}</button>`;
+          }).join('')}
         </div>
 
         <div class="ww-section" id="ww-translation-section">
@@ -2195,7 +2196,7 @@ window.collapsePronunciation = function() {
   // Play audio
   function renderTranslationHtml(translation, lang) {
     const cfg = getLangConfig(lang);
-    const isRtl = lang === 'ar';
+    const isRtl = cfg.rtl;
     return `
       <div class="ww-pronunciation-main" style="margin-bottom:6px; justify-content:flex-start;">
         <span class="ww-section-content ww-translation"${isRtl ? ' dir="rtl" style="font-family:Arial, sans-serif;"' : ''}>${translation}</span>
@@ -2213,8 +2214,10 @@ window.collapsePronunciation = function() {
     currentLang = lang;
     localStorage.setItem('writeword_lang', lang);
 
-    document.getElementById('ww-lang-vi').style.background = lang === 'vi' ? '#333' : 'transparent';
-    document.getElementById('ww-lang-ar').style.background = lang === 'ar' ? '#333' : 'transparent';
+    ['vi', 'ar', 'ur', 'ml'].forEach(function(l) {
+      const btn = document.getElementById('ww-lang-' + l);
+      if (btn) btn.style.background = lang === l ? '#333' : 'transparent';
+    });
 
     const section = document.getElementById('ww-translation-section');
     if (section) {

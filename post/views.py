@@ -1415,28 +1415,12 @@ def cambridge_lookup(request):
 
         if response.status_code != 200:
             return JsonResponse({
-                "definition": definition,
-                "partOfSpeech": part_of_speech,
-                "pronunciation": pronunciation,
-                "audio": audio_url,
+                "pronunciation": "",
                 "source": "Cambridge"
             })
 
         soup = BeautifulSoup(response.text, "html.parser")
-
-        # Definition
-        definition = ""
-        definition_tag = soup.select_one(".def")
-
-        if definition_tag:
-            definition = definition_tag.get_text(" ", strip=True)
-
-        # Part of speech
-        part_of_speech = ""
-        pos_tag = soup.select_one(".pos")
-
-        if pos_tag:
-            part_of_speech = pos_tag.get_text(" ", strip=True)
+        
 
         ipa = soup.select_one(".ipa")
 

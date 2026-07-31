@@ -2197,8 +2197,8 @@ window.collapsePronunciation = function() {
     const cfg = getLangConfig(lang);
     const isRtl = lang === 'ar';
     return `
-      <div class="ww-pronunciation-main" style="margin-bottom:6px;">
-        <span class="ww-section-content ww-translation"${isRtl ? ' dir="rtl" style="text-align:right; width:100%; font-family:Arial, sans-serif;"' : ''}>${translation}</span>
+      <div class="ww-pronunciation-main" style="margin-bottom:6px; justify-content:flex-start;">
+        <span class="ww-section-content ww-translation"${isRtl ? ' dir="rtl" style="font-family:Arial, sans-serif;"' : ''}>${translation}</span>
         ${translation !== '—' ? `
         <button class="ww-audio-btn" onclick="playTranslation('${translation.replace(/'/g, "\\'")}')" title="Listen">
             ▶

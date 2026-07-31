@@ -1350,7 +1350,7 @@ let wrPronunciation = 'Pronunciation unavailable';
             ? meaning.definitions[0].definition
             : '—';
           definition = partOfSpeech
-    ? `<em style="color:#ccc; font-size:12px;">${partOfSpeech}</em> — ${def}`
+    ? `<em style="color:#fff; font-size:12px;">${partOfSpeech}</em> — ${def}`
     : def;
         }
       } else {
@@ -1800,7 +1800,7 @@ ${wrAvailable ? `
                 </div>
 
 
-                <div class="ww-section-label" style="margin-top:0px;">
+                <div class="ww-section-label" style="margin-top:8px;">
                   <a href="https://www.wordreference.com/definition/${word}"
                     target="_blank"
                     style="color:#0d5cab; text-decoration:none; display:block;">
@@ -1817,7 +1817,7 @@ ${wrAvailable ? `
             </div>
 
             <!-- Dots indicator -->
-            <div style="display:flex; justify-content:center; gap:4px; margin-top:2px; margin-bottom:0px;">
+            <div style="display:flex; justify-content:center; gap:4px; margin-top:4px; margin-bottom:0px;">
               ${[dictAvailable, mwAvailable, vocabAvailable, wrAvailable].filter(Boolean).map((_, i) =>
                 `<div id="ww-dot-${i}" style="width:4px; height:4px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`
               ).join('')}

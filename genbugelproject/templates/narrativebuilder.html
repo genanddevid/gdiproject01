@@ -761,8 +761,28 @@ document.querySelectorAll('.review-category-btn').forEach(function(btn) {
                 </div>`;
             }
 
+            function escapeHtml(str) {
+                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }
+
+            function highlightIssueInPreview(originalText) {
+                const preview = document.getElementById('contentPreview');
+                if (!preview || !originalText) return;
+                const plainText = preview.textContent;
+                const index = plainText.indexOf(originalText);
+                if (index === -1) return;
+                const before = plainText.slice(0, index);
+                const match = plainText.slice(index, index + originalText.length);
+                const after = plainText.slice(index + originalText.length);
+                preview.innerHTML = escapeHtml(before) +
+                    '<mark style="background:#fff3a3; padding:1px 2px; border-radius:2px;">' +
+                    escapeHtml(match) +
+                    '</mark>' + escapeHtml(after);
+            }
+
             if (issues.length === 1) {
                 resultsDiv.innerHTML = issueCard(issues[0]);
+                highlightIssueInPreview(issues[0].original);
                 return;
             }
 
@@ -779,6 +799,8 @@ document.querySelectorAll('.review-category-btn').forEach(function(btn) {
                     }).join('')}
                 </div>
             `;
+
+            highlightIssueInPreview(issues[0].original);
 
             let reviewStartX = 0;
             let reviewCurrentSlide = 0;
@@ -803,9 +825,11 @@ document.querySelectorAll('.review-category-btn').forEach(function(btn) {
                         const dot = document.getElementById(`review-dot-${i}`);
                         if (dot) dot.style.background = i === reviewCurrentSlide ? '#000' : '#ddd';
                     }
+                    highlightIssueInPreview(issues[reviewCurrentSlide].original);
                 }
             }, { passive: true });
         })
+
         .catch(function() {
             resultsDiv.innerHTML = `<p style="color:#c00; font-size:13px; text-align:center;">Something went wrong. Please try again.</p>`;
         });

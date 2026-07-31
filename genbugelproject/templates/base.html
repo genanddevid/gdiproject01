@@ -1696,7 +1696,7 @@ ${dictAvailable ? `
      data-link="https://www.merriam-webster.com/dictionary/${word}" 
      data-full="${(
     (mwPartOfSpeech
-        ? '<em style=&quot;color:#ccc;font-size:12px;&quot;>' +
+        ? '<em style=&quot;color:#fff;font-size:12px;&quot;>' +
           mwPartOfSpeech +
           '</em> — '
         : ''
@@ -1705,7 +1705,7 @@ ${dictAvailable ? `
 ).replace(/"/g, '&quot;')}">
                    <div class="ww-section-content" style="color:#fff;">
     ${mwPartOfSpeech
-        ? `<em style="color:#ccc;font-size:12px;">${mwPartOfSpeech}</em> — `
+        ? `<em style="color:#fff;font-size:12px;">${mwPartOfSpeech}</em> — `
         : ''}
     ${mwDefinition}
 </div>
@@ -1730,7 +1730,7 @@ ${dictAvailable ? `
                    data-link="https://www.vocabulary.com/dictionary/${word}"
                    data-full="${(
     (vocabPartOfSpeech
-        ? '<em style=&quot;color:#ccc;font-size:12px;&quot;>' +
+        ? '<em style=&quot;color:#fff;font-size:12px;&quot;>' +
           vocabPartOfSpeech +
           '</em> — '
         : ''
@@ -1739,7 +1739,7 @@ ${dictAvailable ? `
 ).replace(/"/g, '&quot;')}">
                 <div class="ww-section-content" style="color:#fff;">
     ${vocabPartOfSpeech
-        ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — `
+        ? `<em style="color:#fff;font-size:12px;">${vocabPartOfSpeech}</em> — `
         : ''}
 
             
@@ -1782,7 +1782,7 @@ ${wrAvailable ? `
 
 
                 ${wrPartOfSpeech
-                  ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>`
+                  ? `<em style="color:#fff;font-size:12px;">${wrPartOfSpeech}</em><br>`
                   : ''}
 
                 <div class="ww-section-content" style="color:#fff;">
@@ -1817,7 +1817,7 @@ ${wrAvailable ? `
             </div>
 
             <!-- Dots indicator -->
-            <div style="display:flex; justify-content:center; gap:4px; margin-top:12px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:center; gap:4px; margin-top:12px; margin-bottom:0px;">
               ${[dictAvailable, mwAvailable, vocabAvailable, wrAvailable].filter(Boolean).map((_, i) =>
                 `<div id="ww-dot-${i}" style="width:4px; height:4px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`
               ).join('')}

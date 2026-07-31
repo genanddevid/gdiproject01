@@ -42,7 +42,7 @@
               {{ form.content }}
         
             </p>
-            <p id="wordCount" style="font-size: 14px; margin-top: 8px; color: #888; text-align: center;">
+            <p id="wordCount" style="font-size: 12px; margin-top: 8px; color: #888; text-align: center;">
                   Word count: 0 / 250
             </p>
 
@@ -54,7 +54,7 @@
         ✨ Improve my writing
     </button>
     <button type="button" id="reviewBtn" 
-        style="background: #fff; color: #000; border: 1px solid #dadada; border-radius: 50px; 
+        style="background: #eef2f5; color: #000; border: 1px solid #eef2f5; border-radius: 50px; 
         padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;">
         📝 Review my writing
     </button>
@@ -749,8 +749,9 @@ document.querySelectorAll('.review-category-btn').forEach(function(btn) {
                 resultsDiv.innerHTML = `<div style="text-align:center; padding:20px 0; color:#3a8f3a; font-size:14px; font-weight:600;">✓ No ${category} issues found. Nice work!</div>`;
                 return;
             }
-            resultsDiv.innerHTML = issues.map(function(issue) {
-                return `<div style="border:1px solid #eee; border-radius:10px; padding:14px; margin-bottom:12px;">
+
+            function issueCard(issue) {
+                return `<div style="min-width:100%; box-sizing:border-box; border:1px solid #eee; border-radius:10px; padding:14px;">
                     <p style="font-size:12px; color:#888; margin:0 0 4px 0; font-weight:600;">ORIGINAL</p>
                     <p style="font-size:14px; color:#c00; margin:0 0 12px 0; font-style:italic;">"${issue.original}"</p>
                     <p style="font-size:12px; color:#888; margin:0 0 4px 0; font-weight:600;">SUGGESTION</p>
@@ -758,7 +759,52 @@ document.querySelectorAll('.review-category-btn').forEach(function(btn) {
                     <p style="font-size:12px; color:#888; margin:0 0 4px 0; font-weight:600;">WHY</p>
                     <p style="font-size:13px; color:#444; margin:0;">${issue.why}</p>
                 </div>`;
-            }).join('');
+            }
+
+            if (issues.length === 1) {
+                resultsDiv.innerHTML = issueCard(issues[0]);
+                return;
+            }
+
+            resultsDiv.innerHTML = `
+                <div style="text-align:center; font-size:12px; color:#888; margin-bottom:8px;" id="review-counter">1 / ${issues.length}</div>
+                <div style="position:relative; overflow:hidden;">
+                    <div id="review-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:none;">
+                        ${issues.map(issueCard).join('')}
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:center; gap:6px; margin-top:12px;">
+                    ${issues.map(function(_, i) {
+                        return `<div id="review-dot-${i}" style="width:6px; height:6px; border-radius:50%; background:${i === 0 ? '#000' : '#ddd'};"></div>`;
+                    }).join('')}
+                </div>
+            `;
+
+            let reviewStartX = 0;
+            let reviewCurrentSlide = 0;
+            const reviewCarousel = document.getElementById('review-carousel');
+            const slideCount = issues.length;
+
+            reviewCarousel.addEventListener('touchstart', function(e) {
+                reviewStartX = e.changedTouches[0].clientX;
+            }, { passive: true });
+
+            reviewCarousel.addEventListener('touchend', function(e) {
+                const diff = reviewStartX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0 && reviewCurrentSlide < slideCount - 1) {
+                        reviewCurrentSlide++;
+                    } else if (diff < 0 && reviewCurrentSlide > 0) {
+                        reviewCurrentSlide--;
+                    }
+                    reviewCarousel.style.transform = `translateX(-${reviewCurrentSlide * 100}%)`;
+                    document.getElementById('review-counter').textContent = `${reviewCurrentSlide + 1} / ${slideCount}`;
+                    for (let i = 0; i < slideCount; i++) {
+                        const dot = document.getElementById(`review-dot-${i}`);
+                        if (dot) dot.style.background = i === reviewCurrentSlide ? '#000' : '#ddd';
+                    }
+                }
+            }, { passive: true });
         })
         .catch(function() {
             resultsDiv.innerHTML = `<p style="color:#c00; font-size:13px; text-align:center;">Something went wrong. Please try again.</p>`;

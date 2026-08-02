@@ -2210,6 +2210,8 @@ window.collapsePronunciation = function() {
     const audio = new Audio(mwAudio);
     audio.play().catch(() => {});
 
+  };
+
 
   window.playTranslation = function(text) {
     if (!text || text === '—') return;

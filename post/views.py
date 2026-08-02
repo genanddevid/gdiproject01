@@ -1426,6 +1426,12 @@ def cambridge_lookup(request):
 
         pronunciation = ipa.get_text(" ", strip=True) if ipa else ""
 
+        def_tag = soup.select_one(".def")
+        definition = def_tag.get_text(" ", strip=True) if def_tag else ""
+
+        pos_tag = soup.select_one(".pos")
+        part_of_speech = pos_tag.get_text(" ", strip=True) if pos_tag else ""
+
         audio_url = ""
 
         audio = soup.select_one("source[type='audio/mpeg']")
@@ -1441,9 +1447,11 @@ def cambridge_lookup(request):
         return JsonResponse({
             "pronunciation": pronunciation,
             "audio": audio_url,
+            "definition": definition,
+            "partOfSpeech": part_of_speech,
             "source": "Cambridge"
         })
-
+        
     except Exception:
         return JsonResponse({
             "pronunciation": "",

@@ -1414,6 +1414,9 @@ let wrPronunciation = 'Pronunciation unavailable';
 
 
 wrPartOfSpeech = posMap[wrPartOfSpeech] || wrPartOfSpeech;
+let cambridgeDefinition = 'Definition unavailable';
+let cambridgePartOfSpeech = '';
+
 if (cambridgeData) {
 
     if (cambridgeData.pronunciation) {
@@ -1424,8 +1427,15 @@ if (cambridgeData) {
         cambridgeAudio = cambridgeData.audio;
     }
 
-    console.log("Assigned Cambridge audio:", cambridgeAudio);
+    if (cambridgeData.definition) {
+        cambridgeDefinition = cambridgeData.definition;
+    }
+
+    if (cambridgeData.partOfSpeech) {
+        cambridgePartOfSpeech = cambridgeData.partOfSpeech;
+    }
 }
+
 
       
       if (Array.isArray(mwData) && mwData.length > 0 && typeof mwData[0] === 'object') {
@@ -1457,6 +1467,10 @@ if (cambridgeData) {
       const wrAvailable =
           !!wrDefinition &&
           wrDefinition !== 'Definition unavailable';
+
+      const cambridgeDefAvailable =
+          !!cambridgeDefinition &&
+          cambridgeDefinition !== 'Definition unavailable';
 
 
 
@@ -1814,11 +1828,41 @@ ${wrAvailable ? `
               </div>
  ` : ''}
 
+
+ ${cambridgeDefAvailable ? `
+              <!-- Slide 5: Cambridge -->
+              <div style="min-width:100%; box-sizing:border-box;"
+                   data-source="cambridge.org"
+                   data-link="https://dictionary.cambridge.org/dictionary/english/${word}"
+                   data-full="${(
+                      (cambridgePartOfSpeech ? cambridgePartOfSpeech + ' — ' : '') +
+                      cambridgeDefinition
+                   ).replace(/"/g, '&quot;')}">
+                <div class="ww-section-content">
+                    ${cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : ''}
+                    ${cambridgeDefinition.length > 120
+                        ? cambridgeDefinition.substring(0, 120) + `...<a href="https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(word)}" target="_blank" style="text-decoration:underline; color:#ffffff; font-size:10px;">Read more</a>`
+                        : cambridgeDefinition}
+                </div>
+                <div class="ww-section-label" style="margin-top:8px;">
+                    <a href="https://dictionary.cambridge.org/dictionary/english/${word}"
+                       target="_blank"
+                       style="color:#0d5cab; text-decoration:none; display:block;">
+                       Cambridge Dictionary
+                    </a>
+                    <span style="font-size:8px; color:#555;">
+                        https://dictionary.cambridge.org
+                    </span>
+                </div>
+              </div>
+              ` : ''}
+
+
             </div>
 
             <!-- Dots indicator -->
             <div style="display:flex; justify-content:center; gap:4px; margin-top:4px; margin-bottom:0px;">
-              ${[dictAvailable, mwAvailable, vocabAvailable, wrAvailable].filter(Boolean).map((_, i) =>
+              ${[dictAvailable, mwAvailable, vocabAvailable, wrAvailable, cambridgeDefAvailable].filter(Boolean).map((_, i) =>
                 `<div id="ww-dot-${i}" style="width:4px; height:4px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`
               ).join('')}
             </div>
@@ -2172,7 +2216,8 @@ window.collapsePronunciation = function() {
     'dictionary.com': 'Dictionary.com',
     'merriam-webster.com': 'Merriam-Webster',
     'vocabulary.com': 'Vocabulary.com',
-    'wordreference.com': 'WordReference'
+    'wordreference.com': 'WordReference',
+    'cambridge.org': 'Cambridge'
 }[s.source] || s.source
 }
     </a>

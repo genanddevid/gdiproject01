@@ -1614,9 +1614,12 @@ if (cambridgeData) {
         ${vocabAudio ? `<button class="ww-audio-btn" onclick="playVocabularyAudio()" title="Listen">▶</button>` : ''}
     </div>
     <div class="ww-section-label" style="margin-top:10px;">
-        <div style="font-size:9px;color:#0d5cab;">Vocabulary.com</div>
-        <div style="font-size:8px;color:#555;">${vocabPronLink}</div>
-    </div>
+    <a href="${vocabPronLink}" target="_blank"
+       style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+        Vocabulary.com
+    </a>
+    <div style="font-size:8px;color:#555;">${vocabPronLink}</div>
+</div>
 </div>`;
 
       
@@ -1631,9 +1634,12 @@ if (cambridgeData) {
             ${cambridgeAudio ? `<button class="ww-audio-btn" onclick="playCambridgeAudio()" title="Listen">▶</button>` : ''}
         </div>
         <div class="ww-section-label" style="margin-top:10px;">
-          <div style="font-size:9px;color:#0d5cab;">Cambridge</div>
-          <div style="font-size:8px;color:#555;">${cambridgePronLink}</div>
-        </div>
+  <a href="${cambridgePronLink}" target="_blank"
+     style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+    Cambridge
+  </a>
+  <div style="font-size:8px;color:#555;">${cambridgePronLink}</div>
+</div>
       </div>`;
 
      
@@ -1646,9 +1652,12 @@ if (cambridgeData) {
         ${mwAudio ? `<button class="ww-audio-btn" onclick="playMWAudio()" title="Listen">▶</button>` : ''}
     </div>
     <div class="ww-section-label" style="margin-top:10px;">
-        <div style="font-size:9px;color:#0d5cab;">Merriam-Webster</div>
-        <div style="font-size:8px;color:#555;">${mwPronLink}</div>
-    </div>
+    <a href="${mwPronLink}" target="_blank"
+       style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+        Merriam-Webster
+    </a>
+    <div style="font-size:8px;color:#555;">${mwPronLink}</div>
+</div>
 </div>`;
 
 
@@ -1661,9 +1670,12 @@ if (cambridgeData) {
           ${audioUrl ? `<button class="ww-audio-btn" onclick="playAudio()" title="Listen">▶</button>` : ''}
         </div>
         <div class="ww-section-label" style="margin-top:10px;">
-          <div style="font-size:9px;color:#0d5cab;">Dictionary.com</div>
-          <div style="font-size:8px;color:#555;">${dictPronLink}</div>
-        </div>
+    <a href="${dictPronLink}" target="_blank"
+       style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+        Dictionary.com
+    </a>
+    <div style="font-size:8px;color:#555;">${dictPronLink}</div>
+</div>
       </div>`;
 
       const allPronSlides = [];

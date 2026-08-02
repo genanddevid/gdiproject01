@@ -1862,7 +1862,7 @@ ${wrAvailable ? `
 
             <!-- Dots indicator -->
             <div style="display:flex; justify-content:center; gap:4px; margin-top:4px; margin-bottom:0px;">
-              ${[dictAvailable, mwAvailable, vocabAvailable, wrAvailable, cambridgeDefAvailable].filter(Boolean).map((_, i) =>
+              ${[cambridgeDefAvailable, mwAvailable, vocabAvailable, wrAvailable, dictAvailable].filter(Boolean).map((_, i) =>
                 `<div id="ww-dot-${i}" style="width:4px; height:4px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`
               ).join('')}
             </div>
@@ -2213,11 +2213,11 @@ window.collapsePronunciation = function() {
        style="color:#0d5cab; text-decoration:none; display:block;">
         ${
 {
-    'cambridge.org': 'Cambridge',
+    'dictionary.com': 'Dictionary.com',
     'merriam-webster.com': 'Merriam-Webster',
     'vocabulary.com': 'Vocabulary.com',
     'wordreference.com': 'WordReference',
-    'dictionary.com': 'Dictionary.com'
+    'cambridge.org': 'Cambridge'
 }[s.source] || s.source
 }
     </a>

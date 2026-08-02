@@ -1483,17 +1483,24 @@ if (cambridgeData) {
       const wrFullText = (wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') + (wrDefinition || 'Definition unavailable');
       const cambridgeFullText = (cambridgePartOfSpeech ? cambridgePartOfSpeech + ' — ' : '') + cambridgeDefinition;
 
-      const dictSlideHtml = `
-              <div style="min-width:100%; box-sizing:border-box;" 
-                   data-source="dictionary.com" 
-                   data-link="${dictLink}" 
-                   data-full="${definition.replace(/"/g, '&quot;')}">
-                <div class="ww-section-content">${definition}</div>
+      const cambridgeSlideHtml = `
+              <div style="min-width:100%; box-sizing:border-box;"
+                   data-source="cambridge.org"
+                   data-link="${cambridgeLink}"
+                   data-full="${cambridgeFullText.replace(/"/g, '&quot;')}">
+                <div class="ww-section-content">
+                    ${cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : ''}
+                    ${cambridgeDefinition.length > 120
+                        ? cambridgeDefinition.substring(0, 120) + `...<a href="${cambridgeLink}" target="_blank" style="text-decoration:underline; color:#ffffff; font-size:10px;">Read more</a>`
+                        : cambridgeDefinition}
+                </div>
                 <div class="ww-section-label" style="margin-top:8px;">
-    <a href="${dictLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Dictionary.com</a>
-    <span style="font-size:8px; color:#555;">https://www.dictionary.com</span>
-</div>
+                    <a href="${cambridgeLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Cambridge Dictionary</a>
+                    <span style="font-size:8px; color:#555;">https://dictionary.cambridge.org</span>
+                </div>
               </div>`;
+      
+      
 
       const mwSlideHtml = `
               <div style="min-width:100%; box-sizing:border-box;" 
@@ -1548,30 +1555,27 @@ if (cambridgeData) {
                 </div>
               </div>`;
 
-      const cambridgeSlideHtml = `
-              <div style="min-width:100%; box-sizing:border-box;"
-                   data-source="cambridge.org"
-                   data-link="${cambridgeLink}"
-                   data-full="${cambridgeFullText.replace(/"/g, '&quot;')}">
-                <div class="ww-section-content">
-                    ${cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : ''}
-                    ${cambridgeDefinition.length > 120
-                        ? cambridgeDefinition.substring(0, 120) + `...<a href="${cambridgeLink}" target="_blank" style="text-decoration:underline; color:#ffffff; font-size:10px;">Read more</a>`
-                        : cambridgeDefinition}
-                </div>
+      const dictSlideHtml = `
+              <div style="min-width:100%; box-sizing:border-box;" 
+                   data-source="dictionary.com" 
+                   data-link="${dictLink}" 
+                   data-full="${definition.replace(/"/g, '&quot;')}">
+                <div class="ww-section-content">${definition}</div>
                 <div class="ww-section-label" style="margin-top:8px;">
-                    <a href="${cambridgeLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Cambridge Dictionary</a>
-                    <span style="font-size:8px; color:#555;">https://dictionary.cambridge.org</span>
-                </div>
+    <a href="${dictLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Dictionary.com</a>
+    <span style="font-size:8px; color:#555;">https://www.dictionary.com</span>
+</div>
               </div>`;
 
+      
+
       const allDefSlides = [];
-      if (dictAvailable) allDefSlides.push({ source: 'dictionary.com', link: dictLink, full: definition, html: dictSlideHtml });
+      if (cambridgeDefAvailable) allDefSlides.push({ source: 'cambridge.org', link: cambridgeLink, full: cambridgeFullText, html: cambridgeSlideHtml });
       if (mwAvailable) allDefSlides.push({ source: 'merriam-webster.com', link: mwLink, full: mwFullText, html: mwSlideHtml });
       if (vocabAvailable) allDefSlides.push({ source: 'vocabulary.com', link: vocabLink, full: vocabFullText, html: vocabSlideHtml });
       if (wrAvailable) allDefSlides.push({ source: 'wordreference.com', link: wrLink, full: wrFullText, html: wrSlideHtml });
-      if (cambridgeDefAvailable) allDefSlides.push({ source: 'cambridge.org', link: cambridgeLink, full: cambridgeFullText, html: cambridgeSlideHtml });
-
+      if (dictAvailable) allDefSlides.push({ source: 'dictionary.com', link: dictLink, full: definition, html: dictSlideHtml });
+            
       window._wwAllDefSlides = allDefSlides;
       const visibleDefSlides = allDefSlides.slice(0, 3);
 

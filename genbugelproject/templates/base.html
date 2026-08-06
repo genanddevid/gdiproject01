@@ -1500,9 +1500,9 @@ if (cambridgeData) {
       const cambridgeLink = `https://dictionary.cambridge.org/dictionary/english/${word}`;
 
       const mwFullText = (mwPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${mwPartOfSpeech}</em> — ` : '') + (mwDefinition || '');
-      const vocabFullText = (vocabPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — ` : '') + (vocabDefinition || '');
-      const wrFullText = (wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') + (wrDefinition || 'Definition unavailable');
-      const cambridgeFullText = (cambridgePartOfSpeech ? cambridgePartOfSpeech + ' — ' : '') + cambridgeDefinition;
+      const vocabFullText = (vocabPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — ` : '') + (vocabDefinition || '');      
+      const wrFullText = (wrPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${wrPartOfSpeech}</em> — ` : '') + (wrDefinition || 'Definition unavailable');
+      const cambridgeFullText = (cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : '') + cambridgeDefinition;
 
       const cambridgeSlideHtml = `
               <div style="min-width:100%; box-sizing:border-box;"

@@ -284,9 +284,14 @@ def interests_view(request):
     now = timezone.now()
 
     try:
-        user_interests = UserInterest.objects.filter(user=user)
-        interest_entities = set(ui.entity for ui in user_interests)
-        interest_categories = set(ui.category for ui in user_interests)
+        from datetime import timedelta
+        confirmed_interests = UserInterest.objects.filter(
+            user=user,
+            click_count__gte=2,
+            last_clicked__gte=now - timedelta(days=14)
+        )
+        interest_entities = set(ui.entity for ui in confirmed_interests)
+        interest_categories = set(ui.category for ui in confirmed_interests)
 
         followed_posts = Stream.objects.filter(user=user)
         followed_post_ids = set(s.post_id for s in followed_posts)

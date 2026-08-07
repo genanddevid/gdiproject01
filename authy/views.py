@@ -447,6 +447,7 @@ def follow(request, username, option):
 
 def discover_view(request):
     from post.models import SemanticTag, UserInterest
+    from django.utils import timezone
     
     if not request.user.is_authenticated:
         posts = Post.objects.all().select_related(
@@ -460,12 +461,17 @@ def discover_view(request):
     user = request.user
     
     # ONE query — get user interests
-    user_interests = UserInterest.objects.filter(user=user)
-    interest_entities = set(ui.entity for ui in user_interests)
-    interest_categories = set(ui.category for ui in user_interests)
-    interest_parent_categories = set(ui.parent_category for ui in user_interests if ui.parent_category)
-    interest_grandparent_categories = set(ui.grandparent_category for ui in user_interests if ui.grandparent_category)
-    
+    from datetime import timedelta
+    now = timezone.now()
+    confirmed_interests = UserInterest.objects.filter(
+        user=user,
+        click_count__gte=2,
+        last_clicked__gte=now - timedelta(days=14)
+    )
+    interest_entities = set(ui.entity for ui in confirmed_interests)
+    interest_categories = set(ui.category for ui in confirmed_interests)
+    interest_parent_categories = set(ui.parent_category for ui in confirmed_interests if ui.parent_category)
+    interest_grandparent_categories = set(ui.grandparent_category for ui in confirmed_interests if ui.grandparent_category)
     # ONE query — followed writers
     followed_user_ids = set(
         Follow.objects.filter(follower=user).values_list('following_id', flat=True)
@@ -500,10 +506,22 @@ def discover_view(request):
         followed_post_ids
     )
     
+    # Self-adjusting quality floor — median likes across all posts, capped low
+    from django.db.models import Avg
+    all_likes = list(Post.objects.values_list('likes', flat=True))
+    if all_likes:
+        sorted_likes = sorted(all_likes)
+        mid = len(sorted_likes) // 2
+        median_likes = sorted_likes[mid]
+    else:
+        median_likes = 0
+    quality_floor = max(0, median_likes // 2)  # half the median, so it doesn't over-filter
+
     # ONE query — get discover posts with select_related
     discover_posts = Post.objects.exclude(
         id__in=all_excluded_ids
-    ).exclude(user=user).select_related('user__profile')
+    ).exclude(user=user).filter(likes__gte=quality_floor).select_related('user__profile')
+
     
     # ONE query — pre-fetch all semantic tags for discover posts
     discover_post_ids = [p.id for p in discover_posts]

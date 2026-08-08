@@ -530,7 +530,10 @@ function openPostModal(postId, event) {
 
 function closePostModal() {
     document.getElementById("postModal").style.display = "none";
-    document.getElementById("modalBody").innerHTML = "";
+    const modalBody = document.getElementById("modalBody");
+    modalBody.innerHTML = "";
+    modalBody.style.transform = "";
+    modalBody.style.transition = "";
     document.body.classList.remove("no-scroll");
     document.documentElement.classList.remove("no-scroll"); 
     currentPostIndex = -1;

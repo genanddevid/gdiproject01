@@ -203,38 +203,116 @@
    
   let touchStartX = 0;
 let touchStartY = 0;
+let currentDragX = 0;
+let isDragging = false;
+let dragDirection = null;
+let isSwipeAnimating = false;
 
 const modal = document.getElementById('postModal');
 
-// Capture start position
 modal.addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].clientX;
-  touchStartY = e.changedTouches[0].clientY;
-});
+    if (isSwipeAnimating) return;
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+    currentDragX = 0;
+    isDragging = true;
+    dragDirection = null;
+}, { passive: true });
 
-// Capture end position and handle swipe
-modal.addEventListener('touchend', (e) => {
-  const touchEndX = e.changedTouches[0].clientX;
-  const touchEndY = e.changedTouches[0].clientY;
+modal.addEventListener('touchmove', (e) => {
+    if (!isDragging || isSwipeAnimating) return;
 
-  handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
-});
+    const touch = e.changedTouches[0];
+    const diffX = touch.clientX - touchStartX;
+    const diffY = touch.clientY - touchStartY;
 
-// Swipe detection with vertical scroll check
-function handleSwipeGesture(startX, startY, endX, endY) {
-  const swipeThreshold = 50; // Minimum horizontal distance to trigger
-  const diffX = endX - startX;
-  const diffY = endY - startY;
-
-  // Only trigger if horizontal movement is greater than vertical
-  if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
-    if (diffX > 0) {
-      showPreviousPost(); // Swipe right
-    } else {
-      showNextPost(); // Swipe left
+    if (dragDirection === null) {
+        if (Math.abs(diffX) < 8 && Math.abs(diffY) < 8) return;
+        dragDirection = (Math.abs(diffX) > Math.abs(diffY) * 1.5) ? 'horizontal' : 'vertical';
     }
-  }
+
+    if (dragDirection !== 'horizontal') return;
+
+    e.preventDefault();
+
+    const atFirstPost = currentPostIndex <= 0;
+    const atLastPost = currentPostIndex >= allPostIds.length - 1;
+    let dragX = diffX;
+    if ((diffX > 0 && atFirstPost) || (diffX < 0 && atLastPost)) {
+        dragX = diffX * 0.3;
+    }
+
+    currentDragX = dragX;
+    const modalBody = document.getElementById('modalBody');
+    modalBody.style.transition = 'none';
+    modalBody.style.transform = `translateX(${dragX}px)`;
+}, { passive: false });
+
+modal.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+
+    if (dragDirection !== 'horizontal') {
+        dragDirection = null;
+        return;
+    }
+
+    const modalBody = document.getElementById('modalBody');
+    const threshold = 80;
+    const atFirstPost = currentPostIndex <= 0;
+    const atLastPost = currentPostIndex >= allPostIds.length - 1;
+
+    const wentPrevious = currentDragX > threshold && !atFirstPost;
+    const wentNext = currentDragX < -threshold && !atLastPost;
+
+    if (wentPrevious) {
+        animateSwipeTransition(modalBody, 'previous');
+    } else if (wentNext) {
+        animateSwipeTransition(modalBody, 'next');
+    } else {
+        modalBody.style.transition = 'transform 0.25s ease';
+        modalBody.style.transform = 'translateX(0)';
+    }
+
+    dragDirection = null;
+}, { passive: true });
+
+function playSwipeClick() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 600;
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+    } catch (e) {}
 }
+
+function animateSwipeTransition(modalBody, direction) {
+    isSwipeAnimating = true;
+    const exitX = direction === 'next' ? '-100%' : '100%';
+
+    modalBody.style.transition = 'transform 0.2s ease-out';
+    modalBody.style.transform = `translateX(${exitX})`;
+
+    playSwipeClick();
+
+    setTimeout(() => {
+        if (direction === 'next') {
+            showNextPost();
+        } else {
+            showPreviousPost();
+        }
+        modalBody.style.transition = 'none';
+        modalBody.style.transform = 'translateX(0)';
+        isSwipeAnimating = false;
+    }, 200);
+}
+
   
 let allPostIds = []; // Global array to store all post IDs in order
 let currentPostIndex = -1; // Global variable to store the index of the currently viewed post
@@ -444,7 +522,10 @@ function openPostModal(postId, event) {
 
 function closePostModal() {
     document.getElementById("postModal").style.display = "none";
-    document.getElementById("modalBody").innerHTML = "";
+    const modalBody = document.getElementById("modalBody");
+    modalBody.innerHTML = "";
+    modalBody.style.transform = "";
+    modalBody.style.transition = "";
     document.body.classList.remove("no-scroll");
     document.documentElement.classList.remove("no-scroll"); 
     currentPostIndex = -1;

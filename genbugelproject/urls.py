@@ -26,6 +26,7 @@ from post.views import NarrativeBuilder, interests_view, improve_writing, review
 from authy import views as authy_views 
 from post.views import NarrativeBuilder, interests_view
 from authy.views import UserProfile, follow, discover_view
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -57,6 +58,7 @@ urlpatterns = [
     path('wordreference-lookup/', wordreference_lookup, name='wordreference_lookup'),
     path('cambridge-lookup/', cambridge_lookup, name='cambridge_lookup'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
+    path('favicon.ico', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
     
     path('<username>/', UserProfile, name='profile'),
     path('<username>/saved', UserProfile, name='profilefavorites'),

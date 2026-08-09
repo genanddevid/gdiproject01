@@ -399,7 +399,7 @@ function fixCommentScroll() {
     }
 }
 
-function loadPostContent(postId) {
+function loadPostContent(postId, callback) {
     if (postCache[postId]) {
         document.getElementById("modalBody").innerHTML = postCache[postId];
         initEmbedsIndex();

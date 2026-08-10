@@ -1237,62 +1237,80 @@ def delete_ad(request, ad_id):
 
 
 
+
 def writeword_explain(request):
     if request.method == 'POST':
         try:
+            import json
+            import os
+            from groq import Groq
+            from django.http import JsonResponse
+
             data = json.loads(request.body)
             word = data.get('word', '').strip()
-            
+
             if not word:
                 return JsonResponse({'error': 'No word provided'}, status=400)
-            
-            api_key = os.environ.get('DEEPSEEK_API_KEY')
+
+            api_key = os.environ.get('GROQ_API_KEY')
             if not api_key:
-                return JsonResponse({'error': 'API key not configured'}, status=500)
-            
-            response = requests.post(
-                'https://api.deepseek.com/chat/completions',
-                headers={
-                    'Authorization': f'Bearer {api_key}',
-                    'Content-Type': 'application/json',
-                },
-                json={
-                    'model': 'deepseek-v4-flash',
-                    'messages': [
-                        {
-                            "role": "system",
-                            "content": """You are a concise encyclopedia. When given a name or entity, 
-provide exactly 1-2 sentences that are factual, neutral and informative.
-Cover who or what it is, why it is notable, and one key fact.
-Return only the explanation — no preamble, no labels."""
-                        },
-                        {
-                            "role": "user",
-                            "content": f"Explain: {word}"
-                        }
-                    ],
-                    'temperature': 0.3,
-                    'max_tokens': 300,
-                    'thinking': {'type': 'disabled'},
-                },
-                timeout=15,
+                return JsonResponse(
+                    {'error': 'Groq API key not configured'},
+                    status=500
+                )
+
+            client = Groq(api_key=api_key)
+
+            response = client.chat.completions.create(
+                model="qwen/qwen3-32b",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a concise encyclopedia. When given a "
+                            "name or entity, provide exactly 1-2 sentences "
+                            "that are factual, neutral, and informative. "
+                            "Cover who or what it is, why it is notable, "
+                            "and one key fact. Return only the explanation — "
+                            "no preamble, no labels."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Explain: {word}"
+                    }
+                ],
+                reasoning_effort="none",
+                temperature=0.3,
+                max_tokens=300,
             )
 
-            if response.status_code != 200:
-                print(f"DeepSeek explain failed for '{word}': {response.status_code} {response.text}")
-                return JsonResponse({'error': f'DeepSeek returned {response.status_code}'}, status=500)
+            explanation = (
+                response.choices[0].message.content or ''
+            ).strip()
 
-            result = response.json()
-            explanation = (result['choices'][0]['message']['content'] or '').strip()
             if not explanation:
-                explanation = f'No additional information found for "{word}".'
+                explanation = (
+                    f'No additional information found for "{word}".'
+                )
+
             return JsonResponse({'explanation': explanation})
+
         except Exception as e:
             import traceback
             print(f"Writeword explain failed for '{word}': {e}")
             traceback.print_exc()
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+            return JsonResponse(
+                {'error': str(e)},
+                status=500
+            )
+
+    return JsonResponse(
+        {'error': 'Method not allowed'},
+        status=405
+    )
+
 
 
 

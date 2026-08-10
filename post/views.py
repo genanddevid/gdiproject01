@@ -1249,7 +1249,7 @@ def writeword_explain(request):
             
             client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
             completion = client.chat.completions.create(
-                model="openai/gpt-oss-120b",
+                model="qwen/qwen3.6-27b",
                 messages=[
                     {
                         "role": "system",
@@ -1264,8 +1264,7 @@ Return only the explanation — no preamble, no labels."""
                     }
                 ],
                 temperature=0.3,
-                max_tokens=120,
-                reasoning_effort="none",
+                max_completion_tokens=120,
             )
             explanation = completion.choices[0].message.content.strip()
             return JsonResponse({'explanation': explanation})

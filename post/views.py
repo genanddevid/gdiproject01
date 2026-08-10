@@ -1280,7 +1280,7 @@ def writeword_explain(request):
                         "content": f"Explain: {word}"
                     }
                 ],
-                reasoning_effort="none",
+                extra_body={"enable_thinking": False},
                 temperature=0.3,
                 max_tokens=300,
             )

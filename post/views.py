@@ -1280,10 +1280,10 @@ def writeword_explain(request):
                         "content": f"Explain: {word}"
                     }
                 ],
-                extra_body={"enable_thinking": False},
                 temperature=0.3,
                 max_tokens=300,
             )
+            
 
             explanation = (
                 response.choices[0].message.content or ''

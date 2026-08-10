@@ -1238,13 +1238,13 @@ def delete_ad(request, ad_id):
 
 
 
+
 def writeword_explain(request):
     if request.method == 'POST':
         try:
             import json
             import os
             from groq import Groq
-            from django.http import JsonResponse
 
             data = json.loads(request.body)
             word = data.get('word', '').strip()
@@ -1262,38 +1262,29 @@ def writeword_explain(request):
             client = Groq(api_key=api_key)
 
             response = client.chat.completions.create(
-                model="qwen/qwen3-32b",
+                model="llama-3.1-8b-instant",
                 messages=[
                     {
                         "role": "system",
-                        "content": (
-                            "You are a concise encyclopedia. When given a "
-                            "name or entity, provide exactly 1-2 sentences "
-                            "that are factual, neutral, and informative. "
-                            "Cover who or what it is, why it is notable, "
-                            "and one key fact. Return only the explanation — "
-                            "no preamble, no labels."
-                        )
+                        "content": """You are a concise encyclopedia. When given a name or entity, provide exactly 1-2 sentences that are factual, neutral and informative.
+Cover who or what it is, why it is notable, and one key fact.
+Return only the explanation — no preamble, no labels."""
                     },
                     {
                         "role": "user",
                         "content": f"Explain: {word}"
                     }
                 ],
-                reasoning_effort="none",
-                temperature=0.7,
+                temperature=0.3,
                 max_tokens=300,
             )
-            
 
             explanation = (
                 response.choices[0].message.content or ''
             ).strip()
 
             if not explanation:
-                explanation = (
-                    f'No additional information found for "{word}".'
-                )
+                explanation = f'No additional information found for "{word}".'
 
             return JsonResponse({'explanation': explanation})
 
@@ -1311,6 +1302,8 @@ def writeword_explain(request):
         {'error': 'Method not allowed'},
         status=405
     )
+
+
 
 
 

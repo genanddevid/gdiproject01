@@ -1263,8 +1263,12 @@ Return only the explanation — no preamble, no labels."""
                         "content": f"Explain: {word}"
                     }
                 ],
-                temperature=0.3,
+                temperature=0.7,
+                top_p=0.80,
+                top_k=20,
+                presence_penalty=1.5,
                 max_completion_tokens=120,
+                reasoning_effort="none",
             )
             explanation = completion.choices[0].message.content.strip()
             return JsonResponse({'explanation': explanation})

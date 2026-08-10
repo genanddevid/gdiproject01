@@ -1275,8 +1275,8 @@ Return only the explanation — no preamble, no labels."""
                         "content": f"Explain: {word}"
                     }
                 ],
-                temperature=0.3,
-                max_tokens=300,
+                temperature=0.2,
+                max_tokens=80,
             )
 
             explanation = (

@@ -884,34 +884,33 @@ def remove_writer_entity(request, post_id):
 
 def auto_tag_post(post):
     try:
-        from groq import Groq
         from post.models import SemanticTag
-
-        client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
-        completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {
-                    "role": "system",
-                    "content": """Extract named entities from this headline and return ONLY valid JSON. No explanations, no extra text.
-
+        api_key = os.environ.get('DEEPSEEK_API_KEY')
+        response = requests.post(
+            'https://api.deepseek.com/chat/completions',
+            headers={
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json',
+            },
+            json={
+                'model': 'deepseek-v4-flash',
+                'messages': [
+                    {
+                        "role": "system",
+                        "content": """Extract named entities from this headline and return ONLY valid JSON. No explanations, no extra text.
 Classify each entity using a hybrid ontology:
-
 1. HIERARCHY (strict parent-child chain, stop when next level becomes artificial):
    Daniel Dubois → Heavyweight Boxing → Boxing → Combat Sports → Sports
    Cristiano Ronaldo → Football → Sports
    Jerome Powell → Monetary Policy → Central Banking → Economics
-
 2. SEMANTIC LABELS (flat, non-hierarchical — profession, identity, domain):
    Elon Musk → labels: Entrepreneur, Tech Billionaire, AI Industry, Space Technology
    Daniel Dubois → labels: Professional Boxer, Heavyweight Athlete
-
 Rules:
 - Extract from headline only
 - NEVER use generic labels like Person, Individual, Human, Thing, Place
 - Allow uneven depth — don't force equal levels
 - One entity can belong to multiple semantic labels simultaneously
-
 Return ONLY this JSON structure:
 {
   "tags": [
@@ -925,23 +924,29 @@ Return ONLY this JSON structure:
   ]
 }
 Maximum 8 entities."""
-                },
-                {
-                    "role": "user",
-                    "content": f"Headline: {post.caption}"
-                }
-            ],
-            temperature=0.3,
-            max_tokens=600,
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Headline: {post.caption}"
+                    }
+                ],
+                'temperature': 0.3,
+                'max_tokens': 600,
+                'thinking': {'type': 'disabled'},
+            },
+            timeout=15,
         )
 
-        response_text = completion.choices[0].message.content.strip()
+        if response.status_code != 200:
+            print(f"Tagging failed for {post.id}: DeepSeek returned {response.status_code} {response.text}")
+            return
+
+        result = response.json()
+        response_text = (result['choices'][0]['message']['content'] or '').strip()
         if '```' in response_text:
             response_text = response_text.split('```')[1].replace('json', '').strip()
-
         data = json.loads(response_text)
         SemanticTag.objects.filter(post=post).delete()
-
         for tag in data.get('tags', []):
             labels = tag.get('semantic_labels', [])
             SemanticTag.objects.create(
@@ -957,6 +962,7 @@ Maximum 8 entities."""
         import traceback
         print(f"Tagging failed for {post.id}: {e}")
         traceback.print_exc()
+
 
 
 
@@ -1015,15 +1021,12 @@ def improve_writing(request):
 def review_writing(request):
     if request.method == 'POST':
         import json
-        from groq import Groq
         try:
             data = json.loads(request.body)
             original_text = data.get('text', '')
             category = data.get('category', '')
-
             if not original_text.strip():
                 return JsonResponse({'error': 'No text provided'}, status=400)
-
             category_prompts = {
                 'grammar': """You are a writing tutor reviewing GRAMMAR only. Ignore vocabulary, clarity, organization and style.
 Find grammar mistakes (verb tense, subject-verb agreement, punctuation, sentence structure).
@@ -1031,62 +1034,71 @@ For each, quote the exact original sentence, give the corrected version, explain
 Return ONLY valid JSON, no other text:
 {"issues": [{"original": "exact quoted sentence", "suggestion": "corrected sentence", "why": "brief reason"}]}
 Maximum 6 issues. If none exist, return {"issues": []}.""",
-
                 'vocabulary': """You are a writing tutor reviewing VOCABULARY only. Ignore grammar, clarity, organization and style.
 Find weak, vague, or repeated word choices. Flag words used too often and suggest stronger alternatives.
 Return ONLY valid JSON, no other text:
 {"issues": [{"original": "exact quoted phrase", "suggestion": "alternative word(s)", "why": "brief reason"}]}
 Maximum 6 issues. If vocabulary is already strong, return {"issues": []}.""",
-
                 'clarity': """You are a writing tutor reviewing CLARITY only. Ignore grammar, vocabulary, organization and style.
 Find sentences that are confusing, ambiguous, or hard to follow.
 Return ONLY valid JSON, no other text:
 {"issues": [{"original": "exact quoted sentence", "suggestion": "clearer rewrite", "why": "brief reason"}]}
 Maximum 6 issues. If already clear, return {"issues": []}.""",
-
                 'organization': """You are a writing tutor reviewing ORGANIZATION AND FLOW only. Ignore grammar, vocabulary, clarity and style.
 Look at how ideas are ordered and connected. Flag misplaced passages or missing transitions.
 Return ONLY valid JSON, no other text:
 {"issues": [{"original": "exact quoted passage", "suggestion": "reorganization suggestion", "why": "brief reason"}]}
 Maximum 6 issues. If already well organized, return {"issues": []}.""",
-
                 'style': """You are a writing tutor reviewing STYLE only. Ignore grammar, vocabulary, clarity and organization.
 Look at tone, voice, and engagement for a news-style article.
 Return ONLY valid JSON, no other text:
 {"issues": [{"original": "exact quoted sentence", "suggestion": "stylistic rewrite", "why": "brief reason"}]}
 Maximum 6 issues. If style is already strong, return {"issues": []}."""
             }
-
             system_prompt = category_prompts.get(category)
             if not system_prompt:
                 return JsonResponse({'error': 'Invalid category'}, status=400)
 
-            api_key = os.environ.get('GROQ_API_KEY')
+            api_key = os.environ.get('DEEPSEEK_API_KEY')
             if not api_key:
                 return JsonResponse({'error': 'API key not configured'}, status=500)
 
-            client = Groq(api_key=api_key)
-            completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": original_text}
-                ],
-                temperature=0.3,
-                max_tokens=1200,
+            response = requests.post(
+                'https://api.deepseek.com/chat/completions',
+                headers={
+                    'Authorization': f'Bearer {api_key}',
+                    'Content-Type': 'application/json',
+                },
+                json={
+                    'model': 'deepseek-v4-flash',
+                    'messages': [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": original_text}
+                    ],
+                    'temperature': 0.3,
+                    'max_tokens': 1200,
+                    'thinking': {'type': 'disabled'},
+                },
+                timeout=20,
             )
 
-            response_text = completion.choices[0].message.content.strip()
+            if response.status_code != 200:
+                print(f"Review writing failed: {response.status_code} {response.text}")
+                return JsonResponse({'error': f'DeepSeek returned {response.status_code}'}, status=500)
+
+            result = response.json()
+            response_text = (result['choices'][0]['message']['content'] or '').strip()
             if '```' in response_text:
                 response_text = response_text.split('```')[1].replace('json', '').strip()
-
-            result = json.loads(response_text)
-            return JsonResponse({'issues': result.get('issues', [])})
-
+            result_data = json.loads(response_text)
+            return JsonResponse({'issues': result_data.get('issues', [])})
         except Exception as e:
+            import traceback
+            print(f"Review writing failed: {e}")
+            traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
-
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
 
 
@@ -1159,33 +1171,45 @@ def ad_dashboard(request):
                 save=False
             )
             
-            # Extract entities using Groq
+            # Extract entities using DeepSeek
             try:
-                from groq import Groq
-                client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
-                completion = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": """Extract relevant entities and topics from this ad description.
+                api_key = os.environ.get('DEEPSEEK_API_KEY')
+                response = requests.post(
+                    'https://api.deepseek.com/chat/completions',
+                    headers={
+                        'Authorization': f'Bearer {api_key}',
+                        'Content-Type': 'application/json',
+                    },
+                    json={
+                        'model': 'deepseek-v4-flash',
+                        'messages': [
+                            {
+                                "role": "system",
+                                "content": """Extract relevant entities and topics from this ad description.
 Return ONLY a comma-separated list of entities/topics. No other text.
 Example: 'boxing gloves, fitness, sports equipment, training'
 Maximum 6 entities."""
-                        },
-                        {
-                            "role": "user",
-                            "content": f"Ad description: {ad.description}"
-                        }
-                    ],
-                    temperature=0.3,
-                    max_tokens=100,
+                            },
+                            {
+                                "role": "user",
+                                "content": f"Ad description: {ad.description}"
+                            }
+                        ],
+                        'temperature': 0.3,
+                        'max_tokens': 150,
+                        'thinking': {'type': 'disabled'},
+                    },
+                    timeout=15,
                 )
-                ad.entities = completion.choices[0].message.content.strip()
+                if response.status_code == 200:
+                    result = response.json()
+                    ad.entities = (result['choices'][0]['message']['content'] or '').strip()
+                else:
+                    print(f"Ad entity extraction failed: {response.status_code} {response.text}")
+                    ad.entities = ''
             except Exception as e:
                 print(f"Ad entity extraction failed: {e}")
-                ad.entities = ''
-            
+                ad.entities = ''            
             ad.save()
             return redirect('ad_dashboard')
     else:

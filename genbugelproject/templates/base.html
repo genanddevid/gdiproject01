@@ -1197,13 +1197,6 @@ document.addEventListener('focusin', function(e) {
     };
     return configs[lang] || configs.vi;
   }
-  function fetchWithTimeout(url, options, ms) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), ms);
-    return fetch(url, { ...options, signal: controller.signal })
-      .then(r => { clearTimeout(timeoutId); return r; })
-      .catch(err => { clearTimeout(timeoutId); throw err; });
-  }
 
   function getCookie(name) {
     let cookieValue = null;
@@ -1305,22 +1298,22 @@ document.addEventListener('selectionchange', function() {
     const word = selectedWord.toLowerCase();
 
     Promise.all([
-  fetchWithTimeout(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|${getLangConfig(currentLang).mmCode}`, {}, 8000)
+  fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|${getLangConfig(currentLang).mmCode}`)
     .then(r => r.json()).catch(() => null),
 
-  fetchWithTimeout(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`, {}, 8000)
+  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
     .then(r => r.json()).catch(() => null),
 
-  fetchWithTimeout(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${encodeURIComponent(word)}?key=35a925b3-314a-4dd8-b123-0ee55bce39bc`, {}, 8000)
+  fetch(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${encodeURIComponent(word)}?key=35a925b3-314a-4dd8-b123-0ee55bce39bc`)
     .then(r => r.json()).catch(() => null),
 
-  fetchWithTimeout(`/vocabulary-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
+  fetch(`/vocabulary-lookup/?word=${encodeURIComponent(word)}`)
     .then(r => r.json()).catch(() => null),
 
-  fetchWithTimeout(`/wordreference-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
+  fetch(`/wordreference-lookup/?word=${encodeURIComponent(word)}`)
     .then(r => r.json()).catch(() => null),
 
-fetchWithTimeout(`/cambridge-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
+fetch(`/cambridge-lookup/?word=${encodeURIComponent(word)}`)
     .then(r => r.json()).catch(() => null)
 
 ]).then(([translationData, dictData, mwData, vocabData, wrData, cambridgeData]) => {

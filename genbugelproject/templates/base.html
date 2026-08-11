@@ -1820,16 +1820,23 @@ ${visiblePronSlides.map(s => s.html).join('')}
       `;
 
       // If entity — fetch AI explanation
+      
+
+
       if (isEntity) {
+        const wwController = new AbortController();
+        const wwTimeoutId = setTimeout(() => wwController.abort(), 20000);
+
         fetch('/writeword-explain/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken'),
           },
-          body: JSON.stringify({ word: selectedWord })
+          body: JSON.stringify({ word: selectedWord }),
+          signal: wwController.signal
         })
-        .then(r => r.json())
+        .then(r => { clearTimeout(wwTimeoutId); return r.json(); })
         .then(data => {
           const aiSection = document.getElementById('ww-ai-section');
           if (aiSection) {
@@ -1841,11 +1848,12 @@ ${visiblePronSlides.map(s => s.html).join('')}
           }
         })
         .catch(() => {
+          clearTimeout(wwTimeoutId);
           const aiSection = document.getElementById('ww-ai-section');
           if (aiSection) {
             aiSection.innerHTML = `
               <div class="ww-divider"></div>
-              <div class="ww-section-content" style="color:#555;">Could not load explanation.</div>
+              <div class="ww-section-content" style="color:#555;">Could not load explanation. Tap the word again to retry.</div>
             `;
           }
         });

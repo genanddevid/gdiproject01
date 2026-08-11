@@ -1263,14 +1263,15 @@ def delete_ad(request, ad_id):
 
 
 
-def writeword_explain(request):
+def improve_writing(request):
     if request.method == 'POST':
+        import json
         try:
             data = json.loads(request.body)
-            word = data.get('word', '').strip()
+            original_text = data.get('text', '')
             
-            if not word:
-                return JsonResponse({'error': 'No word provided'}, status=400)
+            if not original_text.strip():
+                return JsonResponse({'error': 'No text provided'}, status=400)
             
             api_key = os.environ.get('DEEPSEEK_API_KEY')
             if not api_key:
@@ -1287,38 +1288,39 @@ def writeword_explain(request):
                     'messages': [
                         {
                             "role": "system",
-                            "content": """You are a concise encyclopedia. When given a name or entity, 
-provide exactly 1-2 sentences that are factual, neutral and informative.
-Cover who or what it is, why it is notable, and one key fact.
-Return only the explanation — no preamble, no labels."""
+                            "content": """You are an expert editor for Baytruyen, a news-style writing platform. 
+                            Improve the writer's text while preserving their voice, facts and meaning.
+                            - Fix grammar and spelling errors
+                            - Improve sentence structure and flow
+                            - Make it read like a professional news article
+                            - Keep the same facts and story
+                            - Return only the improved text, no explanations"""
                         },
                         {
-                            "role": "user",
-                            "content": f"Explain: {word}"
+                            "role": "user", 
+                            "content": f"Please improve this writing:\n\n{original_text}"
                         }
                     ],
-                    'temperature': 0.3,
-                    'max_tokens': 300,
+                    'temperature': 0.7,
+                    'max_tokens': 2000,
                     'thinking': {'type': 'disabled'},
                 },
-                timeout=15,
+                timeout=20,
             )
 
             if response.status_code != 200:
-                print(f"DeepSeek explain failed for '{word}': {response.status_code} {response.text}")
+                print(f"Improve writing failed: {response.status_code} {response.text}")
                 return JsonResponse({'error': f'DeepSeek returned {response.status_code}'}, status=500)
 
             result = response.json()
-            explanation = (result['choices'][0]['message']['content'] or '').strip()
-            if not explanation:
-                explanation = f'No additional information found for "{word}".'
-            return JsonResponse({'explanation': explanation})
+            improved_text = (result['choices'][0]['message']['content'] or '').strip()
+            return JsonResponse({'improved': improved_text})
+            
         except Exception as e:
-            import traceback
-            print(f"Writeword explain failed for '{word}': {e}")
-            traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
+    
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
 
 

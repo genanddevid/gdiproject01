@@ -970,7 +970,6 @@ Maximum 8 entities."""
 def improve_writing(request):
     if request.method == 'POST':
         import json
-        from groq import Groq
         try:
             data = json.loads(request.body)
             original_text = data.get('text', '')
@@ -978,41 +977,54 @@ def improve_writing(request):
             if not original_text.strip():
                 return JsonResponse({'error': 'No text provided'}, status=400)
             
-            api_key = os.environ.get('GROQ_API_KEY')
+            api_key = os.environ.get('DEEPSEEK_API_KEY')
             if not api_key:
                 return JsonResponse({'error': 'API key not configured'}, status=500)
             
-            client = Groq(api_key=api_key)
-            
-            completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": """You are an expert editor for Baytruyen, a news-style writing platform. 
-                        Improve the writer's text while preserving their voice, facts and meaning.
-                        - Fix grammar and spelling errors
-                        - Improve sentence structure and flow
-                        - Make it read like a professional news article
-                        - Keep the same facts and story
-                        - Return only the improved text, no explanations"""
-                    },
-                    {
-                        "role": "user", 
-                        "content": f"Please improve this writing:\n\n{original_text}"
-                    }
-                ],
-                temperature=0.7,
-                max_tokens=2000,
+            response = requests.post(
+                'https://api.deepseek.com/chat/completions',
+                headers={
+                    'Authorization': f'Bearer {api_key}',
+                    'Content-Type': 'application/json',
+                },
+                json={
+                    'model': 'deepseek-v4-flash',
+                    'messages': [
+                        {
+                            "role": "system",
+                            "content": """You are an expert editor for Baytruyen, a news-style writing platform. 
+                            Improve the writer's text while preserving their voice, facts and meaning.
+                            - Fix grammar and spelling errors
+                            - Improve sentence structure and flow
+                            - Make it read like a professional news article
+                            - Keep the same facts and story
+                            - Return only the improved text, no explanations"""
+                        },
+                        {
+                            "role": "user", 
+                            "content": f"Please improve this writing:\n\n{original_text}"
+                        }
+                    ],
+                    'temperature': 0.7,
+                    'max_tokens': 2000,
+                    'thinking': {'type': 'disabled'},
+                },
+                timeout=20,
             )
-            
-            improved_text = completion.choices[0].message.content
+
+            if response.status_code != 200:
+                print(f"Improve writing failed: {response.status_code} {response.text}")
+                return JsonResponse({'error': f'DeepSeek returned {response.status_code}'}, status=500)
+
+            result = response.json()
+            improved_text = (result['choices'][0]['message']['content'] or '').strip()
             return JsonResponse({'improved': improved_text})
             
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
 
 
@@ -1263,15 +1275,14 @@ def delete_ad(request, ad_id):
 
 
 
-def improve_writing(request):
+def writeword_explain(request):
     if request.method == 'POST':
-        import json
         try:
             data = json.loads(request.body)
-            original_text = data.get('text', '')
+            word = data.get('word', '').strip()
             
-            if not original_text.strip():
-                return JsonResponse({'error': 'No text provided'}, status=400)
+            if not word:
+                return JsonResponse({'error': 'No word provided'}, status=400)
             
             api_key = os.environ.get('DEEPSEEK_API_KEY')
             if not api_key:
@@ -1288,39 +1299,38 @@ def improve_writing(request):
                     'messages': [
                         {
                             "role": "system",
-                            "content": """You are an expert editor for Baytruyen, a news-style writing platform. 
-                            Improve the writer's text while preserving their voice, facts and meaning.
-                            - Fix grammar and spelling errors
-                            - Improve sentence structure and flow
-                            - Make it read like a professional news article
-                            - Keep the same facts and story
-                            - Return only the improved text, no explanations"""
+                            "content": """You are a concise encyclopedia. When given a name or entity, 
+provide exactly 1-2 sentences that are factual, neutral and informative.
+Cover who or what it is, why it is notable, and one key fact.
+Return only the explanation — no preamble, no labels."""
                         },
                         {
-                            "role": "user", 
-                            "content": f"Please improve this writing:\n\n{original_text}"
+                            "role": "user",
+                            "content": f"Explain: {word}"
                         }
                     ],
-                    'temperature': 0.7,
-                    'max_tokens': 2000,
+                    'temperature': 0.3,
+                    'max_tokens': 300,
                     'thinking': {'type': 'disabled'},
                 },
-                timeout=20,
+                timeout=15,
             )
 
             if response.status_code != 200:
-                print(f"Improve writing failed: {response.status_code} {response.text}")
+                print(f"DeepSeek explain failed for '{word}': {response.status_code} {response.text}")
                 return JsonResponse({'error': f'DeepSeek returned {response.status_code}'}, status=500)
 
             result = response.json()
-            improved_text = (result['choices'][0]['message']['content'] or '').strip()
-            return JsonResponse({'improved': improved_text})
-            
+            explanation = (result['choices'][0]['message']['content'] or '').strip()
+            if not explanation:
+                explanation = f'No additional information found for "{word}".'
+            return JsonResponse({'explanation': explanation})
         except Exception as e:
+            import traceback
+            print(f"Writeword explain failed for '{word}': {e}")
+            traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
-    
     return JsonResponse({'error': 'Method not allowed'}, status=405)
-
 
 
 

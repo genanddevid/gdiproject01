@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  .ca-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+  @media (max-width: 768px) { .ca-container { padding: 12px; } }
+  .ca-card { border: 1px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: white; }
+  .ca-msg-success { background: #eafaf0; color: #1a7a3a; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; }
+  .ca-msg-error { background: #fdecea; color: #a41c1c; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; }
+</style>
+
+<div class="ca-container">
+  <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 8px;">CA Dashboard</h2>
+  <p style="font-size: 13px; color: #888; margin-bottom: 24px;">{{ cohort.institution_name|default:"Your cohort" }} • {{ members.count }} / 10 members</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="{% if message.tags == 'success' %}ca-msg-success{% else %}ca-msg-error{% endif %}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="ca-card">
+    <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Add a member</h3>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="add">
+      <div style="display: flex; gap: 8px;">
+        <input type="email" name="email" placeholder="student@example.edu" required
+          style="flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+        <button type="submit" style="background: #000; color: white; border: none; border-radius: 6px; padding: 10px 18px; font-size: 13px; font-weight: 600; cursor: pointer;">Add</button>
+      </div>
+    </form>
+  </div>
+
+  <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Your cohort</h3>
+  {% for member in members %}
+    <div class="ca-card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <div>
+        <p style="font-size: 14px; font-weight: 500; margin-bottom: 2px;">{{ member.email }}</p>
+        <p style="font-size: 11px; color: #888;">{% if member.member_user %}Joined{% else %}Invited — not yet signed up{% endif %}</p>
+      </div>
+      <form method="post" onsubmit="return confirm('Remove {{ member.email }} from your cohort?');">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="remove">
+        <input type="hidden" name="member_id" value="{{ member.id }}">
+        <button type="submit" style="background: none; border: none; color: #a41c1c; font-size: 12px; cursor: pointer;">Remove</button>
+      </form>
+    </div>
+  {% empty %}
+    <p style="color: #888; font-size: 14px;">No members yet. Add up to 10 above.</p>
+  {% endfor %}
+</div>
+{% endblock %}

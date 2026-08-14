@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, vocabulary_lookup, wordreference_lookup, cambridge_lookup
+from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, vocabulary_lookup, wordreference_lookup, cambridge_lookup, ca_dashboard
 
 #from .views import frontpage
 from authy import views as authy_views 
@@ -57,6 +57,7 @@ urlpatterns = [
     path('vocabulary-lookup/', vocabulary_lookup, name='vocabulary_lookup'),
     path('wordreference-lookup/', wordreference_lookup, name='wordreference_lookup'),
     path('cambridge-lookup/', cambridge_lookup, name='cambridge_lookup'),
+    path('ca-dashboard/', ca_dashboard, name='ca_dashboard'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
     path('favicon.ico', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
     

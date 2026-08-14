@@ -662,3 +662,51 @@ def Signup(request):
         'form':form,
     }
     return render(request, 'signup.html', context)
+
+
+
+@login_required
+def ca_dashboard(request):
+    from authy.models import Cohort, CohortMemberEmail
+    import json
+
+    cohort = Cohort.objects.filter(partner_user=request.user, is_active=True).first()
+    if not cohort:
+        return HttpResponse('Not authorized', status=403)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add':
+            email = request.POST.get('email', '').strip().lower()
+            if email:
+                already_partner = Cohort.objects.filter(partner_email__iexact=email).exists()
+                already_member = CohortMemberEmail.objects.filter(email__iexact=email).exists()
+                if already_partner or already_member:
+                    messages.error(request, f"{email} is already part of a cohort.")
+                elif cohort.members.filter(is_active=True).count() >= 10:
+                    messages.error(request, "This cohort already has 10 members.")
+                else:
+                    CohortMemberEmail.objects.create(cohort=cohort, email=email)
+                    messages.success(request, f"Added {email}.")
+
+        elif action == 'remove':
+            member_id = request.POST.get('member_id')
+            member = CohortMemberEmail.objects.filter(id=member_id, cohort=cohort).first()
+            if member:
+                member.is_active = False
+                member.save()
+                if member.member_user:
+                    member.member_user.is_active = False
+                    member.member_user.save()
+                messages.success(request, f"Removed {member.email}.")
+
+        return redirect('ca_dashboard')
+
+    members = cohort.members.filter(is_active=True).order_by('email')
+
+    return render(request, 'ca_dashboard.html', {
+        'cohort': cohort,
+        'members': members,
+    })
+

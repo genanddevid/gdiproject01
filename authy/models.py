@@ -70,6 +70,30 @@ post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
 
 
+class Cohort(models.Model):
+    """A Partner's cohort for the beta pilot"""
+    partner_email = models.EmailField(unique=True)
+    partner_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='partner_cohort')
+    institution_name = models.CharField(max_length=200, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.partner_email} ({self.institution_name or 'no institution set'})"
+
+
+class CohortMemberEmail(models.Model):
+    """A Member email allowed into a specific Partner's cohort during beta"""
+    cohort = models.ForeignKey(Cohort, on_delete=models.CASCADE, related_name='members')
+    email = models.EmailField(unique=True)
+    member_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='cohort_membership')
+    is_active = models.BooleanField(default=True)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.email} → {self.cohort.partner_email}"
+
+
 
 #class PostView(models.Model):
     #user = models.ForeignKey(User, on_delete=models.CASCADE)

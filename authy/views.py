@@ -32,7 +32,7 @@ from django.core.paginator import Paginator
 
 from django.urls import resolve
 import random
-
+import os
 
 from django.http import JsonResponse
 
@@ -621,3 +621,44 @@ def collections_history_view(request):
     user = request.user
     viewed_posts = PostView.objects.filter(user=user).order_by('-timestamp')
     return render(request, 'collections_history.html', {'viewed_posts': viewed_posts, 'active_page': 'all_collections'})
+
+
+
+def Signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+
+            beta_mode = os.environ.get('BETA_MODE', 'True') == 'True'
+            matching_cohort = None
+            matching_member = None
+
+            if beta_mode:
+                from authy.models import Cohort, CohortMemberEmail
+                matching_cohort = Cohort.objects.filter(partner_email__iexact=email, is_active=True).first()
+                matching_member = CohortMemberEmail.objects.filter(email__iexact=email, is_active=True).first()
+
+                if not matching_cohort and not matching_member:
+                    form.add_error(None, "Baytruyen is currently invite-only for our beta pilot. If you believe you should have access, please contact your program lead.")
+                    return render(request, 'signup.html', {'form': form})
+
+            user = User.objects.create_user(username=username, email=email, password=password)
+
+            if matching_cohort:
+                matching_cohort.partner_user = user
+                matching_cohort.save()
+            elif matching_member:
+                matching_member.member_user = user
+                matching_member.save()
+
+            login(request, user, backend='genbugelproject.backends.EmailOrUsernameBackend')
+            return redirect('profile', username=username)
+    else:
+        form = SignupForm()
+    context = {
+        'form':form,
+    }
+    return render(request, 'signup.html', context)

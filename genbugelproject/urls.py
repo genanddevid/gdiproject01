@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, vocabulary_lookup, wordreference_lookup, cambridge_lookup
-from authy.views import ca_dashboard
+from authy.views import ca_dashboard, feedback_view
 
 #from .views import frontpage
 from authy import views as authy_views 
@@ -59,6 +59,7 @@ urlpatterns = [
     path('wordreference-lookup/', wordreference_lookup, name='wordreference_lookup'),
     path('cambridge-lookup/', cambridge_lookup, name='cambridge_lookup'),
     path('ca-dashboard/', ca_dashboard, name='ca_dashboard'),
+    path('feedback/', feedback_view, name='feedback'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
     path('favicon.ico', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
     

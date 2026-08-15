@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  .fb-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+  @media (max-width: 768px) { .fb-container { padding: 12px; } }
+  .fb-card { border: 1px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 12px; background: white; }
+  .fb-msg-success { background: #eafaf0; color: #1a7a3a; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; }
+</style>
+
+<div class="fb-container">
+  <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 8px;">Feedback</h2>
+  <p style="font-size: 13px; color: #888; margin-bottom: 24px;">Tell us how Baytruyen is helping — or not.</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="fb-msg-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="fb-card">
+    <form method="post">
+      {% csrf_token %}
+      <textarea name="body" rows="4" placeholder="Share your experience..." required
+        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; font-family: inherit; box-sizing: border-box; resize: vertical;"></textarea>
+      <button type="submit" style="margin-top: 10px; background: #000; color: white; border: none; border-radius: 50px; padding: 10px 24px; font-size: 13px; font-weight: 600; cursor: pointer;">Send</button>
+    </form>
+  </div>
+
+  {% if my_feedback %}
+    <h3 style="font-size: 14px; font-weight: 600; margin: 20px 0 12px;">Your past feedback</h3>
+    {% for fb in my_feedback %}
+      <div class="fb-card">
+        <p style="font-size: 14px; margin-bottom: 6px;">{{ fb.body }}</p>
+        <p style="font-size: 11px; color: #888;">{{ fb.created_at|date:"M j, Y" }}</p>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

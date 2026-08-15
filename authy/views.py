@@ -671,7 +671,7 @@ def Signup(request):
 
 @login_required
 def ca_dashboard(request):
-    from authy.models import Cohort, CohortMemberEmail
+    from authy.models import Cohort, CohortMemberEmail, Feedback
     import json
 
     cohort = Cohort.objects.filter(partner_user=request.user, is_active=True).first()
@@ -720,8 +720,32 @@ def ca_dashboard(request):
 
     members = cohort.members.filter(is_active=True).order_by('email')
 
+    member_user_ids = [m.member_user_id for m in members if m.member_user_id]
+    cohort_feedback = Feedback.objects.filter(user_id__in=member_user_ids).select_related('user')
+
     return render(request, 'ca_dashboard.html', {
         'cohort': cohort,
         'members': members,
+        'cohort_feedback': cohort_feedback,
     })
+
+
+
+@login_required
+def feedback_view(request):
+    from authy.models import Feedback
+
+    if request.method == 'POST':
+        body = request.POST.get('body', '').strip()
+        if body:
+            Feedback.objects.create(user=request.user, body=body)
+            messages.success(request, "Thank you — your feedback has been sent.")
+        return redirect('feedback')
+
+    my_feedback = Feedback.objects.filter(user=request.user)
+
+    return render(request, 'feedback.html', {
+        'my_feedback': my_feedback,
+    })
+
 

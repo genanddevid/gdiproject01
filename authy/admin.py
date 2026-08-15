@@ -5,7 +5,7 @@ from authy.models import Profile
 admin.site.register(Profile)
 
 
-from authy.models import Cohort, CohortMemberEmail
+from authy.models import Cohort, CohortMemberEmail, Feedback
 
 @admin.register(Cohort)
 class CohortAdmin(admin.ModelAdmin):
@@ -18,3 +18,13 @@ class CohortMemberEmailAdmin(admin.ModelAdmin):
     list_display = ('email', 'cohort', 'member_user', 'is_active', 'added_at')
     list_filter = ('is_active', 'cohort')
     search_fields = ('email',)
+
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('user', 'body_preview', 'created_at')
+    search_fields = ('user__username', 'body')
+
+    def body_preview(self, obj):
+        return obj.body[:80]
+    body_preview.short_description = 'Feedback'

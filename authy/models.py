@@ -93,6 +93,18 @@ class CohortMemberEmail(models.Model):
     def __str__(self):
         return f"{self.email} → {self.cohort.partner_email}"
 
+class Feedback(models.Model):
+    """Beta pilot feedback from a Partner or Member"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='beta_feedback')
+    body = models.TextField(max_length=2000)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username}: {self.body[:50]}"
+
 
 
 #class PostView(models.Model):

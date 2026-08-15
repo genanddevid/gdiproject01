@@ -370,17 +370,26 @@ body {
           Display ads
         </a>
         {% if request.user.is_authenticated %}
-          {% with partner_cohort=request.user.partner_cohort.first %}
-            {% if partner_cohort and partner_cohort.is_active %}
-            <a href="{% url 'ca_dashboard' %}" class="dropdown-item" style="
-              display: flex; align-items: center; gap: 14px;
-              padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">
-              <span class="material-icons" style="font-size:20px; color:#1a1a1a;">groups</span>
-              CA Dashboard
-            </a>
-            {% endif %}
-          {% endwith %}
-        {% endif %}
+        {% with partner_cohort=request.user.partner_cohort.first member_row=request.user.cohort_membership.first %}
+          {% if partner_cohort and partner_cohort.is_active %}
+          <a href="{% url 'ca_dashboard' %}" class="dropdown-item" style="
+            display: flex; align-items: center; gap: 14px;
+            padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">
+            <span class="material-icons" style="font-size:20px; color:#1a1a1a;">groups</span>
+            CA Dashboard
+          </a>
+          {% endif %}
+          {% if partner_cohort or member_row %}
+          <a href="{% url 'feedback' %}" class="dropdown-item" style="
+            display: flex; align-items: center; gap: 14px;
+            padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">
+            <span class="material-icons" style="font-size:20px; color:#1a1a1a;">rate_review</span>
+            Feedback
+          </a>
+          {% endif %}
+        {% endwith %}
+      {% endif %}
+
         <a href="#" class="dropdown-item" style="
           display: flex; align-items: center; gap: 14px;
           padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">

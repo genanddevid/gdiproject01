@@ -50,5 +50,16 @@
   {% empty %}
     <p style="color: #888; font-size: 14px;">No members yet. Add up to 10 above.</p>
   {% endfor %}
+
+  {% if cohort_feedback %}
+    <h3 style="font-size: 15px; font-weight: 600; margin: 24px 0 12px;">Feedback from your cohort</h3>
+    {% for fb in cohort_feedback %}
+      <div class="ca-card">
+        <p style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">{{ fb.user.username }}</p>
+        <p style="font-size: 14px; margin-bottom: 6px;">{{ fb.body }}</p>
+        <p style="font-size: 11px; color: #888;">{{ fb.created_at|date:"M j, Y" }}</p>
+      </div>
+    {% endfor %}
+  {% endif %}
 </div>
 {% endblock %}

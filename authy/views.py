@@ -720,8 +720,12 @@ def ca_dashboard(request):
 
     members = cohort.members.filter(is_active=True).order_by('email')
 
-    member_user_ids = [m.member_user_id for m in members if m.member_user_id]
-    cohort_feedback = Feedback.objects.filter(user_id__in=member_user_ids).select_related('user')
+    member_email_by_user_id = {m.member_user_id: m.email for m in members if m.member_user_id}
+    cohort_feedback = Feedback.objects.filter(
+        user_id__in=member_email_by_user_id.keys()
+    ).select_related('user')
+    for fb in cohort_feedback:
+        fb.cohort_email = member_email_by_user_id.get(fb.user_id, '')
 
     return render(request, 'ca_dashboard.html', {
         'cohort': cohort,

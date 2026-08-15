@@ -22,8 +22,12 @@ class CohortMemberEmailAdmin(admin.ModelAdmin):
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ('user', 'body_preview', 'created_at')
-    search_fields = ('user__username', 'body')
+    list_display = ('user', 'user_email', 'body_preview', 'created_at')
+    search_fields = ('user__username', 'user__email', 'body')
+
+    def user_email(self, obj):
+        return obj.user.email
+    user_email.short_description = 'Email'
 
     def body_preview(self, obj):
         return obj.body[:80]

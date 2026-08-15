@@ -55,7 +55,7 @@
     <h3 style="font-size: 15px; font-weight: 600; margin: 24px 0 12px;">Feedback from your cohort</h3>
     {% for fb in cohort_feedback %}
       <div class="ca-card">
-        <p style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">{{ fb.user.username }}</p>
+        <p style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">{{ fb.user.username }} <span style="font-weight:400; color:#888;">— {{ fb.cohort_email }}</span></p>
         <p style="font-size: 14px; margin-bottom: 6px;">{{ fb.body }}</p>
         <p style="font-size: 11px; color: #888;">{{ fb.created_at|date:"M j, Y" }}</p>
       </div>

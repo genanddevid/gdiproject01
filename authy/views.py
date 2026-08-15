@@ -681,12 +681,23 @@ def ca_dashboard(request):
         if action == 'add':
             email = request.POST.get('email', '').strip().lower()
             if email:
-                already_partner = Cohort.objects.filter(partner_email__iexact=email).exists()
-                already_member = CohortMemberEmail.objects.filter(email__iexact=email).exists()
-                if already_partner or already_member:
-                    messages.error(request, f"{email} is already part of a cohort.")
+                already_partner = Cohort.objects.filter(partner_email__iexact=email, is_active=True).exists()
+                existing_member = CohortMemberEmail.objects.filter(email__iexact=email).first()
+
+                if already_partner:
+                    messages.error(request, f"{email} is already a Partner.")
+                elif existing_member and existing_member.is_active:
+                    messages.error(request, f"{email} is already an active member of a cohort.")
                 elif cohort.members.filter(is_active=True).count() >= 10:
                     messages.error(request, "This cohort already has 10 members.")
+                elif existing_member:
+                    existing_member.cohort = cohort
+                    existing_member.is_active = True
+                    existing_member.save()
+                    if existing_member.member_user:
+                        existing_member.member_user.is_active = True
+                        existing_member.member_user.save()
+                    messages.success(request, f"Reinstated {email}.")
                 else:
                     CohortMemberEmail.objects.create(cohort=cohort, email=email)
                     messages.success(request, f"Added {email}.")

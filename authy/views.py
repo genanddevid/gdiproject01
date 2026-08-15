@@ -69,7 +69,10 @@ def UserProfile(request, username):
 
 
 	#follow status
-	follow_status = Follow.objects.filter(following=user, follower=request.user).exists()
+	follow_status = (
+        request.user.is_authenticated and
+        Follow.objects.filter(following=user, follower=request.user).exists()
+    )
 
 	#Pagination
 	paginator = Paginator(posts, 62)

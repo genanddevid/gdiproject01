@@ -1103,7 +1103,17 @@ Maximum 6 issues. If style is already strong, return {"issues": []}."""
             if '```' in response_text:
                 response_text = response_text.split('```')[1].replace('json', '').strip()
             result_data = json.loads(response_text)
-            return JsonResponse({'issues': result_data.get('issues', [])})
+            issues = result_data.get('issues', [])
+
+            if request.user.is_authenticated:
+                from authy.models import ReviewWritingLog
+                ReviewWritingLog.objects.create(
+                    user=request.user,
+                    category=category,
+                    issue_count=len(issues)
+                )
+
+            return JsonResponse({'issues': issues})
         except Exception as e:
             import traceback
             print(f"Review writing failed: {e}")

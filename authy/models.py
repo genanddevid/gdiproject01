@@ -105,6 +105,25 @@ class Feedback(models.Model):
     def __str__(self):
         return f"{self.user.username}: {self.body[:50]}"
 
+class LoginEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='login_events')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
+
+@receiver(user_logged_in)
+def log_login_event(sender, request, user, **kwargs):
+    LoginEvent.objects.create(user=user)
+
+
+class ReviewWritingLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_writing_logs')
+    category = models.CharField(max_length=20)
+    issue_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
 
 #class PostView(models.Model):

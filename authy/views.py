@@ -18,6 +18,7 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash, login
+from django.contrib import messages
 
 from authy.models import Profile
 from post.models import Post, Follow, Likes, Stream

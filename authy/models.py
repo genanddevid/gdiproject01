@@ -125,6 +125,19 @@ class ReviewWritingLog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+class ReadTimeLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='read_time_logs')
+    post = models.ForeignKey('post.Post', on_delete=models.CASCADE)
+    seconds = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class WritewordLookupLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='writeword_lookups')
+    word = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 
 #class PostView(models.Model):
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -137,4 +150,3 @@ class ReviewWritingLog(models.Model):
    # def __str__(self):
    #     return f"{self.user.username} viewed {self.post.heading}"
 
-   

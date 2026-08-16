@@ -942,6 +942,74 @@ document.addEventListener('focusin', function(e) {
 });
 </script>
 
+<script>
+(function() {
+  let currentReadPostId = null;
+  let readStartTime = null;
+  let accumulatedSeconds = 0;
+  let isVisible = !document.hidden;
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  window.startReadTimer = function(postId) {
+    window.stopReadTimer();
+    currentReadPostId = postId;
+    readStartTime = Date.now();
+    accumulatedSeconds = 0;
+    isVisible = !document.hidden;
+  };
+
+  window.stopReadTimer = function() {
+    if (!currentReadPostId) return;
+
+    if (isVisible && readStartTime) {
+      accumulatedSeconds += Math.floor((Date.now() - readStartTime) / 1000);
+    }
+
+    if (accumulatedSeconds > 0) {
+      fetch('/log-read-time/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ post_id: currentReadPostId, seconds: accumulatedSeconds }),
+        keepalive: true
+      }).catch(() => {});
+    }
+
+    currentReadPostId = null;
+    readStartTime = null;
+    accumulatedSeconds = 0;
+  };
+
+  document.addEventListener('visibilitychange', function() {
+    if (!currentReadPostId) return;
+    if (document.hidden) {
+      if (isVisible && readStartTime) {
+        accumulatedSeconds += Math.floor((Date.now() - readStartTime) / 1000);
+      }
+      isVisible = false;
+    } else {
+      readStartTime = Date.now();
+      isVisible = true;
+    }
+  });
+})();
+</script>
 
 
 
@@ -1298,6 +1366,16 @@ document.addEventListener('selectionchange', function() {
     alert('No word selected');
     return;
   }
+
+  fetch('/log-writeword-lookup/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    body: JSON.stringify({ word: selectedWord })
+  }).catch(() => {});
+
 
     const toolbar = document.getElementById('writeword-toolbar');
     toolbar.style.display = 'none';

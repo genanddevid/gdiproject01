@@ -370,6 +370,7 @@ function loadPostContent(postId, callback) {
     
     if (postCache[postId]) {
         document.getElementById("modalBody").innerHTML = postCache[postId];
+        startReadTimer(postId);
         initEmbeds();
         document.getElementById('modalContent').scrollTop = 0;
         if (callback) callback();
@@ -396,8 +397,9 @@ function loadPostContent(postId, callback) {
             return response.text();
         })
         .then(html => {
-            postCache[postId] = html; // Store in cache
+            postCache[postId] = html;
             document.getElementById("modalBody").innerHTML = html;
+startReadTimer(postId);
 initEmbeds();
 document.getElementById('modalContent').scrollTop = 0;
 

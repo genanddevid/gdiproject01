@@ -60,6 +60,8 @@ urlpatterns = [
     path('cambridge-lookup/', cambridge_lookup, name='cambridge_lookup'),
     path('ca-dashboard/', ca_dashboard, name='ca_dashboard'),
     path('feedback/', feedback_view, name='feedback'),
+    path('log-read-time/', log_read_time, name='log_read_time'),
+    path('log-writeword-lookup/', log_writeword_lookup, name='log_writeword_lookup'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
     path('favicon.ico', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
     

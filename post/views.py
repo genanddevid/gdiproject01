@@ -1539,6 +1539,37 @@ def cambridge_lookup(request):
         })
 
 
+def log_read_time(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            from authy.models import ReadTimeLog
+            try:
+                data = json.loads(request.body)
+                post_id = data.get('post_id')
+                seconds = int(data.get('seconds', 0))
+                if post_id and seconds > 0:
+                    post = Post.objects.filter(id=post_id).first()
+                    if post:
+                        ReadTimeLog.objects.create(user=request.user, post=post, seconds=seconds)
+            except Exception:
+                pass
+        return JsonResponse({'success': True})
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+def log_writeword_lookup(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            from authy.models import WritewordLookupLog
+            try:
+                data = json.loads(request.body)
+                word = data.get('word', '').strip()
+                if word:
+                    WritewordLookupLog.objects.create(user=request.user, word=word)
+            except Exception:
+                pass
+        return JsonResponse({'success': True})
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
     

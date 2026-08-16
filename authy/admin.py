@@ -5,8 +5,7 @@ from authy.models import Profile
 admin.site.register(Profile)
 
 
-from authy.models import Cohort, CohortMemberEmail, Feedback, LoginEvent, ReviewWritingLog
-
+from authy.models import Cohort, CohortMemberEmail, Feedback, LoginEvent, ReviewWritingLog, ReadTimeLog, WritewordLookupLog
 
 @admin.register(Cohort)
 class CohortAdmin(admin.ModelAdmin):
@@ -46,3 +45,14 @@ class ReviewWritingLogAdmin(admin.ModelAdmin):
     list_display = ('user', 'category', 'issue_count', 'created_at')
     list_filter = ('category',)
     search_fields = ('user__username',)
+
+
+@admin.register(ReadTimeLog)
+class ReadTimeLogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'post', 'seconds', 'created_at')
+    search_fields = ('user__username',)
+
+@admin.register(WritewordLookupLog)
+class WritewordLookupLogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'word', 'created_at')
+    search_fields = ('user__username', 'word')

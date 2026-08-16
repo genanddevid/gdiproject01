@@ -402,6 +402,7 @@ function fixCommentScroll() {
 function loadPostContent(postId, callback) {
     if (postCache[postId]) {
         document.getElementById("modalBody").innerHTML = postCache[postId];
+        startReadTimer(postId);
         initEmbedsIndex();
         wirShareBtn();
         document.getElementById('modalContent').scrollTop = 0;
@@ -430,6 +431,7 @@ function loadPostContent(postId, callback) {
         .then(html => {
             postCache[postId] = html;
             document.getElementById("modalBody").innerHTML = html;
+            startReadTimer(postId);
             initEmbedsIndex();
             wirShareBtn();
             document.getElementById('modalContent').scrollTop = 0;
@@ -535,6 +537,7 @@ function openPostModal(postId, event) {
 }
 
 function closePostModal() {
+    stopReadTimer();
     document.getElementById("postModal").style.display = "none";
     const modalBody = document.getElementById("modalBody");
     modalBody.innerHTML = "";

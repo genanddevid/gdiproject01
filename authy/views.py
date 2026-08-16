@@ -667,6 +667,58 @@ def Signup(request):
     }
     return render(request, 'signup.html', context)
 
+def get_member_stats(member):
+    """Compute beta tracking metrics for a single CohortMemberEmail"""
+    from authy.models import LoginEvent, ReviewWritingLog, ReadTimeLog, WritewordLookupLog
+    from post.models import Post
+    from comment.models import Comment
+    from django.db.models import Sum
+    from datetime import timedelta
+
+    if not member.member_user:
+        return {
+            'email': member.email, 'joined': False,
+            'logins': 0, 'stories': 0, 'words': 0, 'comments': 0,
+            'read_minutes': 0, 'ai_reviews': 0, 'w1_err': 0, 'w2_err': 0,
+            'lookups': 0,
+        }
+
+    user = member.member_user
+    join_date = user.date_joined
+
+    logins = LoginEvent.objects.filter(user=user).count()
+
+    posts = Post.objects.filter(user=user)
+    stories = posts.count()
+    words = sum(len(p.content.split()) for p in posts)
+
+    comments = Comment.objects.filter(user=user).count()
+
+    read_seconds = ReadTimeLog.objects.filter(user=user).aggregate(total=Sum('seconds'))['total'] or 0
+    read_minutes = read_seconds // 60
+
+    ai_reviews = ReviewWritingLog.objects.filter(user=user).count()
+
+    week1_end = join_date + timedelta(days=7)
+    week2_end = join_date + timedelta(days=14)
+
+    w1_err = ReviewWritingLog.objects.filter(
+        user=user, created_at__gte=join_date, created_at__lt=week1_end
+    ).aggregate(total=Sum('issue_count'))['total'] or 0
+
+    w2_err = ReviewWritingLog.objects.filter(
+        user=user, created_at__gte=week1_end, created_at__lt=week2_end
+    ).aggregate(total=Sum('issue_count'))['total'] or 0
+
+    lookups = WritewordLookupLog.objects.filter(user=user).count()
+
+    return {
+        'email': member.email, 'joined': True,
+        'logins': logins, 'stories': stories, 'words': words, 'comments': comments,
+        'read_minutes': read_minutes, 'ai_reviews': ai_reviews,
+        'w1_err': w1_err, 'w2_err': w2_err,
+        'lookups': lookups,
+    }
 
 
 @login_required
@@ -727,11 +779,27 @@ def ca_dashboard(request):
     for fb in cohort_feedback:
         fb.cohort_email = member_email_by_user_id.get(fb.user_id, '')
 
+    member_stats = [get_member_stats(m) for m in members]
+    totals = {
+        'logins': sum(s['logins'] for s in member_stats),
+        'stories': sum(s['stories'] for s in member_stats),
+        'words': sum(s['words'] for s in member_stats),
+        'comments': sum(s['comments'] for s in member_stats),
+        'read_minutes': sum(s['read_minutes'] for s in member_stats),
+        'ai_reviews': sum(s['ai_reviews'] for s in member_stats),
+        'w1_err': sum(s['w1_err'] for s in member_stats),
+        'w2_err': sum(s['w2_err'] for s in member_stats),
+        'lookups': sum(s['lookups'] for s in member_stats),
+    }
+
     return render(request, 'ca_dashboard.html', {
         'cohort': cohort,
         'members': members,
         'cohort_feedback': cohort_feedback,
+        'member_stats': member_stats,
+        'totals': totals,
     })
+
 
 
 

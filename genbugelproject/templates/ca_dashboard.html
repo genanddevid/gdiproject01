@@ -20,8 +20,64 @@
     {% endfor %}
   {% endif %}
 
+  {% if member_stats %}
+  <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Cohort performance</h3>
+  <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #eee; border-radius: 8px; margin-bottom: 24px;">
+    <table style="border-collapse: collapse; font-size: 12px; white-space: nowrap; min-width: 100%;">
+      <thead>
+        <tr style="background: #fafafa; border-bottom: 1px solid #eee;">
+          <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Email</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Logins</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Stories</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Words</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Comments</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Read (min)</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">AI Reviews</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">W1 Err</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">W2 Err</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Lookups</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stat in member_stats %}
+        <tr style="border-bottom: 1px solid #f5f5f5;">
+          <td style="padding: 10px 12px;">
+            {{ stat.email }}
+            {% if not stat.joined %}<span style="color:#aaa; font-size:10px;"> (not joined)</span>{% endif %}
+          </td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.logins }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.stories }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.words }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.comments }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.read_minutes }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.ai_reviews }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.w1_err }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.w2_err }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ stat.lookups }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr style="background: #fafafa; font-weight: 600; border-top: 2px solid #eee;">
+          <td style="padding: 10px 12px;">Total</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.logins }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.stories }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.words }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.comments }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.read_minutes }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.ai_reviews }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.w1_err }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.w2_err }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.lookups }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  {% endif %}
+
   <div class="ca-card">
     <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Add a member</h3>
+
     <form method="post">
       {% csrf_token %}
       <input type="hidden" name="action" value="add">

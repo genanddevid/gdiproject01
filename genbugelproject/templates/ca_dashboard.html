@@ -74,6 +74,37 @@
     </table>
   </div>
   {% endif %}
+  {% if milestones %}
+  <h3 style="font-size: 15px; font-weight: 600; margin: 24px 0 12px;">Pilot milestones</h3>
+  <div class="ca-card">
+    {% for key, data in milestones.items %}
+      {% if key != 'error_reduction' %}
+      <div style="margin-bottom: 14px;">
+        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+          <span style="text-transform:capitalize; font-weight:500;">{{ key }}</span>
+          <span style="color:{% if data.met %}#1a7a3a{% else %}#888{% endif %};">{{ data.total }} / {{ data.trigger }} {% if data.met %}✓{% endif %}</span>
+        </div>
+        <div style="background:#f0f0f0; border-radius:4px; height:6px; overflow:hidden;">
+          <div style="background:{% if data.met %}#1a7a3a{% else %}#000{% endif %}; height:100%; width:{{ data.progress_pct }}%;"></div>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+    <div style="margin-top:16px; padding-top:14px; border-top:1px solid #eee; font-size:12px;">
+      <div style="display:flex; justify-content:space-between;">
+        <span style="font-weight:500;">Error reduction (W1 → W2)</span>
+        <span style="color:{% if milestones.error_reduction.met %}#1a7a3a{% else %}#888{% endif %};">{{ milestones.error_reduction.w1 }} → {{ milestones.error_reduction.w2 }} {% if milestones.error_reduction.met %}✓{% endif %}</span>
+      </div>
+    </div>
+    <div style="margin-top:18px; text-align:center;">
+      {% if all_milestones_met %}
+        <p style="color:#1a7a3a; font-size:13px; font-weight:600;">All milestones met — report ready to build.</p>
+      {% else %}
+        <p style="color:#888; font-size:12px;">Report unlocks once every milestone above is reached.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
 
   <div class="ca-card">
     <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Add a member</h3>

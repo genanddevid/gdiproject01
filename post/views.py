@@ -1110,7 +1110,8 @@ Maximum 6 issues. If style is already strong, return {"issues": []}."""
                 ReviewWritingLog.objects.create(
                     user=request.user,
                     category=category,
-                    issue_count=len(issues)
+                    issue_count=len(issues),
+                    issues_detail=issues
                 )
 
             return JsonResponse({'issues': issues})

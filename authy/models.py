@@ -122,6 +122,7 @@ class ReviewWritingLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_writing_logs')
     category = models.CharField(max_length=20)
     issue_count = models.IntegerField(default=0)
+    issues_detail = models.JSONField(default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 

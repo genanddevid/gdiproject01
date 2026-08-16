@@ -712,6 +712,9 @@ def get_member_stats(member):
 
     lookups = WritewordLookupLog.objects.filter(user=user).count()
 
+    from post.models import Likes
+    likes_received = Likes.objects.filter(post__user=user).count()
+
     return {
         'email': member.email, 'joined': True,
         'logins': logins, 'stories': stories, 'words': words, 'comments': comments,
@@ -719,6 +722,49 @@ def get_member_stats(member):
         'w1_err': w1_err, 'w2_err': w2_err,
         'lookups': lookups,
     }
+
+
+def get_cohort_milestones(member_stats):
+    cohort_size = 10
+    totals = {
+        'logins': sum(s['logins'] for s in member_stats),
+        'stories': sum(s['stories'] for s in member_stats),
+        'words': sum(s['words'] for s in member_stats),
+        'comments': sum(s['comments'] for s in member_stats),
+        'read_minutes': sum(s['read_minutes'] for s in member_stats),
+        'ai_reviews': sum(s['ai_reviews'] for s in member_stats),
+        'lookups': sum(s['lookups'] for s in member_stats),
+        'likes': sum(s['likes'] for s in member_stats),
+        'w1_err': sum(s['w1_err'] for s in member_stats),
+        'w2_err': sum(s['w2_err'] for s in member_stats),
+    }
+    targets_per_student = {
+        'logins': 14, 'stories': 14, 'words': 3500, 'comments': 28,
+        'read_minutes': 140, 'ai_reviews': 14, 'lookups': 28, 'likes': 28,
+    }
+
+    milestones = {}
+    all_met = True
+    for key, target in targets_per_student.items():
+        cohort_target = target * cohort_size
+        trigger = cohort_target * 0.8
+        met = totals[key] >= trigger
+        milestones[key] = {
+            'total': totals[key], 'trigger': int(trigger),
+            'met': met,
+            'progress_pct': min(100, round((totals[key] / cohort_target) * 100)) if cohort_target else 0,
+        }
+        if not met:
+            all_met = False
+
+    w1_err, w2_err = totals['w1_err'], totals['w2_err']
+    reduction_met = w1_err > 0 and w2_err <= (w1_err * 0.72)
+    milestones['error_reduction'] = {'w1': w1_err, 'w2': w2_err, 'met': reduction_met}
+    if not reduction_met:
+        all_met = False
+
+    return milestones, all_met
+
 
 
 @login_required
@@ -780,6 +826,7 @@ def ca_dashboard(request):
         fb.cohort_email = member_email_by_user_id.get(fb.user_id, '')
 
     member_stats = [get_member_stats(m) for m in members]
+    milestones, all_milestones_met = get_cohort_milestones(member_stats)
     totals = {
         'logins': sum(s['logins'] for s in member_stats),
         'stories': sum(s['stories'] for s in member_stats),

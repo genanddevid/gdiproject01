@@ -679,7 +679,7 @@ def get_member_stats(member):
         return {
             'email': member.email, 'joined': False,
             'logins': 0, 'stories': 0, 'words': 0, 'comments': 0,
-            'read_minutes': 0, 'ai_reviews': 0, 'w1_err': 0, 'w2_err': 0,
+            'read_minutes': 0, 'ai_reviews': 0, 'likes': 0, 'w1_err': 0, 'w2_err': 0,
             'lookups': 0,
         }
 
@@ -718,7 +718,7 @@ def get_member_stats(member):
     return {
         'email': member.email, 'joined': True,
         'logins': logins, 'stories': stories, 'words': words, 'comments': comments,
-        'read_minutes': read_minutes, 'ai_reviews': ai_reviews,
+        'read_minutes': read_minutes, 'ai_reviews': ai_reviews, 'likes': likes_received,
         'w1_err': w1_err, 'w2_err': w2_err,
         'lookups': lookups,
     }
@@ -834,6 +834,7 @@ def ca_dashboard(request):
         'comments': sum(s['comments'] for s in member_stats),
         'read_minutes': sum(s['read_minutes'] for s in member_stats),
         'ai_reviews': sum(s['ai_reviews'] for s in member_stats),
+        'likes': sum(s['likes'] for s in member_stats),
         'w1_err': sum(s['w1_err'] for s in member_stats),
         'w2_err': sum(s['w2_err'] for s in member_stats),
         'lookups': sum(s['lookups'] for s in member_stats),

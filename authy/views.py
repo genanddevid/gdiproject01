@@ -771,7 +771,7 @@ def download_cohort_report(request):
     from authy.models import Cohort, ReviewWritingLog, WritewordLookupLog
     from django.db.models import Count
     from io import BytesIO
-    from reportlab.lib.pagesizes import letter
+    from reportlab.lib.pagesizes import letter, landscape
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib import colors
@@ -790,7 +790,7 @@ def download_cohort_report(request):
         return redirect('ca_dashboard')
 
     buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0.6*inch, bottomMargin=0.6*inch)
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(letter), topMargin=0.6*inch, bottomMargin=0.6*inch, leftMargin=0.5*inch, rightMargin=0.5*inch)
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle('ReportTitle', parent=styles['Title'], fontSize=16, spaceAfter=4)
     section_style = ParagraphStyle('Section', parent=styles['Heading2'], spaceBefore=14, spaceAfter=8)
@@ -814,7 +814,7 @@ def download_cohort_report(request):
         totals_row.append(sum(s[key] for s in member_stats))
     table_data.append(totals_row)
 
-    engagement_table = Table(table_data, repeatRows=1)
+    engagement_table = Table(table_data, repeatRows=1, colWidths=[2.2*inch, 0.75*inch, 0.75*inch, 0.85*inch, 0.85*inch, 0.95*inch, 0.75*inch, 0.7*inch, 0.7*inch, 0.8*inch])
     engagement_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a1a1a')),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),

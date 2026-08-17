@@ -766,6 +766,143 @@ def get_cohort_milestones(member_stats):
     return milestones, all_met
 
 
+@login_required
+def download_cohort_report(request):
+    from authy.models import Cohort, ReviewWritingLog, WritewordLookupLog
+    from django.db.models import Count
+    from io import BytesIO
+    from reportlab.lib.pagesizes import letter
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib import colors
+    from reportlab.lib.units import inch
+
+    cohort = Cohort.objects.filter(partner_user=request.user, is_active=True).first()
+    if not cohort:
+        return HttpResponse('Not authorized', status=403)
+
+    members = cohort.members.filter(is_active=True).order_by('email')
+    member_stats = [get_member_stats(m) for m in members]
+    milestones, all_milestones_met = get_cohort_milestones(member_stats)
+
+    if not all_milestones_met:
+        messages.error(request, "The report unlocks once every pilot milestone has been reached.")
+        return redirect('ca_dashboard')
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0.6*inch, bottomMargin=0.6*inch)
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle('ReportTitle', parent=styles['Title'], fontSize=16, spaceAfter=4)
+    section_style = ParagraphStyle('Section', parent=styles['Heading2'], spaceBefore=14, spaceAfter=8)
+    small_style = ParagraphStyle('Small', parent=styles['Normal'], fontSize=9, textColor=colors.grey)
+    body_style = styles['Normal']
+    story = []
+
+    # Page 1 — Cover + Engagement Matrix
+    story.append(Paragraph("Baytruyen Pilot Cohort Performance Report", title_style))
+    active_testers = sum(1 for s in member_stats if s['joined'])
+    story.append(Paragraph(f"Partner: {request.user.username} &nbsp;|&nbsp; Institution: {cohort.institution_name or '—'}", body_style))
+    story.append(Paragraph(f"Cohort Size: {members.count()} Students &nbsp;|&nbsp; Active Testers: {active_testers}/{members.count()}", body_style))
+    story.append(Spacer(1, 16))
+    story.append(Paragraph("Cohort Quantitative Engagement Matrix", section_style))
+
+    table_data = [['Email', 'Logins', 'Stories', 'Words', 'Comments', 'Read (min)', 'AI Rev.', 'W1 Err', 'W2 Err', 'Lookups']]
+    for s in member_stats:
+        table_data.append([s['email'], s['logins'], s['stories'], s['words'], s['comments'], s['read_minutes'], s['ai_reviews'], s['w1_err'], s['w2_err'], s['lookups']])
+    totals_row = ['TOTAL']
+    for key in ['logins', 'stories', 'words', 'comments', 'read_minutes', 'ai_reviews', 'w1_err', 'w2_err', 'lookups']:
+        totals_row.append(sum(s[key] for s in member_stats))
+    table_data.append(totals_row)
+
+    engagement_table = Table(table_data, repeatRows=1)
+    engagement_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a1a1a')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('FONTSIZE', (0, 0), (-1, -1), 7.5),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+        ('BACKGROUND', (0, -1), (-1, -1), colors.HexColor('#f0f0f0')),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dddddd')),
+        ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, -1), 5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+    ]))
+    story.append(engagement_table)
+    story.append(PageBreak())
+
+    # Page 2 — Qualitative Writing & Pedagogical Growth
+    story.append(Paragraph("Qualitative Writing & Pedagogical Growth", section_style))
+    story.append(Paragraph("AI Review Interventions & Syntax Evolution", styles['Heading3']))
+    story.append(Spacer(1, 8))
+
+    for m in members:
+        if not m.member_user:
+            continue
+        log = ReviewWritingLog.objects.filter(
+            user=m.member_user, issues_detail__isnull=False
+        ).exclude(issues_detail=[]).order_by('-created_at').first()
+
+        if log and log.issues_detail:
+            issue = log.issues_detail[0]
+            original = (issue.get('original', '') or '')[:150]
+            suggestion = (issue.get('suggestion', '') or '')[:150]
+            story.append(Paragraph(f"<b>Student:</b> {m.email}", body_style))
+            story.append(Paragraph(f"<i>Original Draft:</i> \u201c{original}\u201d", body_style))
+            story.append(Paragraph(f"<i>AI Review Correction:</i> \u201c{suggestion}\u201d", body_style))
+            story.append(Spacer(1, 10))
+
+    w1_total = sum(s['w1_err'] for s in member_stats)
+    w2_total = sum(s['w2_err'] for s in member_stats)
+    if w1_total > 0:
+        reduction = round(((w1_total - w2_total) / w1_total) * 100, 1)
+        story.append(Spacer(1, 6))
+        story.append(Paragraph(
+            f"<b>Key Pedagogical Metric:</b> {reduction}% drop in repeated grammar/syntax corrections between Week 1 ({w1_total} corrections) and Week 2 ({w2_total} corrections).",
+            body_style
+        ))
+    story.append(PageBreak())
+
+    # Page 3 — Vocabulary Acquisition & Reading Analytics
+    story.append(Paragraph("Vocabulary Acquisition & Reading Analytics (Writeword)", section_style))
+    member_user_ids = [m.member_user_id for m in members if m.member_user_id]
+    top_words = (
+        WritewordLookupLog.objects.filter(user_id__in=member_user_ids)
+        .values('word').annotate(count=Count('word')).order_by('-count')[:10]
+    )
+
+    story.append(Paragraph("Top Words Looked Up During Reading", styles['Heading3']))
+    if top_words:
+        word_data = [['Word', 'Times Looked Up']]
+        for w in top_words:
+            word_data.append([w['word'], w['count']])
+        word_table = Table(word_data, colWidths=[3*inch, 2*inch])
+        word_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a1a1a')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dddddd')),
+            ('TOPPADDING', (0, 0), (-1, -1), 5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ]))
+        story.append(word_table)
+    else:
+        story.append(Paragraph("No lookups recorded yet.", body_style))
+
+    total_lookups = sum(s['lookups'] for s in member_stats)
+    story.append(Spacer(1, 14))
+    story.append(Paragraph(f"<b>Total Writeword Lookups:</b> {total_lookups} instances logged.", body_style))
+    story.append(Paragraph("<b>Word Adoption Tracking:</b> not yet available — coming in a future update.", small_style))
+
+    doc.build(story)
+    buffer.seek(0)
+    response = HttpResponse(buffer.read(), content_type='application/pdf')
+    filename = f"baytruyen_cohort_report_{cohort.partner_email.split('@')[0]}.pdf"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response
+
+
+
 
 @login_required
 def ca_dashboard(request):

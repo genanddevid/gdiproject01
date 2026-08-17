@@ -75,8 +75,7 @@
         </tr>
       </tfoot>
     </table>
-  </div>
-  {% endif %}
+    {% endif %}
   {% if milestones %}
   <h3 style="font-size: 15px; font-weight: 600; margin: 24px 0 12px;">Pilot milestones</h3>
   <div class="ca-card">
@@ -99,16 +98,18 @@
         <span style="color:{% if milestones.error_reduction.met %}#1a7a3a{% else %}#888{% endif %};">{{ milestones.error_reduction.w1 }} → {{ milestones.error_reduction.w2 }} {% if milestones.error_reduction.met %}✓{% endif %}</span>
       </div>
     </div>
+    
     <div style="margin-top:18px; text-align:center;">
       {% if all_milestones_met %}
-        <p style="color:#1a7a3a; font-size:13px; font-weight:600;">All milestones met — report ready to build.</p>
+        <a href="{% url 'download_cohort_report' %}" style="display:inline-block; background:#1a7a3a; color:white; text-decoration:none; border-radius:50px; padding:10px 24px; font-size:13px; font-weight:600;">Download & Share Cohort Report</a>
       {% else %}
         <p style="color:#888; font-size:12px;">Report unlocks once every milestone above is reached.</p>
       {% endif %}
     </div>
-    
   </div>
 {% endif %}
+  </div>
+  
 
   <div class="ca-card">
     <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Add a member</h3>

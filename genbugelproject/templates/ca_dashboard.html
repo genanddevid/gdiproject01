@@ -68,13 +68,14 @@
           <td style="padding: 10px 12px; text-align: right;">{{ totals.comments }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ totals.read_minutes }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ totals.ai_reviews }}</td>
-          <td style="padding: 10px 12px; text-align: right;">{{ stat.likes }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ totals.likes }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ totals.w1_err }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ totals.w2_err }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ totals.lookups }}</td>
         </tr>
       </tfoot>
     </table>
+    </div>
     {% endif %}
   {% if milestones %}
   <h3 style="font-size: 15px; font-weight: 600; margin: 24px 0 12px;">Pilot milestones</h3>
@@ -108,7 +109,7 @@
     </div>
   </div>
 {% endif %}
-  </div>
+  
   
 
   <div class="ca-card">

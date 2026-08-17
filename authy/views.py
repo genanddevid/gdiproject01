@@ -983,9 +983,9 @@ def ca_dashboard(request):
         'cohort_feedback': cohort_feedback,
         'member_stats': member_stats,
         'totals': totals,
+        'milestones': milestones,
+        'all_milestones_met': all_milestones_met,
     })
-
-
 
 
 @login_required

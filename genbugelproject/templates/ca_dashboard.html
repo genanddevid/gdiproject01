@@ -73,42 +73,52 @@
           <td style="padding: 10px 12px; text-align: right;">{{ totals.w2_err }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ totals.lookups }}</td>
         </tr>
+        <tr style="border-top: 1px solid #eee; color: #888; font-size: 11px;">
+          <td style="padding: 8px 12px;">Milestone (100%)</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.logins.cohort_target }}</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.stories.cohort_target }}</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.words.cohort_target }}</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.comments.cohort_target }}</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.read_minutes.cohort_target }}</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.ai_reviews.cohort_target }}</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.likes.cohort_target }}</td>
+          <td style="padding: 8px 12px; text-align: right;">—</td>
+          <td style="padding: 8px 12px; text-align: right;">—</td>
+          <td style="padding: 8px 12px; text-align: right;">{{ milestones.lookups.cohort_target }}</td>
+        </tr>
       </tfoot>
     </table>
-    </div>
-    {% endif %}
-  {% if milestones %}
-  <h3 style="font-size: 15px; font-weight: 600; margin: 24px 0 12px;">Pilot milestones</h3>
+  </div>
+
   <div class="ca-card">
-    {% for key, data in milestones.items %}
-      {% if key != 'error_reduction' %}
-      <div style="margin-bottom: 14px;">
-        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
-          <span style="text-transform:capitalize; font-weight:500;">{{ key }}</span>
-          <span style="color:{% if data.met %}#1a7a3a{% else %}#888{% endif %};">{{ data.total }} / {{ data.trigger }} {% if data.met %}✓{% endif %}</span>
-        </div>
-        <div style="background:#f0f0f0; border-radius:4px; height:6px; overflow:hidden;">
-          <div style="background:{% if data.met %}#1a7a3a{% else %}#000{% endif %}; height:100%; width:{{ data.progress_pct }}%;"></div>
-        </div>
-      </div>
-      {% endif %}
-    {% endfor %}
-    <div style="margin-top:16px; padding-top:14px; border-top:1px solid #eee; font-size:12px;">
+    <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+      <span style="font-weight:600;">Overall progress</span>
+      <span style="color:{% if all_milestones_met %}#1a7a3a{% else %}#888{% endif %};">{{ lowest_pct }}% {% if all_milestones_met %}✓{% endif %}</span>
+    </div>
+    <div style="background:#f0f0f0; border-radius:4px; height:8px; overflow:hidden;">
+      <div style="background:{% if all_milestones_met %}#1a7a3a{% else %}#000{% endif %}; height:100%; width:{{ lowest_pct }}%;"></div>
+    </div>
+    {% if not all_milestones_met %}
+      <p style="font-size:11px; color:#888; margin-top:6px;">Furthest behind: {{ bottleneck_label }}</p>
+    {% endif %}
+
+    <div style="margin-top:14px; padding-top:12px; border-top:1px solid #eee; font-size:12px;">
       <div style="display:flex; justify-content:space-between;">
         <span style="font-weight:500;">Error reduction (W1 → W2)</span>
         <span style="color:{% if milestones.error_reduction.met %}#1a7a3a{% else %}#888{% endif %};">{{ milestones.error_reduction.w1 }} → {{ milestones.error_reduction.w2 }} {% if milestones.error_reduction.met %}✓{% endif %}</span>
       </div>
     </div>
-    
+
     <div style="margin-top:18px; text-align:center;">
       {% if all_milestones_met %}
         <a href="{% url 'download_cohort_report' %}" style="display:inline-block; background:#1a7a3a; color:white; text-decoration:none; border-radius:50px; padding:10px 24px; font-size:13px; font-weight:600;">Download & Share Cohort Report</a>
       {% else %}
-        <p style="color:#888; font-size:12px;">Report unlocks once every milestone above is reached.</p>
+        <p style="color:#888; font-size:12px;">Report unlocks once every milestone above reaches 80%.</p>
       {% endif %}
     </div>
   </div>
-{% endif %}
+  {% endif %}
+
   
   
 

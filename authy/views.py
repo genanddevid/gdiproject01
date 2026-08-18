@@ -724,6 +724,11 @@ def get_member_stats(member):
     }
 
 
+FRIENDLY_METRIC_LABELS = {
+    'logins': 'Logins', 'stories': 'Stories', 'words': 'Words', 'comments': 'Comments',
+    'read_minutes': 'Read Time', 'ai_reviews': 'AI Reviews', 'lookups': 'Lookups', 'likes': 'Likes',
+}
+
 def get_cohort_milestones(member_stats):
     cohort_size = 10
     totals = {
@@ -744,26 +749,35 @@ def get_cohort_milestones(member_stats):
     }
 
     milestones = {}
-    all_met = True
+    lowest_pct = 100
+    bottleneck_key = None
+
     for key, target in targets_per_student.items():
         cohort_target = target * cohort_size
         trigger = cohort_target * 0.8
-        met = totals[key] >= trigger
+        raw_pct = round((totals[key] / cohort_target) * 100) if cohort_target else 0
         milestones[key] = {
-            'total': totals[key], 'trigger': int(trigger),
-            'met': met,
-            'progress_pct': min(100, round((totals[key] / cohort_target) * 100)) if cohort_target else 0,
+            'total': totals[key],
+            'cohort_target': cohort_target,
+            'trigger': int(trigger),
+            'met': totals[key] >= trigger,
+            'progress_pct': raw_pct,
         }
-        if not met:
-            all_met = False
+        gating_pct = min(raw_pct, 100)
+        if gating_pct < lowest_pct:
+            lowest_pct = gating_pct
+            bottleneck_key = key
 
+    all_met = lowest_pct >= 80
+    bottleneck_label = FRIENDLY_METRIC_LABELS.get(bottleneck_key, bottleneck_key)
+
+    # Informational only — does NOT gate the download
     w1_err, w2_err = totals['w1_err'], totals['w2_err']
     reduction_met = w1_err > 0 and w2_err <= (w1_err * 0.72)
     milestones['error_reduction'] = {'w1': w1_err, 'w2': w2_err, 'met': reduction_met}
-    if not reduction_met:
-        all_met = False
 
-    return milestones, all_met
+    return milestones, all_met, lowest_pct, bottleneck_label
+
 
 
 @login_required
@@ -963,7 +977,7 @@ def ca_dashboard(request):
         fb.cohort_email = member_email_by_user_id.get(fb.user_id, '')
 
     member_stats = [get_member_stats(m) for m in members]
-    milestones, all_milestones_met = get_cohort_milestones(member_stats)
+    milestones, all_milestones_met, lowest_pct, bottleneck_label = get_cohort_milestones(member_stats)
     totals = {
         'logins': sum(s['logins'] for s in member_stats),
         'stories': sum(s['stories'] for s in member_stats),
@@ -985,6 +999,8 @@ def ca_dashboard(request):
         'totals': totals,
         'milestones': milestones,
         'all_milestones_met': all_milestones_met,
+        'lowest_pct': lowest_pct,
+        'bottleneck_label': bottleneck_label,
     })
 
 

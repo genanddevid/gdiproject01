@@ -820,15 +820,15 @@ def download_cohort_report(request):
     story.append(Spacer(1, 16))
     story.append(Paragraph("Cohort Quantitative Engagement Matrix", section_style))
 
-    table_data = [['Email', 'Logins', 'Stories', 'Words', 'Comments', 'Read (min)', 'AI Rev.', 'W1 Err', 'W2 Err', 'Lookups']]
+    table_data = [['Email', 'Logins', 'Stories', 'Words', 'Comments', 'Read (min)', 'AI Rev.', 'Likes', 'W1 Err', 'W2 Err', 'Lookups']]
     for s in member_stats:
-        table_data.append([s['email'], s['logins'], s['stories'], s['words'], s['comments'], s['read_minutes'], s['ai_reviews'], s['w1_err'], s['w2_err'], s['lookups']])
+        table_data.append([s['email'], s['logins'], s['stories'], s['words'], s['comments'], s['read_minutes'], s['ai_reviews'], s['likes'], s['w1_err'], s['w2_err'], s['lookups']])
     totals_row = ['TOTAL']
-    for key in ['logins', 'stories', 'words', 'comments', 'read_minutes', 'ai_reviews', 'w1_err', 'w2_err', 'lookups']:
+    for key in ['logins', 'stories', 'words', 'comments', 'read_minutes', 'ai_reviews', 'likes', 'w1_err', 'w2_err', 'lookups']:
         totals_row.append(sum(s[key] for s in member_stats))
     table_data.append(totals_row)
 
-    engagement_table = Table(table_data, repeatRows=1, colWidths=[2.2*inch, 0.75*inch, 0.75*inch, 0.85*inch, 0.85*inch, 0.95*inch, 0.75*inch, 0.7*inch, 0.7*inch, 0.8*inch])
+    engagement_table = Table(table_data, repeatRows=1, colWidths=[2.15*inch, 0.7*inch, 0.7*inch, 0.8*inch, 0.8*inch, 0.9*inch, 0.7*inch, 0.65*inch, 0.65*inch, 0.65*inch, 0.75*inch])
     engagement_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a1a1a')),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),

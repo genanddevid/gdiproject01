@@ -81,6 +81,14 @@ class Cohort(models.Model):
     def __str__(self):
         return f"{self.partner_email} ({self.institution_name or 'no institution set'})"
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            previous = Cohort.objects.filter(pk=self.pk).first()
+            if previous and previous.is_active and not self.is_active and self.partner_user:
+                self.partner_user.is_active = False
+                self.partner_user.save()
+        super().save(*args, **kwargs)
+
 
 class CohortMemberEmail(models.Model):
     """A Member email allowed into a specific Partner's cohort during beta"""

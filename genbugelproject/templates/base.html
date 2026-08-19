@@ -1323,13 +1323,20 @@ document.addEventListener('focusin', function(e) {
 
     // Only inside #modalBody
     const modalBody = document.getElementById('modalBody');
-    if (!modalBody) { toolbar.style.display = 'none'; return; }
+    const reviewResults = document.getElementById('reviewResults');
+    const originalText = document.getElementById('originalText');
+    const improvedText = document.getElementById('improvedText');
 
     const anchorNode = selection.anchorNode;
-    if (!anchorNode || !modalBody.contains(anchorNode)) {
+    const inModal = modalBody && modalBody.contains(anchorNode);
+    const inReview = reviewResults && reviewResults.contains(anchorNode);
+    const inImprove = (originalText && originalText.contains(anchorNode)) || (improvedText && improvedText.contains(anchorNode));
+
+    if (!anchorNode || !(inModal || inReview || inImprove)) {
       toolbar.style.display = 'none';
       return;
     }
+
 
     selectedWord = text;
 

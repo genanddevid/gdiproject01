@@ -783,6 +783,8 @@ def get_cohort_milestones(member_stats):
 @login_required
 def download_cohort_report(request):
     from authy.models import Cohort, ReviewWritingLog, WritewordLookupLog
+    from post.models import PostView
+    import requests
     from django.db.models import Count
     from io import BytesIO
     from reportlab.lib.pagesizes import letter, landscape
@@ -847,13 +849,52 @@ def download_cohort_report(request):
 
     # Page 2 — Qualitative Writing & Pedagogical Growth
     story.append(Paragraph("Qualitative Writing & Pedagogical Growth", section_style))
-    story.append(Paragraph("AI Review Interventions & Syntax Evolution", styles['Heading3']))
-    story.append(Spacer(1, 8))
 
+    member_user_ids = [m.member_user_id for m in members if m.member_user_id]
+    all_logs = ReviewWritingLog.objects.filter(user_id__in=member_user_ids)
+
+    w1_total = sum(s['w1_err'] for s in member_stats)
+    w2_total = sum(s['w2_err'] for s in member_stats)
+    total_interventions = sum(log.issue_count for log in all_logs)
+
+    story.append(Paragraph("1. Cohort Syntax Evolution Metrics", styles['Heading3']))
+    story.append(Paragraph(f"Total AI Review Interventions Logged: {total_interventions}", body_style))
+    story.append(Paragraph(f"Week 1 Interventions: {w1_total} &nbsp;|&nbsp; Week 2 Interventions: {w2_total}", body_style))
+    if w1_total > 0:
+        reduction = round(((w1_total - w2_total) / w1_total) * 100, 1)
+        story.append(Paragraph(f"<b>Correction Reduction Rate:</b> {reduction}% drop between Week 1 and Week 2.", body_style))
+    story.append(Spacer(1, 14))
+
+    story.append(Paragraph("2. Error Category Breakdown", styles['Heading3']))
+    category_counts = (
+        all_logs.values('category').annotate(total=Count('id')).order_by('-total')
+    )
+    category_sum = sum(c['total'] for c in category_counts)
+    if category_sum > 0:
+        cat_data = [['Category', 'Reviews', 'Share']]
+        for c in category_counts:
+            pct = round((c['total'] / category_sum) * 100)
+            cat_data.append([c['category'].capitalize(), c['total'], f"{pct}%"])
+        cat_table = Table(cat_data, colWidths=[2.5*inch, 1.5*inch, 1.5*inch])
+        cat_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a1a1a')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dddddd')),
+            ('TOPPADDING', (0, 0), (-1, -1), 5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ]))
+        story.append(cat_table)
+    else:
+        story.append(Paragraph("No reviews recorded yet.", body_style))
+    story.append(Spacer(1, 14))
+
+    story.append(Paragraph("3. Representative Before &amp; After Snippets", styles['Heading3']))
+    snippet_count = 0
     for m in members:
-        if not m.member_user:
+        if not m.member_user or snippet_count >= 6:
             continue
-        log = ReviewWritingLog.objects.filter(
+        log = all_logs.filter(
             user=m.member_user, issues_detail__isnull=False
         ).exclude(issues_detail=[]).order_by('-created_at').first()
 
@@ -861,36 +902,49 @@ def download_cohort_report(request):
             issue = log.issues_detail[0]
             original = (issue.get('original', '') or '')[:150]
             suggestion = (issue.get('suggestion', '') or '')[:150]
-            story.append(Paragraph(f"<b>Student:</b> {m.email}", body_style))
-            story.append(Paragraph(f"<i>Original Draft:</i> \u201c{original}\u201d", body_style))
-            story.append(Paragraph(f"<i>AI Review Correction:</i> \u201c{suggestion}\u201d", body_style))
+            story.append(Paragraph(f"<b>{m.email}</b> &nbsp;<font color='#888'>({log.category})</font>", body_style))
+            story.append(Paragraph(f"<i>Original:</i> \u201c{original}\u201d", body_style))
+            story.append(Paragraph(f"<i>Correction:</i> \u201c{suggestion}\u201d", body_style))
             story.append(Spacer(1, 10))
-
-    w1_total = sum(s['w1_err'] for s in member_stats)
-    w2_total = sum(s['w2_err'] for s in member_stats)
-    if w1_total > 0:
-        reduction = round(((w1_total - w2_total) / w1_total) * 100, 1)
-        story.append(Spacer(1, 6))
-        story.append(Paragraph(
-            f"<b>Key Pedagogical Metric:</b> {reduction}% drop in repeated grammar/syntax corrections between Week 1 ({w1_total} corrections) and Week 2 ({w2_total} corrections).",
-            body_style
-        ))
+            snippet_count += 1
     story.append(PageBreak())
 
     # Page 3 — Vocabulary Acquisition & Reading Analytics
     story.append(Paragraph("Vocabulary Acquisition & Reading Analytics (Writeword)", section_style))
-    member_user_ids = [m.member_user_id for m in members if m.member_user_id]
+
+    story.append(Paragraph("1. Reading Engagement Overview", styles['Heading3']))
+    total_stories_read = PostView.objects.filter(user_id__in=member_user_ids).count()
+    total_read_minutes = sum(s['read_minutes'] for s in member_stats)
+    total_lookups = sum(s['lookups'] for s in member_stats)
+    story.append(Paragraph(f"Total Peer Narratives Read: {total_stories_read}", body_style))
+    story.append(Paragraph(f"Total Reading Time Logged: {total_read_minutes} minutes", body_style))
+    story.append(Paragraph(f"Total Writeword Lookups: {total_lookups}", body_style))
+    story.append(Spacer(1, 14))
+
+    story.append(Paragraph("2. Top Words Looked Up During Reading", styles['Heading3']))
     top_words = (
         WritewordLookupLog.objects.filter(user_id__in=member_user_ids)
         .values('word').annotate(count=Count('word')).order_by('-count')[:10]
     )
-
-    story.append(Paragraph("Top Words Looked Up During Reading", styles['Heading3']))
     if top_words:
-        word_data = [['Word', 'Times Looked Up']]
+        word_data = [['Word', 'Times Looked Up', 'Arabic Translation']]
         for w in top_words:
-            word_data.append([w['word'], w['count']])
-        word_table = Table(word_data, colWidths=[3*inch, 2*inch])
+            translation = '—'
+            try:
+                resp = requests.get(
+                    'https://api.mymemory.translated.net/get',
+                    params={'q': w['word'], 'langpair': 'en|ar'},
+                    timeout=5
+                )
+                if resp.status_code == 200:
+                    result = resp.json()
+                    if result.get('responseStatus') == 200:
+                        translation = result['responseData'].get('translatedText', '—')
+            except Exception:
+                pass
+            word_data.append([w['word'], w['count'], translation])
+
+        word_table = Table(word_data, colWidths=[2.2*inch, 1.6*inch, 2.2*inch])
         word_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a1a1a')),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
@@ -903,9 +957,7 @@ def download_cohort_report(request):
     else:
         story.append(Paragraph("No lookups recorded yet.", body_style))
 
-    total_lookups = sum(s['lookups'] for s in member_stats)
     story.append(Spacer(1, 14))
-    story.append(Paragraph(f"<b>Total Writeword Lookups:</b> {total_lookups} instances logged.", body_style))
     story.append(Paragraph("<b>Word Adoption Tracking:</b> not yet available — coming in a future update.", small_style))
 
     doc.build(story)

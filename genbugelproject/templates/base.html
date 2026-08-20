@@ -1361,9 +1361,8 @@ document.addEventListener('selectionchange', function() {
     window._wwTimer = setTimeout(onSelectionChange, 300);
 });
 
-  function onTextareaSelectionChange() {
-    const textarea = document.querySelector('textarea[name="content"]');
-    if (!textarea) return;
+  function onTextareaSelectionChange(event) {
+    const textarea = event.target;
 
     const toolbar = document.getElementById('writeword-toolbar');
     const start = textarea.selectionStart;
@@ -1389,18 +1388,22 @@ document.addEventListener('selectionchange', function() {
     toolbar.style.display = 'block';
   }
 
-  const wwContentTextarea = document.querySelector('textarea[name="content"]');
-  if (wwContentTextarea) {
-    wwContentTextarea.addEventListener('mouseup', onTextareaSelectionChange);
-    wwContentTextarea.addEventListener('keyup', onTextareaSelectionChange);
-    wwContentTextarea.addEventListener('touchend', onTextareaSelectionChange);
-    wwContentTextarea.addEventListener('blur', function() {
+  function wireWritewordTextarea(textarea) {
+    if (!textarea) return;
+    textarea.addEventListener('mouseup', onTextareaSelectionChange);
+    textarea.addEventListener('keyup', onTextareaSelectionChange);
+    textarea.addEventListener('touchend', onTextareaSelectionChange);
+    textarea.addEventListener('blur', function() {
       setTimeout(function() {
         const toolbar = document.getElementById('writeword-toolbar');
         if (toolbar) toolbar.style.display = 'none';
       }, 200);
     });
   }
+
+  wireWritewordTextarea(document.querySelector('textarea[name="content"]'));
+  wireWritewordTextarea(document.querySelector('textarea[name="caption"]'));
+
 
 
   // Hide toolbar when clicking elsewhere

@@ -1355,7 +1355,11 @@ toolbar.style.display = 'block';
     
   }
 
-// No global selectionchange handler needed for textarea selections.
+document.addEventListener('mouseup', onSelectionChange);
+document.addEventListener('selectionchange', function() {
+    clearTimeout(window._wwTimer);
+    window._wwTimer = setTimeout(onSelectionChange, 300);
+});
 
   function onTextareaSelectionChange(event) {
     const textarea = event.target;
@@ -1388,35 +1392,37 @@ toolbar.style.display = 'block';
     return el && el.tagName === 'TEXTAREA' && (el.name === 'content' || el.name === 'caption');
   }
 
+  function debouncedTextareaCheck(textarea) {
+    clearTimeout(window._wwTextareaTimer);
+    window._wwTextareaTimer = setTimeout(function() {
+      onTextareaSelectionChange({ target: textarea });
+    }, 300);
+  }
+
+  document.addEventListener('select', function(event) {
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  }, true);
+
   document.addEventListener('mouseup', function(event) {
-    if (!isWritewordTextarea(event.target)) return;
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  });
 
-    const textarea = event.target;
+  document.addEventListener('touchend', function(event) {
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  });
 
-    setTimeout(function() {
-        onTextareaSelectionChange({ target: textarea });
-    }, 50);
-});
+  document.addEventListener('keyup', function(event) {
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  });
 
-document.addEventListener('touchend', function(event) {
-    if (!isWritewordTextarea(event.target)) return;
-
-    const textarea = event.target;
-
-    setTimeout(function() {
-        onTextareaSelectionChange({ target: textarea });
-    }, 100);
-});
-
-document.addEventListener('keyup', function(event) {
-    if (!isWritewordTextarea(event.target)) return;
-
-    const textarea = event.target;
-
-    setTimeout(function() {
-        onTextareaSelectionChange({ target: textarea });
-    }, 0);
-});
+  document.addEventListener('focusout', function(event) {
+    if (isWritewordTextarea(event.target)) {
+      setTimeout(function() {
+        const toolbar = document.getElementById('writeword-toolbar');
+        if (toolbar) toolbar.style.display = 'none';
+      }, 200);
+    }
+  });
 
 
 

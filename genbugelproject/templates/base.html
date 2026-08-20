@@ -1355,7 +1355,7 @@ toolbar.style.display = 'block';
     
   }
 
-  document.addEventListener('mouseup', onSelectionChange);
+document.addEventListener('mouseup', onSelectionChange);
 document.addEventListener('selectionchange', function() {
     clearTimeout(window._wwTimer);
     window._wwTimer = setTimeout(onSelectionChange, 300);
@@ -1390,9 +1390,18 @@ document.addEventListener('selectionchange', function() {
 
   function wireWritewordTextarea(textarea) {
     if (!textarea) return;
-    textarea.addEventListener('mouseup', onTextareaSelectionChange);
-    textarea.addEventListener('keyup', onTextareaSelectionChange);
-    textarea.addEventListener('touchend', onTextareaSelectionChange);
+
+    function debouncedCheck() {
+      clearTimeout(window._wwTextareaTimer);
+      window._wwTextareaTimer = setTimeout(function() {
+        onTextareaSelectionChange({ target: textarea });
+      }, 300);
+    }
+
+    textarea.addEventListener('select', debouncedCheck);
+    textarea.addEventListener('mouseup', debouncedCheck);
+    textarea.addEventListener('touchend', debouncedCheck);
+    textarea.addEventListener('keyup', debouncedCheck);
     textarea.addEventListener('blur', function() {
       setTimeout(function() {
         const toolbar = document.getElementById('writeword-toolbar');
@@ -1400,6 +1409,7 @@ document.addEventListener('selectionchange', function() {
       }, 200);
     });
   }
+
 
   wireWritewordTextarea(document.querySelector('textarea[name="content"]'));
   wireWritewordTextarea(document.querySelector('textarea[name="caption"]'));

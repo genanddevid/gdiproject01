@@ -1378,14 +1378,10 @@ toolbar.style.display = 'block';
 
     selectedWord = text;
 
-    // Put the bubble somewhere safely visible.
-// It does not need to be positioned next to the selected word.
-toolbar.style.position = 'fixed';
-toolbar.style.zIndex = '999999';
-toolbar.style.left = '50%';
-toolbar.style.top = '80px';
-toolbar.style.transform = 'translateX(-50%)';
-toolbar.style.display = 'block';
+    toolbar.style.top = 'auto';
+    toolbar.style.left = '50%';
+    toolbar.style.bottom = '80px';
+    toolbar.style.display = 'block';
   }
 
   function isWritewordTextarea(el) {

@@ -1361,6 +1361,48 @@ document.addEventListener('selectionchange', function() {
     window._wwTimer = setTimeout(onSelectionChange, 300);
 });
 
+  function onTextareaSelectionChange() {
+    const textarea = document.querySelector('textarea[name="content"]');
+    if (!textarea) return;
+
+    const toolbar = document.getElementById('writeword-toolbar');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    if (start === end) {
+      toolbar.style.display = 'none';
+      return;
+    }
+
+    const text = textarea.value.substring(start, end).trim();
+
+    if (text.includes(' ') || text.length < 2) {
+      toolbar.style.display = 'none';
+      return;
+    }
+
+    selectedWord = text;
+
+    const rect = textarea.getBoundingClientRect();
+    toolbar.style.left = (rect.left + rect.width / 2) + 'px';
+    toolbar.style.top = (rect.bottom + 12) + 'px';
+    toolbar.style.display = 'block';
+  }
+
+  const wwContentTextarea = document.querySelector('textarea[name="content"]');
+  if (wwContentTextarea) {
+    wwContentTextarea.addEventListener('mouseup', onTextareaSelectionChange);
+    wwContentTextarea.addEventListener('keyup', onTextareaSelectionChange);
+    wwContentTextarea.addEventListener('touchend', onTextareaSelectionChange);
+    wwContentTextarea.addEventListener('blur', function() {
+      setTimeout(function() {
+        const toolbar = document.getElementById('writeword-toolbar');
+        if (toolbar) toolbar.style.display = 'none';
+      }, 200);
+    });
+  }
+
+
   // Hide toolbar when clicking elsewhere
  
 

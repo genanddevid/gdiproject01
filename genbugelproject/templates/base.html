@@ -1388,31 +1388,42 @@ document.addEventListener('selectionchange', function() {
     toolbar.style.display = 'block';
   }
 
-  function wireWritewordTextarea(textarea) {
-    if (!textarea) return;
+  function isWritewordTextarea(el) {
+    return el && el.tagName === 'TEXTAREA' && (el.name === 'content' || el.name === 'caption');
+  }
 
-    function debouncedCheck() {
-      clearTimeout(window._wwTextareaTimer);
-      window._wwTextareaTimer = setTimeout(function() {
-        onTextareaSelectionChange({ target: textarea });
-      }, 300);
-    }
+  function debouncedTextareaCheck(textarea) {
+    clearTimeout(window._wwTextareaTimer);
+    window._wwTextareaTimer = setTimeout(function() {
+      onTextareaSelectionChange({ target: textarea });
+    }, 300);
+  }
 
-    textarea.addEventListener('select', debouncedCheck);
-    textarea.addEventListener('mouseup', debouncedCheck);
-    textarea.addEventListener('touchend', debouncedCheck);
-    textarea.addEventListener('keyup', debouncedCheck);
-    textarea.addEventListener('blur', function() {
+  document.addEventListener('select', function(event) {
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  }, true);
+
+  document.addEventListener('mouseup', function(event) {
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  });
+
+  document.addEventListener('touchend', function(event) {
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  });
+
+  document.addEventListener('keyup', function(event) {
+    if (isWritewordTextarea(event.target)) debouncedTextareaCheck(event.target);
+  });
+
+  document.addEventListener('focusout', function(event) {
+    if (isWritewordTextarea(event.target)) {
       setTimeout(function() {
         const toolbar = document.getElementById('writeword-toolbar');
         if (toolbar) toolbar.style.display = 'none';
       }, 200);
-    });
-  }
+    }
+  });
 
-
-  wireWritewordTextarea(document.querySelector('textarea[name="content"]'));
-  wireWritewordTextarea(document.querySelector('textarea[name="caption"]'));
 
 
 
@@ -2335,7 +2346,7 @@ window.collapsePronunciation = function() {
             ▶
         </button>` : ''}
       </div>
-      <div class="ww-section-label">${cfg.label} • <a href="https://mymemory.translated.net/" target="_blank" style="color:#0d5cab; text-decoration:none;">MyMemory</a></div>
+      <div class="ww-section-label">${cfg.label} <span style="color:#999999; font-size:11px; font-weight:600;">Translation</span> • <a href="https://mymemory.translated.net/" target="_blank" style="color:#0d5cab; text-decoration:none;">MyMemory</a></div>
     `;
   }
 

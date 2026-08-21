@@ -1068,7 +1068,8 @@ def ca_dashboard(request):
         'lookups': sum(s['lookups'] for s in member_stats),
     }
 
-   return render(request, 'ca_dashboard.html', {
+    
+    return render(request, 'ca_dashboard.html', {
         'cohort': cohort,
         'members': members,
         'cohort_feedback': cohort_feedback,

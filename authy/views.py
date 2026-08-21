@@ -1068,7 +1068,7 @@ def ca_dashboard(request):
         'lookups': sum(s['lookups'] for s in member_stats),
     }
 
-    return render(request, 'ca_dashboard.html', {
+   return render(request, 'ca_dashboard.html', {
         'cohort': cohort,
         'members': members,
         'cohort_feedback': cohort_feedback,
@@ -1078,6 +1078,8 @@ def ca_dashboard(request):
         'all_milestones_met': all_milestones_met,
         'lowest_pct': lowest_pct,
         'bottleneck_label': bottleneck_label,
+        'all_cohorts': all_cohorts,
+        'is_admin': is_admin,
     })
 
 

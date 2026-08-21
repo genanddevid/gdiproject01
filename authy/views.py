@@ -793,17 +793,26 @@ def download_cohort_report(request):
     from reportlab.lib import colors
     from reportlab.lib.units import inch
 
-    cohort = Cohort.objects.filter(partner_user=request.user, is_active=True).first()
-    if not cohort:
-        return HttpResponse('Not authorized', status=403)
+    is_admin = request.user.is_staff or request.user.is_superuser
+
+    if is_admin:
+        cohort_id = request.GET.get('cohort_id')
+        cohort = Cohort.objects.filter(id=cohort_id, is_active=True).first() if cohort_id else None
+        if not cohort:
+            return HttpResponse('Cohort not found.', status=404)
+    else:
+        cohort = Cohort.objects.filter(partner_user=request.user, is_active=True).first()
+        if not cohort:
+            return HttpResponse('Not authorized', status=403)
 
     members = cohort.members.filter(is_active=True).order_by('email')
     member_stats = [get_member_stats(m) for m in members]
-    milestones, all_milestones_met = get_cohort_milestones(member_stats)
+    milestones, all_milestones_met, lowest_pct, bottleneck_label = get_cohort_milestones(member_stats)
 
-    if not all_milestones_met:
+    if not all_milestones_met and not is_admin:
         messages.error(request, "The report unlocks once every pilot milestone has been reached.")
         return redirect('ca_dashboard')
+
 
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=landscape(letter), topMargin=0.6*inch, bottomMargin=0.6*inch, leftMargin=0.5*inch, rightMargin=0.5*inch)
@@ -975,11 +984,27 @@ def ca_dashboard(request):
     from authy.models import Cohort, CohortMemberEmail, Feedback
     import json
 
-    cohort = Cohort.objects.filter(partner_user=request.user, is_active=True).first()
-    if not cohort:
-        return HttpResponse('Not authorized', status=403)
+    is_admin = request.user.is_staff or request.user.is_superuser
+
+    if is_admin:
+        cohort_id = request.GET.get('cohort_id')
+        all_cohorts = Cohort.objects.filter(is_active=True).order_by('partner_email')
+        if cohort_id:
+            cohort = all_cohorts.filter(id=cohort_id).first()
+        else:
+            cohort = all_cohorts.first()
+        if not cohort:
+            return HttpResponse('No active cohorts exist yet.', status=404)
+    else:
+        cohort = Cohort.objects.filter(partner_user=request.user, is_active=True).first()
+        all_cohorts = None
+        if not cohort:
+            return HttpResponse('Not authorized', status=403)
 
     if request.method == 'POST':
+        if is_admin:
+            return HttpResponse('Admins manage cohorts through Django admin, not this view.', status=403)
+
         action = request.POST.get('action')
 
         if action == 'add':

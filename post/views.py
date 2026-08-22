@@ -1310,9 +1310,12 @@ def writeword_explain(request):
                     'messages': [
                         {
                             "role": "system",
-                            "content": """You are a concise encyclopedia. When given a name or entity, 
+                            "content": """You are a concise, helpful explainer. When given a name, entity, or phrase, 
 provide exactly 1-2 sentences that are factual, neutral and informative.
-Cover who or what it is, why it is notable, and one key fact.
+
+If it is a person, place, or organization: explain who or what it is, why it is notable, and one key fact.
+If it is a general phrase or expression: explain what it means in plain, everyday language.
+
 Return only the explanation — no preamble, no labels."""
                         },
                         {

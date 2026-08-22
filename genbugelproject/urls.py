@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, vocabulary_lookup, wordreference_lookup, cambridge_lookup, log_read_time, log_writeword_lookup
+from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, writeword_translate_phrase, vocabulary_lookup, wordreference_lookup, cambridge_lookup, log_read_time, log_writeword_lookup
 from authy.views import ca_dashboard, feedback_view, download_cohort_report, all_cohorts_dashboard
 
 #from .views import frontpage

@@ -1305,15 +1305,19 @@ document.addEventListener('focusin', function(e) {
 
   function handleMultiWordLookup(phrase) {
     const body = document.getElementById('writeword-body');
-    const cfg = getLangConfig(currentLang);
 
-    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(phrase)}&langpair=en|${cfg.mmCode}`)
+    fetch('/writeword-translate-phrase/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify({ phrase: phrase, lang_code: currentLang })
+    })
       .then(r => r.json()).catch(() => null)
       .then(translationData => {
-        let translation = '—';
-        if (translationData && translationData.responseStatus === 200) {
-          translation = translationData.responseData.translatedText || '—';
-        }
+        let translation = (translationData && translationData.translation) || '—';
+
 
         body.innerHTML = `
           <div class="ww-word">${selectedWord}</div>
@@ -2375,6 +2379,28 @@ window.collapsePronunciation = function() {
     }
 
     const cfg = getLangConfig(lang);
+    const wwSwitchWordCount = selectedWord.trim().split(/\s+/).filter(Boolean).length;
+
+    if (wwSwitchWordCount > 1) {
+      fetch('/writeword-translate-phrase/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ phrase: selectedWord, lang_code: lang })
+      })
+        .then(r => r.json())
+        .then(data => {
+          const translation = (data && data.translation) || '—';
+          if (section) section.innerHTML = renderTranslationHtml(translation, lang);
+        })
+        .catch(() => {
+          if (section) section.innerHTML = renderTranslationHtml('—', lang);
+        });
+      return;
+    }
+
     fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(selectedWord.toLowerCase())}&langpair=en|${cfg.mmCode}`)
       .then(r => r.json())
       .then(data => {

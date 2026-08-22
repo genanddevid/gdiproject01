@@ -1347,6 +1347,65 @@ Return only the explanation — no preamble, no labels."""
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
+def writeword_translate_phrase(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            phrase = data.get('phrase', '').strip()
+            lang_code = data.get('lang_code', 'vi').strip()
+
+            if not phrase:
+                return JsonResponse({'error': 'No phrase provided'}, status=400)
+
+            lang_names = {'vi': 'Vietnamese', 'ar': 'Arabic', 'ur': 'Urdu', 'ml': 'Malayalam'}
+            target_language = lang_names.get(lang_code, 'Vietnamese')
+
+            api_key = os.environ.get('DEEPSEEK_API_KEY')
+            if not api_key:
+                return JsonResponse({'error': 'API key not configured'}, status=500)
+
+            response = requests.post(
+                'https://api.deepseek.com/chat/completions',
+                headers={
+                    'Authorization': f'Bearer {api_key}',
+                    'Content-Type': 'application/json',
+                },
+                json={
+                    'model': 'deepseek-v4-flash',
+                    'messages': [
+                        {
+                            "role": "system",
+                            "content": f"""You are a precise translator. Translate the given English phrase into natural, contextually accurate {target_language}.
+Return ONLY the translation — no explanations, no quotation marks, no preamble."""
+                        },
+                        {
+                            "role": "user",
+                            "content": phrase
+                        }
+                    ],
+                    'temperature': 0.3,
+                    'max_tokens': 150,
+                    'thinking': {'type': 'disabled'},
+                },
+                timeout=15,
+            )
+
+            if response.status_code != 200:
+                print(f"Phrase translation failed for '{phrase}': {response.status_code} {response.text}")
+                return JsonResponse({'error': f'DeepSeek returned {response.status_code}'}, status=500)
+
+            result = response.json()
+            translation = (result['choices'][0]['message']['content'] or '').strip()
+            if not translation:
+                translation = '—'
+            return JsonResponse({'translation': translation})
+
+        except Exception as e:
+            import traceback
+            print(f"Phrase translation failed: {e}")
+            traceback.print_exc()
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
 

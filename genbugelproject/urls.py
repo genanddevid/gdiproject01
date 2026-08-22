@@ -55,6 +55,7 @@ urlpatterns = [
     path('review-writing/', review_writing, name='review_writing'),
     path('run-tagging/', run_tagging_now, name='run_tagging'),
     path('writeword-explain/', writeword_explain, name='writeword_explain'),
+    path('writeword-translate-phrase/', writeword_translate_phrase, name='writeword_translate_phrase'),
     path('vocabulary-lookup/', vocabulary_lookup, name='vocabulary_lookup'),
     path('wordreference-lookup/', wordreference_lookup, name='wordreference_lookup'),
     path('cambridge-lookup/', cambridge_lookup, name='cambridge_lookup'),

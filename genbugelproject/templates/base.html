@@ -1306,7 +1306,7 @@ document.addEventListener('focusin', function(e) {
     const body = document.getElementById('writeword-body');
     const cfg = getLangConfig(currentLang);
 
-    fetchWithTimeout(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(phrase)}&langpair=en|${cfg.mmCode}`, {}, 8000)
+    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(phrase)}&langpair=en|${cfg.mmCode}`)
       .then(r => r.json()).catch(() => null)
       .then(translationData => {
         let translation = '—';

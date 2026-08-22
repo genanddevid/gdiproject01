@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  .ca-container { max-width: 700px; margin: 0 auto; padding: 20px; }
+  @media (max-width: 768px) { .ca-container { padding: 12px; } }
+  .ca-card { border: 1px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: white; }
+</style>
+
+<div class="ca-container">
+  <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 8px;">All Cohorts</h2>
+  <p style="font-size: 13px; color: #888; margin-bottom: 24px;">{{ summary.total_cohorts }} active cohort{{ summary.total_cohorts|pluralize }} • {{ summary.total_members }} total members</p>
+
+  <div class="ca-card">
+    <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+      <span style="font-weight:600;">Overall progress (all cohorts)</span>
+      <span style="color:{% if summary.lowest_pct >= 80 %}#1a7a3a{% else %}#888{% endif %};">{{ summary.lowest_pct }}%{% if summary.lowest_pct >= 80 %} ✓{% endif %}</span>
+    </div>
+    <div style="background:#f0f0f0; border-radius:4px; height:8px; overflow:hidden;">
+      <div style="background:{% if summary.lowest_pct >= 80 %}#1a7a3a{% else %}#000{% endif %}; height:100%; width:{{ summary.lowest_pct }}%;"></div>
+    </div>
+    {% if summary.bottleneck_label %}
+      <p style="font-size:11px; color:#888; margin-top:6px;">Furthest behind: {{ summary.bottleneck_label }}</p>
+    {% endif %}
+    <div style="margin-top:14px; padding-top:12px; border-top:1px solid #eee; font-size:12px;">
+      <div style="display:flex; justify-content:space-between;">
+        <span style="font-weight:500;">Error reduction (W1 → W2)</span>
+        <span style="color:{% if summary.reduction_met %}#1a7a3a{% else %}#888{% endif %};">{{ summary.w1_err }} → {{ summary.w2_err }} {% if summary.reduction_met %}✓{% endif %}</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">By cohort</h3>
+  <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #eee; border-radius: 8px; margin-bottom: 24px;">
+    <table style="border-collapse: collapse; font-size: 12px; white-space: nowrap; min-width: 100%;">
+      <thead>
+        <tr style="background: #fafafa; border-bottom: 1px solid #eee;">
+          <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Partner</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Members</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Logins</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Stories</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Words</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Comments</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Read (min)</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">AI Rev.</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Likes</th>
+          <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Lookups</th>
+          <th style="padding: 10px 12px; text-align: center; font-weight: 600;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in summary.cohort_rows %}
+        <tr style="border-bottom: 1px solid #f5f5f5;">
+          <td style="padding: 10px 12px;">{{ row.cohort.partner_email }}<br><span style="color:#aaa; font-size:10px;">{{ row.cohort.institution_name|default:"—" }}</span></td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.member_count }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.logins }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.stories }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.words }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.comments }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.read_minutes }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.ai_reviews }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.likes }}</td>
+          <td style="padding: 10px 12px; text-align: right;">{{ row.totals.lookups }}</td>
+          <td style="padding: 10px 12px; text-align: center;"><a href="{% url 'ca_dashboard' %}?cohort_id={{ row.cohort.id }}" style="color:#0d5cab; font-size:11px; text-decoration:none;">View →</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="11" style="padding: 16px; text-align:center; color:#888;">No active cohorts yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

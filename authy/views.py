@@ -729,6 +729,76 @@ FRIENDLY_METRIC_LABELS = {
     'read_minutes': 'Read Time', 'ai_reviews': 'AI Reviews', 'lookups': 'Lookups', 'likes': 'Likes',
 }
 
+def get_all_cohorts_summary():
+    from authy.models import Cohort
+
+    all_cohorts = Cohort.objects.filter(is_active=True).order_by('partner_email')
+    cohort_rows = []
+    grand_totals = {
+        'logins': 0, 'stories': 0, 'words': 0, 'comments': 0,
+        'read_minutes': 0, 'ai_reviews': 0, 'lookups': 0, 'likes': 0,
+        'w1_err': 0, 'w2_err': 0,
+    }
+    total_members = 0
+
+    for cohort in all_cohorts:
+        members = cohort.members.filter(is_active=True)
+        member_stats = [get_member_stats(m) for m in members]
+        cohort_totals = {
+            'logins': sum(s['logins'] for s in member_stats),
+            'stories': sum(s['stories'] for s in member_stats),
+            'words': sum(s['words'] for s in member_stats),
+            'comments': sum(s['comments'] for s in member_stats),
+            'read_minutes': sum(s['read_minutes'] for s in member_stats),
+            'ai_reviews': sum(s['ai_reviews'] for s in member_stats),
+            'lookups': sum(s['lookups'] for s in member_stats),
+            'likes': sum(s['likes'] for s in member_stats),
+            'w1_err': sum(s['w1_err'] for s in member_stats),
+            'w2_err': sum(s['w2_err'] for s in member_stats),
+        }
+        member_count = members.count()
+        cohort_rows.append({'cohort': cohort, 'member_count': member_count, 'totals': cohort_totals})
+        for key in grand_totals:
+            grand_totals[key] += cohort_totals[key]
+        total_members += member_count
+
+    targets_per_student = {
+        'logins': 14, 'stories': 14, 'words': 3500, 'comments': 28,
+        'read_minutes': 140, 'ai_reviews': 14, 'lookups': 28, 'likes': 28,
+    }
+    lowest_pct = 0
+    bottleneck_label = None
+    if total_members > 0:
+        lowest_pct = 100
+        for key, target in targets_per_student.items():
+            cohort_target = target * total_members
+            pct = round((grand_totals[key] / cohort_target) * 100) if cohort_target else 0
+            gating_pct = min(pct, 100)
+            if gating_pct < lowest_pct:
+                lowest_pct = gating_pct
+                bottleneck_label = FRIENDLY_METRIC_LABELS.get(key, key)
+
+    w1, w2 = grand_totals['w1_err'], grand_totals['w2_err']
+    reduction_met = w1 > 0 and w2 <= (w1 * 0.72)
+
+    return {
+        'cohort_rows': cohort_rows, 'grand_totals': grand_totals,
+        'total_members': total_members, 'total_cohorts': all_cohorts.count(),
+        'lowest_pct': lowest_pct, 'bottleneck_label': bottleneck_label,
+        'w1_err': w1, 'w2_err': w2, 'reduction_met': reduction_met,
+    }
+
+
+@login_required
+def all_cohorts_dashboard(request):
+    if not (request.user.is_staff or request.user.is_superuser):
+        return HttpResponse('Not authorized', status=403)
+    summary = get_all_cohorts_summary()
+    return render(request, 'all_cohorts_dashboard.html', {'summary': summary})
+
+
+
+
 def get_cohort_milestones(member_stats):
     cohort_size = 10
     totals = {

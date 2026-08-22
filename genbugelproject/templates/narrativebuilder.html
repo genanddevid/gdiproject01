@@ -666,7 +666,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // AI Writing Assistant
-document.getElementById('improveBtn').addEventListener('click', function() {
+function safeAddListener(id, event, handler) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(event, handler);
+}
+
+safeAddListener('improveBtn', 'click', function() {
     const contentField = document.querySelector('textarea[name="content"]');
     const originalText = contentField.value.trim();
     
@@ -713,7 +718,7 @@ document.getElementById('improveBtn').addEventListener('click', function() {
     });
 });
 
-document.getElementById('reviewBtn').addEventListener('click', function() {
+safeAddListener('reviewBtn', 'click', function() {
     const contentField = document.querySelector('textarea[name="content"]');
     const text = contentField.value.trim();
     if (!text) { alert('Please write something first.'); return; }
@@ -839,7 +844,7 @@ document.querySelectorAll('.review-category-btn').forEach(function(btn) {
 });
 
 
-document.getElementById('useImprovedBtn').addEventListener('click', function() {
+safeAddListener('useImprovedBtn', 'click', function() {
     const improved = document.getElementById('improvedText').textContent;
     const contentField = document.querySelector('textarea[name="content"]');
     contentField.value = improved;
@@ -848,7 +853,7 @@ document.getElementById('useImprovedBtn').addEventListener('click', function() {
     contentField.scrollIntoView({ behavior: 'smooth' });
 });
 
-document.getElementById('keepOriginalBtn').addEventListener('click', function() {
+safeAddListener('keepOriginalBtn', 'click', function() {
     document.getElementById('improvementPanel').style.display = 'none';
 });
 

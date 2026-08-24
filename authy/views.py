@@ -51,10 +51,9 @@ def collections_history(request):
 
 # Create your views here.
 def UserProfile(request, username):
-	user = get_object_or_404(User, username=username)
-	profile = Profile.objects.get(user=user)
-	url_name = resolve(request.path).url_name
-	
+    user = get_object_or_404(User, username=username)
+    profile = Profile.objects.get(user=user)
+    url_name = resolve(request.path).url_name
 
     #if url_name == 'profile':
     posts = list(Post.objects.filter(user=user).order_by('-posted'))
@@ -68,43 +67,41 @@ def UserProfile(request, username):
         if pinned_post:
             posts.insert(0, pinned_post)
 
-	#Profile info stats
-	posts_count = Post.objects.filter(user=user).count()
-	following_count = Follow.objects.filter(follower=user).count()
-	followers_count = Follow.objects.filter(following=user).count()
-	likes_count = Likes.objects.filter(user=user).count()
-	#comment_count = Comment.objects.filter(user=user).count()
+    #Profile info stats
+    posts_count = Post.objects.filter(user=user).count()
+    following_count = Follow.objects.filter(follower=user).count()
+    followers_count = Follow.objects.filter(following=user).count()
+    likes_count = Likes.objects.filter(user=user).count()
+    #comment_count = Comment.objects.filter(user=user).count()
 
-
-	#follow status
-	follow_status = (
+    #follow status
+    follow_status = (
         request.user.is_authenticated and
         Follow.objects.filter(following=user, follower=request.user).exists()
     )
 
-	#Pagination
-	paginator = Paginator(posts, 62)
-	page_number = request.GET.get('page')
-	posts_paginator = paginator.get_page(page_number)
+    #Pagination
+    paginator = Paginator(posts, 62)
+    page_number = request.GET.get('page')
+    posts_paginator = paginator.get_page(page_number)
 
-	template = loader.get_template('profile.html')
+    template = loader.get_template('profile.html')
 
-	context = {
-		'posts': posts_paginator,
-		'profile':profile,
-		'url_name':url_name,
-		'following_count':following_count,
-		'followers_count':followers_count,
-		'posts_count':posts_count,
-		'likes_count': likes_count,
-		#'comment_count': comment_count,
-		'follow_status':follow_status,
-		'active_page': 'profile',
-		'is_own_profile': request.user.is_authenticated and request.user.username == username,
-	}
+    context = {
+        'posts': posts_paginator,
+        'profile': profile,
+        'url_name': url_name,
+        'following_count': following_count,
+        'followers_count': followers_count,
+        'posts_count': posts_count,
+        'likes_count': likes_count,
+        #'comment_count': comment_count,
+        'follow_status': follow_status,
+        'active_page': 'profile',
+        'is_own_profile': request.user.is_authenticated and request.user.username == username,
+    }
 
-	return HttpResponse(template.render(context, request))
-
+    return HttpResponse(template.render(context, request))
 
 
 

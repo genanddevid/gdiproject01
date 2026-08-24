@@ -61,11 +61,11 @@ def UserProfile(request, username):
     #posts = profile.favorites.all()
 
     if profile.pinned_post_id:
-        posts = [p for p in posts if p.id != profile.pinned_post_id]
-        posts = posts[:61]
-        pinned_post = Post.objects.filter(id=profile.pinned_post_id, user=user).first()
-        if pinned_post:
-            posts.insert(0, pinned_post)
+    posts = [p for p in posts if p.id != profile.pinned_post_id]
+    posts = posts[:61]
+    pinned_post = Post.objects.filter(id=profile.pinned_post_id, user=user).first()
+    if pinned_post:
+        posts.insert(0, pinned_post)
 
 	#Profile info stats
 	posts_count = Post.objects.filter(user=user).count()

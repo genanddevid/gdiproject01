@@ -99,6 +99,7 @@ def UserProfile(request, username):
         'follow_status': follow_status,
         'active_page': 'profile',
         'is_own_profile': request.user.is_authenticated and request.user.username == username,
+        'pinned_post_id': profile.pinned_post_id,
     }
 
     return HttpResponse(template.render(context, request))

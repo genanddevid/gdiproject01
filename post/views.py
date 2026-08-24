@@ -159,12 +159,24 @@ def get_recommendations(post, user):
                 seen.add(p.id)
                 unique_combined.append(p)
         
+        # Inject the author's pinned post at the very top, if one exists
+        try:
+            author_profile = post.user.profile
+            pinned = author_profile.pinned_post
+            if pinned and pinned.id != post.id:
+                unique_combined = [p for p in unique_combined if p.id != pinned.id]
+                unique_combined = unique_combined[:5]
+                unique_combined.insert(0, pinned)
+        except Exception:
+            pass
+
         # Split into left and right
         mid = len(unique_combined) // 2
         left_recommendations = unique_combined[:mid]
         right_recommendations = unique_combined[mid:]
         
         return left_recommendations, right_recommendations
+
         
     except Exception as e:
         # Silent fallback — never let recommendations break article loading
@@ -754,6 +766,20 @@ def edit_post(request, post_id):
         'edit_mode': True,
         'post': post,
     })
+
+@login_required
+def toggle_pin(request, post_id):
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+    profile = request.user.profile
+
+    if profile.pinned_post_id == post.id:
+        profile.pinned_post = None
+    else:
+        profile.pinned_post = post
+    profile.save()
+
+    return redirect(request.META.get('HTTP_REFERER', reverse('profile', kwargs={'username': request.user.username})))
+
 
 
 @login_required

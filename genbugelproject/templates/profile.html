@@ -351,13 +351,22 @@ border-radius: 0; padding-right: 7px !important;">
 </div>
 </div>
 
-{% if post.user == request.user %}
+ {% if post.user == request.user %}
 <div style="max-width: 500px; margin: auto; text-align: right; padding-top: 0px; padding-bottom: 10px;">
-  
+
+    <!-- Pin Button -->
+    <a href="{% url 'toggle_pin' post.id %}"
+     class="button is-small has-tooltip-left"
+     data-tooltip="{% if request.user.profile.pinned_post_id == post.id %}Unpin{% else %}Pin to top{% endif %}"
+     style="background-color: rgb(241, 241, 233); border: none;"
+     aria-label="Pin this post">
+    <i class="material-icons" style="font-size: 14px; {% if request.user.profile.pinned_post_id == post.id %}color: #1a7a3a;{% endif %}">push_pin</i>
+  </a>
+
     <!-- Edit Button -->
   
+    <a href="{% url 'edit_post' post.id %}"
 
-    <a href="{% url 'edit_post' post.id %}" 
      class="button is-small has-tooltip-left" 
      data-tooltip="Edit"
      style="background-color: rgb(241, 241, 233); border: none;" 

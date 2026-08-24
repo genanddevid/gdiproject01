@@ -278,7 +278,7 @@ border-radius: 0; padding-right: 7px !important;">
         <span style="position:absolute; top:4px; left:4px; 
             border-radius:50%; width:20px; height:20px; display:flex; align-items:center;
             justify-content:center; pointer-events:none;">
-          <i class="material-icons" style="font-size:16px; color:#f7f7f7; transform:rotate(-29deg);">push_pin</i>
+          <i class="material-icons" style="font-size:16px; color:#ffffff; transform:rotate(-29deg);">push_pin</i>
          
         </span>
         {% endif %}
@@ -368,7 +368,7 @@ border-radius: 0; padding-right: 7px !important;">
      data-tooltip="{% if request.user.profile.pinned_post_id == post.id %}Unpin{% else %}Pin to top{% endif %}"
      style="background-color: rgb(241, 241, 233); border: none;"
      aria-label="Pin this post">
-    <i class="material-icons" style="font-size: 14px; {% if request.user.profile.pinned_post_id == post.id %}color: #f7f7f7;{% endif %}">push_pin</i>
+    <i class="material-icons" style="font-size: 14px; {% if request.user.profile.pinned_post_id == post.id %}color: #ffffff;{% endif %}">push_pin</i>
   </a>
 
     <!-- Edit Button -->

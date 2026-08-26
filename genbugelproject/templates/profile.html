@@ -279,12 +279,7 @@ border-radius: 0; padding-right: 7px !important;">
 
       <!-- Right: Text section -->
       <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 15px; height: 100px; flex: 1;">
-        
-        <!-- Top section: User image and name, then caption -->
-        <div class="content" style="margin-top: -13px;">
-          <!-- User image and name -->
-          <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
-            {% if profile.pinned_post_id == post.id %}
+        {% if profile.pinned_post_id == post.id %}
         <span style="position:absolute; top:4px; left:4px; 
             border-radius:50%; width:20px; height:20px; display:flex; align-items:center;
             justify-content:center; pointer-events:none;">
@@ -292,6 +287,12 @@ border-radius: 0; padding-right: 7px !important;">
          
         </span>
         {% endif %}
+        
+        <!-- Top section: User image and name, then caption -->
+        <div class="content" style="margin-top: -13px;">
+          <!-- User image and name -->
+          <div class="media" style="align-items: center; border-top: none; margin-bottom: 0.25rem;">
+            
                         <!-- Profile Picture of article writer -->
                         <div class="media-left">
                             <figure class="image is-24x24" style="margin: 0;">

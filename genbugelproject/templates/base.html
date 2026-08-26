@@ -482,26 +482,32 @@ document.addEventListener("DOMContentLoaded", function () {
               Interests
           </a>
 
+          
           {% if request.user.is_authenticated %}
           <a href="{% url 'narrativebuilder' %}"
             class="button custom-button {% if active_page == 'narrativebuilder' %}is-active{% endif %}"
             style="margin-bottom: 0px;">
           {% else %}
-          <button onclick="showLoginModal()"
-            class="button custom-button"
-            style="margin-bottom: 0px;">
+            <button onclick="showLoginModal()"
+                    class="button custom-button"
+                    style="margin-bottom: 0px;">
           {% endif %}
           <!--this is for desktop-->
           <!--  <img src="{% static 'img/narrative-icon.png' %}" 
      style="width: 30px; height: 30px; margin-right: 0px; object-fit: contain;">-->
 
-          {% if request.user.is_authenticated %}</a>{% else %}</button>{% endif %}
-
-            <span class="material-symbols-outlined" style="font-size: 12px; margin-right: 8px;">
-              stylus_fountain_pen
-            </span>
+              <span class="material-symbols-outlined" style="font-size: 24px; margin-right: 8px;">
+                stylus_fountain_pen
+              </span>
               Narrative Builder
-          </a>
+            {% if request.user.is_authenticated %}
+                </a>
+              {% else %}
+              </button>
+            {% endif %}
+
+          
+
 
           <a href="{% url 'discover' %}" 
           class="button custom-button {% if active_page == 'discover' %}is-active{% endif %}" 

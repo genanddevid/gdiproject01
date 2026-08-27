@@ -1698,47 +1698,33 @@ if (cambridgeData) {
       }
 
 
-      let vocabDefinition = null;
-      let vocabPartOfSpeech = null;
-      let vocabPronunciation = 'Pronunciation unavailable';
-      vocabAudio = '';
-      if (vocabData) {
-        if (vocabData.definition) vocabDefinition = vocabData.definition;
-        if (vocabData.partOfSpeech) vocabPartOfSpeech = vocabData.partOfSpeech;
-        if (vocabData.pronunciation) vocabPronunciation = vocabData.pronunciation;
-        if (vocabData.audio) vocabAudio = vocabData.audio;
-      }
-
-      let wrDefinition = null;
-      let wrPartOfSpeech = null;
-      if (wrData) {
-        if (wrData.definition) wrDefinition = wrData.definition;
-        if (wrData.partOfSpeech) wrPartOfSpeech = wrData.partOfSpeech;
-      }
-
-      let cambridgePronunciation = 'Pronunciation unavailable';
-      cambridgeAudio = '';
-      let cambridgeDefinition = 'Definition unavailable';
-      let cambridgePartOfSpeech = '';
-      if (cambridgeData) {
-        if (cambridgeData.pronunciation) cambridgePronunciation = cambridgeData.pronunciation;
-        if (cambridgeData.audio) cambridgeAudio = cambridgeData.audio;
-        if (cambridgeData.definition) cambridgeDefinition = cambridgeData.definition;
-        if (cambridgeData.partOfSpeech) cambridgePartOfSpeech = cambridgeData.partOfSpeech;
-      }
+      const dictAvailable = definition !== '—';
 
       const mwAvailable = mwDefinition !== '—';
-      const vocabAvailable = !!vocabDefinition && vocabDefinition !== 'Definition unavailable';
-      const wrAvailable = !!wrDefinition && wrDefinition !== 'Definition unavailable';
-      const cambridgeDefAvailable = !!cambridgeDefinition && cambridgeDefinition !== 'Definition unavailable';
 
-      const mwPronunciationAvailable = mwPronunciation !== 'Pronunciation unavailable';
-      const vocabPronunciationAvailable = vocabPronunciation !== 'Pronunciation unavailable';
-      const cambridgeAvailable = cambridgePronunciation !== 'Pronunciation unavailable';
+      const cambridgeAvailable =
+          cambridgePronunciation !== 'Pronunciation unavailable';
 
-      // isEntity: previously decided by dictionaryapi.dev's success/failure.
-      // Now decided by whether ANY remaining source found a real definition.
-      const isEntity = !(mwAvailable || vocabAvailable || wrAvailable || cambridgeDefAvailable);
+      const dictPronunciationAvailable =
+          dictPronunciation !== 'Pronunciation unavailable';
+
+      const vocabPronunciationAvailable =
+          vocabPronunciation !== 'Pronunciation unavailable';
+
+      const mwPronunciationAvailable =
+          mwPronunciation !== 'Pronunciation unavailable';
+
+      const vocabAvailable =
+          !!vocabDefinition &&
+          vocabDefinition !== 'Definition unavailable';
+
+      const wrAvailable =
+          !!wrDefinition &&
+          wrDefinition !== 'Definition unavailable';
+
+      const cambridgeDefAvailable =
+          !!cambridgeDefinition &&
+          cambridgeDefinition !== 'Definition unavailable';
 
       
       const mwLink = `https://www.merriam-webster.com/dictionary/${word}`;
@@ -1750,6 +1736,25 @@ if (cambridgeData) {
       const vocabFullText = (vocabPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — ` : '') + (vocabDefinition || '');      
       const wrFullText = (wrPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${wrPartOfSpeech}</em> — ` : '') + (wrDefinition || 'Definition unavailable');
       const cambridgeFullText = (cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : '') + cambridgeDefinition;
+
+      const cambridgeSlideHtml = `
+              <div style="min-width:100%; box-sizing:border-box;"
+                   data-source="cambridge.org"
+                   data-link="${cambridgeLink}"
+                   data-full="${cambridgeFullText.replace(/"/g, '&quot;')}">
+                <div class="ww-section-content">
+                    ${cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : ''}
+                    ${cambridgeDefinition.length > 120
+                        ? cambridgeDefinition.substring(0, 120) + `...<a href="${cambridgeLink}" target="_blank" style="text-decoration:underline; color:#ffffff; font-size:10px;">Read more</a>`
+                        : cambridgeDefinition}
+                </div>
+                <div class="ww-section-label" style="margin-top:8px;">
+                    <a href="${cambridgeLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Cambridge Dictionary</a>
+                    <span style="font-size:8px; color:#555;">https://dictionary.cambridge.org</span>
+                </div>
+              </div>`;
+      
+      
 
       const mwSlideHtml = `
               <div style="min-width:100%; box-sizing:border-box;" 
@@ -1801,23 +1806,6 @@ if (cambridgeData) {
                 <div class="ww-section-label" style="margin-top:8px;">
                   <a href="${wrLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Wordreference.com</a>
                   <span style="font-size:8px; color:#555;">https://www.wordreference.com</span>
-                </div>
-              </div>`;
-
-      const cambridgeSlideHtml = `
-              <div style="min-width:100%; box-sizing:border-box;"
-                   data-source="cambridge.org"
-                   data-link="${cambridgeLink}"
-                   data-full="${cambridgeFullText.replace(/"/g, '&quot;')}">
-                <div class="ww-section-content">
-                    ${cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : ''}
-                    ${cambridgeDefinition.length > 120
-                        ? cambridgeDefinition.substring(0, 120) + `...<a href="${cambridgeLink}" target="_blank" style="text-decoration:underline; color:#ffffff; font-size:10px;">Read more</a>`
-                        : cambridgeDefinition}
-                </div>
-                <div class="ww-section-label" style="margin-top:8px;">
-                    <a href="${cambridgeLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Cambridge Dictionary</a>
-                    <span style="font-size:8px; color:#555;">https://dictionary.cambridge.org</span>
                 </div>
               </div>`;
 

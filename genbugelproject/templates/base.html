@@ -1528,22 +1528,25 @@ document.addEventListener('touchend', function() {
     }
 
     Promise.all([
-  fetchWithTimeout(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|${getLangConfig(currentLang).mmCode}`, {}, 8000)
-        .then(r => r.json()).catch(() => null),
+  fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|${getLangConfig(currentLang).mmCode}`)
+    .then(r => r.json()).catch(() => null),
 
-      fetchWithTimeout(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${encodeURIComponent(word)}?key=35a925b3-314a-4dd8-b123-0ee55bce39bc`, {}, 8000)
-        .then(r => r.json()).catch(() => null),
+  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null),
 
-      fetchWithTimeout(`/vocabulary-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
-        .then(r => r.json()).catch(() => null),
+  fetch(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${encodeURIComponent(word)}?key=35a925b3-314a-4dd8-b123-0ee55bce39bc`)
+    .then(r => r.json()).catch(() => null),
 
-      fetchWithTimeout(`/wordreference-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
-        .then(r => r.json()).catch(() => null),
+  fetch(`/vocabulary-lookup/?word=${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null),
 
-      fetchWithTimeout(`/cambridge-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
-        .then(r => r.json()).catch(() => null)
+  fetch(`/wordreference-lookup/?word=${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null),
 
-    ]).then(([translationData, mwData, vocabData, wrData, cambridgeData]) => {
+fetch(`/cambridge-lookup/?word=${encodeURIComponent(word)}`)
+    .then(r => r.json()).catch(() => null)
+
+]).then(([translationData, dictData, mwData, vocabData, wrData, cambridgeData]) => {
       // Extract translation
       let translation = '—';
       if (translationData && translationData.responseStatus === 200) {
@@ -1726,7 +1729,7 @@ if (cambridgeData) {
           !!cambridgeDefinition &&
           cambridgeDefinition !== 'Definition unavailable';
 
-      
+      const dictLink = `https://www.dictionary.com/browse/${word}`;
       const mwLink = `https://www.merriam-webster.com/dictionary/${word}`;
       const vocabLink = `https://www.vocabulary.com/dictionary/${word}`;
       const wrLink = `https://www.wordreference.com/definition/${word}`;
@@ -1809,6 +1812,17 @@ if (cambridgeData) {
                 </div>
               </div>`;
 
+      const dictSlideHtml = `
+              <div style="min-width:100%; box-sizing:border-box;" 
+                   data-source="dictionary.com" 
+                   data-link="${dictLink}" 
+                   data-full="${definition.replace(/"/g, '&quot;')}">
+                <div class="ww-section-content">${definition}</div>
+                <div class="ww-section-label" style="margin-top:8px;">
+    <a href="${dictLink}" target="_blank" style="color:#0d5cab; text-decoration:none; display:block;">Dictionary.com</a>
+    <span style="font-size:8px; color:#555;">https://www.dictionary.com</span>
+</div>
+              </div>`;
 
       
 
@@ -1817,6 +1831,7 @@ if (cambridgeData) {
       if (mwAvailable) allDefSlides.push({ source: 'merriam-webster.com', link: mwLink, full: mwFullText, html: mwSlideHtml });
       if (vocabAvailable) allDefSlides.push({ source: 'vocabulary.com', link: vocabLink, full: vocabFullText, html: vocabSlideHtml });
       if (wrAvailable) allDefSlides.push({ source: 'wordreference.com', link: wrLink, full: wrFullText, html: wrSlideHtml });
+      if (dictAvailable) allDefSlides.push({ source: 'dictionary.com', link: dictLink, full: definition, html: dictSlideHtml });
             
       window._wwAllDefSlides = allDefSlides;
       const visibleDefSlides = allDefSlides.slice(0, 3);

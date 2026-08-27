@@ -1824,32 +1824,39 @@ if (cambridgeData) {
 
       
 
-     const allDefSlides = [];
+      const allDefSlides = [];
+      if (cambridgeDefAvailable) allDefSlides.push({ source: 'cambridge.org', link: cambridgeLink, full: cambridgeFullText, html: cambridgeSlideHtml });
       if (mwAvailable) allDefSlides.push({ source: 'merriam-webster.com', link: mwLink, full: mwFullText, html: mwSlideHtml });
       if (vocabAvailable) allDefSlides.push({ source: 'vocabulary.com', link: vocabLink, full: vocabFullText, html: vocabSlideHtml });
       if (wrAvailable) allDefSlides.push({ source: 'wordreference.com', link: wrLink, full: wrFullText, html: wrSlideHtml });
-      if (cambridgeDefAvailable) allDefSlides.push({ source: 'cambridge.org', link: cambridgeLink, full: cambridgeFullText, html: cambridgeSlideHtml });
-
+            
       window._wwAllDefSlides = allDefSlides;
       const visibleDefSlides = allDefSlides.slice(0, 3);
 
-      const mwPronLink = 'https://www.merriam-webster.com';
-      const vocabPronLink = 'https://www.vocabulary.com';
+      const dictPronLink = 'https://www.dictionary.com';
       const cambridgePronLink = 'https://dictionary.cambridge.org';
+      const vocabPronLink = 'https://www.vocabulary.com';
+      const mwPronLink = 'https://www.merriam-webster.com';
 
-      const mwPronSlideHtml = `
+       const vocabPronSlideHtml = `
     <div style="min-width:100%; box-sizing:border-box;"
-      data-source="Merriam-Webster" data-link="${mwPronLink}"
-      data-full="${mwPronunciation}" data-audio="${mwAudio}">
+      data-source="Vocabulary.com" data-link="${vocabPronLink}"
+      data-full="${vocabPronunciation}" data-audio="${vocabAudio}">
     <div class="ww-pronunciation-main">
-        <span class="ww-phonetic">${mwPronunciation}</span>
-        ${mwAudio ? `<button class="ww-audio-btn" onclick="playMWAudio()" title="Listen">▶</button>` : ''}
+        <span class="ww-phonetic">${vocabPronunciation}</span>
+        ${vocabAudio ? `<button class="ww-audio-btn" onclick="playVocabularyAudio()" title="Listen">▶</button>` : ''}
     </div>
     <div class="ww-section-label" style="margin-top:10px;">
-        <div style="font-size:9px;color:#0d5cab;">Merriam-Webster</div>
-        <div style="font-size:8px;color:#555;">${mwPronLink}</div>
-    </div>
+    <a href="${vocabPronLink}" target="_blank"
+       style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+        Vocabulary.com
+    </a>
+    <div style="font-size:8px;color:#555;">${vocabPronLink}</div>
+</div>
 </div>`;
+
+      
+      
 
       const cambridgePronSlideHtml = `
       <div style="min-width:100%; box-sizing:border-box;"
@@ -1860,33 +1867,58 @@ if (cambridgeData) {
             ${cambridgeAudio ? `<button class="ww-audio-btn" onclick="playCambridgeAudio()" title="Listen">▶</button>` : ''}
         </div>
         <div class="ww-section-label" style="margin-top:10px;">
-          <div style="font-size:9px;color:#0d5cab;">Cambridge</div>
-          <div style="font-size:8px;color:#555;">${cambridgePronLink}</div>
-        </div>
+  <a href="${cambridgePronLink}" target="_blank"
+     style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+    Cambridge
+  </a>
+  <div style="font-size:8px;color:#555;">${cambridgePronLink}</div>
+</div>
       </div>`;
 
-      const vocabPronSlideHtml = `
+     
+      const mwPronSlideHtml = `
     <div style="min-width:100%; box-sizing:border-box;"
-      data-source="Vocabulary.com" data-link="${vocabPronLink}"
-      data-full="${vocabPronunciation}" data-audio="${vocabAudio}">
+      data-source="Merriam-Webster" data-link="${mwPronLink}"
+      data-full="${mwPronunciation}" data-audio="${mwAudio}">
     <div class="ww-pronunciation-main">
-        <span class="ww-phonetic">${vocabPronunciation}</span>
-        ${vocabAudio ? `<button class="ww-audio-btn" onclick="playVocabularyAudio()" title="Listen">▶</button>` : ''}
+        <span class="ww-phonetic">${mwPronunciation}</span>
+        ${mwAudio ? `<button class="ww-audio-btn" onclick="playMWAudio()" title="Listen">▶</button>` : ''}
     </div>
     <div class="ww-section-label" style="margin-top:10px;">
-        <div style="font-size:9px;color:#0d5cab;">Vocabulary.com</div>
-        <div style="font-size:8px;color:#555;">${vocabPronLink}</div>
-    </div>
+    <a href="${mwPronLink}" target="_blank"
+       style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+        Merriam-Webster
+    </a>
+    <div style="font-size:8px;color:#555;">${mwPronLink}</div>
+</div>
 </div>`;
 
+
+    const dictPronSlideHtml = `
+      <div style="min-width:100%; box-sizing:border-box;"
+          data-source="Dictionary.com" data-link="${dictPronLink}"
+          data-full="${dictPronunciation}" data-audio="${audioUrl}">
+        <div class="ww-pronunciation-main">
+          <span class="ww-phonetic">${dictPronunciation}</span>
+          ${audioUrl ? `<button class="ww-audio-btn" onclick="playAudio()" title="Listen">▶</button>` : ''}
+        </div>
+        <div class="ww-section-label" style="margin-top:10px;">
+    <a href="${dictPronLink}" target="_blank"
+       style="font-size:9px;color:#0d5cab;text-decoration:none;display:block;">
+        Dictionary.com
+    </a>
+    <div style="font-size:8px;color:#555;">${dictPronLink}</div>
+</div>
+      </div>`;
+
       const allPronSlides = [];
-      if (mwPronunciationAvailable) allPronSlides.push({ source: 'Merriam-Webster', link: mwPronLink, full: mwPronunciation, audio: mwAudio, html: mwPronSlideHtml });
-      if (cambridgeAvailable) allPronSlides.push({ source: 'Cambridge', link: cambridgePronLink, full: cambridgePronunciation, audio: cambridgeAudio, html: cambridgePronSlideHtml });
       if (vocabPronunciationAvailable) allPronSlides.push({ source: 'Vocabulary.com', link: vocabPronLink, full: vocabPronunciation, audio: vocabAudio, html: vocabPronSlideHtml });
+      if (cambridgeAvailable) allPronSlides.push({ source: 'Cambridge', link: cambridgePronLink, full: cambridgePronunciation, audio: cambridgeAudio, html: cambridgePronSlideHtml });
+      if (mwPronunciationAvailable) allPronSlides.push({ source: 'Merriam-Webster', link: mwPronLink, full: mwPronunciation, audio: mwAudio, html: mwPronSlideHtml });
+      if (dictPronunciationAvailable) allPronSlides.push({ source: 'Dictionary.com', link: dictPronLink, full: dictPronunciation, audio: audioUrl, html: dictPronSlideHtml });
 
       window._wwAllPronSlides = allPronSlides;
       const visiblePronSlides = allPronSlides.slice(0, 3);
-
 
 
 

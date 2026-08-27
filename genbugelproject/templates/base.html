@@ -1383,73 +1383,29 @@ document.addEventListener('focusin', function(e) {
 
   // Detect single word selection inside modal
   function onSelectionChange() {
-    const toolbar = document.getElementById('writeword-toolbar');
-    if (!toolbar) return;
-
-    // ---- 1. Narrative Builder textarea selection ----
-    try {
-      const active = document.activeElement;
-      if (
-        active &&
-        (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT') &&
-        (active.name === 'content' || active.name === 'caption') &&
-        typeof active.selectionStart === 'number' &&
-        typeof active.selectionEnd === 'number'
-      ) {
-        const start = active.selectionStart;
-        const end = active.selectionEnd;
-
-        if (start === end) {
-          toolbar.style.display = 'none';
-          return;
-        }
-
-        const text = active.value.substring(start, end).trim();
-        const wordCount = text.split(/\s+/).filter(Boolean).length;
-
-        if (!text || wordCount > 6 || text.length < 2) {
-          toolbar.style.display = 'none';
-          return;
-        }
-
-        selectedWord = text;
-
-        const rect = active.getBoundingClientRect();
-        let left = rect.left + (rect.width / 2);
-        let top = rect.top - 55;
-
-        const toolbarWidth = 150;
-        if (left < toolbarWidth / 2) left = toolbarWidth / 2;
-        if (left > window.innerWidth - toolbarWidth / 2) left = window.innerWidth - toolbarWidth / 2;
-        if (top < 10) top = rect.bottom + 10;
-
-        toolbar.style.left = left + 'px';
-        toolbar.style.top = top + 'px';
-        toolbar.style.display = 'block';
-        return;
-      }
-    } catch (e) {
-      // .selectionStart throws on some input types — ignore, fall through
-    }
-
-    // ---- 2. Normal page text (articles, Review/Improve panels) ----
     const selection = window.getSelection();
+    const toolbar = document.getElementById('writeword-toolbar');
+
     if (!selection || selection.isCollapsed || !selection.toString().trim()) {
-      toolbar.style.display = 'none';
+      document.getElementById('writeword-toolbar').style.display = 'none'
       return;
     }
 
     const text = selection.toString().trim();
+
+    // Single words, or short phrases up to 6 words
     const wordCount = text.split(/\s+/).filter(Boolean).length;
     if (wordCount > 6 || text.length < 2) {
       toolbar.style.display = 'none';
       return;
     }
 
+    // Only inside #modalBody
     const modalBody = document.getElementById('modalBody');
     const reviewResults = document.getElementById('reviewResults');
     const originalText = document.getElementById('originalText');
     const improvedText = document.getElementById('improvedText');
+
     const anchorNode = selection.anchorNode;
     const inModal = modalBody && modalBody.contains(anchorNode);
     const inReview = reviewResults && reviewResults.contains(anchorNode);
@@ -1460,25 +1416,30 @@ document.addEventListener('focusin', function(e) {
       return;
     }
 
+
     selectedWord = text;
 
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-    toolbar.style.left = (rect.left + rect.width / 2) + 'px';
-    toolbar.style.top = (rect.bottom + 27) + 'px';
-    toolbar.style.display = 'block';
-}
+    // debugging
+    console.log('WRITEWORD SELECTED:', selectedWord);
 
+    // Position toolbar above selection
+    
+const range = selection.getRangeAt(0);
+const rect = range.getBoundingClientRect();
+toolbar.style.left = (rect.left + rect.width / 2) + 'px';
+toolbar.style.top = (rect.bottom + 27) + 'px';
+toolbar.style.display = 'block';
+   
 
- document.addEventListener('mouseup', onSelectionChange);
+    
+  }
+
+  document.addEventListener('mouseup', onSelectionChange);
 document.addEventListener('selectionchange', function() {
     clearTimeout(window._wwTimer);
     window._wwTimer = setTimeout(onSelectionChange, 300);
 });
-document.addEventListener('touchend', function() {
-    clearTimeout(window._wwTimer);
-    window._wwTimer = setTimeout(onSelectionChange, 300);
-});
+
   // Hide toolbar when clicking elsewhere
  
 

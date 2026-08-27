@@ -2185,6 +2185,130 @@ document.addEventListener('focusin', function(e) {
     openWriteword();
   };
 
+
+
+  // Play audio
+  function renderTranslationHtml(translation, lang) {
+    const cfg = getLangConfig(lang);
+    const isRtl = cfg.rtl;
+    return `
+      <div class="ww-pronunciation-main" style="margin-bottom:6px; justify-content:flex-start;">
+        <span class="ww-section-content ww-translation"${isRtl ? ' dir="rtl" style="font-family:Arial, sans-serif;"' : ''}>${translation}</span>
+        ${translation !== '—' ? `
+        <button class="ww-audio-btn" onclick="playTranslation('${translation.replace(/'/g, "\\'")}')" title="Listen">
+            ▶
+        </button>` : ''}
+      </div>
+      <div class="ww-section-label">
+       ${cfg.label} <span style="color:#999999; font-size:9px; font-weight:600;">Translation</span><!-- • <a href="https://mymemory.translated.net/" target="_blank" style="color:#0d5cab; text-decoration:none;">MyMemory</a> -->
+      `;
+       }
+
+  window.switchWriteWordLang = function(lang) {
+    if (lang === currentLang) return;
+    currentLang = lang;
+    localStorage.setItem('writeword_lang', lang);
+
+    ['vi', 'ar', 'ur', 'ml'].forEach(function(l) {
+      const btn = document.getElementById('ww-lang-' + l);
+      if (btn) btn.style.background = lang === l ? '#333' : 'transparent';
+    });
+
+    const section = document.getElementById('ww-translation-section');
+    if (section) {
+      section.innerHTML = `<div class="ww-loading" style="padding:8px 0;"><div class="ww-spinner"></div>Translating...</div>`;
+    }
+
+    const cfg = getLangConfig(lang);
+    const wwSwitchWordCount = selectedWord.trim().split(/\s+/).filter(Boolean).length;
+
+    if (wwSwitchWordCount > 1) {
+      fetch('/writeword-translate-phrase/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ phrase: selectedWord, lang_code: lang })
+      })
+        .then(r => r.json())
+        .then(data => {
+          const translation = (data && data.translation) || '—';
+          if (section) section.innerHTML = renderTranslationHtml(translation, lang);
+        })
+        .catch(() => {
+          if (section) section.innerHTML = renderTranslationHtml('—', lang);
+        });
+      return;
+    }
+
+    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(selectedWord.toLowerCase())}&langpair=en|${cfg.mmCode}`)
+      .then(r => r.json())
+      .then(data => {
+        let translation = '—';
+        if (data && data.responseStatus === 200) {
+          translation = data.responseData.translatedText || '—';
+        }
+        if (section) section.innerHTML = renderTranslationHtml(translation, lang);
+      })
+      .catch(() => {
+        if (section) section.innerHTML = renderTranslationHtml('—', lang);
+      });
+  };
+
+  // Play audio
+  window.playAudio = function() {
+
+    if (!audioUrl) return;
+    const audio = new Audio(audioUrl);
+    audio.play().catch(() => {});
+  };
+
+  window.playCambridgeAudio = function() {
+
+    if (!cambridgeAudio) return;
+
+    const audio = new Audio(cambridgeAudio);
+    audio.play().catch(() => {});
+
+  };
+
+  window.playVocabularyAudio = function() {
+
+    if (!vocabAudio) return;
+
+    const audio = new Audio(vocabAudio);
+    audio.play().catch(() => {});
+
+  };
+
+  window.playMWAudio = function() {
+
+    if (!mwAudio) return;
+
+    const audio = new Audio(mwAudio);
+    audio.play().catch(() => {});
+
+  };
+
+
+  window.playTranslation = function(text) {
+    if (!text || text === '—') return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = getLangConfig(currentLang).voiceLocale;
+    utterance.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  };
+
+
+
+
+
+  
+
+  // Close modal
+
   window.closeWriteword = function(e) {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
     document.getElementById('writeword-overlay').style.display = 'none';

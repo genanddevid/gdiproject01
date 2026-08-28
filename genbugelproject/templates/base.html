@@ -1419,11 +1419,14 @@ document.addEventListener('focusin', function(e) {
       e.preventDefault();
     }, { passive: false });
   }
+
+  document.addEventListener('pointerdown', function(e) {
     const toolbar = document.getElementById('writeword-toolbar');
     if (toolbar && !toolbar.contains(e.target)) {
       toolbar.style.display = 'none';
     }
   });
+
 
   window.openWriteword = function() {
     if (!selectedWord) {

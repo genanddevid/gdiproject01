@@ -1349,12 +1349,12 @@ document.addEventListener('focusin', function(e) {
 
         const rect = active.getBoundingClientRect();
         let left = rect.left + (rect.width / 2);
-        let top = rect.top - 55;
+        let top = rect.bottom + 60;
 
         const toolbarWidth = 150;
         if (left < toolbarWidth / 2) left = toolbarWidth / 2;
         if (left > window.innerWidth - toolbarWidth / 2) left = window.innerWidth - toolbarWidth / 2;
-        if (top < 10) top = rect.bottom + 10;
+        if (top > window.innerHeight - 60) top = window.innerHeight - 60;
 
         toolbar.style.left = left + 'px';
         toolbar.style.top = top + 'px';

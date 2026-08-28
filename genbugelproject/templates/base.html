@@ -1411,7 +1411,14 @@ document.addEventListener('focusin', function(e) {
     window._wwTimer = setTimeout(onSelectionChange, 300);
   });
 
-  document.addEventListener('pointerdown', function(e) {
+  const wwOverlayEl = document.getElementById('writeword-overlay');
+  if (wwOverlayEl) {
+    wwOverlayEl.addEventListener('touchmove', function(e) {
+      const card = document.getElementById('writeword-card');
+      if (card && card.contains(e.target)) return;
+      e.preventDefault();
+    }, { passive: false });
+  }
     const toolbar = document.getElementById('writeword-toolbar');
     if (toolbar && !toolbar.contains(e.target)) {
       toolbar.style.display = 'none';

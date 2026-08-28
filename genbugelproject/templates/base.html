@@ -1757,10 +1757,10 @@ document.addEventListener('focusin', function(e) {
           ">
           ⤢
       </button>
-  
+  </div>
 <!-- Pronunciation carousel -->
 
-          
+          <div id="ww-pron-wrapper" style="overflow:hidden;">
             <div id="ww-pron-carousel" style="display:flex; transition:transform .3s ease;">
               ${visiblePronSlides.map(s => s.html).join('')}
             </div>
@@ -2177,6 +2177,101 @@ document.addEventListener('focusin', function(e) {
             `).join('')}
 
         </div>
+
+          `;
+};
+
+window.expandPronunciation = function() {
+    const card = document.getElementById('writeword-card');
+    const sources = window._wwAllPronSlides || [];
+
+    if (!card || !sources.length) return;
+
+    card.dataset.expanded = 'true';
+
+    document.getElementById('writeword-body').innerHTML = `
+      <button onclick="collapsePronunciation()"
+        style="
+          background:#222;
+          border:1px solid #333;
+          border-radius:50px;
+          padding:6px 14px;
+          color:#aaa;
+          font-size:12px;
+          cursor:pointer;
+          display:flex;
+          align-items:center;
+          gap:6px;
+          margin-bottom:18px;
+        ">
+        ⤡ Back
+      </button>
+
+      <div style="max-height:65vh; overflow-y:auto; padding-right:4px;">
+
+        <div class="ww-word" style="margin-bottom:18px;">
+          ${selectedWord}
+        </div>
+
+        ${sources.map((s, i) => `
+          <div class="ww-section"
+            style="${
+              i < sources.length - 1
+                ? 'border-bottom:1px solid #222; padding-bottom:16px;'
+                : ''
+            }">
+
+            <div class="ww-section-content"
+              style="font-size:15px; line-height:1.7;">
+
+              <div class="ww-pronunciation-main">
+
+                <span class="ww-phonetic">
+                  ${s.full}
+                </span>
+
+                ${
+                  s.audio
+                    ? `
+                      <button
+                        class="ww-audio-btn"
+                        onclick="new Audio('${s.audio}').play()"
+                        title="Listen">
+                        ▶
+                      </button>
+                    `
+                    : ''
+                }
+
+              </div>
+
+            </div>
+
+            <div class="ww-section-label" style="margin-top:10px;">
+
+              <a href="${s.link}"
+                target="_blank"
+                style="
+                  color:#0d5cab;
+                  text-decoration:none;
+                  display:block;
+                ">
+                ${s.source}
+              </a>
+
+              <span style="
+                font-size:8px;
+                color:#555;
+              ">
+                ${s.link}
+              </span>
+
+            </div>
+
+          </div>
+        `).join('')}
+
+      </div>  
 
     `;
 };

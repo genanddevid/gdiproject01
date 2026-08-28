@@ -198,10 +198,19 @@
 
     ]).then(([translationData, mwData, vocabData, wrData, cambridgeData]) => {
 
+
+
+
+
+
       let translation = '—';
       if (translationData && translationData.responseStatus === 200) {
         translation = translationData.responseData.translatedText || '—';
       }
+
+
+
+
 
       let mwPartOfSpeech = '';
       let mwDefinition = '—';
@@ -350,6 +359,11 @@
                     <span style="font-size:8px; color:#555;">https://dictionary.cambridge.org</span>
                 </div>
               </div>`;
+
+
+
+
+              
 
       const allDefSlides = [];
       if (mwAvailable) allDefSlides.push({ source: 'merriam-webster.com', link: mwLink, full: mwFullText, html: mwSlideHtml });

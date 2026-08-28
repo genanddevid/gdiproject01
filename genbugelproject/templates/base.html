@@ -1411,13 +1411,15 @@ document.addEventListener('focusin', function(e) {
     window._wwTimer = setTimeout(onSelectionChange, 300);
   });
 
+  function wwBlockBodyScroll(e) {
+    const card = document.getElementById('writeword-card');
+    if (card && card.contains(e.target)) return;
+    e.preventDefault();
+  }
+
   const wwOverlayEl = document.getElementById('writeword-overlay');
   if (wwOverlayEl) {
-    wwOverlayEl.addEventListener('touchmove', function(e) {
-      const card = document.getElementById('writeword-card');
-      if (card && card.contains(e.target)) return;
-      e.preventDefault();
-    }, { passive: false });
+    wwOverlayEl.addEventListener('touchmove', wwBlockBodyScroll, { passive: false });
   }
 
   document.addEventListener('pointerdown', function(e) {
@@ -1451,6 +1453,7 @@ document.addEventListener('focusin', function(e) {
 
     document.body.classList.add('no-scroll');
     document.documentElement.classList.add('no-scroll');
+    document.body.addEventListener('touchmove', wwBlockBodyScroll, { passive: false });
 
     body.innerHTML = `
       <div class="ww-loading">
@@ -2420,6 +2423,7 @@ window.expandPronunciation = function() {
   window.closeWriteword = function(e) {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
     document.getElementById('writeword-overlay').style.display = 'none';
+    document.body.removeEventListener('touchmove', wwBlockBodyScroll);
     const postModal = document.getElementById('postModal');
     const postModalOpen = postModal && postModal.style.display !== 'none' && postModal.style.display !== '';
     if (!postModalOpen) {

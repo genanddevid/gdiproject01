@@ -1439,6 +1439,9 @@ document.addEventListener('focusin', function(e) {
     const overlay = document.getElementById('writeword-overlay');
     const body = document.getElementById('writeword-body');
 
+    document.body.classList.add('no-scroll');
+    document.documentElement.classList.add('no-scroll');
+
     body.innerHTML = `
       <div class="ww-loading">
         <div class="ww-spinner"></div>
@@ -2407,6 +2410,8 @@ window.expandPronunciation = function() {
   window.closeWriteword = function(e) {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
     document.getElementById('writeword-overlay').style.display = 'none';
+    document.body.classList.remove('no-scroll');
+    document.documentElement.classList.remove('no-scroll');
     audioUrl = '';
   };
 

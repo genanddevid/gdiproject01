@@ -1585,8 +1585,8 @@ document.addEventListener('focusin', function(e) {
 
       const mwFullText = (mwPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${mwPartOfSpeech}</em> — ` : '') + (mwDefinition || '');
       const vocabFullText = (vocabPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — ` : '') + (vocabDefinition || '');
-      const wrFullText = (wrPartOfSpeech ? wrPartOfSpeech + ' — ' : '') + (wrDefinition || 'Definition unavailable');
-      const cambridgeFullText = (cambridgePartOfSpeech ? '<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ' : '') + cambridgeDefinition;
+      const wrFullText = (wrPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${wrPartOfSpeech}</em> — ` : '') + (wrDefinition || 'Definition unavailable');
+      const cambridgeFullText = (cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : '') + cambridgeDefinition;
 
       const mwSlideHtml = `
               <div style="min-width:100%; box-sizing:border-box;" 

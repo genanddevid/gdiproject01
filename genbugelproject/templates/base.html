@@ -2410,8 +2410,12 @@ window.expandPronunciation = function() {
   window.closeWriteword = function(e) {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
     document.getElementById('writeword-overlay').style.display = 'none';
-    document.body.classList.remove('no-scroll');
-    document.documentElement.classList.remove('no-scroll');
+    const postModal = document.getElementById('postModal');
+    const postModalOpen = postModal && postModal.style.display !== 'none' && postModal.style.display !== '';
+    if (!postModalOpen) {
+      document.body.classList.remove('no-scroll');
+      document.documentElement.classList.remove('no-scroll');
+    }
     audioUrl = '';
   };
 

@@ -1722,7 +1722,7 @@ document.addEventListener('focusin', function(e) {
         ${!isEntity ? `
 
         ${visiblePronSlides.length > 0 ? `
-        <div class="ww-section" style="margin-top: 10px;">
+        <div class="ww-section" style="margin-top: 12px;">
           <div class="ww-divider"></div>
 
           <div style="
@@ -1764,7 +1764,7 @@ document.addEventListener('focusin', function(e) {
             <div id="ww-pron-carousel" style="display:flex; transition:transform .3s ease;">
               ${visiblePronSlides.map(s => s.html).join('')}
             </div>
-            <div id="ww-pron-dots" style="display:flex; justify-content:center; gap:4px; margin-top:12px; margin-bottom:5px;">
+            <div id="ww-pron-dots" style="display:flex; justify-content:center; gap:3px; margin-top:12px; margin-bottom:5px;">
               ${visiblePronSlides.map((_, i) => `<div id="ww-pron-dot-${i}" style="width:4px; height:4px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`).join('')}
             </div>
           </div>
@@ -1800,7 +1800,7 @@ document.addEventListener('focusin', function(e) {
             <div id="ww-def-carousel" style="display:flex; transition:transform 0.3s ease; touch-action:none; padding-top:32px;">
               ${visibleDefSlides.map(s => s.html).join('')}
             </div>
-            <div style="display:flex; justify-content:center; gap:0px; margin-top:0px; margin-bottom:0px;">
+            <div style="display:flex; justify-content:center; gap:3px; margin-top:12px; margin-bottom:0px;">
               ${visibleDefSlides.map((_, i) => `<div id="ww-dot-${i}" style="width:4px; height:4px; border-radius:50%; background:${i === 0 ? '#B83C2E' : '#333'};"></div>`).join('')}
             </div>
           </div>

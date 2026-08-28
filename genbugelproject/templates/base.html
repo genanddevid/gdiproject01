@@ -1406,8 +1406,31 @@ document.addEventListener('focusin', function(e) {
     clearTimeout(window._wwTimer);
     window._wwTimer = setTimeout(onSelectionChange, 300);
   });
+  document.addEventListener('touchend', function() {
+    clearTimeout(window._wwTimer);
+    window._wwTimer = setTimeout(onSelectionChange, 300);
+  });
+
+  function wwBlockBodyScroll(e) {
+    const card = document.getElementById('writeword-card');
+    if (card && card.contains(e.target)) return;
+    e.preventDefault();
+  }
+
+  const wwOverlayEl = document.getElementById('writeword-overlay');
+  if (wwOverlayEl) {
+    wwOverlayEl.addEventListener('touchmove', wwBlockBodyScroll, { passive: false });
+  }
+
+  document.addEventListener('pointerdown', function(e) {
+    const toolbar = document.getElementById('writeword-toolbar');
+    if (toolbar && !toolbar.contains(e.target)) {
+      toolbar.style.display = 'none';
+    }
+  });
+
+
   window.openWriteword = function() {
-    console.log('OPENING:', selectedWord);
     if (!selectedWord) {
       alert('No word selected');
       return;
@@ -1431,6 +1454,12 @@ document.addEventListener('focusin', function(e) {
     document.body.classList.add('no-scroll');
     document.documentElement.classList.add('no-scroll');
     document.body.addEventListener('touchmove', wwBlockBodyScroll, { passive: false });
+    window._wwScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${window._wwScrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.overflow = 'hidden';
 
     body.innerHTML = `
       <div class="ww-loading">
@@ -2401,6 +2430,12 @@ window.expandPronunciation = function() {
     if (e && e.target !== document.getElementById('writeword-overlay')) return;
     document.getElementById('writeword-overlay').style.display = 'none';
     document.body.removeEventListener('touchmove', wwBlockBodyScroll);
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.overflow = '';
+    window.scrollTo(0, window._wwScrollY || 0);
     const postModal = document.getElementById('postModal');
     const postModalOpen = postModal && postModal.style.display !== 'none' && postModal.style.display !== '';
     if (!postModalOpen) {
@@ -2409,7 +2444,6 @@ window.expandPronunciation = function() {
     }
     audioUrl = '';
   };
-
 })();
 
 document.getElementById('writeword-btn').addEventListener('touchstart', function(e) {

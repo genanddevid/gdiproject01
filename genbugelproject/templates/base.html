@@ -1406,31 +1406,8 @@ document.addEventListener('focusin', function(e) {
     clearTimeout(window._wwTimer);
     window._wwTimer = setTimeout(onSelectionChange, 300);
   });
-  document.addEventListener('touchend', function() {
-    clearTimeout(window._wwTimer);
-    window._wwTimer = setTimeout(onSelectionChange, 300);
-  });
-
-  function wwBlockBodyScroll(e) {
-    const card = document.getElementById('writeword-card');
-    if (card && card.contains(e.target)) return;
-    e.preventDefault();
-  }
-
-  const wwOverlayEl = document.getElementById('writeword-overlay');
-  if (wwOverlayEl) {
-    wwOverlayEl.addEventListener('touchmove', wwBlockBodyScroll, { passive: false });
-  }
-
-  document.addEventListener('pointerdown', function(e) {
-    const toolbar = document.getElementById('writeword-toolbar');
-    if (toolbar && !toolbar.contains(e.target)) {
-      toolbar.style.display = 'none';
-    }
-  });
-
-
   window.openWriteword = function() {
+    console.log('OPENING:', selectedWord);
     if (!selectedWord) {
       alert('No word selected');
       return;

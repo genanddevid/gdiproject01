@@ -1760,8 +1760,15 @@ document.addEventListener('focusin', function(e) {
   </div>
 <!-- Pronunciation carousel -->
 
-          <div id="ww-pron-wrapper" style="overflow:hidden;">
-            <div id="ww-pron-carousel" style="display:flex; transition:transform .3s ease;">
+          <div id="ww-pron-wrapper" style="position:relative; overflow:hidden;">
+            <button id="ww-pron-expand-btn" onclick="expandPronunciation()" 
+              style="position:absolute; top:0; right:0; z-index:10; background:#222; 
+              border:1px solid #333; border-radius:6px; width:26px; height:26px; 
+              display:flex; align-items:center; justify-content:center; 
+              cursor:pointer; color:#aaa; font-size:16px; padding-bottom:5px;">
+              ⤢
+            </button>
+            <div id="ww-pron-carousel" style="display:flex; transition:transform .3s ease; padding-top:32px;">
               ${visiblePronSlides.map(s => s.html).join('')}
             </div>
             <div id="ww-pron-dots" style="display:flex; justify-content:center; gap:4px; margin-top:12px; margin-bottom:10px;">

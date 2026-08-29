@@ -1525,6 +1525,7 @@ def wordreference_lookup(request):
             return JsonResponse({'definition': None})
 
         soup = BeautifulSoup(response.text, 'html.parser')
+        print("WR POS MATCH:", soup.select_one('span.rh_empos'))
 
         definition = None
         definition_tag = soup.select_one('span.rh_def')

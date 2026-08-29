@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="{{ post.caption }}" />
 <meta name="twitter:description" content="{{ post.content|striptags|truncatewords:25 }}" />
-<meta name="twitter:image" content="https://www.baytruyen.com{{ post.picture.url }}" />
+<meta name="twitter:image" content="{{ post.picture.url }}" />
 {% endblock %}
 
 {% block content %}

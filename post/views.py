@@ -1475,6 +1475,8 @@ def vocabulary_lookup(request):
 
         if short_def:
             definition = short_def.get_text(" ", strip=True)
+            if definition:
+                definition = definition[0].lower() + definition[1:]
 
         if pos_tag:
             part_of_speech = pos_tag.get_text(" ", strip=True)

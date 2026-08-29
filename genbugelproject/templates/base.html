@@ -1586,7 +1586,7 @@ document.addEventListener('focusin', function(e) {
       const cambridgeLink = `https://dictionary.cambridge.org/dictionary/english/${word}`;
 
       const mwFullText = (mwPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${mwPartOfSpeech}</em> — ` : '') + (mwDefinition || '');
-      const vocabFullText = (vocabPartOfSpeech ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>` : '') + (vocabDefinition || '');
+      const vocabFullText = (vocabPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — ` : '') + (vocabDefinition || '');
       const wrFullText = (wrPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${wrPartOfSpeech}</em> — ` : '') + (wrDefinition || 'Definition unavailable');
       const cambridgeFullText = (cambridgePartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${cambridgePartOfSpeech}</em> — ` : '') + cambridgeDefinition;
 
@@ -1610,9 +1610,8 @@ document.addEventListener('focusin', function(e) {
                    data-source="vocabulary.com"
                    data-link="${vocabLink}"
                    data-full="${vocabFullText.replace(/"/g, '&quot;')}">
-                ${vocabPartOfSpeech ? `<em style="color:#555;font-size:12px;">${vocabPartOfSpeech}</em><br>` : ''}
                 <div class="ww-section-content">
-    
+    ${vocabPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${vocabPartOfSpeech}</em> — ` : ''}
   ${vocabDefinition
       ? (vocabDefinition.length > 120
           ? vocabDefinition.substring(0, 120).replace(/\s+\S*$/, '') +

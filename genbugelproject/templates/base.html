@@ -1630,8 +1630,9 @@ document.addEventListener('focusin', function(e) {
             data-source="wordreference.com"
             data-link="${wrLink}"
             data-full="${wrFullText.replace(/"/g, '&quot;')}">
-                ${wrPartOfSpeech ? `<em style="color:#555;font-size:12px;">${wrPartOfSpeech}</em><br>` : ''}
-                <div class="ww-section-content">
+            <div class="ww-section-content">
+                ${wrPartOfSpeech ? `<em style="color:#ccc;font-size:12px;">${wrPartOfSpeech}</em> —` : ''}
+                
                       ${wrDefinition
                       ? (wrDefinition.length > 120 ? wrDefinition.substring(0, 120) + '...' : wrDefinition + '...')
                       : 'Definition unavailable'}

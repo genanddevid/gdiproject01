@@ -1319,6 +1319,8 @@ document.addEventListener('focusin', function(e) {
   function onSelectionChange() {
     const toolbar = document.getElementById('writeword-toolbar');
     if (!toolbar) return;
+    const wwOverlay = document.getElementById('writeword-overlay');
+    if (wwOverlay && wwOverlay.style.display === 'flex') return;
 
     try {
       const active = document.activeElement;

@@ -1530,6 +1530,7 @@ def wordreference_lookup(request):
         definition = None
         definition_tag = soup.select_one('span.rh_def')
         pos_tag = soup.select_one('span.rh_empos')
+        print(soup.select_one('span.rh_def').parent)
 
         definition = None
         part_of_speech = None

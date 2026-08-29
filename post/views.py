@@ -1548,7 +1548,13 @@ def wordreference_lookup(request):
             definition = definition_copy.get_text(" ", strip=True)
 
         if pos_tag:
-            part_of_speech = pos_tag.get_text(" ", strip=True)
+            raw_pos = pos_tag.get_text(" ", strip=True)
+            pos_expansions = {
+                'n.': 'noun', 'v.': 'verb', 'adj.': 'adjective', 'adv.': 'adverb',
+                'prep.': 'preposition', 'conj.': 'conjunction', 'pron.': 'pronoun',
+                'interj.': 'interjection', 'vtr.': 'verb', 'vi.': 'verb',
+            }
+            part_of_speech = pos_expansions.get(raw_pos.lower(), raw_pos)
         return JsonResponse({
             'definition': definition,
             'partOfSpeech': part_of_speech

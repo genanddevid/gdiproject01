@@ -1546,6 +1546,8 @@ def wordreference_lookup(request):
                 tag.decompose()
 
             definition = definition_copy.get_text(" ", strip=True)
+            if definition:
+                definition = definition[0].lower() + definition[1:]
 
         if pos_tag:
             raw_pos = pos_tag.get_text(" ", strip=True)

@@ -1674,3 +1674,126 @@ def log_writeword_lookup(request):
 
 
     
+import requests
+from bs4 import BeautifulSoup
+from django.http import JsonResponse
+
+
+def collins_lookup(request):
+    word = request.GET.get('word', '').strip().lower()
+
+    if not word:
+        return JsonResponse({
+            'pronunciation': None,
+            'audio': None
+        })
+
+    try:
+        url = f"https://www.collinsdictionary.com/dictionary/english-pronunciations/{word}"
+
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=10
+        )
+
+        if response.status_code != 200:
+            return JsonResponse({
+                'pronunciation': None,
+                'audio': None
+            })
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        pronunciation = None
+        audio = None
+
+        # Look specifically for the British English pronunciation section
+        british_text = soup.find(
+            string=lambda text: text and
+            'British English pronunciation' in text
+        )
+
+        if british_text:
+            container = british_text.parent
+
+            # Search around the British section
+            for element in container.find_all_next(limit=15):
+
+                text = element.get_text(" ", strip=True)
+
+                if text and 'American English pronunciation' in text:
+                    break
+
+                # Collins currently exposes IPA in text around
+                # the British pronunciation section.
+                if element.name in ['span', 'div', 'p']:
+                    candidate = text.strip()
+
+                    if candidate and len(candidate) < 80:
+                        if any(char in candidate for char in [
+                            'ɪ', 'ə', 'ʌ', 'ɒ', 'ɔ', 'ː',
+                            'ʃ', 'ʒ', 'θ', 'ð', 'ŋ', 'æ', 'ɛ'
+                        ]):
+                            pronunciation = candidate
+                            break
+
+        return JsonResponse({
+            'pronunciation': pronunciation,
+            'audio': audio
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            'pronunciation': None,
+            'audio': None,
+            'error': str(e)
+        })
+
+
+
+def macmillan_lookup(request):
+    word = request.GET.get('word', '').strip().lower()
+
+    if not word:
+        return JsonResponse({
+            'pronunciation': None,
+            'audio': None
+        })
+
+    try:
+        url = f"https://www.macmillandictionary.com/dictionary/british/{word}"
+
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=10
+        )
+
+        print("MACMILLAN STATUS:", response.status_code)
+        print("MACMILLAN URL:", response.url)
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # TEMPORARY DEBUG
+        print("MACMILLAN TITLE:", soup.title.get_text(strip=True) if soup.title else None)
+
+        return JsonResponse({
+            'pronunciation': None,
+            'audio': None
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            'pronunciation': None,
+            'audio': None,
+            'error': str(e)
+        })

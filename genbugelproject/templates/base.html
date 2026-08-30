@@ -1281,6 +1281,8 @@ document.addEventListener('focusin', function(e) {
   let cambridgeAudio = '';
   let vocabAudio = '';
   let mwAudio = '';
+  let collinsAudio = '';
+  let macmillanAudio = '';
   let currentLang = localStorage.getItem('writeword_lang') || 'vi';
 
   function getLangConfig(lang) {
@@ -1496,9 +1498,15 @@ document.addEventListener('focusin', function(e) {
         .then(r => r.json()).catch(() => null),
 
       fetchWithTimeout(`/cambridge-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
+        .then(r => r.json()).catch(() => null),
+
+      fetchWithTimeout(`/collins-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
+        .then(r => r.json()).catch(() => null),
+
+      fetchWithTimeout(`/macmillan-lookup/?word=${encodeURIComponent(word)}`, {}, 8000)
         .then(r => r.json()).catch(() => null)
 
-    ]).then(([translationData, mwData, vocabData, wrData, cambridgeData]) => {
+      ]).then(([translationData, mwData, vocabData, wrData, cambridgeData, collinsData, macmillanData]) => {
 
 
 
@@ -1567,6 +1575,33 @@ document.addEventListener('focusin', function(e) {
         if (cambridgeData.audio) cambridgeAudio = cambridgeData.audio;
         if (cambridgeData.definition) cambridgeDefinition = cambridgeData.definition;
         if (cambridgeData.partOfSpeech) cambridgePartOfSpeech = cambridgeData.partOfSpeech;
+      }
+
+      let collinsPronunciation = 'Pronunciation unavailable';
+      collinsAudio = '';
+
+      if (collinsData) {
+          if (collinsData.pronunciation) {
+              collinsPronunciation = collinsData.pronunciation;
+          }
+
+          if (collinsData.audio) {
+              collinsAudio = collinsData.audio;
+          }
+      }
+
+
+      let macmillanPronunciation = 'Pronunciation unavailable';
+      macmillanAudio = '';
+
+      if (macmillanData) {
+          if (macmillanData.pronunciation) {
+              macmillanPronunciation = macmillanData.pronunciation;
+          }
+
+          if (macmillanData.audio) {
+              macmillanAudio = macmillanData.audio;
+          }
       }
 
       const mwAvailable = mwDefinition !== '—';
@@ -1723,11 +1758,73 @@ document.addEventListener('focusin', function(e) {
     </div>
 </div>`;
 
+
+const collinsPronLink =
+    `https://www.collinsdictionary.com/dictionary/english-pronunciations/${word}`;
+
+const collinsPronSlideHtml = `
+    <div style="min-width:100%; box-sizing:border-box;"
+         data-source="Collins"
+         data-link="${collinsPronLink}"
+         data-full="${collinsPronunciation}"
+         data-audio="${collinsAudio}">
+
+        <div class="ww-pronunciation-main">
+            <span class="ww-phonetic">${collinsPronunciation}</span>
+
+            ${collinsAudio
+                ? `<button class="ww-audio-btn"
+                    onclick="playCollinsAudio()"
+                    title="Listen">▶</button>`
+                : ''}
+        </div>
+
+        <div class="ww-section-label" style="margin-top:10px;">
+            <div style="font-size:9px;color:#0d5cab;">Collins</div>
+            <div style="font-size:8px;color:#555;">
+                ${collinsPronLink}
+            </div>
+        </div>
+    </div>`;
+
+    const macmillanPronLink =
+    `https://www.macmillandictionary.com/dictionary/british/${word}`;
+
+const macmillanPronSlideHtml = `
+    <div style="min-width:100%; box-sizing:border-box;"
+         data-source="Macmillan"
+         data-link="${macmillanPronLink}"
+         data-full="${macmillanPronunciation}"
+         data-audio="${macmillanAudio}">
+
+        <div class="ww-pronunciation-main">
+            <span class="ww-phonetic">${macmillanPronunciation}</span>
+
+            ${macmillanAudio
+                ? `<button class="ww-audio-btn"
+                    onclick="playMacmillanAudio()"
+                    title="Listen">▶</button>`
+                : ''}
+        </div>
+
+        <div class="ww-section-label" style="margin-top:10px;">
+            <div style="font-size:9px;color:#0d5cab;">Macmillan</div>
+            <div style="font-size:8px;color:#555;">
+                ${macmillanPronLink}
+            </div>
+        </div>
+    </div>`;
+
+
+
+
+
       const allPronSlides = [];
       if (mwPronunciationAvailable) allPronSlides.push({ source: 'Merriam-Webster', link: mwPronLink, full: mwPronunciation, audio: mwAudio, html: mwPronSlideHtml });
       if (cambridgeAvailable) allPronSlides.push({ source: 'Cambridge', link: cambridgePronLink, full: cambridgePronunciation, audio: cambridgeAudio, html: cambridgePronSlideHtml });
       if (vocabPronunciationAvailable) allPronSlides.push({ source: 'Vocabulary.com', link: vocabPronLink, full: vocabPronunciation, audio: vocabAudio, html: vocabPronSlideHtml });
-
+      if (collinsPronunciation !== 'Pronunciation unavailable') {allPronSlides.push({source: 'Collins', link: collinsPronLink, full: collinsPronunciation, audio: collinsAudio, html: collinsPronSlideHtml});}
+      if (macmillanPronunciation !== 'Pronunciation unavailable') {allPronSlides.push({source: 'Macmillan', link: macmillanPronLink, full: macmillanPronunciation, audio: macmillanAudio, html: macmillanPronSlideHtml});}
       window._wwAllPronSlides = allPronSlides;
       const visiblePronSlides = allPronSlides.slice(0, 3);
 
@@ -2303,6 +2400,21 @@ window.expandPronunciation = function() {
     audio.play().catch(() => {});
 
   };
+
+  window.playCollinsAudio = function() {
+    if (!collinsAudio) return;
+
+    const audio = new Audio(collinsAudio);
+    audio.play().catch(() => {});
+};
+
+
+window.playMacmillanAudio = function() {
+    if (!macmillanAudio) return;
+
+    const audio = new Audio(macmillanAudio);
+    audio.play().catch(() => {});
+};
 
 
   window.playTranslation = function(text) {

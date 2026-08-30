@@ -1288,7 +1288,10 @@ document.addEventListener('focusin', function(e) {
       vi: { mmCode: 'vi', voiceLocale: 'vi-VN', label: 'Vietnamese', rtl: false },
       ar: { mmCode: 'ar', voiceLocale: 'ar-SA', label: 'Arabic', rtl: true },
       ur: { mmCode: 'ur', voiceLocale: 'ur-PK', label: 'Urdu', rtl: true },
-      ml: { mmCode: 'ml', voiceLocale: 'ml-IN', label: 'Malayalam', rtl: false }
+      ml: { mmCode: 'ml', voiceLocale: 'ml-IN', label: 'Malayalam', rtl: false },
+      hi: { mmCode: 'hi', voiceLocale: 'hi-IN', label: 'Hindi', rtl: false },
+      tl: { mmCode: 'tl', voiceLocale: 'fil-PH', label: 'Tagalog', rtl: false },
+      fr: { mmCode: 'fr', voiceLocale: 'fr-FR', label: 'French', rtl: false }
     };
     return configs[lang] || configs.vi;
   }
@@ -1733,7 +1736,7 @@ document.addEventListener('focusin', function(e) {
         <div class="ww-word">${selectedWord}</div>
 
         <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;">
-          ${['vi', 'ar', 'ur', 'ml'].map(function(l) {
+          ${['vi', 'ar', 'ur', 'ml', 'hi', 'tl', 'fr'].map(function(l) {
             return `<button id="ww-lang-${l}" onclick="switchWriteWordLang('${l}')"
               style="background:${currentLang === l ? '#333' : 'transparent'}; color:#fff; border:1px solid #333;
               border-radius:50px; padding:4px 12px; font-size:11px; font-weight:600; cursor:pointer;">${l.toUpperCase()}</button>`;
@@ -1959,7 +1962,7 @@ document.addEventListener('focusin', function(e) {
           <div class="ww-word">${selectedWord}</div>
 
           <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;">
-            ${['vi', 'ar', 'ur', 'ml'].map(function(l) {
+            ${['vi', 'ar', 'ur', 'ml', 'hi', 'tl', 'fr'].map(function(l) {
               return `<button id="ww-lang-${l}" onclick="switchWriteWordLang('${l}')"
                 style="background:${currentLang === l ? '#333' : 'transparent'}; color:#fff; border:1px solid #333;
                 border-radius:50px; padding:4px 12px; font-size:11px; font-weight:600; cursor:pointer;">${l.toUpperCase()}</button>`;
@@ -2220,7 +2223,7 @@ window.expandPronunciation = function() {
     currentLang = lang;
     localStorage.setItem('writeword_lang', lang);
 
-    ['vi', 'ar', 'ur', 'ml'].forEach(function(l) {
+    ['vi', 'ar', 'ur', 'ml', 'hi', 'tl', 'fr'].forEach(function(l) {
       const btn = document.getElementById('ww-lang-' + l);
       if (btn) btn.style.background = lang === l ? '#333' : 'transparent';
     });

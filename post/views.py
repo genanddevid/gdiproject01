@@ -1674,22 +1674,19 @@ def log_writeword_lookup(request):
 
 
     
-import requests
-from bs4 import BeautifulSoup
-from django.http import JsonResponse
-
-
 def collins_lookup(request):
-    word = request.GET.get('word', '').strip().lower()
+    word = request.GET.get('word', '').strip()
 
     if not word:
         return JsonResponse({
+            'definition': None,
+            'partOfSpeech': None,
             'pronunciation': None,
             'audio': None
         })
 
     try:
-        url = f"https://www.collinsdictionary.com/dictionary/english-pronunciations/{word}"
+        url = f"https://www.collinsdictionary.com/dictionary/english/{word}"
 
         headers = {
             "User-Agent": "Mozilla/5.0"
@@ -1703,6 +1700,8 @@ def collins_lookup(request):
 
         if response.status_code != 200:
             return JsonResponse({
+                'definition': None,
+                'partOfSpeech': None,
                 'pronunciation': None,
                 'audio': None
             })
@@ -1710,57 +1709,96 @@ def collins_lookup(request):
         soup = BeautifulSoup(response.text, 'html.parser')
 
         pronunciation = None
+        part_of_speech = None
+        definition = None
         audio = None
 
-        # Look specifically for the British English pronunciation section
-        british_text = soup.find(
-            string=lambda text: text and
-            'British English pronunciation' in text
-        )
+        # Collins' British English entry
+        british_entry = None
 
-        if british_text:
-            container = british_text.parent
+        for element in soup.find_all(
+            string=lambda text: text and 'in British English' in text
+        ):
+            parent = element.parent
+            if parent:
+                british_entry = parent.parent
+                break
 
-            # Search around the British section
-            for element in container.find_all_next(limit=15):
+        if british_entry:
 
-                text = element.get_text(" ", strip=True)
+            # IPA
+            ipa_tag = british_entry.select_one(
+                '.pron, .pronunciation, .orth, [class*="pron"]'
+            )
 
-                if text and 'American English pronunciation' in text:
+            if ipa_tag:
+                pronunciation = ipa_tag.get_text(
+                    " ", strip=True
+                )
+
+            # Part of speech
+            pos_tag = british_entry.select_one(
+                '.pos, .part-of-speech, [class*="pos"]'
+            )
+
+            if pos_tag:
+                part_of_speech = pos_tag.get_text(
+                    " ", strip=True
+                )
+
+            # Definition
+            def_tag = british_entry.select_one(
+                '.def, .definition, [class*="definition"]'
+            )
+
+            if def_tag:
+                definition = def_tag.get_text(
+                    " ", strip=True
+                )
+
+        # Fallback: find IPA anywhere in the British entry/page
+        if not pronunciation:
+            for tag in soup.select(
+                '.pron, .pronunciation, [class*="pron"]'
+            ):
+                text = tag.get_text(" ", strip=True)
+
+                if text and any(char in text for char in [
+                    'ɪ', 'i', 'ː', 'ə', 'ʌ', 'ɒ',
+                    'ɔ', 'ʃ', 'ʒ', 'θ', 'ð', 'ŋ',
+                    'æ', 'ɛ', 'ɜ', 'ɑ'
+                ]):
+                    pronunciation = text
                     break
 
-                # Collins currently exposes IPA in text around
-                # the British pronunciation section.
-                if element.name in ['span', 'div', 'p']:
-                    candidate = text.strip()
-
-                    if candidate and len(candidate) < 80:
-                        if any(char in candidate for char in [
-                            'ɪ', 'ə', 'ʌ', 'ɒ', 'ɔ', 'ː',
-                            'ʃ', 'ʒ', 'θ', 'ð', 'ŋ', 'æ', 'ɛ'
-                        ]):
-                            pronunciation = candidate
-                            break
-
         return JsonResponse({
+            'definition': definition,
+            'partOfSpeech': part_of_speech,
             'pronunciation': pronunciation,
-            'audio': audio
+            'audio': audio,
+            'source': 'Collins',
+            'variant': 'UK'
         })
 
     except Exception as e:
         return JsonResponse({
+            'definition': None,
+            'partOfSpeech': None,
             'pronunciation': None,
             'audio': None,
+            'source': 'Collins',
+            'variant': 'UK',
             'error': str(e)
         })
 
 
-
 def macmillan_lookup(request):
-    word = request.GET.get('word', '').strip().lower()
+    word = request.GET.get('word', '').strip()
 
     if not word:
         return JsonResponse({
+            'definition': None,
+            'partOfSpeech': None,
             'pronunciation': None,
             'audio': None
         })
@@ -1778,22 +1816,116 @@ def macmillan_lookup(request):
             timeout=10
         )
 
-        print("MACMILLAN STATUS:", response.status_code)
-        print("MACMILLAN URL:", response.url)
+        if response.status_code != 200:
+            return JsonResponse({
+                'definition': None,
+                'partOfSpeech': None,
+                'pronunciation': None,
+                'audio': None
+            })
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # TEMPORARY DEBUG
-        print("MACMILLAN TITLE:", soup.title.get_text(strip=True) if soup.title else None)
+        pronunciation = None
+        part_of_speech = None
+        definition = None
+        audio = None
+
+        # Macmillan pronunciation
+        ipa_tag = soup.select_one(
+            '.PRON, .pron, .pronunciation, [class*="pron"]'
+        )
+
+        if ipa_tag:
+            pronunciation = ipa_tag.get_text(
+                " ", strip=True
+            )
+
+        # Part of speech
+        pos_tag = soup.select_one(
+            '.POS, .pos, .part-of-speech, [class*="pos"]'
+        )
+
+        if pos_tag:
+            part_of_speech = pos_tag.get_text(
+                " ", strip=True
+            )
+
+        # Definition
+        def_tag = soup.select_one(
+            '.DEF, .def, .definition, [class*="definition"]'
+        )
+
+        if def_tag:
+            definition = def_tag.get_text(
+                " ", strip=True
+            )
+
+        # Audio
+        audio_tag = soup.select_one(
+            'audio source, audio'
+        )
+
+        if audio_tag:
+            audio = audio_tag.get(
+                'src'
+            )
+
+            if audio and audio.startswith('//'):
+                audio = 'https:' + audio
 
         return JsonResponse({
-            'pronunciation': None,
-            'audio': None
+            'definition': definition,
+            'partOfSpeech': part_of_speech,
+            'pronunciation': pronunciation,
+            'audio': audio,
+            'source': 'Macmillan',
+            'variant': 'UK'
         })
 
     except Exception as e:
         return JsonResponse({
+            'definition': None,
+            'partOfSpeech': None,
             'pronunciation': None,
             'audio': None,
+            'source': 'Macmillan',
+            'variant': 'UK',
             'error': str(e)
         })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

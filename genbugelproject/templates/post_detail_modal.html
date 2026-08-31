@@ -812,7 +812,7 @@ data-comment-id="{{ comment.id }}">
                 </small>
 
                 <!-- Hidden reply form (revealed when "Reply" is clicked) -->
-                <div class="reply-form-container" id="reply-form-{{ comment.id }}">
+                <div class="reply-form-container" id="reply-form-{{ comment.id }}" style="display: none;">
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
 
                     {% csrf_token %}

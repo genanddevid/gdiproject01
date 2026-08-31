@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, writeword_translate_phrase, vocabulary_lookup, wordreference_lookup, cambridge_lookup, collins_lookup, macmillan_lookup, log_read_time, log_writeword_lookup, toggle_pin
+from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, writeword_translate_phrase, vocabulary_lookup, wordreference_lookup, cambridge_lookup, log_read_time, log_writeword_lookup, toggle_pin
 from authy.views import ca_dashboard, feedback_view, download_cohort_report, all_cohorts_dashboard
 
 #from .views import frontpage
@@ -59,8 +59,6 @@ urlpatterns = [
     path('vocabulary-lookup/', vocabulary_lookup, name='vocabulary_lookup'),
     path('wordreference-lookup/', wordreference_lookup, name='wordreference_lookup'),
     path('cambridge-lookup/', cambridge_lookup, name='cambridge_lookup'),
-    path('collins-lookup/', collins_lookup, name='collins_lookup'),
-    path('macmillan-lookup/', macmillan_lookup, name='macmillan_lookup'),
     path('ca-dashboard/', ca_dashboard, name='ca_dashboard'),
     path('feedback/', feedback_view, name='feedback'),
     path('log-read-time/', log_read_time, name='log_read_time'),

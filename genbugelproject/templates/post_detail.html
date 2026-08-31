@@ -608,7 +608,7 @@
                   <form method="POST" action="{% url 'submit_reply' comment.id %}">
                     {% csrf_token %}
                     <textarea name="reply" rows="2" style="width: 100%;" placeholder="Write your reply...">
-                      @{{ comment.user.username }} 
+                      {{ comment.user.username }} 
                     </textarea>
                     <button type="submit">Submit</button>
                   </form>
@@ -631,7 +631,7 @@
                       <div class="content">
                         <p>
                           <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
-                          <small>• {{ reply.date|timesince }} ago</small>
+                          <small> • {{ reply.date|timesince }} ago</small>
                           <br>
                           {{ reply.body }}
                         </p>

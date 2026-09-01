@@ -816,8 +816,7 @@ data-comment-id="{{ comment.id }}">
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
 
                     {% csrf_token %}
-                    <textarea name="reply" rows="2" style="width: 100%;"> @{{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }} 
-                    </textarea>
+                    <textarea name="reply" rows="2" style="width: 100%;">@{% if comment.user.profile.first_name %}{{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }}{% else %}{{ comment.user.username }}{% endif %} </textarea>
                     <button type="submit">Submit</button>
                   </form>
                 </div>

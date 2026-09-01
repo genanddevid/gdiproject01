@@ -841,11 +841,10 @@ data-comment-id="{{ comment.id }}">
         }
 
         </style>
-                  
 
 
                 <!-- Replies section (initially hidden) -->
-                <div class="replies-section" id="replies-{{ comment.id }}">
+                <div class="replies-section" id="replies-{{ comment.id }}" style="display: none;">
 
                   {% for reply in comment.replies.all|slice:":4" %}
                   <article class="media">
@@ -858,7 +857,8 @@ data-comment-id="{{ comment.id }}">
                     </figure>
                     <div class="media-content">
                       <div class="content">
-                        <p>
+                        <p style="margin-bottom: 0.3rem;">
+                <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
                           <span style="
                           font-weight: 600;
                           color:black;
@@ -871,7 +871,8 @@ data-comment-id="{{ comment.id }}">
                           <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
                     {{ reply.date|timesince }} 
                     ago
-                  </span>                  
+                  </span>    
+                  </span>              
                           
                           <br>
                           {{ reply.body }}

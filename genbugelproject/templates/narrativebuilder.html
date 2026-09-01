@@ -630,9 +630,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (cropper) cropper.destroy();
 
         cropper = new Cropper(cropImage, {
-          
           viewMode: 1,
           autoCropArea: 1,
+          responsive: false,
+          restore: false,
         });
       };
       reader.readAsDataURL(file);

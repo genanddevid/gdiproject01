@@ -816,7 +816,7 @@ data-comment-id="{{ comment.id }}">
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
 
                     {% csrf_token %}
-                    <textarea name="reply" rows="2" style="width: 100%;">@{% if comment.user.profile.first_name %}{{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }}{% else %}{{ comment.user.username }}{% endif %} </textarea>
+                    <textarea name="reply" rows="2" style="width: 100%;"> @{% if comment.user.profile.first_name %}{{ comment.user.profile.first_name }} {{ comment.user.profile.last_name }}{% else %}{{ comment.user.username }}{% endif %} </textarea>
                     <button type="submit">Submit</button>
                   </form>
                 </div>
@@ -859,11 +859,19 @@ data-comment-id="{{ comment.id }}">
                     <div class="media-content">
                       <div class="content">
                         <p>
-                          <strong>{% if reply.user.profile.first_name %}{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}{% else %}{{ reply.user.username }}{% endif %}</strong><span style="margin: 0; color: #636363;">•</span>
+                          <span style="
+                          font-weight: 600;
+                          color:black;
+                          font-size: 0.9rem;                                                
+                          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;                      
+                          letter-spacing: 0.1px;">
+                          {% if reply.user.profile.first_name %}
+                          {{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}{% else %}{{ reply.user.username }}{% endif %}</span>
+                          <span style="margin: 0; color: #636363;">•</span>
                           <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
                     {{ reply.date|timesince }} 
                     ago
-                  </span>
+                  </span>                  
                           
                           <br>
                           {{ reply.body }}

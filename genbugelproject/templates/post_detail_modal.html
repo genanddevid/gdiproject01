@@ -777,9 +777,9 @@ data-comment-id="{{ comment.id }}">
                     ago
                   </span>
                 </span>   
-                <span style="font-size: 15px; line-height: 1.35;">                                 
+                <div style="font-size: 15px; line-height: 1.05;">                                 
                 {{ comment.body }}    
-                </span>
+                </div>
 
                 <div style="height: 0.01rem;"></div> <!-- Adjustable spacer -->
                 
@@ -793,7 +793,7 @@ data-comment-id="{{ comment.id }}">
                     
                     {% if comment.likes.count > 0 %}
                     <span class="like-count" id="like-count-{{ comment.id }}" style="color: #666;
-                          font-size: 11px; font-weight: 500;"  >                      
+                          font-size: 12px; font-weight: 500;">                      
                       {{ comment.likes.count }} <!--like{{ comment.likes.count|pluralize }}-->
                     </span>                     
                     {% endif %}                    

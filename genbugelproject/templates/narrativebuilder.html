@@ -510,24 +510,25 @@ function uppercaseButton() {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  const captionField = document.querySelector('textarea[name="caption"]');
-  const contentField = document.querySelector('textarea[name="content"]');
-  const captionPreview = document.getElementById('captionPreview');
-  const contentPreview = document.getElementById('contentPreview');
+//document.addEventListener('DOMContentLoaded', () => {
+//  const captionField = document.querySelector('textarea[name="caption"]');
+//  const contentField = document.querySelector('textarea[name="content"]');
+//  const captionPreview = document.getElementById('captionPreview');
+//  const contentPreview = document.getElementById('contentPreview');
 
-  if (captionField && captionPreview) {
-    captionField.addEventListener('input', () => {
-      captionPreview.innerHTML = captionField.value;
-    });
-  }
+//  if (captionField && captionPreview) {
+//    captionField.addEventListener('input', () => {
+//      captionPreview.innerHTML = captionField.value;
+//    });
+//  }
 
-  if (contentField && contentPreview) {
-    contentField.addEventListener('input', () => {
-      contentPreview.innerHTML = contentField.value;
-    });
-  }
-});
+//  if (contentField && contentPreview) {
+//    contentField.addEventListener('input', () => {
+//      contentPreview.innerHTML = contentField.value;
+//    });
+//  }
+//});
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -562,16 +563,17 @@ document.addEventListener("DOMContentLoaded", function () {
             let words = contentField.value.trim().split(/\s+/).filter(w => w.length > 0);
 
             if (words.length > wordLimit) {
-                words = words.slice(0, wordLimit);
-                contentField.value = words.join(" ");
+                const truncatedText = words.slice(0, wordLimit).join(" ");
+                contentField.value = truncatedText;
             }
 
-            contentPreview.textContent = words.length > 0
-                ? words.join(" ")
+            contentPreview.textContent = contentField.value.trim().length > 0
+                ? contentField.value
                 : "Ensure your narrative is at least 200 words in length";
         });
     }
 });
+
 
 
 

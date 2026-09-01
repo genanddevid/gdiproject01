@@ -779,7 +779,7 @@ data-comment-id="{{ comment.id }}">
                 </span>                                    
                 {{ comment.body }}    
 
-                <div style="height: 0.4rem;"></div> <!-- Adjustable spacer -->
+                <!--<div style="height: 0.4rem;"></div> --><!-- Adjustable spacer -->
                 
                 <small style="display: flex; gap: 10px;">                  
 
@@ -837,6 +837,13 @@ data-comment-id="{{ comment.id }}">
 
           .replies-section .media-left {
             margin-right: 8px !important;
+          }
+
+          .media + .media {
+            border-top: none !important;
+          }
+          .media .media {
+            border-top: none !important;
           }
         }
 

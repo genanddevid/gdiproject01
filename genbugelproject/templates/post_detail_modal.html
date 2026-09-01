@@ -779,7 +779,7 @@ data-comment-id="{{ comment.id }}">
                 </span>                                    
                 {{ comment.body }}    
 
-                <div style="height: 0.1rem;"></div> <!-- Adjustable spacer -->
+                <div style="height: 0.01rem;"></div> <!-- Adjustable spacer -->
                 
                 <small style="display: flex; gap: 10px;">                  
 
@@ -965,9 +965,9 @@ data-comment-id="{{ comment.id }}">
                   </div>
 
                   <!-- Show more replies toggle -->
-                  <a href="#" class="show-more-replies-btn" data-comment-id="{{ comment.id }}">
-                    Hang me Show more replies
-                  </a>
+                  <div><a href="#" class="show-more-replies-btn" data-comment-id="{{ comment.id }}">
+                    Show more replies
+                  </a></div>
                   {% endif %}
 
                 </div>

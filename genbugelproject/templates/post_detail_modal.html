@@ -796,13 +796,15 @@ data-comment-id="{{ comment.id }}">
                     {% endif %}                    
                   </span>
 
-                  <span>
+                  <span style="display: flex; flex-direction: column; align-items:center; color: #666;
+                          font-size: 13px; font-weight: 500;">
                     <a href="#" class="reply-btn" data-comment-id="{{ comment.id }}">
                       Reply
                     </a>
                   </span>
                   {% if comment.replies.count > 0 %}
-                  <span><a href="#" class="view-replies-btn" 
+                  <span style="display: flex; flex-direction: column; align-items:center; color: #666;
+                          font-size: 13px; font-weight: 500;"><a href="#" class="view-replies-btn" 
                     data-comment-id="{{ comment.id }}"
                     data-reply-count="{{ comment.replies.count}}">
                     View replies ({{ comment.replies.count }})

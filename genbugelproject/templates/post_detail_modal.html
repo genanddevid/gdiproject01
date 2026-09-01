@@ -781,137 +781,36 @@ data-comment-id="{{ comment.id }}">
 
                 <div style="height: 0.01rem;"></div> <!-- Adjustable spacer -->
                 
-                
-<small class="comment-actions">
+                <small style="display: flex; gap: 10px;">                  
 
-  <span class="comment-action-with-count">
-    <a href="#" class="comment-action like-btn" data-comment-id="{{ comment.id }}">
-      Like
-    </a>
+                  <span style="display: flex; flex-direction: column; align-items:center;">
+                    <a href="#" class="like-btn" data-comment-id="{{ comment.id }}">
+                      Like
+                    </a>
+                    
+                    {% if comment.likes.count > 0 %}
+                    <span class="like-count" id="like-count-{{ comment.id }}">                      
+                      {{ comment.likes.count }} <!--like{{ comment.likes.count|pluralize }}-->
+                    </span>                     
+                    {% endif %}                    
+                  </span>
 
-    {% if comment.likes.count > 0 %}
-    <span class="like-count" id="like-count-{{ comment.id }}">
-      {{ comment.likes.count }}
-    </span>
-    {% endif %}
-  </span>
+                  <span>
+                    <a href="#" class="reply-btn" data-comment-id="{{ comment.id }}">
+                      Reply
+                    </a>
+                  </span>
+                  {% if comment.replies.count > 0 %}
+                  <span><a href="#" class="view-replies-btn" 
+                    data-comment-id="{{ comment.id }}"
+                    data-reply-count="{{ comment.replies.count}}">
+                    View replies ({{ comment.replies.count }})
+                    </a>
+                  </span>
+                  {% endif %}
 
-  <span>
-    <a href="#" class="comment-action reply-btn" data-comment-id="{{ comment.id }}">
-      Reply
-    </a>
-  </span>
+                </small>
 
-  {% if comment.replies.count > 0 %}
-  <span>
-    <a href="#" class="comment-action view-replies-btn"
-       data-comment-id="{{ comment.id }}"
-       data-reply-count="{{ comment.replies.count }}">
-      View replies ({{ comment.replies.count }})
-    </a>
-  </span>
-  {% endif %}
-
-</small>
-<style>
-/* ========================================
-   COMMENT ACTIONS
-   ======================================== */
-
-.comment-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 4px;
-    font-size: 13px;
-}
-
-.comment-action {
-    display: inline-flex;
-    align-items: center;
-    color: #666;
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.2s ease, background 0.2s ease;
-    cursor: pointer;
-}
-
-.comment-action:hover {
-    color: #222;
-    text-decoration: none;
-}
-
-
-/* Like + number */
-
-.comment-action-with-count {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.15;
-}
-
-.like-count {
-    margin-top: 2px;
-    color: #777;
-    font-size: 11px;
-    font-weight: 400;
-}
-
-
-/* View replies */
-
-.view-replies-btn {
-    display: inline-flex;
-    align-items: center;
-}
-
-
-/* Hide / Show replies */
-
-.show-more-replies-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    margin-top: 6px;
-    color: #666;
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.show-more-replies-btn:hover {
-    color: #222;
-    text-decoration: none;
-}
-
-
-/* Submit */
-
-.reply-form-container button[type="submit"] {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 6px;
-    padding: 5px 13px;
-    border: none;
-    border-radius: 14px;
-    background: #f1f1f1;
-    color: #555;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.reply-form-container button[type="submit"]:hover {
-    background: #e5e5e5;
-    color: #222;
-}
-
-</style>
                 <!-- Hidden reply form (revealed when "Reply" is clicked) -->
                 <div class="reply-form-container" id="reply-form-{{ comment.id }}" style="display: none;">
                   <form method="POST" action="{% url 'submit_reply' comment.id %}" onsubmit="submitReply(event, '{{ comment.id }}')">
@@ -1054,7 +953,8 @@ data-comment-id="{{ comment.id }}">
                       <div class="media-content">
                         <div class="content">
                           <p>
-                            <strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>
+                            <!--<strong>{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}</strong>-->
+                            <strong>{% if reply.user.profile.first_name %}{{ reply.user.profile.first_name }} {{ reply.user.profile.last_name }}{% else %}{{ reply.user.username }}{% endif %}</strong>
                             <span style="margin: 0; color: #636363;">•</span>
                           <span class="time-posted" style="font-size: 0.7rem; font-weight: 100; letter-spacing: 0.1px;">
                     {{ reply.date|timesince }} 

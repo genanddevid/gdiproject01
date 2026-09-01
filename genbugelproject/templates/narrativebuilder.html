@@ -630,7 +630,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (cropper) cropper.destroy();
 
         cropper = new Cropper(cropImage, {
-          aspectRatio: 4 / 3,
+          
           viewMode: 1,
           autoCropArea: 1,
         });
@@ -643,9 +643,18 @@ document.addEventListener("DOMContentLoaded", function () {
   saveEditBtn.addEventListener("click", function () {
     if (!cropper) return;
 
+    const cropData = cropper.getData();
+    const maxDimension = 1600;
+    let exportWidth = cropData.width;
+    let exportHeight = cropData.height;
+    if (exportWidth > maxDimension || exportHeight > maxDimension) {
+      const scale = maxDimension / Math.max(exportWidth, exportHeight);
+      exportWidth = Math.round(exportWidth * scale);
+      exportHeight = Math.round(exportHeight * scale);
+    }
     cropper.getCroppedCanvas({
-      width: 1200,
-      height: 675
+      width: exportWidth,
+      height: exportHeight
     }).toBlob((blob) => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");

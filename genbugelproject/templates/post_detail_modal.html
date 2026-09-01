@@ -747,7 +747,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
 id="comment-{{ comment.id }}"
 data-comment-id="{{ comment.id }}">
           <figure class="media-left">
-            <p class="image is-24x24">
+            <p class="image is-32x32">
               <img class="is-rounded"
                 src="{% if comment.user.profile.picture %}{{ comment.user.profile.picture.url }}{% else %}https://bulma.io/assets/images/placeholders/48x48.png{% endif %}"
                 style="width: 24px; height: 24px; object-fit: cover;">
@@ -781,12 +781,12 @@ data-comment-id="{{ comment.id }}">
                 {{ comment.body }}    
                 </div>
 
-                <div style="height: 0.01rem;"></div> <!-- Adjustable spacer -->
+                <div style="height: 0.05rem;"></div> <!-- Adjustable spacer -->
                 
                 <small style="display: flex; gap: 10px;">                  
 
-                  <span style="display: flex; flex-direction: column; align-items:center; color: #666;
-                          font-size: 13px; font-weight: 500;">
+                  <span style="display: flex; flex-direction: column; align-items:center; color: #777;
+                          font-size: 13px; font-weight: 600;">
                     <a href="#" class="like-btn" data-comment-id="{{ comment.id }}">
                       Like
                     </a>

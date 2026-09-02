@@ -184,7 +184,11 @@ time,
 #recommendations-Container,
 #viewcomments-bar, 
 .comment-author-name,
-.custom-file-upload {
+.custom-file-upload,
+#captionPreview,
+#contentPreview,
+#wordCount,
+.outer-container {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -967,7 +971,11 @@ document.addEventListener('contextmenu', function(e) {
     e.target.closest('.media-right p') ||
     e.target.closest('#recommendations-Container') ||
     e.target.closest('#viewcomments-bar') ||
-    e.target.closest('.custom-file-upload') || 
+    e.target.closest('.custom-file-upload') ||
+    e.target.closest('#captionPreview') ||
+    e.target.closest('#contentPreview') ||
+    e.target.closest('#wordCount') ||
+    e.target.closest('.outer-container') ||
     e.target.closest('.comment-author-name')
   ) {
     e.preventDefault();

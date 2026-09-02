@@ -1438,12 +1438,12 @@ document.addEventListener('focusin', function(e) {
 
     const anchorElement = anchorNode && anchorNode.nodeType === 3 ? anchorNode.parentElement : anchorNode;
     const isAuthorName = anchorElement && anchorElement.closest && anchorElement.closest('.comment-author-name');
+    const isShowMoreComments = anchorElement && anchorElement.closest && anchorElement.closest('#viewcomments-bar');
 
-    if (!anchorNode || !(inModal || inReview || inImprove) || isAuthorName) {
+    if (!anchorNode || !(inModal || inReview || inImprove) || isAuthorName || isShowMoreComments) {
       toolbar.style.display = 'none';
       return;
     }
-
     selectedWord = text;
 
     const range = selection.getRangeAt(0);

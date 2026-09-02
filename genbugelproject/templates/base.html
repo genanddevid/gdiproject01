@@ -1437,7 +1437,7 @@ document.addEventListener('focusin', function(e) {
     const inImprove = (originalText && originalText.contains(anchorNode)) || (improvedText && improvedText.contains(anchorNode));
 
     const anchorElement = anchorNode && anchorNode.nodeType === 3 ? anchorNode.parentElement : anchorNode;
-    const isAuthorName = anchorElement && anchorElement.closest && anchorElement.closest('.comment-author-name, .media-content strong');
+    const isAuthorName = anchorElement && anchorElement.closest && anchorElement.closest('.comment-author-name');
 
     if (!anchorNode || !(inModal || inReview || inImprove) || isAuthorName) {
       toolbar.style.display = 'none';

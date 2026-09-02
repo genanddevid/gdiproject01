@@ -179,7 +179,10 @@ button,
 .media-content p.title, 
 time,
 .heading,
-.subtitle {
+.subtitle,
+.media-right p,
+#recommendations-Container,
+#viewcomments-bar {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -958,7 +961,10 @@ document.addEventListener('contextmenu', function(e) {
     e.target.closest('.media-content') ||
     e.target.closest('time') ||
     e.target.closest('.heading') ||
-    e.target.closest('.subtitle')
+    e.target.closest('.subtitle') ||
+    e.target.closest('.media-right p') ||
+    e.target.closest('#recommendations-Container') ||
+    e.target.closest('#viewcomments-bar')
   ) {
     e.preventDefault();
   }

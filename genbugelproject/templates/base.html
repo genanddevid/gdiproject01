@@ -940,11 +940,18 @@ window.fetch = function(...args) {
 
 
 <script>
-  document.addEventListener('contextmenu', function(e) {
-  if (e.target.tagName === 'IMG') {
+document.addEventListener('contextmenu', function(e) {
+  if (
+    e.target.tagName === 'IMG' ||
+    e.target.closest('.material-icons') ||
+    e.target.closest('.material-symbols-outlined') ||
+    e.target.closest('button') ||
+    e.target.closest('.button')
+  ) {
     e.preventDefault();
   }
 });
+
 document.addEventListener('focusin', function(e) {
     if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
         const modalContent = document.getElementById('modalContent');

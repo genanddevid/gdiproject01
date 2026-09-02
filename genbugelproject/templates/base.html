@@ -946,7 +946,8 @@ document.addEventListener('contextmenu', function(e) {
     e.target.closest('.material-icons') ||
     e.target.closest('.material-symbols-outlined') ||
     e.target.closest('button') ||
-    e.target.closest('.button')
+    e.target.closest('.button') ||
+    e.target.closest('a')
   ) {
     e.preventDefault();
   }

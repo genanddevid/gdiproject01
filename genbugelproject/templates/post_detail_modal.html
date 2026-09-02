@@ -564,13 +564,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
                 <img src="{{ post.picture.url }}" alt="Article Image" 
                      style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 6px;" />
               </a>
-              {% if post.user.profile.pinned_post_id == post.id %}
-              <span style="position:absolute; top:4px; left:4px;
-                  border-radius:50%; width:20px; height:20px; display:flex; align-items:center;
-                  justify-content:center; pointer-events:none;">
-                <i class="material-icons" style="font-size:17px; color:#000000; transform:rotate(-29deg);">push_pin</i>
-              </span>
-              {% endif %}
+              
             </div>
 
             
@@ -597,6 +591,10 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
                         margin: 0;
                         ">{% if post.user.profile.first_name %}{{ post.user.profile.first_name }} {{ post.user.profile.last_name }}{% else %}{{ post.user.username }}{% endif %}
                     </p>
+                    {% if post.user.profile.pinned_post_id == post.id %}
+              <i class="material-icons" style="font-size:15px; color:#000000; margin-left: auto; transform:rotate(0deg);">push_pin</i>
+                            
+              {% endif %}
                   </div>
                 </div>
 

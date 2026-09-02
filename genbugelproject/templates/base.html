@@ -1492,11 +1492,10 @@ document.addEventListener('focusin', function(e) {
     wwOverlayEl.addEventListener('touchmove', wwBlockBodyScroll, { passive: false });
   }
 
-  document.addEventListener('pointerdown', function(e) {
-    const toolbar = document.getElementById('writeword-toolbar');
-    if (toolbar && !toolbar.contains(e.target)) {
-      toolbar.style.display = 'none';
-    }
+  document.querySelectorAll('.recommended-post a').forEach(function(link) {
+    link.addEventListener('touchstart', function(e) {
+      e.currentTarget.style.webkitTapHighlightColor = 'transparent';
+    }, { passive: true });
   });
 
 

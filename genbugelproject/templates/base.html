@@ -176,7 +176,8 @@
 button,
 .button,
 .time-posted,
-.media-content p.title {
+.media-content p.title, 
+time{
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -952,7 +953,8 @@ document.addEventListener('contextmenu', function(e) {
     e.target.closest('.button') ||
     e.target.closest('a') ||
     e.target.closest('.time-posted') ||
-    e.target.closest('.media-content')
+    e.target.closest('.media-content') ||
+    e.target.closest('time')
   ) {
     e.preventDefault();
   }

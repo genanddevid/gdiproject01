@@ -182,7 +182,8 @@ time,
 .subtitle,
 .media-right p,
 #recommendations-Container,
-#viewcomments-bar {
+#viewcomments-bar 
+.comment-author-name {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -964,7 +965,8 @@ document.addEventListener('contextmenu', function(e) {
     e.target.closest('.subtitle') ||
     e.target.closest('.media-right p') ||
     e.target.closest('#recommendations-Container') ||
-    e.target.closest('#viewcomments-bar')
+    e.target.closest('#viewcomments-bar') ||
+    e.target.closest('.comment-author-name')
   ) {
     e.preventDefault();
   }

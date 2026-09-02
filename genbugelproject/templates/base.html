@@ -1436,7 +1436,10 @@ document.addEventListener('focusin', function(e) {
     const inReview = reviewResults && reviewResults.contains(anchorNode);
     const inImprove = (originalText && originalText.contains(anchorNode)) || (improvedText && improvedText.contains(anchorNode));
 
-    if (!anchorNode || !(inModal || inReview || inImprove)) {
+    const anchorElement = anchorNode && anchorNode.nodeType === 3 ? anchorNode.parentElement : anchorNode;
+    const isAuthorName = anchorElement && anchorElement.closest && anchorElement.closest('.comment-author-name, .media-content strong');
+
+    if (!anchorNode || !(inModal || inReview || inImprove) || isAuthorName) {
       toolbar.style.display = 'none';
       return;
     }

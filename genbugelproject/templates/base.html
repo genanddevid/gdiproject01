@@ -188,7 +188,8 @@ time,
 #captionPreview,
 #contentPreview,
 #wordCount,
-.outer-container {
+.outer-container,
+.writer {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -976,6 +977,7 @@ document.addEventListener('contextmenu', function(e) {
     e.target.closest('#contentPreview') ||
     e.target.closest('#wordCount') ||
     e.target.closest('.outer-container') ||
+    e.target.closest('.writer') ||
     e.target.closest('.comment-author-name')
   ) {
     e.preventDefault();

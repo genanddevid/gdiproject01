@@ -645,6 +645,9 @@ document.addEventListener("DOMContentLoaded", function () {
           responsive: false,
           restore: false,
         });
+        cropImage.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+        });
       };
       reader.readAsDataURL(file);
     }

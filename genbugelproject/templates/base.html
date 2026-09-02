@@ -174,7 +174,9 @@
 .material-icons,
 .material-symbols-outlined,
 button,
-.button {
+.button,
+.time-posted,
+.media-content p.title {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -182,6 +184,7 @@ button,
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+
 
 
 /* Show bottom nav on screens smaller than 768px */
@@ -947,7 +950,9 @@ document.addEventListener('contextmenu', function(e) {
     e.target.closest('.material-symbols-outlined') ||
     e.target.closest('button') ||
     e.target.closest('.button') ||
-    e.target.closest('a')
+    e.target.closest('a') ||
+    e.target.closest('.time-posted') ||
+    e.target.closest('.media-content')
   ) {
     e.preventDefault();
   }

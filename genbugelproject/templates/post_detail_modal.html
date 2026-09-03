@@ -62,7 +62,7 @@
       <div class="my-card-content" style="width: 100%; padding-top: 15px;">
   <div class="media">
     <div class="media-left">
-      <a href="{% url 'profile' post.user.username %}">
+      <a href="{% url 'profile' post.user.username %}" style="-webkit-tap-highlight-color: transparent;">
         <figure class="image is-38x38">
 
           {% if post.user.profile.picture %}
@@ -81,7 +81,7 @@
     </div>
           
           <div class="media-content">
-            <a href="{% url 'profile' post.user.username %}" style="text-decoration: none;">
+            <a href="{% url 'profile' post.user.username %}" style="text-decoration: none; -webkit-tap-highlight-color: transparent;">
             {% if post.user.profile.first_name %}
             <p class="title is-4" style="
               font-weight:500;

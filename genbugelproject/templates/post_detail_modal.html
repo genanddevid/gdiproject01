@@ -552,7 +552,7 @@ color:#222222; font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', s
       <!-- Left Recommendations -->
   <div style="flex: 1; min-width: 250px; max-width: 525px;">
     {% for post in left_recommendations %}
-    <div class="recommended-post" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
+    <div class="recommended-post rec-card-link" data-post-id="{{ post.id }}" onclick="openPostModal('{{ post.id }}', event)">
       <!-- Paste your card HTML here -->
       <div class="box" style="max-width: 525px; padding-left: 0 !important; background-color: rgb(255, 255, 255); box-shadow: none; border-radius: 0;">
         <article class="media" style="margin-left: 0; background-color: rgb(255, 255, 255);">

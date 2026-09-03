@@ -186,9 +186,25 @@
 /* ===== Profile picture: relabel "Clear" area to "Edit photo" ===== */
 
 /* Hide the "Currently: .../xxxx.jpg" link */
+.ig-picture-field a,
+.ig-picture-field {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .ig-picture-field a {
   display: none !important;
 }
+.label.is-medium {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 
 /* Hide Django's default "Clear" text label that wraps the checkbox.
    We hide the label's text but keep the checkbox visible. */

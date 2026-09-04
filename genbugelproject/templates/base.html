@@ -2456,6 +2456,61 @@ document.getElementById('writeword-btn').addEventListener('click', function(e) {
 
 
 
+{% if request.resolver_match.url_name and "collections_" in request.resolver_match.url_name %}
+{% url 'collections_liked_posts' as url_liked_posts %}
+{% url 'collections_liked_comments' as url_liked_comments %}
+{% url 'collections_posted_comments' as url_posted_comments %}
+{% url 'collections_posted_replies' as url_posted_replies %}
+{% url 'collections_saved' as url_saved %}
+{% url 'collections_history' as url_history %}
+{% url 'collections_notifications' as url_notifications %}
+<script>
+(function() {
+  const collectionsSequence = [
+    { name: 'collections_liked_posts', url: '{{ url_liked_posts }}' },
+    { name: 'collections_liked_comments', url: '{{ url_liked_comments }}' },
+    { name: 'collections_posted_comments', url: '{{ url_posted_comments }}' },
+    { name: 'collections_posted_replies', url: '{{ url_posted_replies }}' },
+    { name: 'collections_saved', url: '{{ url_saved }}' },
+    { name: 'collections_history', url: '{{ url_history }}' },
+    { name: 'collections_notifications', url: '{{ url_notifications }}' }
+  ];
+  const currentCollectionsPage = '{{ request.resolver_match.url_name }}';
+  const currentIndex = collectionsSequence.findIndex(function(p) { return p.name === currentCollectionsPage; });
+  if (currentIndex === -1) return;
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    const postModal = document.getElementById('postModal');
+    if (postModal && postModal.style.display === 'flex') return;
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const postModal = document.getElementById('postModal');
+    if (postModal && postModal.style.display === 'flex') return;
+
+    const diffX = e.changedTouches[0].clientX - touchStartX;
+    const diffY = e.changedTouches[0].clientY - touchStartY;
+    const threshold = 80;
+
+    if (Math.abs(diffX) > threshold && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+      let targetIndex;
+      if (diffX < 0) {
+        targetIndex = (currentIndex + 1) % collectionsSequence.length;
+      } else {
+        targetIndex = (currentIndex - 1 + collectionsSequence.length) % collectionsSequence.length;
+      }
+      const targetUrl = collectionsSequence[targetIndex].url;
+      if (targetUrl) window.location.href = targetUrl;
+    }
+  }, { passive: true });
+})();
+</script>
+{% endif %}
 
 
 

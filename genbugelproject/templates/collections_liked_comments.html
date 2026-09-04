@@ -297,8 +297,33 @@ function loadPostContentAndScroll(postId, commentId) {
             postCache[postId] = html;
             document.getElementById("modalBody").innerHTML = html;
             initEmbeds();
+            const shareBtn = document.getElementById('share-btn');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const title = this.dataset.caption;
+                    const postId = this.dataset.postId || '';
+                    const url = postId ? 'https://www.baytruyen.com/' + postId : window.location.href;
+                    if (navigator.share) {
+                        navigator.share({ title: title, url: url }).catch(() => {});
+                    } else {
+                        navigator.clipboard.writeText(url).then(() => {
+                            const label = document.getElementById('share-label');
+                            if (label) {
+                                label.textContent = '✓ Copied!';
+                                label.style.color = '#3273dc';
+                                setTimeout(() => {
+                                    label.textContent = 'Share';
+                                    label.style.color = '';
+                                }, 2000);
+                            }
+                        }).catch(() => { prompt('Copy this link:', url); });
+                    }
+                });
+            }
             scrollToComment(commentId);
         })
+
         .catch(error => {
             console.error('Error loading post:', error);
             document.getElementById("modalBody").innerHTML = "<p>Error loading post.</p>";

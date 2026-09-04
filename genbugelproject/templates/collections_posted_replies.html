@@ -366,6 +366,172 @@ function closePostModal() {
     document.body.classList.remove("no-scroll");
     document.documentElement.classList.remove("no-scroll"); 
 }
+
+// openPostModal — same behavior as openPostModalAtComment, but no comment to scroll to.
+// Related Narratives cards inside the modal call this directly by name.
+function openPostModal(postId, event) {
+    if (event) event.preventDefault();
+    loadPostContentAndScroll(postId, null);
+    document.getElementById("postModal").style.display = "flex";
+    document.body.classList.add("no-scroll");
+    document.documentElement.classList.add("no-scroll");
+}
+
+document.getElementById('modalBody').addEventListener('click', function (event) {
+  const postLikeBtn = event.target.closest('.like-post-btn');
+  const commentLikeBtn = event.target.closest('.like-btn');
+  if (postLikeBtn) {
+    event.preventDefault();
+    const postId = postLikeBtn.dataset.postId;
+    fetch(`/${postId}/like`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const icon = postLikeBtn.querySelector('i');
+      const countElem = document.getElementById(`like-count-${postId}`);
+      if (icon) icon.style.color = data.liked ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
+      if (countElem) countElem.textContent = data.likes;
+    });
+  }
+  if (commentLikeBtn && !postLikeBtn) {
+    event.preventDefault();
+    const commentId = commentLikeBtn.dataset.commentId;
+    fetch(`/comment/${commentId}/like/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+      const likeCountId = `like-count-${commentId}`;
+      let likeSpan = document.getElementById(likeCountId);
+      if (data.likes > 0) {
+        if (likeSpan) likeSpan.innerText = `${data.likes}`;
+        else {
+          likeSpan = document.createElement('span');
+          likeSpan.className = 'like-count';
+          likeSpan.id = likeCountId;
+          likeSpan.innerText = `${data.likes}`;
+          commentLikeBtn.insertAdjacentElement('afterend', likeSpan);
+        }
+      } else if (likeSpan) likeSpan.remove();
+    });
+  }
+});
+
+document.getElementById('modalBody').addEventListener('click', function (event) {
+  const target = event.target;
+  if (target.closest('.save-post-btn')) {
+    event.preventDefault();
+    const saveBtn = target.closest('.save-post-btn');
+    const postId = saveBtn.dataset.postId;
+    fetch(`/${postId}/favorite`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    })
+    .then(response => {
+      if (response.ok) {
+        saveBtn.classList.toggle('saved');
+        const icon = saveBtn.querySelector('i');
+        if (icon) icon.style.color = saveBtn.classList.contains('saved') ? 'rgb(50, 115, 220)' : 'rgb(134, 134, 129)';
+        const textElem = saveBtn.nextElementSibling;
+        if (textElem && textElem.tagName === 'P') {
+          textElem.textContent = saveBtn.classList.contains('saved') ? 'Saved' : 'Save';
+        }
+      }
+    });
+  }
+  if (target.id === 'viewcomments-bar') {
+    document.querySelectorAll(".comment-wrapper.is-hidden").forEach(el => el.classList.remove("is-hidden"));
+    target.style.display = "none";
+  }
+  if (target.classList.contains('reply-btn')) {
+    event.preventDefault();
+    const commentId = target.dataset.commentId;
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    if (replyForm) replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
+  }
+  if (target.classList.contains('view-replies-btn')) {
+    event.preventDefault();
+    const commentId = target.dataset.commentId;
+    const replyCount = target.dataset.replyCount;
+    const repliesSection = document.getElementById(`replies-${commentId}`);
+    if (repliesSection) {
+      const isVisible = repliesSection.style.display === 'block';
+      repliesSection.style.display = isVisible ? 'none' : 'block';
+      target.textContent = isVisible ? `View replies (${replyCount})` : 'Hide replies';
+    }
+  }
+  if (target.classList.contains('show-more-replies-btn')) {
+    event.preventDefault();
+    const commentId = target.dataset.commentId;
+    const extraReplies = document.getElementById('extra-replies-' + commentId);
+    if (extraReplies) {
+      extraReplies.style.display = 'block';
+      target.style.display = 'none';
+    }
+  }
+});
+
+document.getElementById('modalBody').addEventListener('submit', function (event) {
+  const form = event.target;
+  
+  if (form.id === 'modal-comment-form') {
+    event.preventDefault();
+    const postId = form.dataset.postId;
+    const formData = new FormData(form);
+    fetch(`/modal/${postId}/`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+      body: formData,
+    })
+    .then(response => response.text())
+    .then(html => { document.getElementById('modalBody').innerHTML = html; });
+  }
+  if (form.action.includes('/comment/') && form.action.includes('/reply/')) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+      body: formData,
+    })
+    .then(response => {
+      if (response.status === 204) {
+        const postId = document.getElementById('modal-comment-form')?.dataset.postId;
+        if (postId) {
+          fetch(`/modal/${postId}/`)
+            .then(res => res.text())
+            .then(html => { document.getElementById('modalBody').innerHTML = html; });
+        }
+      }
+    });
+  }
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 </script>
+
 
 {% endblock %}

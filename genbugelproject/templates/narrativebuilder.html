@@ -567,27 +567,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 contentField.value = truncatedText;
             }
 
-            const content = contentField.value;
+            contentPreview.textContent = contentField.value.trim().length > 0
+                ? contentField.value
+                : "Ensure your narrative is at least 200 words in length";
 
-
-
-contentPreview.textContent = contentField.value.trim().length > 0
-    ? contentField.value
-    : "Ensure your narrative is at least 200 words in length";
-
-const cursorPos = contentField.selectionStart;
-const totalLength = contentField.value.length;
-
-if (totalLength > 0) {
-    const fraction = cursorPos / totalLength;
-    const maxScroll = contentPreview.scrollHeight - contentPreview.clientHeight;
-
-    // Position the cursor's corresponding content toward the lower part
-    // of the preview window.
-    const targetScroll = (maxScroll * fraction) - (contentPreview.clientHeight * 0.65);
-
-    contentPreview.scrollTop = Math.max(0, Math.min(targetScroll, maxScroll));
-}
+            const cursorPos = contentField.selectionStart;
+            const totalLength = contentField.value.length;
+            if (totalLength > 0) {
+                const fraction = cursorPos / totalLength;
+                const maxScroll = contentPreview.scrollHeight - contentPreview.clientHeight;
+                contentPreview.scrollTop = maxScroll * fraction;
+            }
         });
     }
 });

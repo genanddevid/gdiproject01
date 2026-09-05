@@ -567,17 +567,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 contentField.value = truncatedText;
             }
 
-            contentPreview.textContent = contentField.value.trim().length > 0
-                ? contentField.value
-                : "Ensure your narrative is at least 200 words in length";
+            const content = contentField.value;
 
-            const cursorPos = contentField.selectionStart;
-            const totalLength = contentField.value.length;
-            if (totalLength > 0) {
-                const fraction = cursorPos / totalLength;
-                const maxScroll = contentPreview.scrollHeight - contentPreview.clientHeight;
-                contentPreview.scrollTop = maxScroll * fraction;
-            }
+contentPreview.textContent = content.trim()
+    ? content
+    : "Ensure your narrative is at least 200 words in length";
+
+const cursorPos = contentField.selectionStart;
+const totalLength = content.length;
+
+if (totalLength > 0) {
+    const fraction = cursorPos / totalLength;
+    const maxScroll = contentPreview.scrollHeight - contentPreview.clientHeight;
+    contentPreview.scrollTop = maxScroll * fraction;
+}
         });
     }
 });

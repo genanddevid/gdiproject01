@@ -450,6 +450,12 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
+        .preview-edit-highlight {
+    background: #fff3a3;
+    border-radius: 3px;
+    padding: 1px 2px;
+}
 </style>
 
 
@@ -567,17 +573,50 @@ document.addEventListener("DOMContentLoaded", function () {
                 contentField.value = truncatedText;
             }
 
-            contentPreview.textContent = contentField.value.trim().length > 0
-                ? contentField.value
-                : "Ensure your narrative is at least 200 words in length";
+            const text = contentField.value;
 
-            const cursorPos = contentField.selectionStart;
-            const totalLength = contentField.value.length;
-            if (totalLength > 0) {
-                const fraction = cursorPos / totalLength;
-                const maxScroll = contentPreview.scrollHeight - contentPreview.clientHeight;
-                contentPreview.scrollTop = maxScroll * fraction;
-            }
+if (text.trim().length > 0) {
+    const cursorPos = contentField.selectionStart;
+
+    let start = cursorPos;
+    let end = cursorPos;
+
+    while (start > 0 && !/\s/.test(text[start - 1])) {
+        start--;
+    }
+
+    while (end < text.length && !/\s/.test(text[end])) {
+        end++;
+    }
+
+    contentPreview.replaceChildren();
+
+    contentPreview.appendChild(
+        document.createTextNode(text.substring(0, start))
+    );
+
+    const highlight = document.createElement("span");
+    highlight.className = "preview-edit-highlight";
+    highlight.textContent = text.substring(start, end);
+    contentPreview.appendChild(highlight);
+
+    contentPreview.appendChild(
+        document.createTextNode(text.substring(end))
+    );
+} else {
+    contentPreview.textContent =
+        "Ensure your narrative is at least 200 words in length";
+}
+
+const totalLength = text.length;
+
+if (totalLength > 0) {
+    const fraction = contentField.selectionStart / totalLength;
+    const maxScroll =
+        contentPreview.scrollHeight - contentPreview.clientHeight;
+
+    contentPreview.scrollTop = maxScroll * fraction;
+}
         });
     }
 });

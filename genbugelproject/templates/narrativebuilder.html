@@ -573,7 +573,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 contentField.value = truncatedText;
             }
 
-            const text = contentField.value;
+  const text = contentField.value;
+
+let highlight = null;
 
 if (text.trim().length > 0) {
     const cursorPos = contentField.selectionStart;
@@ -595,9 +597,10 @@ if (text.trim().length > 0) {
         document.createTextNode(text.substring(0, start))
     );
 
-    const highlight = document.createElement("span");
+    highlight = document.createElement("span");
     highlight.className = "preview-edit-highlight";
     highlight.textContent = text.substring(start, end);
+
     contentPreview.appendChild(highlight);
 
     contentPreview.appendChild(
@@ -615,7 +618,18 @@ if (totalLength > 0) {
     const maxScroll =
         contentPreview.scrollHeight - contentPreview.clientHeight;
 
-    contentPreview.scrollTop = maxScroll * fraction;
+    let targetScroll = maxScroll * fraction;
+
+    if (highlight) {
+        targetScroll =
+            highlight.offsetTop -
+            (contentPreview.clientHeight * 0.65);
+    }
+
+    contentPreview.scrollTop = Math.max(
+        0,
+        Math.min(targetScroll, maxScroll)
+    );
 }
         });
     }

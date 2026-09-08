@@ -1664,4 +1664,46 @@ def log_writeword_lookup(request):
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
-    
+def global_search(request):
+    query = request.GET.get('q', '').strip()
+
+    if not query or len(query) < 2:
+        return JsonResponse({'writers': [], 'narratives': []})
+
+    from django.db.models import Q
+
+    matched_users = User.objects.filter(
+        Q(username__icontains=query) |
+        Q(profile__first_name__icontains=query) |
+        Q(profile__last_name__icontains=query)
+    ).select_related('profile').distinct()[:8]
+
+    writers = []
+    for u in matched_users:
+        display_name = u.username
+        if u.profile.first_name:
+            display_name = f"{u.profile.first_name} {u.profile.last_name}".strip()
+        writers.append({
+            'username': u.username,
+            'display_name': display_name,
+            'profile_url': reverse('profile', kwargs={'username': u.username}),
+            'picture_url': u.profile.picture.url if u.profile.picture else '',
+        })
+
+    matched_posts = Post.objects.filter(
+        Q(caption__icontains=query) | Q(content__icontains=query)
+    ).select_related('user__profile').order_by('-likes')[:8]
+
+    narratives = []
+    for p in matched_posts:
+        writer_name = p.user.username
+        if p.user.profile.first_name:
+            writer_name = f"{p.user.profile.first_name} {p.user.profile.last_name}".strip()
+        narratives.append({
+            'caption': p.caption,
+            'writer_name': writer_name,
+            'post_url': p.get_absolute_url(),
+            'picture_url': p.picture.url if p.picture else '',
+        })
+
+    return JsonResponse({'writers': writers, 'narratives': narratives})

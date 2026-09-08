@@ -376,6 +376,9 @@ body {
         Log in
     </button>
     {% endif %}
+    <a href="#" onclick="openSearchOverlay(event)" class="has-text-black">
+      <span class="material-icons">search</span>
+    </a>
     <a href="{% if request.user.is_authenticated %}{% url 'profile' request.user %}{% else %}#{% endif %}"
         {% if not request.user.is_authenticated %}onclick="showLoginModal(); return false;"{% endif %}
         class="has-text-black">
@@ -1082,8 +1085,104 @@ document.addEventListener('focusin', function(e) {
 })();
 </script>
 
+<!--global search-->
 
+<div id="search-overlay" style="position:fixed; inset:0; background:#fff; z-index:999997; display:none; flex-direction:column;">
+  <div style="display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid #eee;">
+    <span class="material-icons" style="color:#888;">search</span>
+    <input id="search-input" type="text" placeholder="Search writers or narratives..."
+      style="flex:1; border:none; outline:none; font-size:16px; background:transparent;">
+    <button onclick="closeSearchOverlay()" style="background:none; border:none; font-size:22px; color:#888; cursor:pointer;">&times;</button>
+  </div>
+  <div id="search-results" style="flex:1; overflow-y:auto; padding:8px 0;"></div>
+</div>
 
+<script>
+function openSearchOverlay(e) {
+  if (e) e.preventDefault();
+  document.getElementById('search-overlay').style.display = 'flex';
+  window._searchScrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${window._searchScrollY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('search-input').focus(), 100);
+}
+
+function closeSearchOverlay() {
+  document.getElementById('search-overlay').style.display = 'none';
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.overflow = '';
+  window.scrollTo(0, window._searchScrollY || 0);
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+}
+
+let searchDebounceTimer;
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchDebounceTimer);
+      const query = this.value.trim();
+      const resultsDiv = document.getElementById('search-results');
+      if (query.length < 2) {
+        resultsDiv.innerHTML = '';
+        return;
+      }
+      searchDebounceTimer = setTimeout(function() {
+        fetch('/search/?q=' + encodeURIComponent(query))
+          .then(r => r.json())
+          .then(data => renderSearchResults(data));
+      }, 300);
+    });
+  }
+});
+
+function renderSearchResults(data) {
+  const resultsDiv = document.getElementById('search-results');
+  let html = '';
+
+  if (data.writers.length > 0) {
+    html += '<div style="padding:8px 16px; font-size:12px; font-weight:600; color:#888; text-transform:uppercase;">Writers</div>';
+    data.writers.forEach(function(w) {
+      html += `
+        <a href="${w.profile_url}" style="display:flex; align-items:center; gap:12px; padding:10px 16px; text-decoration:none; color:#000;">
+          ${w.picture_url
+            ? `<img src="${w.picture_url}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">`
+            : `<span class="material-icons" style="width:36px; height:36px; font-size:36px; color:#ccc;">account_circle</span>`}
+          <span style="font-size:14px; font-weight:500;">${w.display_name}</span>
+        </a>`;
+    });
+  }
+
+  if (data.narratives.length > 0) {
+    html += '<div style="padding:8px 16px; font-size:12px; font-weight:600; color:#888; text-transform:uppercase; margin-top:8px;">Narratives</div>';
+    data.narratives.forEach(function(n) {
+      html += `
+        <a href="${n.post_url}" style="display:flex; align-items:center; gap:12px; padding:10px 16px; text-decoration:none; color:#000;">
+          ${n.picture_url
+            ? `<img src="${n.picture_url}" style="width:44px; height:44px; border-radius:6px; object-fit:cover;">`
+            : ''}
+          <span style="display:flex; flex-direction:column;">
+            <span style="font-size:14px; font-weight:500;">${n.caption}</span>
+            <span style="font-size:12px; color:#888;">${n.writer_name}</span>
+          </span>
+        </a>`;
+    });
+  }
+
+  if (data.writers.length === 0 && data.narratives.length === 0) {
+    html = '<div style="padding:40px 20px; text-align:center; color:#888; font-size:14px;">No results found.</div>';
+  }
+
+  resultsDiv.innerHTML = html;
+}
+</script>
 
 
 

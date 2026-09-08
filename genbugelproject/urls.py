@@ -65,6 +65,7 @@ urlpatterns = [
     path('log-writeword-lookup/', log_writeword_lookup, name='log_writeword_lookup'),
     path('ca-dashboard/report/', download_cohort_report, name='download_cohort_report'),
     path('ca-dashboard/all/', all_cohorts_dashboard, name='all_cohorts_dashboard'),
+    path('search/', global_search, name='global_search'),
     path('toggle-pin/<uuid:post_id>/', toggle_pin, name='toggle_pin'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
     path('favicon.ico', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),

@@ -1686,7 +1686,7 @@ def global_search(request):
         writers.append({
             'username': u.username,
             'display_name': display_name,
-            'profile_url': reverse('profile', kwargs={'username': u.username}),
+            'profile_url': reverse('profile', args=[u.username]),
             'picture_url': u.profile.picture.url if u.profile.picture else '',
         })
 

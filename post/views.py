@@ -24,6 +24,7 @@ from bs4 import BeautifulSoup
 # Models
 from post.models import Post, Stream, Tag, Likes, PostView, SavedItem, ApprovedTagAuthor
 from authy.models import Profile
+from django.contrib.auth.models import User
 from comment.models import Comment
 
 # Forms

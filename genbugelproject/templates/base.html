@@ -1140,6 +1140,18 @@ document.addEventListener('DOMContentLoaded', function() {
           .then(data => renderSearchResults(data));
       }, 300);
     });
+
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        clearTimeout(searchDebounceTimer);
+        const query = this.value.trim();
+        if (query.length < 2) return;
+        fetch('/search/?q=' + encodeURIComponent(query))
+          .then(r => r.json())
+          .then(data => renderSearchResults(data));
+      }
+    });
   }
 });
 

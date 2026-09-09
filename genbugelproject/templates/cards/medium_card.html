@@ -89,11 +89,11 @@ box-shadow: none; border-radius: 0; margin-bottom: 0; padding-right: 20px !impor
             <div class="media-content" style="margin-left: -10px; overflow: hidden;">
               <a href="{% url 'profile' post.user.username %}" onclick="event.stopPropagation();" style="-webkit-tap-highlight-color: transparent;">
                 {% if post.user.profile.first_name %}
-                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; font-size: 12px; margin: 0; font-family: 'Inter', sans-serif;">
+                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; letter-spacing: -0.1px; font-size: 12px; margin: 0; font-family: 'Inter', sans-serif;">
                   {{ post.user.profile.first_name }} {{ post.user.profile.last_name }}
                 </p>
                 {% else %}
-                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; font-size: 12px; margin: 0; font-family: 'Inter', sans-serif;">{{ post.user.username }}</p>
+                <p class="title is-4" style="color:rgb(59, 59, 59); font-weight:400; letter-spacing: -0.1px; font-size: 12px; margin: 0; font-family: 'Inter', sans-serif;">{{ post.user.username }}</p>
                 {% endif %}
               </a>
             </div>

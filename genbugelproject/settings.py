@@ -70,6 +70,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'authy.context_processors.unread_notifications_count',
+                'authy.context_processors.is_mobile_device',
             ],
         },
     },

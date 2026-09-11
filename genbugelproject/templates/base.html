@@ -209,14 +209,13 @@ time,
 
 
 /* Show bottom nav on screens smaller than 768px */
+body[data-is-mobile="true"] .sidebar {
+  display: none;
+}
+body[data-is-mobile="true"] .mobile-bottom-nav {
+  display: flex;
+}
 @media (max-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-
-  .mobile-bottom-nav {
-    display: flex;
-  }
 
   .main-content {
     margin-left: 0 !important;
@@ -360,7 +359,7 @@ body {
   </style>
 
 
-  <body class="{% block body_class %}default-bg{% endblock %}">
+  <body class="{% block body_class %}default-bg{% endblock %}" data-is-mobile="{{ is_mobile_device|yesno:'true,false' }}">
     <!-- Mobile Top Nav (Visible only on mobile) -->
 <div class="mobile-top-nav">
   <div class="left-logo">

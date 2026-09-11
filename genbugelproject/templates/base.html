@@ -209,13 +209,22 @@ time,
 
 
 /* Show bottom nav on screens smaller than 768px */
-body[data-is-mobile="true"] .sidebar {
+.sidebar {
   display: none;
 }
-body[data-is-mobile="true"] .mobile-bottom-nav {
+.mobile-bottom-nav {
   display: flex;
 }
+@media (min-width: 900px) and (pointer: fine) {
+  .sidebar {
+    display: flex;
+  }
+  .mobile-bottom-nav {
+    display: none;
+  }
+}
 @media (max-width: 768px) {
+
 
   .main-content {
     margin-left: 0 !important;

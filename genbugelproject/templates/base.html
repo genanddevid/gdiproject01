@@ -274,6 +274,26 @@ time,
   }
 }
 
+#rotate-overlay {
+  display: none;
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  #rotate-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 999999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+  }
+}
+
+
 .right-icons {
   display: flex;
   align-items: center;
@@ -351,6 +371,10 @@ time,
 
 
   <body class="{% block body_class %}default-bg{% endblock %}">
+    <div id="rotate-overlay">
+  <span class="material-icons" style="font-size: 48px; color: #888;">screen_rotation</span>
+  <p style="margin-top: 16px; font-size: 15px; color: #555;">Please rotate your phone back to portrait to use Baytruyen.</p>
+</div>
     <!-- Mobile Top Nav (Visible only on mobile) -->
 <div class="mobile-top-nav">
   <div class="left-logo">

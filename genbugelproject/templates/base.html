@@ -279,6 +279,11 @@ time,
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
+  body {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
   #rotate-overlay {
     display: flex;
     position: fixed;
@@ -856,7 +861,25 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
 </div>
 
+<script>
+  const rotateMediaQuery = window.matchMedia('(max-height: 500px) and (orientation: landscape)');
 
+function blockRotateScroll(e) {
+  e.preventDefault();
+}
+
+function handleRotateOverlayChange(e) {
+  if (e.matches) {
+    document.body.addEventListener('touchmove', blockRotateScroll, { passive: false });
+  } else {
+    document.body.removeEventListener('touchmove', blockRotateScroll);
+  }
+}
+
+rotateMediaQuery.addEventListener('change', handleRotateOverlayChange);
+handleRotateOverlayChange(rotateMediaQuery);
+
+</script>
 
 
 

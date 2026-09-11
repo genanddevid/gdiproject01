@@ -6,14 +6,6 @@ def unread_notifications_count(request):
     if not hasattr(request, 'user') or not request.user.is_authenticated:
         return {'unread_notif_count': 0}
 
-def is_mobile_device(request):
-    user_agent = request.META.get('HTTP_USER_AGENT', '')
-    mobile_pattern = re.compile(
-        r'Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone',
-        re.IGNORECASE
-    )
-    return {'is_mobile_device': bool(mobile_pattern.search(user_agent))}
-
     me = request.user
     last_seen = me.profile.notifications_last_seen
 
@@ -35,3 +27,12 @@ def is_mobile_device(request):
     count += CommentLike.objects.filter(comment__user=me, liked_at__gt=last_seen).exclude(user=me).count()
 
     return {'unread_notif_count': count}
+
+
+def is_mobile_device(request):
+    user_agent = request.META.get('HTTP_USER_AGENT', '')
+    mobile_pattern = re.compile(
+        r'Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone',
+        re.IGNORECASE
+    )
+    return {'is_mobile_device': bool(mobile_pattern.search(user_agent))}

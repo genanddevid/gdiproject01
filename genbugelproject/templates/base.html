@@ -209,77 +209,70 @@ time,
 
 
 /* Show bottom nav on screens smaller than 768px */
-.sidebar {
-  display: none;
-}
-.mobile-bottom-nav {
-  display: flex;
-}
-@media (min-width: 900px) and (pointer: fine) {
+@media (max-width: 768px) {
   .sidebar {
-    display: flex;
-  }
-  .mobile-bottom-nav {
     display: none;
   }
-}
-.main-content {
-  margin-left: 0 !important;
+  .mobile-bottom-nav {
+    display: flex;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  body > div[style*="margin-left"] {
+    margin-left: 0 !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .section {
+    padding: 1rem 0 !important;
+  }
+
+  .left-logo a {
+    font-size: 23px;
+    font-weight: 5 !important;
+    color: rgb(20, 20, 20) !important;
+    text-decoration: none;
+  }
+
+  body {
+    padding-top: 50px;
+  }
+
+  .mobile-top-nav {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: rgb(255, 255, 255);
+    border-bottom: 1px solid rgba(230, 230, 221, 0.151);
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    padding-left: 1rem;
+    z-index: 1000;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
-body > div[style*="margin-left"] {
-  margin-left: 0 !important;
-}
-
-.container {
-  width: 100% !important;
-  max-width: 100% !important;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.section {
-  padding: 1rem 0 !important;
-}
-
-.left-logo a {
-  font-size: 23px;
-  font-weight: 5 !important;
-  color: rgb(20, 20, 20) !important;
-  text-decoration: none;
-}
-
-body {
-  padding-top: 50px;
-}
-
-.mobile-top-nav {
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-  background-color: rgb(255, 255, 255);
-  border-bottom: 1px solid rgba(230, 230, 221, 0.151);
-  padding-top: 0.1rem;
-  padding-bottom: 0.1rem;
-  padding-left: 1rem;
-  z-index: 1000;
-  justify-content: space-between;
-  align-items: center;
-}
-
-@media (min-width: 900px) and (pointer: fine) {
+@media (min-width: 769px) {
   .mobile-top-nav {
     display: none !important;
   }
-
   body {
     padding-top: 0 !important;
   }
 }
-
 
 .right-icons {
   display: flex;

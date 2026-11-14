@@ -80,7 +80,12 @@ class EditProfileForm(forms.ModelForm):
 
 	class Meta:
 		model = Profile
-		fields = ('picture', 'first_name', 'last_name', 'location', 'url', 'profile_info')
+		fields = ('picture', 'first_name', 'last_name', 'location', 'profile_info')
+
+	def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.initial['email'] = self.instance.user.email
 
 
 

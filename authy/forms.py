@@ -83,10 +83,9 @@ class EditProfileForm(forms.ModelForm):
 		fields = ('picture', 'first_name', 'last_name', 'location', 'profile_info')
 
 	def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance and self.instance.pk:
-            self.initial['email'] = self.instance.user.email
-
+		super().__init__(*args, **kwargs)
+		if self.instance and self.instance.pk:
+			self.initial['email'] = self.instance.user.email
 
 
 		from django import forms

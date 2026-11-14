@@ -71,22 +71,74 @@ class ChangePasswordForm(forms.ModelForm):
 		return self.cleaned_data
 
 class EditProfileForm(forms.ModelForm):
-	picture = forms.ImageField(required=False)
-	first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'input is-medium'}), max_length=50, required=False)
-	last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'input is-medium'}), max_length=50, required=False)
-	location = forms.CharField(widget=forms.TextInput(attrs={'class': 'input is-medium'}), max_length=25, required=False)
-	email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'input is-medium'}), max_length=100, required=True)
-	profile_info = forms.CharField(widget=forms.Textarea(attrs={'class': 'input is-medium'}), max_length=500, required=False)
+    picture = forms.ImageField(required=False)
 
-	class Meta:
-		model = Profile
-		fields = ('picture', 'first_name', 'last_name', 'location', 'profile_info')
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'input is-medium'}),
+        max_length=50,
+        required=False
+    )
 
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		if self.instance and self.instance.pk:
-			self.initial['email'] = self.instance.user.email
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'input is-medium'}),
+        max_length=50,
+        required=False
+    )
 
+    location = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'input is-medium'}),
+        max_length=25,
+        required=False
+    )
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'input is-medium'}),
+        max_length=100,
+        required=True
+    )
+
+    profile_info = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'input is-medium'}),
+        max_length=500,
+        required=False
+    )
+
+    class Meta:
+        model = Profile
+        fields = (
+            'picture',
+            'first_name',
+            'last_name',
+            'location',
+            'email',
+            'profile_info',
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            self.initial['email'] = self.instance.user.email
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].strip()
+
+        if User.objects.filter(email__iexact=email).exclude(
+            pk=self.instance.user_id
+        ).exists():
+            raise ValidationError('User with this email already exists.')
+
+        return email
+
+    def save(self, commit=True):
+        profile = super().save(commit=commit)
+
+        if commit:
+            user = profile.user
+            user.email = self.cleaned_data['email']
+            user.save(update_fields=['email'])
+
+        return profile
 
 		from django import forms
 from django.contrib.auth.forms import AuthenticationForm

@@ -82,7 +82,23 @@ class EditProfileForm(forms.ModelForm):
         model = Profile
         fields = ('picture', 'first_name', 'last_name', 'location', 'email', 'profile_info')
 
-    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.initial['email'] = self.instance.user.email
+			
+	def clean_email(self):
+        email = self.cleaned_data['email'].strip()
+        if User.objects.filter(email__iexact=email).exclude(pk=self.instance.user_id).exists():
+            raise ValidationError('User with this email already exists.')
+        return email
+
+    def save(self, commit=True):
+        profile = super().save(commit=commit)
+        user = profile.user
+        user.email = self.cleaned_data['email']
+        user.save()
+        return profile
 
 
 

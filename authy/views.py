@@ -366,23 +366,17 @@ def Signup(request):
 
 @login_required
 def PasswordChange(request):
-	user = request.user
-	if request.method == 'POST':
-		form = ChangePasswordForm(request.POST)
-		if form.is_valid():
-			new_password = form.cleaned_data.get('new_password')
-			user.set_password(new_password)
-			user.save()
-			update_session_auth_hash(request, user)
-			return redirect('change_password_done')
-	else:
-		form = ChangePasswordForm(instance=user)
-
-	context = {
-		'form':form,
-	}
-
-	return render(request, 'change_password.html', context)
+    user = request.user
+    if request.method == 'POST':
+        form = ChangePasswordForm(user, request.POST)
+        if form.is_valid():
+            user.set_password(form.cleaned_data['new_password'])
+            user.save()
+            update_session_auth_hash(request, user)
+            return redirect('change_password_done')
+    else:
+        form = ChangePasswordForm(user)
+    return render(request, 'change_password.html', {'form': form})
 
 def PasswordChangeDone(request):
 	return render(request, 'change_password_done.html')

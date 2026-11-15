@@ -430,7 +430,8 @@ time,
         </a>-->
         
         
-        {% if user.is_authenticated and user.username == 'migaja' %}
+        
+        {% if request.user.is_authenticated and request.user.username == 'migaja' %}
         <a href="{% url 'all_cohorts_dashboard' %}" class="dropdown-item" style="
           display: flex; align-items: center; gap: 14px;
           padding: 13px 20px; font-size: 15px; color: #1a1a1a; font-weight: 400;">

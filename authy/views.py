@@ -1172,3 +1172,27 @@ def feedback_view(request):
     })
 
 
+
+@login_required
+def report_issue(request):
+    from authy.models import IssueReport
+
+    if request.method == 'POST':
+        description = request.POST.get('description', '').strip()
+        category = request.POST.get('category', 'bug')
+        if category not in [c[0] for c in IssueReport.CATEGORY_CHOICES]:
+            category = 'other'
+        if description:
+            IssueReport.objects.create(
+                user=request.user,
+                category=category,
+                description=description[:2000],
+                user_agent=request.META.get('HTTP_USER_AGENT', '')[:500],
+            )
+            messages.success(request, "Thank you, your report has been sent.")
+        return redirect('report_issue')
+
+    return render(request, 'report_issue.html', {
+        'categories': IssueReport.CATEGORY_CHOICES,
+        'my_reports': IssueReport.objects.filter(user=request.user)[:10],
+    })

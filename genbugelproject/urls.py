@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from post.views import NarrativeBuilder, interests_view, improve_writing, review_writing, run_tagging_now, writeword_explain, writeword_translate_phrase, vocabulary_lookup, wordreference_lookup, cambridge_lookup, log_read_time, log_writeword_lookup, toggle_pin, global_search
-from authy.views import ca_dashboard, feedback_view, download_cohort_report, all_cohorts_dashboard
+from authy.views import ca_dashboard, feedback_view, download_cohort_report, all_cohorts_dashboard, report_issue
 
 #from .views import frontpage
 from authy import views as authy_views 
@@ -69,6 +69,7 @@ urlpatterns = [
     path('toggle-pin/<uuid:post_id>/', toggle_pin, name='toggle_pin'),
     path('', include('authy.urls')),  # e.g. /login/, /signup/
     path('favicon.ico', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
+    path('report-issue/', report_issue, name='report_issue'),
     
     path('<username>/', UserProfile, name='profile'),
     path('<username>/saved', UserProfile, name='profilefavorites'),

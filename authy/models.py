@@ -260,3 +260,30 @@ class WritewordLookupLog(models.Model):
     word = models.CharField(max_length=100)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+class IssueReport(models.Model):
+    CATEGORY_CHOICES = [
+        ('bug', 'Something is broken'),
+        ('content', 'A narrative or user'),
+        ('account', 'My account'),
+        ('other', 'Something else'),
+    ]
+    STATUS_CHOICES = [
+        ('new', 'New'),
+        ('in_progress', 'In progress'),
+        ('resolved', 'Resolved'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='issue_reports')
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='bug')
+    description = models.TextField(max_length=2000)
+    user_agent = models.CharField(max_length=500, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username}: {self.description[:50]}"

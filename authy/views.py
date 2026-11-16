@@ -769,7 +769,7 @@ def get_all_cohorts_summary():
         for key in grand_totals:
             grand_totals[key] += cohort_totals[key]
         total_members += member_count
-            cohort_rows.sort(key=lambda r: r['progress_pct'])
+    cohort_rows.sort(key=lambda r: r['progress_pct'])
 
     targets_per_student = {
         'logins': 14, 'stories': 14, 'words': 3500, 'comments': 28,

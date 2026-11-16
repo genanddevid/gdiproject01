@@ -36,6 +36,7 @@
       <thead>
         <tr style="background: #fafafa; border-bottom: 1px solid #eee;">
           <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Partner</th>
+          <th style="padding: 10px 12px; text-align: left; font-weight: 600;">Progress</th>
           <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Members</th>
           <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Logins</th>
           <th style="padding: 10px 12px; text-align: right; font-weight: 600;">Stories</th>
@@ -52,6 +53,15 @@
         {% for row in summary.cohort_rows %}
         <tr style="border-bottom: 1px solid #f5f5f5;">
           <td style="padding: 10px 12px;">{{ row.cohort.partner_email }}<br><span style="color:#aaa; font-size:10px;">{{ row.cohort.institution_name|default:"—" }}</span></td>
+          <td style="padding: 10px 12px; min-width: 110px;">
+            <div style="font-size:11px; font-weight:600; margin-bottom:3px; color:{% if row.milestones_met %}#1a7a3a{% else %}#444{% endif %};">{{ row.progress_pct }}%{% if row.milestones_met %} ✓{% endif %}</div>
+            <div style="background:#f0f0f0; border-radius:3px; height:5px; overflow:hidden;">
+              <div style="background:{% if row.milestones_met %}#1a7a3a{% else %}#000{% endif %}; height:100%; width:{{ row.progress_pct }}%;"></div>
+            </div>
+            {% if not row.milestones_met and row.bottleneck_label %}
+              <div style="font-size:10px; color:#888; margin-top:3px;">Behind: {{ row.bottleneck_label }}</div>
+            {% endif %}
+          </td>
           <td style="padding: 10px 12px; text-align: right;">{{ row.member_count }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ row.totals.logins }}</td>
           <td style="padding: 10px 12px; text-align: right;">{{ row.totals.stories }}</td>
@@ -64,7 +74,7 @@
           <td style="padding: 10px 12px; text-align: center;"><a href="{% url 'ca_dashboard' %}?cohort_id={{ row.cohort.id }}" style="color:#0d5cab; font-size:11px; text-decoration:none;">View →</a></td>
         </tr>
         {% empty %}
-        <tr><td colspan="11" style="padding: 16px; text-align:center; color:#888;">No active cohorts yet.</td></tr>
+        <tr><td colspan="12" style="padding: 16px; text-align:center; color:#888;">No active cohorts yet.</td></tr>
         {% endfor %}
       </tbody>
     </table>

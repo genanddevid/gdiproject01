@@ -757,7 +757,15 @@ def get_all_cohorts_summary():
             'w2_err': sum(s['w2_err'] for s in member_stats),
         }
         member_count = members.count()
-        cohort_rows.append({'cohort': cohort, 'member_count': member_count, 'totals': cohort_totals})
+        _, milestones_met, progress_pct, bottleneck_label = get_cohort_milestones(member_stats)
+        cohort_rows.append({
+            'cohort': cohort,
+            'member_count': member_count,
+            'totals': cohort_totals,
+            'progress_pct': progress_pct,
+            'milestones_met': milestones_met,
+            'bottleneck_label': bottleneck_label,
+        })
         for key in grand_totals:
             grand_totals[key] += cohort_totals[key]
         total_members += member_count
